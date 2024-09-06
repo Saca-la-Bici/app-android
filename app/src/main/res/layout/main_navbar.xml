@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/vNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#F3F0EB"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1">
+    </View>
+
+    <ImageButton
+        android:id="@+id/btnActividades"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_actividades"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@id/vNavBar"
+        app:layout_constraintTop_toTopOf="@id/vNavBar"
+        app:layout_constraintStart_toStartOf="@id/vNavBar"
+        app:layout_constraintEnd_toStartOf="@id/btnMapa"
+        app:layout_constraintVertical_bias="0.2"/>
+
+    <TextView
+        android:id="@+id/tvActividades"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnActividades"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/btnActividades"
+        app:layout_constraintStart_toStartOf="@id/btnActividades"
+        app:layout_constraintEnd_toEndOf="@id/btnActividades"
+        app:layout_constraintBottom_toBottomOf="@id/vNavBar"
+        app:layout_constraintVertical_bias="0"/>
+
+    <ImageButton
+        android:id="@+id/btnMapa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_mapa"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@id/vNavBar"
+        app:layout_constraintTop_toTopOf="@id/vNavBar"
+        app:layout_constraintStart_toEndOf="@id/btnActividades"
+        app:layout_constraintEnd_toStartOf="@id/btnAnuncios"
+        app:layout_constraintVertical_bias="0.2"/>
+
+    <TextView
+        android:id="@+id/tvMapa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnMapa"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/btnMapa"
+        app:layout_constraintStart_toStartOf="@id/btnMapa"
+        app:layout_constraintEnd_toEndOf="@id/btnMapa"
+        app:layout_constraintBottom_toBottomOf="@id/vNavBar"
+        app:layout_constraintVertical_bias="0"/>
+
+    <ImageButton
+        android:id="@+id/btnAnuncios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_anuncios"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@id/vNavBar"
+        app:layout_constraintTop_toTopOf="@id/vNavBar"
+        app:layout_constraintStart_toEndOf="@id/btnMapa"
+        app:layout_constraintEnd_toStartOf="@id/btnPerfil"
+        app:layout_constraintVertical_bias="0.2"/>
+
+    <TextView
+        android:id="@+id/tvAnuncios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnAnuncios"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/btnAnuncios"
+        app:layout_constraintStart_toStartOf="@id/btnAnuncios"
+        app:layout_constraintEnd_toEndOf="@id/btnAnuncios"
+        app:layout_constraintBottom_toBottomOf="@id/vNavBar"
+        app:layout_constraintVertical_bias="0"/>
+
+    <ImageButton
+        android:id="@+id/btnPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_perfil"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@id/vNavBar"
+        app:layout_constraintTop_toTopOf="@id/vNavBar"
+        app:layout_constraintStart_toEndOf="@id/btnAnuncios"
+        app:layout_constraintEnd_toEndOf="@id/vNavBar"
+        app:layout_constraintVertical_bias="0.2"/>
+
+    <TextView
+        android:id="@+id/tvPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnPerfil"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/btnPerfil"
+        app:layout_constraintStart_toStartOf="@id/btnPerfil"
+        app:layout_constraintEnd_toEndOf="@id/btnPerfil"
+        app:layout_constraintBottom_toBottomOf="@id/vNavBar"
+        app:layout_constraintVertical_bias="0"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

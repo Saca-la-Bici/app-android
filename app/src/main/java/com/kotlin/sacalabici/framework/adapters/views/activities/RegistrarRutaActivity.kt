@@ -1,0 +1,269 @@
+package com.kotlin.sacalabici.framework.adapters.views.activities
+
+import android.graphics.BitmapFactory
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.kotlin.sacalabici.R
+import com.mapbox.geojson.LineString
+import com.mapbox.geojson.Point
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapView
+import com.mapbox.maps.extension.style.layers.addLayer
+import com.mapbox.maps.extension.style.layers.generated.lineLayer
+import com.mapbox.maps.extension.style.layers.generated.symbolLayer
+import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
+import com.mapbox.maps.extension.style.sources.addSource
+import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
+import com.mapbox.maps.plugin.PuckBearing
+import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
+import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
+import com.mapbox.maps.plugin.locationcomponent.location
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
+
+class RegistrarRutaActivity: AppCompatActivity() {
+    private lateinit var mapViewForm: MapView
+    private lateinit var etDistancia: EditText
+    private var startPoint: Point? = null
+    private var stopoverPoint: Point? = null
+    private var stopoverPoint2: Point? = null
+    private var stopoverPoint3: Point? = null
+    private var endPoint: Point? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_agregarruta)
+
+        mapViewForm = findViewById(R.id.mapView)
+        etDistancia = findViewById(R.id.etDistancia)
+        initializeMap()
+
+        val btnEnviar: Button = findViewById(R.id.btnEnviar)
+        btnEnviar.setOnClickListener {
+            val titulo = findViewById<EditText>(R.id.etTitulo).text.toString()
+            val distancia = etDistancia.text.toString()
+            val tiempo = findViewById<EditText>(R.id.etTiempo).text.toString()
+            val nivel = findViewById<EditText>(R.id.etNivel).text.toString()
+            val lugar = findViewById<EditText>(R.id.etLugar).text.toString()
+            val descanso = findViewById<EditText>(R.id.etDescanso).text.toString()
+
+            if (startPoint != null && stopoverPoint != null && stopoverPoint2 != null && stopoverPoint3 != null && endPoint != null) {
+                lifecycleScope.launch {
+                    val result = sendRoute(
+                        titulo, distancia, tiempo, nivel, lugar, descanso,
+                        startPoint!!, stopoverPoint!!, stopoverPoint2!!, stopoverPoint3!!, endPoint!!
+                    )
+                    if (result) {
+                        Toast.makeText(this@RegistrarRutaActivity, "Ruta guardada exitosamente.", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this@RegistrarRutaActivity, "Error al guardar la ruta.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Por favor, establezca todos los puntos de la ruta.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun initializeMap() {
+        mapViewForm.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
+            // Define the coordinates for Querétaro
+            val queretaroCoordinates = Point.fromLngLat(-100.3899, 20.5888)
+
+            // Move the camera to Querétaro
+            mapViewForm.mapboxMap.setCamera(
+                CameraOptions.Builder()
+                    .center(queretaroCoordinates)
+                    .zoom(12.0) // Ajusta el zoom según sea necesario
+                    .build()
+            )
+        }
+    }
+
+    private fun enableLocationComponent() {
+        with(mapViewForm) {
+            location.enabled = true
+            location.puckBearing = PuckBearing.COURSE
+        }
+    }
+
+    private fun setupMapLongClickListener() {
+        mapViewForm.getMapboxMap().addOnMapLongClickListener(OnMapLongClickListener { point ->
+            when {
+                startPoint == null -> {
+                    startPoint = point
+                    Toast.makeText(this, "Punto de inicio establecido.", Toast.LENGTH_SHORT).show()
+                    addMarker(point, "start-point-symbol")
+                }
+                stopoverPoint == null -> {
+                    stopoverPoint = point
+                    Toast.makeText(this, "Punto de descanso establecido.", Toast.LENGTH_SHORT).show()
+                    addMarker(point, "stopover-point-symbol")
+                }
+                stopoverPoint2 == null -> {
+                    stopoverPoint2 = point
+                    Toast.makeText(this, "Punto de descanso 2 establecido.", Toast.LENGTH_SHORT).show()
+                    addMarker(point, "stopover-point2-symbol")
+                }
+                stopoverPoint3 == null -> {
+                    stopoverPoint3 = point
+                    Toast.makeText(this, "Punto de descanso 3 establecido.", Toast.LENGTH_SHORT).show()
+                    addMarker(point, "stopover-point3-symbol")
+                }
+                endPoint == null -> {
+                    endPoint = point
+                    Toast.makeText(this, "Punto final establecido.", Toast.LENGTH_SHORT).show()
+                    addMarker(point, "end-point-symbol")
+                    drawRoute()
+                }
+                else -> {
+                    Toast.makeText(this, "Ya se han establecido todos los puntos.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            true
+        })
+    }
+
+    private fun addMarker(point: Point, symbolId: String) {
+        mapViewForm.getMapboxMap().getStyle { style ->
+            val source = geoJsonSource(symbolId) {
+                geometry(point)
+            }
+            style.addSource(source)
+
+            val symbolLayer = symbolLayer(symbolId + "-layer", symbolId) {
+                iconImage("pin-icon")
+                iconAllowOverlap(true)
+                iconIgnorePlacement(true)
+                iconSize(0.05)
+                iconAnchor(IconAnchor.BOTTOM)
+                iconOffset(listOf(0.0, -10.0))
+            }
+            style.addLayer(symbolLayer)
+        }
+    }
+
+    private fun drawRoute() {
+        val points = listOfNotNull(startPoint, stopoverPoint, stopoverPoint2, stopoverPoint3, endPoint)
+        if (points.size < 2) {
+            Toast.makeText(this, "Establezca al menos dos puntos para crear la ruta.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val origin = points.first()
+        val destination = points.last()
+        val waypoints = points.subList(1, points.size - 1)
+
+        val waypointsCoordinates = waypoints.joinToString(";") { "${it.longitude()},${it.latitude()}" }
+
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${origin.longitude()},${origin.latitude()};$waypointsCoordinates;${destination.longitude()},${destination.latitude()}?geometries=geojson&access_token=sk.eyJ1Ijoic2FtaXIyNzciLCJhIjoiY20wbWwxOXZ0MDNwNTJtb3J0cHN2Z3NmdCJ9.UafXR_Ln3yfnnVwqE2-_Dg")
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
+                val inputStream = connection.inputStream
+                val response = inputStream.bufferedReader().use { it.readText() }
+                val jsonResponse = JSONObject(response)
+                val routes = jsonResponse.getJSONArray("routes")
+                if (routes.length() > 0) {
+                    val route = routes.getJSONObject(0)
+                    val geometry = route.getJSONObject("geometry")
+                    val lineString = LineString.fromJson(geometry.toString())
+                    val distance = route.getDouble("distance") / 1000.0
+
+                    withContext(Dispatchers.Main) {
+                        etDistancia.setText(String.format("%.2f km", distance))
+
+                        val routeSource = geoJsonSource("route-source") {
+                            geometry(lineString)
+                        }
+                        mapViewForm.getMapboxMap().getStyle { style ->
+                            style.addSource(routeSource)
+
+                            val routeLayer = lineLayer("route-layer", "route-source") {
+                                lineWidth(5.0)
+                            }
+                            style.addLayer(routeLayer)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("AgregarRutaActivity", "Error al obtener la ruta: ${e.message}")
+            }
+        }
+    }
+
+    private suspend fun sendRoute(
+        titulo: String,
+        distancia: String,
+        tiempo: String,
+        nivel: String,
+        lugar: String,
+        descanso: String,
+        start: Point,
+        stopover: Point,
+        stopover2: Point,
+        stopover3: Point,
+        end: Point
+    ): Boolean = withContext(Dispatchers.IO) {
+        val url = URL("http://awstest.eba-jp32qr2u.us-east-1.elasticbeanstalk.com/rutas")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "POST"
+        connection.setRequestProperty("Content-Type", "application/json")
+        connection.doOutput = true
+
+        val coordinatesArray = JSONArray().apply {
+            put(JSONObject().apply {
+                put("latitud", start.latitude())
+                put("longitud", start.longitude())
+            })
+            put(JSONObject().apply {
+                put("latitud", stopover.latitude())
+                put("longitud", stopover.longitude())
+            })
+            put(JSONObject().apply {
+                put("latitud", stopover2.latitude())
+                put("longitud", stopover2.longitude())
+            })
+            put(JSONObject().apply {
+                put("latitud", stopover3.latitude())
+                put("longitud", stopover3.longitude())
+            })
+            put(JSONObject().apply {
+                put("latitud", end.latitude())
+                put("longitud", end.longitude())
+            })
+        }
+
+        val jsonInputString = JSONObject().apply {
+            put("titulo", titulo)
+            put("distancia", distancia)
+            put("tiempo", tiempo)
+            put("nivel", nivel)
+            put("lugar", lugar)
+            put("descanso", descanso)
+            put("coordenadas", coordinatesArray)
+        }.toString()
+
+        connection.outputStream.use {
+            it.write(jsonInputString.toByteArray(Charsets.UTF_8))
+        }
+
+        val responseCode = connection.responseCode
+        connection.disconnect()
+
+        responseCode == HttpURLConnection.HTTP_OK
+    }
+}

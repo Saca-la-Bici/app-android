@@ -3,6 +3,7 @@ package com.kotlin.sacalabici.framework.adapters.views.activities
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,12 @@ class MapActivity: BaseActivity() {
         initializeBinding()
         setupNavbar()
         initializeMap()
+
+        val btnAgregarRuta: ImageButton = findViewById(R.id.btnAdd)
+        btnAgregarRuta.setOnClickListener {
+            val intent = Intent(this, RegistrarRutaActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initializeBinding(){

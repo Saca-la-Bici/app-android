@@ -46,4 +46,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //MAPBOX DEPENDENCY
+    implementation(libs.maps.android)
+    implementation(libs.maps.compose)
 }

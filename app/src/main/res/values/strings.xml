@@ -4,5 +4,6 @@
     <string name="Mapa">Mapa</string>
     <string name="Anuncios">Anuncios</string>
     <string name="Perfil">Perfil</string>
+    <string name="mapbox_access_token">sk.eyJ1Ijoic2FtaXIyNzciLCJhIjoiY20wbWwxOXZ0MDNwNTJtb3J0cHN2Z3NmdCJ9.UafXR_Ln3yfnnVwqE2-_Dg</string>
 
 </resources>

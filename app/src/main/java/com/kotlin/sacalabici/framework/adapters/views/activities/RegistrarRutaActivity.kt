@@ -88,6 +88,8 @@ class RegistrarRutaActivity: AppCompatActivity() {
                     .zoom(12.0) // Ajusta el zoom según sea necesario
                     .build()
             )
+            enableLocationComponent()
+            setupMapLongClickListener()
         }
     }
 
@@ -218,7 +220,7 @@ class RegistrarRutaActivity: AppCompatActivity() {
         stopover3: Point,
         end: Point
     ): Boolean = withContext(Dispatchers.IO) {
-        val url = URL("http://awstest.eba-jp32qr2u.us-east-1.elasticbeanstalk.com/rutas")
+        val url = URL("http://localhost:7070/mapa/registrarRuta")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.setRequestProperty("Content-Type", "application/json")
@@ -228,22 +230,27 @@ class RegistrarRutaActivity: AppCompatActivity() {
             put(JSONObject().apply {
                 put("latitud", start.latitude())
                 put("longitud", start.longitude())
+                put("tipo", "inicio")
             })
             put(JSONObject().apply {
                 put("latitud", stopover.latitude())
                 put("longitud", stopover.longitude())
+                put("tipo", "descanso")
             })
             put(JSONObject().apply {
                 put("latitud", stopover2.latitude())
                 put("longitud", stopover2.longitude())
+                put("tipo", "descanso")
             })
             put(JSONObject().apply {
                 put("latitud", stopover3.latitude())
                 put("longitud", stopover3.longitude())
+                put("tipo", "descanso")
             })
             put(JSONObject().apply {
                 put("latitud", end.latitude())
                 put("longitud", end.longitude())
+                put("tipo", "final")
             })
         }
 

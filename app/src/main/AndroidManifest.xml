@@ -39,5 +39,24 @@
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
+        <activity
+            android:name=".framework.adapters.views.activities.SessionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar" />
+
+        <activity
+            android:name=".framework.adapters.views.activities.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar" />
+
+        <activity
+            android:name=".framework.adapters.views.activities.RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar" />
+
+        <activity
+            android:name=".framework.adapters.views.activities.RegisterContinueActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar" />
     </application>
 </manifest>

@@ -46,4 +46,31 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //Glide
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
+
+    //Corrutinas
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+
+    //Fragment
+    implementation("androidx.fragment:fragment-ktx:1.5.0")
+    //Activity
+    implementation("androidx.activity:activity-ktx:1.5.0")
+    //Data binding
+    implementation("androidx.databinding:databinding-runtime:7.1.2")
+
+    // BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+
+    // Dpendency for the Firebase Authentication library
+    implementation("com.google.firebase:firebase-auth-ktx")
+
+    implementation("androidx.compose.material3:material3:1.1.1")
 }

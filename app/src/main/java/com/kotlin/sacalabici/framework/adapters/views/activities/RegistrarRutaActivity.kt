@@ -110,21 +110,21 @@ class RegistrarRutaActivity: AppCompatActivity() {
         val tiempo = findViewById<EditText>(R.id.etTiempo).text.toString().trim()
         val btnEnviar: Button = findViewById(R.id.btnEnviar)
 
-        // Verificar si todos los campos tienen texto y si se ha seleccionado un nivel
         val todosCamposLlenos = titulo.isNotEmpty() && distancia.isNotEmpty() && tiempo.isNotEmpty()
         val nivelSeleccionado = nivelSeleccionado != null
-        val rutaCompleta = startPoint != null && stopoverPoint != null && stopoverPoint2 != null && stopoverPoint3 != null && endPoint != null
+        val rutaCompleta = startPoint != null && stopoverPoint != null && endPoint != null
+
+        Log.d("VerifyInputs", "Titulo: $titulo, Distancia: $distancia, Tiempo: $tiempo, Nivel Seleccionado: $nivelSeleccionado, Ruta Completa: $rutaCompleta")
 
         if (todosCamposLlenos && nivelSeleccionado && rutaCompleta) {
-            // Si todos los campos son válidos, habilitar el botón y cambiar el color
             btnEnviar.isEnabled = true
             btnEnviar.backgroundTintList = ContextCompat.getColorStateList(this, R.color.yellow_able)
         } else {
-            // Si alguno de los campos está vacío o falta información, deshabilitar el botón y cambiar el color
             btnEnviar.isEnabled = false
             btnEnviar.backgroundTintList = ContextCompat.getColorStateList(this, R.color.yellow_disabled)
         }
     }
+
 
     // Función para mostrar el diálogo de selección de nivel
     private fun showlevelDialogue() {

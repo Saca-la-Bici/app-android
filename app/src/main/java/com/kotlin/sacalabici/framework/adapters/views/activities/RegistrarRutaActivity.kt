@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import android.util.Log
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
@@ -34,11 +36,16 @@ import java.net.URL
 class RegistrarRutaActivity: AppCompatActivity() {
     private lateinit var mapViewForm: MapView
     private lateinit var etDistancia: EditText
+    private lateinit var tvNivel: TextView
     private var startPoint: Point? = null
     private var stopoverPoint: Point? = null
     private var stopoverPoint2: Point? = null
     private var stopoverPoint3: Point? = null
     private var endPoint: Point? = null
+
+    private var nivelSeleccionado: String? = null // Variable para almacenar el nivel seleccionado
+    private var nivelSeleccionadoTemporal: Int = -1
+    private val niveles = arrayOf("Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +53,20 @@ class RegistrarRutaActivity: AppCompatActivity() {
 
         mapViewForm = findViewById(R.id.mapView)
         etDistancia = findViewById(R.id.etDistancia)
+        tvNivel = findViewById(R.id.tvNivel) // Inicializamos el TextView del nivel
         initializeMap()
+
+        tvNivel.setOnClickListener {
+            mostrarDialogoNivel() // Abre el diálogo para que el usuario seleccione un nivel
+        }
 
         val btnEnviar: Button = findViewById(R.id.btnEnviar)
         btnEnviar.setOnClickListener {
             val titulo = findViewById<EditText>(R.id.etTitulo).text.toString()
             val distancia = etDistancia.text.toString()
             val tiempo = findViewById<EditText>(R.id.etTiempo).text.toString()
-            val nivel = findViewById<EditText>(R.id.etNivel).text.toString()
+            val nivelSeleccionado = niveles[nivelSeleccionadoTemporal]
+            val nivel = nivelSeleccionado.toString()
             val lugar = findViewById<EditText>(R.id.etLugar).text.toString()
             val descanso = findViewById<EditText>(R.id.etDescanso).text.toString()
 
@@ -75,6 +88,29 @@ class RegistrarRutaActivity: AppCompatActivity() {
             }
         }
     }
+
+    // Función para mostrar el diálogo de selección de nivel
+    private fun mostrarDialogoNivel() {
+        var nivelSeleccionadoTemporal = -1 // Variable temporal para seleccionar el nivel
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Selecciona el nivel")
+        builder.setSingleChoiceItems(niveles, -1) { _, which ->
+            nivelSeleccionadoTemporal = which // Guardamos el índice del nivel seleccionado
+        }
+        builder.setPositiveButton("Listo") { dialog, _ ->
+            if (nivelSeleccionadoTemporal != -1) {
+                nivelSeleccionado = niveles[nivelSeleccionadoTemporal] // Asignamos el nivel final
+                tvNivel.text = nivelSeleccionado // Actualizamos el TextView con el nivel seleccionado
+            }
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.create().show() // Mostramos el diálogo
+    }
+
 
     private fun initializeMap() {
         mapViewForm.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {

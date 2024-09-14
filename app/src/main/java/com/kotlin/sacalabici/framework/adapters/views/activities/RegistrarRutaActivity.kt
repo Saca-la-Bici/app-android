@@ -1,6 +1,5 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -9,6 +8,7 @@ import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
 import com.mapbox.geojson.LineString
@@ -55,26 +55,31 @@ class RegistrarRutaActivity: AppCompatActivity() {
         etDistancia = findViewById(R.id.etDistancia)
         tvNivel = findViewById(R.id.tvNivel) // Inicializamos el TextView del nivel
         initializeMap()
+        val etTitulo = findViewById<EditText>(R.id.etTitulo)
+        val etTiempo = findViewById<EditText>(R.id.etTiempo)
+        val btnEnviar: Button = findViewById(R.id.btnEnviar)
+
+        btnEnviar.isEnabled = false
+
+        etTitulo.addTextChangedListener(textWatcher)
+        etDistancia.addTextChangedListener(textWatcher)
+        etTiempo.addTextChangedListener(textWatcher)
 
         tvNivel.setOnClickListener {
-            mostrarDialogoNivel() // Abre el diálogo para que el usuario seleccione un nivel
+            showlevelDialogue() // Abre el diálogo para que el usuario seleccione un nivel
         }
 
-        val btnEnviar: Button = findViewById(R.id.btnEnviar)
         btnEnviar.setOnClickListener {
             val titulo = findViewById<EditText>(R.id.etTitulo).text.toString()
             val distancia = etDistancia.text.toString()
             val tiempo = findViewById<EditText>(R.id.etTiempo).text.toString()
             val nivelSeleccionado = niveles[nivelSeleccionadoTemporal]
             val nivel = nivelSeleccionado.toString()
-            val lugar = findViewById<EditText>(R.id.etLugar).text.toString()
-            val descanso = findViewById<EditText>(R.id.etDescanso).text.toString()
 
             if (startPoint != null && stopoverPoint != null && stopoverPoint2 != null && stopoverPoint3 != null && endPoint != null) {
                 lifecycleScope.launch {
                     val result = sendRoute(
-                        titulo, distancia, tiempo, nivel, lugar, descanso,
-                        startPoint!!, stopoverPoint!!, stopoverPoint2!!, stopoverPoint3!!, endPoint!!
+                        titulo, distancia, tiempo, nivel, startPoint!!, stopoverPoint!!, endPoint!!
                     )
                     if (result) {
                         Toast.makeText(this@RegistrarRutaActivity, "Ruta guardada exitosamente.", Toast.LENGTH_SHORT).show()
@@ -89,8 +94,40 @@ class RegistrarRutaActivity: AppCompatActivity() {
         }
     }
 
+    private val textWatcher = object : android.text.TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            verifyInputs()
+        }
+
+        override fun afterTextChanged(s: android.text.Editable?) {}
+    }
+
+    private fun verifyInputs() {
+        val titulo = findViewById<EditText>(R.id.etTitulo).text.toString().trim()
+        val distancia = etDistancia.text.toString().trim()
+        val tiempo = findViewById<EditText>(R.id.etTiempo).text.toString().trim()
+        val btnEnviar: Button = findViewById(R.id.btnEnviar)
+
+        // Verificar si todos los campos tienen texto y si se ha seleccionado un nivel
+        val todosCamposLlenos = titulo.isNotEmpty() && distancia.isNotEmpty() && tiempo.isNotEmpty()
+        val nivelSeleccionado = nivelSeleccionado != null
+        val rutaCompleta = startPoint != null && stopoverPoint != null && stopoverPoint2 != null && stopoverPoint3 != null && endPoint != null
+
+        if (todosCamposLlenos && nivelSeleccionado && rutaCompleta) {
+            // Si todos los campos son válidos, habilitar el botón y cambiar el color
+            btnEnviar.isEnabled = true
+            btnEnviar.backgroundTintList = ContextCompat.getColorStateList(this, R.color.yellow_able)
+        } else {
+            // Si alguno de los campos está vacío o falta información, deshabilitar el botón y cambiar el color
+            btnEnviar.isEnabled = false
+            btnEnviar.backgroundTintList = ContextCompat.getColorStateList(this, R.color.yellow_disabled)
+        }
+    }
+
     // Función para mostrar el diálogo de selección de nivel
-    private fun mostrarDialogoNivel() {
+    private fun showlevelDialogue() {
         var nivelSeleccionadoTemporal = -1 // Variable temporal para seleccionar el nivel
 
         val builder = AlertDialog.Builder(this)
@@ -146,18 +183,9 @@ class RegistrarRutaActivity: AppCompatActivity() {
                 }
                 stopoverPoint == null -> {
                     stopoverPoint = point
-                    Toast.makeText(this, "Punto de descanso establecido.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Punto de descanso establecido.", Toast.LENGTH_SHORT)
+                        .show()
                     addMarker(point, "stopover-point-symbol")
-                }
-                stopoverPoint2 == null -> {
-                    stopoverPoint2 = point
-                    Toast.makeText(this, "Punto de descanso 2 establecido.", Toast.LENGTH_SHORT).show()
-                    addMarker(point, "stopover-point2-symbol")
-                }
-                stopoverPoint3 == null -> {
-                    stopoverPoint3 = point
-                    Toast.makeText(this, "Punto de descanso 3 establecido.", Toast.LENGTH_SHORT).show()
-                    addMarker(point, "stopover-point3-symbol")
                 }
                 endPoint == null -> {
                     endPoint = point
@@ -248,12 +276,8 @@ class RegistrarRutaActivity: AppCompatActivity() {
         distancia: String,
         tiempo: String,
         nivel: String,
-        lugar: String,
-        descanso: String,
         start: Point,
         stopover: Point,
-        stopover2: Point,
-        stopover3: Point,
         end: Point
     ): Boolean = withContext(Dispatchers.IO) {
         val url = URL("http://localhost:7070/mapa/registrarRuta")
@@ -274,16 +298,6 @@ class RegistrarRutaActivity: AppCompatActivity() {
                 put("tipo", "descanso")
             })
             put(JSONObject().apply {
-                put("latitud", stopover2.latitude())
-                put("longitud", stopover2.longitude())
-                put("tipo", "descanso")
-            })
-            put(JSONObject().apply {
-                put("latitud", stopover3.latitude())
-                put("longitud", stopover3.longitude())
-                put("tipo", "descanso")
-            })
-            put(JSONObject().apply {
                 put("latitud", end.latitude())
                 put("longitud", end.longitude())
                 put("tipo", "final")
@@ -295,8 +309,6 @@ class RegistrarRutaActivity: AppCompatActivity() {
             put("distancia", distancia)
             put("tiempo", tiempo)
             put("nivel", nivel)
-            put("lugar", lugar)
-            put("descanso", descanso)
             put("coordenadas", coordinatesArray)
         }.toString()
 

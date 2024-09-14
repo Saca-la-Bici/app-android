@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1077042273728",
+    "project_id": "saca-la-bici-df42f",
+    "storage_bucket": "saca-la-bici-df42f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077042273728:android:4643cf99df808a244afc25",
+        "android_client_info": {
+          "package_name": "com.kotlin.sacalabici"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1077042273728-cns3k8dphm5u44k16c2qvss92acjb5i5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kotlin.sacalabici",
+            "certificate_hash": "f8c7eb957605abca4ea3dcc815904b7e60baeb96"
+          }
+        },
+        {
+          "client_id": "1077042273728-8dgeo63mtbl5e25n0b6n453ptd7fhm9a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnKPCD63bl-nzWgL0jT-4Kq8mUZ64apH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1077042273728-8dgeo63mtbl5e25n0b6n453ptd7fhm9a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

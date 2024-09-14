@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -9,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.kotlin.sacalabici"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -34,7 +35,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        viewBinding = true
+        viewBinding =  true
     }
 }
 
@@ -43,6 +44,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -65,12 +68,6 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.5.0")
     //Data binding
     implementation("androidx.databinding:databinding-runtime:7.1.2")
-
-    // BoM for the Firebase platform
-    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
-
-    // Dpendency for the Firebase Authentication library
-    implementation("com.google.firebase:firebase-auth-ktx")
 
     implementation("androidx.compose.material3:material3:1.1.1")
 }

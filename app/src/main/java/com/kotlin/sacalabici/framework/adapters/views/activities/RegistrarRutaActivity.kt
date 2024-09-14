@@ -73,10 +73,23 @@ class RegistrarRutaActivity: AppCompatActivity() {
             val titulo = findViewById<EditText>(R.id.etTitulo).text.toString()
             val distancia = etDistancia.text.toString()
             val tiempo = findViewById<EditText>(R.id.etTiempo).text.toString()
-            val nivelSeleccionado = niveles[nivelSeleccionadoTemporal]
             val nivel = nivelSeleccionado.toString()
 
-            if (startPoint != null && stopoverPoint != null && stopoverPoint2 != null && stopoverPoint3 != null && endPoint != null) {
+            // Construcción del JSON
+            val jsonObject = JSONObject().apply {
+                put("titulo", titulo)
+                put("distancia", distancia)
+                put("tiempo", tiempo)
+                put("nivel", nivel)
+                put("startPoint", startPoint?.toString())  // Asegúrate de que `startPoint` pueda convertirse en String
+                put("stopoverPoint", stopoverPoint?.toString())  // Asegúrate de que `stopoverPoint` pueda convertirse en String
+                put("endPoint", endPoint?.toString())  // Asegúrate de que `endPoint` pueda convertirse en String
+            }
+
+            // Mostrar el JSON en el log
+            Log.d("JSON_LOG", jsonObject.toString())
+
+            if (startPoint != null && stopoverPoint != null && endPoint != null) {
                 lifecycleScope.launch {
                     val result = sendRoute(
                         titulo, distancia, tiempo, nivel, startPoint!!, stopoverPoint!!, endPoint!!
@@ -92,6 +105,7 @@ class RegistrarRutaActivity: AppCompatActivity() {
                 Toast.makeText(this, "Por favor, establezca todos los puntos de la ruta.", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private val textWatcher = object : android.text.TextWatcher {
@@ -128,18 +142,25 @@ class RegistrarRutaActivity: AppCompatActivity() {
 
     // Función para mostrar el diálogo de selección de nivel
     private fun showlevelDialogue() {
+        Log.d("Niveles", niveles.joinToString())
         var nivelSeleccionadoTemporal = -1 // Variable temporal para seleccionar el nivel
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Selecciona el nivel")
         builder.setSingleChoiceItems(niveles, -1) { _, which ->
             nivelSeleccionadoTemporal = which // Guardamos el índice del nivel seleccionado
+            Log.d("NivelSeleccionado", nivelSeleccionadoTemporal.toString())
         }
+
         builder.setPositiveButton("Listo") { dialog, _ ->
-            if (nivelSeleccionadoTemporal != -1) {
+            if (nivelSeleccionadoTemporal in niveles.indices) {
                 nivelSeleccionado = niveles[nivelSeleccionadoTemporal] // Asignamos el nivel final
+                Log.d("Nivel", nivelSeleccionado.toString())
                 tvNivel.text = nivelSeleccionado // Actualizamos el TextView con el nivel seleccionado
+            } else {
+                Toast.makeText(this, "Por favor, seleccione un nivel válido.", Toast.LENGTH_SHORT).show()
             }
+
             dialog.dismiss()
         }
         builder.setNegativeButton("Cancelar") { dialog, _ ->
@@ -147,6 +168,7 @@ class RegistrarRutaActivity: AppCompatActivity() {
         }
         builder.create().show() // Mostramos el diálogo
     }
+
 
 
     private fun initializeMap() {
@@ -280,45 +302,60 @@ class RegistrarRutaActivity: AppCompatActivity() {
         stopover: Point,
         end: Point
     ): Boolean = withContext(Dispatchers.IO) {
-        val url = URL("http://localhost:7070/mapa/registrarRuta")
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.setRequestProperty("Content-Type", "application/json")
-        connection.doOutput = true
+        try {
+            val url = URL("http://localhost:7070/mapa/registrarRuta") // Asegúrate de usar la IP correcta
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.doOutput = true
 
-        val coordinatesArray = JSONArray().apply {
-            put(JSONObject().apply {
-                put("latitud", start.latitude())
-                put("longitud", start.longitude())
-                put("tipo", "inicio")
-            })
-            put(JSONObject().apply {
-                put("latitud", stopover.latitude())
-                put("longitud", stopover.longitude())
-                put("tipo", "descanso")
-            })
-            put(JSONObject().apply {
-                put("latitud", end.latitude())
-                put("longitud", end.longitude())
-                put("tipo", "final")
-            })
+            val coordinatesArray = JSONArray().apply {
+                put(JSONObject().apply {
+                    put("latitud", start.latitude())
+                    put("longitud", start.longitude())
+                    put("tipo", "inicio")
+                })
+                put(JSONObject().apply {
+                    put("latitud", stopover.latitude())
+                    put("longitud", stopover.longitude())
+                    put("tipo", "descanso")
+                })
+                put(JSONObject().apply {
+                    put("latitud", end.latitude())
+                    put("longitud", end.longitude())
+                    put("tipo", "final")
+                })
+            }
+
+            val jsonInputString = JSONObject().apply {
+                put("titulo", titulo)
+                put("distancia", distancia)
+                put("tiempo", tiempo)
+                put("nivel", nivel)
+                put("coordenadas", coordinatesArray)
+            }.toString()
+
+            connection.outputStream.use {
+                it.write(jsonInputString.toByteArray(Charsets.UTF_8))
+            }
+
+            val responseCode = connection.responseCode
+            val responseMessage = connection.inputStream.bufferedReader().use { it.readText() }
+
+            connection.disconnect()
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                Log.d("sendRoute", "Respuesta del servidor: $responseMessage")
+                true
+            } else {
+                Log.e("sendRoute", "Error en la solicitud: $responseCode - $responseMessage")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e("sendRoute", "Excepción en la solicitud: ${e.message}")
+            false
         }
-
-        val jsonInputString = JSONObject().apply {
-            put("titulo", titulo)
-            put("distancia", distancia)
-            put("tiempo", tiempo)
-            put("nivel", nivel)
-            put("coordenadas", coordinatesArray)
-        }.toString()
-
-        connection.outputStream.use {
-            it.write(jsonInputString.toByteArray(Charsets.UTF_8))
-        }
-
-        val responseCode = connection.responseCode
-        connection.disconnect()
-
-        responseCode == HttpURLConnection.HTTP_OK
     }
+
+
 }

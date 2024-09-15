@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.facebook.FacebookSdk
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
@@ -21,8 +22,10 @@ class ActivitiesActivity: BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        FacebookSdk.sdkInitialize(applicationContext)
         initializeBinding()
         setupNavbar()
+
 
 //        sharedPrefs = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
 //        val isUserRegistered = getSharedPreferences("user_prefs", MODE_PRIVATE).getBoolean("is_registered", false)

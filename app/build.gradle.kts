@@ -69,8 +69,11 @@ dependencies {
     //Data binding
     implementation("androidx.databinding:databinding-runtime:7.1.2")
 
-    implementation(platform("com.google.firebase:firebase-bom:31.5.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation("com.google.android.gms:play-services-auth:20.5.0")
 
     implementation("androidx.compose.material3:material3:1.1.1")
+
+    implementation("com.facebook.android:facebook-login:latest-version")
+    implementation("com.facebook.android:facebook-android-sdk:latest.release")
 }

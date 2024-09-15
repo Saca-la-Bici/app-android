@@ -50,4 +50,17 @@ dependencies {
     //MAPBOX DEPENDENCY
     implementation(libs.maps.android)
     implementation(libs.maps.compose)
+
+    //Coroutines
+    implementation (libs.kotlinx.coroutines.core)
+    implementation (libs.kotlinx.coroutines.android)
+
+    // ViewModel y LiveData
+    implementation (libs.androidx.activity.ktx)
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation (libs.androidx.lifecycle.livedata.ktx)
+
+    //Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
 }

@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -85,9 +86,6 @@ class RegistrarRutaActivity: AppCompatActivity() {
                 put("stopoverPoint", stopoverPoint?.toString())  // Asegúrate de que `stopoverPoint` pueda convertirse en String
                 put("endPoint", endPoint?.toString())  // Asegúrate de que `endPoint` pueda convertirse en String
             }
-
-            // Mostrar el JSON en el log
-            Log.d("JSON_LOG", jsonObject.toString())
 
             if (startPoint != null && stopoverPoint != null && endPoint != null) {
                 lifecycleScope.launch {
@@ -201,19 +199,18 @@ class RegistrarRutaActivity: AppCompatActivity() {
                 startPoint == null -> {
                     startPoint = point
                     Toast.makeText(this, "Punto de inicio establecido.", Toast.LENGTH_SHORT).show()
-                    addMarker(point, "start-point-symbol")
+                    addMarker(point, "start-point-symbol", "start_icon")
                 }
                 stopoverPoint == null -> {
                     stopoverPoint = point
-                    Toast.makeText(this, "Punto de descanso establecido.", Toast.LENGTH_SHORT)
-                        .show()
-                    addMarker(point, "stopover-point-symbol")
+                    Toast.makeText(this, "Punto de descanso establecido.", Toast.LENGTH_SHORT).show()
+                    addMarker(point, "stopover-point-symbol", "stopover_icon")
                 }
                 endPoint == null -> {
                     endPoint = point
                     Toast.makeText(this, "Punto final establecido.", Toast.LENGTH_SHORT).show()
-                    addMarker(point, "end-point-symbol")
-                    drawRoute()
+                    addMarker(point, "end-point-symbol", "end_icon")
+                    drawRoute()  // Aquí dibujas la ruta
                 }
                 else -> {
                     Toast.makeText(this, "Ya se han establecido todos los puntos.", Toast.LENGTH_SHORT).show()
@@ -223,24 +220,46 @@ class RegistrarRutaActivity: AppCompatActivity() {
         })
     }
 
-    private fun addMarker(point: Point, symbolId: String) {
+    private fun addMarker(point: Point, symbolId: String, iconName: String) {
         mapViewForm.getMapboxMap().getStyle { style ->
+
+            // Verifica si la imagen ya ha sido añadida al estilo, si no, la añade
+            if (!style.styleLayerExists(iconName)) {
+                val icon = BitmapFactory.decodeResource(resources, resources.getIdentifier(iconName, "drawable", packageName))
+                style.addImage(iconName, icon)
+            }
+
+            // Crear la fuente GeoJSON
             val source = geoJsonSource(symbolId) {
                 geometry(point)
             }
             style.addSource(source)
 
+            // Ajuste del offset en función del icono específico
+            val offset = when (iconName) {
+                "start_icon" -> listOf(20.0, 0.0) // Desplazar hacia la derecha
+                "end_icon" -> listOf(20.0, 0.0) // Desplazar hacia la derecha
+                else -> listOf(0.0, -10.0) // Sin desplazamiento para otros íconos
+            }
+
+            // Crear la capa del símbolo con la imagen específica
             val symbolLayer = symbolLayer(symbolId + "-layer", symbolId) {
-                iconImage("pin-icon")
+                iconImage(iconName)  // Aquí usas el ícono específico
                 iconAllowOverlap(true)
                 iconIgnorePlacement(true)
-                iconSize(0.05)
+                iconSize(0.07)
+
+                // Ajusta el ancla para que la parte inferior esté en el punto presionado
                 iconAnchor(IconAnchor.BOTTOM)
-                iconOffset(listOf(0.0, -10.0))
+
+                // Ajuste del iconOffset basado en el ícono
+                iconOffset(offset)
             }
             style.addLayer(symbolLayer)
         }
     }
+
+
 
     private fun drawRoute() {
         val points = listOfNotNull(startPoint, stopoverPoint, stopoverPoint2, stopoverPoint3, endPoint)
@@ -303,7 +322,7 @@ class RegistrarRutaActivity: AppCompatActivity() {
         end: Point
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://SU_IP_AQUI:7070/mapa/registrarRuta") // Asegúrate de usar la IP correcta
+            val url = URL("http://192.168.66.213:7070/mapa/registrarRuta") // Asegúrate de usar la IP correcta
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")

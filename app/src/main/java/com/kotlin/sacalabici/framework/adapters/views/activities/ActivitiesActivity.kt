@@ -10,30 +10,32 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.facebook.FacebookSdk
+import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
 
 class ActivitiesActivity: BaseActivity() {
+
     private lateinit var binding: AcivityActivitiesBinding
-    // In your launch activity's onCreate()
-//    private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         FacebookSdk.sdkInitialize(applicationContext)
         initializeBinding()
-        setupNavbar()
 
+        firebaseAuth = FirebaseAuth.getInstance()
 
-//        sharedPrefs = getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-//        val isUserRegistered = getSharedPreferences("user_prefs", MODE_PRIVATE).getBoolean("is_registered", false)
-//
-//        if (!isUserRegistered) {
+        if (firebaseAuth.currentUser == null) {
+            // Usuario no está autenticado, redirige a SessionActivity
             startActivity(Intent(this, SessionActivity::class.java))
-            finish() // Optional: Finish the launch activity to prevent going back to it
-//        }
+            finish() // Opcional: Termina la actividad actual para que el usuario no pueda volver a ella con el botón "Atrás"
+        } else {
+            // Usuario autenticado, continúa con la lógica de ActivitiesActivity
+            setupNavbar()
+        }
     }
 
     private fun initializeBinding(){

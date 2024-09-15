@@ -127,7 +127,7 @@
         android:background="@android:color/darker_gray"
         app:layout_constraintEnd_toStartOf="@+id/TVContinue"
         app:layout_constraintStart_toStartOf="@+id/VWhiteBackground"
-        app:layout_constraintTop_toBottomOf="@+id/VWhiteBackground"
+        app:layout_constraintTop_toBottomOf="@+id/BLogin"
         app:layout_constraintWidth_percent="0.3" />
 
     <TextView

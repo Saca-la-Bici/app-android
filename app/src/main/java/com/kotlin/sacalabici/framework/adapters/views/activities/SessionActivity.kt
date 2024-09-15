@@ -150,4 +150,17 @@ class SessionActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        // Verifica si el usuario está autenticado
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser != null) {
+            // Usuario está autenticado, redirige a ActivitiesActivity
+            val intent = Intent(this, ActivitiesActivity::class.java)
+            startActivity(intent)
+            finish() // Termina la actividad actual para que el usuario no pueda volver a ella con el botón "Atrás"
+        }
+    }
+
 }

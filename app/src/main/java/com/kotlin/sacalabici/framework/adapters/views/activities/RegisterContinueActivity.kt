@@ -41,7 +41,7 @@ class RegisterContinueActivity : AppCompatActivity() {
                             Toast.makeText(this, "Account created", Toast.LENGTH_SHORT).show()
                             startActivity(intent)
                         } else {
-                            val intent = Intent(this, RegisterActivity::class.java)
+                            val intent = Intent(this, ActivitiesActivity::class.java)
                             // Handle error (e.g., display error message)
                             Toast.makeText(this, "Account creation failed", Toast.LENGTH_SHORT).show()
                             startActivity(intent)

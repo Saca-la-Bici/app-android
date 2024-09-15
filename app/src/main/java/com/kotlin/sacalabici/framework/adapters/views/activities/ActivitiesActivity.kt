@@ -20,6 +20,7 @@ class ActivitiesActivity: BaseActivity() {
     private lateinit var binding: AcivityActivitiesBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -60,7 +60,7 @@ dependencies {
     implementation("jp.wasabeef:glide-transformations:4.3.0")
 
     //Corrutinas
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     //Fragment
     implementation("androidx.fragment:fragment-ktx:1.5.0")

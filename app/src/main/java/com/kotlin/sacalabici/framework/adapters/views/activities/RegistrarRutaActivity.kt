@@ -322,7 +322,7 @@ class RegistrarRutaActivity: AppCompatActivity() {
         end: Point
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://192.168.66.213:7070/mapa/registrarRuta") // Asegúrate de usar la IP correcta
+            val url = URL("http://[SU_IP_AQUI]:7070/mapa/registrarRuta") // Asegúrate de usar la IP correcta
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")

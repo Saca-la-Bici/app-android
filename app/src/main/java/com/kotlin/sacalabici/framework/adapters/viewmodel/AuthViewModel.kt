@@ -18,8 +18,8 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.kotlin.sacalabici.data.models.AuthState
 import com.kotlin.sacalabici.utils.Constants
 
 class AuthViewModel : ViewModel() {
@@ -119,10 +119,4 @@ class AuthViewModel : ViewModel() {
             _authState.postValue(AuthState.Success(currentUser))
         }
     }
-}
-
-sealed class AuthState {
-    data class Success(val user: FirebaseUser?) : AuthState()
-    data class Error(val message: String) : AuthState()
-    object Cancel : AuthState()
 }

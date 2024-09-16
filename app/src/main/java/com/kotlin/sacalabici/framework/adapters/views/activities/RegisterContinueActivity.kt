@@ -6,9 +6,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.data.models.RegistrationState
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserContinueBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.RegisterContinueViewModel
-import com.kotlin.sacalabici.framework.adapters.viewmodel.RegistrationState
 
 class RegisterContinueActivity : AppCompatActivity() {
 

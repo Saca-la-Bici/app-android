@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.kotlin.sacalabici.data.models.RegistrationState
 
 class RegisterContinueViewModel : ViewModel() {
 
@@ -35,9 +35,4 @@ class RegisterContinueViewModel : ViewModel() {
     private fun arePasswordsValid(password: String, confirmPassword: String): Boolean {
         return password == confirmPassword && password.length >= 6
     }
-}
-
-sealed class RegistrationState {
-    data class Success(val user: FirebaseUser?) : RegistrationState()
-    data class Error(val message: String) : RegistrationState()
 }

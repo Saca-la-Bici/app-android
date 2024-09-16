@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.data.models.AuthState
 import com.kotlin.sacalabici.databinding.ActivityLoginBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.AuthState
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AuthViewModel
 import com.kotlin.sacalabici.utils.Constants
 

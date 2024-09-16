@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.R
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
@@ -274,7 +275,8 @@ class RegistrarRutaActivity: AppCompatActivity() {
 
         val waypointsCoordinates = waypoints.joinToString(";") { "${it.longitude()},${it.latitude()}" }
 
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${origin.longitude()},${origin.latitude()};$waypointsCoordinates;${destination.longitude()},${destination.latitude()}?geometries=geojson&access_token=sk.eyJ1Ijoic2FtaXIyNzciLCJhIjoiY20xNDFyajFuMWs0czJqcTI5eW1mNjk5ciJ9.CUkjRFJfyFJN3Xio8t9DyQ")
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${origin.longitude()},${origin.latitude()};$waypointsCoordinates;${destination.longitude()},${destination.latitude()}?geometries=geojson&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
+
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {

@@ -4,6 +4,4 @@
     <string name="Mapa">Mapa</string>
     <string name="Anuncios">Anuncios</string>
     <string name="Perfil">Perfil</string>
-    <string name="mapbox_access_token">MAPBOX_DOWNLOAD_TOKEN</string>
-
 </resources>

@@ -274,7 +274,7 @@ class RegistrarRutaActivity: AppCompatActivity() {
 
         val waypointsCoordinates = waypoints.joinToString(";") { "${it.longitude()},${it.latitude()}" }
 
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${origin.longitude()},${origin.latitude()};$waypointsCoordinates;${destination.longitude()},${destination.latitude()}?geometries=geojson&access_token=sk.eyJ1Ijoic2FtaXIyNzciLCJhIjoiY20wbWwxOXZ0MDNwNTJtb3J0cHN2Z3NmdCJ9.UafXR_Ln3yfnnVwqE2-_Dg")
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${origin.longitude()},${origin.latitude()};$waypointsCoordinates;${destination.longitude()},${destination.latitude()}?geometries=geojson&access_token=sk.eyJ1Ijoic2FtaXIyNzciLCJhIjoiY20xNDFyajFuMWs0czJqcTI5eW1mNjk5ciJ9.CUkjRFJfyFJN3Xio8t9DyQ")
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
@@ -322,7 +322,7 @@ class RegistrarRutaActivity: AppCompatActivity() {
         end: Point
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://[SU_IP_AQUI]:7070/mapa/registrarRuta") // Asegúrate de usar la IP correcta
+            val url = URL("http://10.0.2.2:7070/mapa/registrarRuta") // Asegúrate de usar la IP correcta
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")

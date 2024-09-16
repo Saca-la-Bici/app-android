@@ -13,8 +13,16 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Acceder al valor de MAPBOX_DOWNLOADS_TOKEN desde gradle.properties
+        val mapboxToken: String = project.findProperty("MAPBOX_DOWNLOADS_TOKEN") as String? ?: ""
+
+        // Agregarlo como un buildConfigField para usarlo en el código Kotlin
+        buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"${mapboxToken}\"")
+
+        // Agregarlo como un recurso de string para usarlo en el AndroidManifest.xml
+        resValue("string", "mapbox_access_token", "\"${mapboxToken}\"")
     }
 
     buildTypes {

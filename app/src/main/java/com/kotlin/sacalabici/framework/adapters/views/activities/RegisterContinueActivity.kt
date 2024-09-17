@@ -40,11 +40,11 @@ class RegisterContinueActivity : AppCompatActivity() {
         binding.BFinish.setOnClickListener {
             val email = intent.getStringExtra("email") ?: ""
             val username = intent.getStringExtra("username") ?: ""
-            val birthday = intent.getStringExtra("birthday") ?: ""
+            val edad = intent.getIntExtra("edad", -1) ?: ""
             val password = binding.TILPassword.editText?.text.toString()
             val confirmPassword = binding.TILVerifyPassword.editText?.text.toString()
 
-            registerViewModel.registerUser(email, password, confirmPassword)
+            registerViewModel.registerUser(email, password, confirmPassword, username, edad as Int)
         }
 
         binding.BBack.setOnClickListener {

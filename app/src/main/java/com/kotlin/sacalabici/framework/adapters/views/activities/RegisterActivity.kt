@@ -11,13 +11,17 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserBinding
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
 class RegisterActivity : AppCompatActivity() {
     lateinit var binding: ActivityRegisterUserBinding
-//    private val viewModel: RegisterViewModel by viewModels()
+    // private val viewModel: RegisterViewModel by viewModels()
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,11 +41,14 @@ class RegisterActivity : AppCompatActivity() {
             val username = binding.TILUsername.editText?.text.toString()
             val birthday = binding.BDate.text.toString()
 
+            @RequiresApi(Build.VERSION_CODES.O)
             if (isValidEmail(email) && isValidUsername(username) && isValidBirthday(birthday)) {
+                val edad = calcularEdad(birthday)
+
                 val intent = Intent(this, RegisterContinueActivity::class.java)
                 intent.putExtra("email", email)
                 intent.putExtra("username", username)
-                intent.putExtra("birthday", birthday)
+                intent.putExtra("edad", edad)
                 startActivity(intent)
             } else {
                 if (!isValidEmail(email)) {
@@ -51,7 +58,6 @@ class RegisterActivity : AppCompatActivity() {
                     binding.TILUsername.error = "Invalid username"
                 }
                 if (!isValidBirthday(birthday)) {
-                    // Show error message for invalid birthday (e.g., Toast or Snackbar)
                     Toast.makeText(this, "Please select your birthday", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -71,7 +77,6 @@ class RegisterActivity : AppCompatActivity() {
                 calendario.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
-
     }
 
     private fun isValidBirthday(birthday: String): Boolean {
@@ -83,7 +88,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun isValidUsername(username: String): Boolean {
-        // Example: Check if username is not empty and meets certain criteria
         return username.isNotEmpty() && username.length >= 3
     }
 
@@ -92,7 +96,15 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    // Función para obtener actualizar la fecha
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun calcularEdad(birthday: String): Int {
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val fechaNacimiento = LocalDate.parse(birthday, formatter)
+        val fechaActual = LocalDate.now()
+        val periodo = Period.between(fechaNacimiento, fechaActual)
+        return periodo.years
+    }
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun actualizarFecha(calendario: Calendar) {
         val formatoFecha = "dd/MM/yyyy"

@@ -1,9 +1,11 @@
 package com.kotlin.sacalabici.framework.adapters.viewmodel
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -20,7 +22,10 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.kotlin.sacalabici.data.models.AuthState
+import com.kotlin.sacalabici.data.models.User
+import com.kotlin.sacalabici.domain.SessionRequirement
 import com.kotlin.sacalabici.utils.Constants
+import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
 
@@ -30,6 +35,7 @@ class AuthViewModel : ViewModel() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
+    private val sessionRequirement = SessionRequirement()  // Crear instancia de SessionRequirement
 
     fun initialize(firebaseAuthInstance: FirebaseAuth, googleOptions: GoogleSignInOptions, activity: AppCompatActivity) {
         firebaseAuth = firebaseAuthInstance
@@ -70,7 +76,21 @@ class AuthViewModel : ViewModel() {
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
+                    val currentUser = firebaseAuth.currentUser
+                    if (currentUser != null) {
+                        val user = User(
+                            username = currentUser.displayName ?: "",
+                            nombre = "",
+                            edad = 0,
+                            tipoSangre = "",
+                            correoElectronico = currentUser.email ?: "",
+                            numeroEmergencia = currentUser.phoneNumber ?: "",
+                            firebaseUID = currentUser.uid ?: ""
+                        )
+                        registerUser(user)
+                    } else {
+                        _authState.postValue(AuthState.Error("Usuario actual no disponible"))
+                    }
                 } else {
                     _authState.postValue(AuthState.Error("Autenticación fallida con Facebook"))
                 }
@@ -90,7 +110,21 @@ class AuthViewModel : ViewModel() {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
+                val currentUser = firebaseAuth.currentUser
+                if (currentUser != null) {
+                    val user = User(
+                        username = currentUser.displayName ?: "",
+                        nombre = "",
+                        edad = 0,
+                        tipoSangre = "",
+                        correoElectronico = currentUser.email ?: "",
+                        numeroEmergencia = currentUser.phoneNumber ?: "",
+                        firebaseUID = currentUser.uid ?: ""
+                    )
+                    registerUser(user)
+                } else {
+                    _authState.postValue(AuthState.Error("Usuario actual no disponible"))
+                }
             } else {
                 _authState.postValue(AuthState.Error("Autenticación fallida con Google"))
             }
@@ -98,12 +132,27 @@ class AuthViewModel : ViewModel() {
     }
 
     // Autenticación por correo y contraseña
+// Autenticación por correo y contraseña
     fun signInWithEmailAndPassword(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
+                        val currentUser = firebaseAuth.currentUser
+                        if (currentUser != null) {
+                            val user = User(
+                                username = currentUser.displayName ?: "",
+                                nombre = "",
+                                edad = 0,
+                                tipoSangre = "",
+                                correoElectronico = currentUser.email ?: "",
+                                numeroEmergencia = currentUser.phoneNumber ?: "",
+                                firebaseUID = currentUser.uid ?: ""
+                            )
+                            registerUser(user)
+                        } else {
+                            _authState.postValue(AuthState.Error("Usuario actual no disponible"))
+                        }
                     } else {
                         _authState.postValue(AuthState.Error("Error al iniciar sesión con correo y contraseña: ${task.exception?.message}"))
                     }
@@ -113,10 +162,26 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+
     fun checkCurrentUser() {
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
             _authState.postValue(AuthState.Success(currentUser))
+        }
+    }
+
+    private fun registerUser(user: User) {
+        viewModelScope.launch {
+            try {
+                val result = sessionRequirement(user)
+                if (result != null) {
+                    _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
+                } else {
+                    _authState.postValue(AuthState.Error("Error al iniciar sesión"))
+                }
+            } catch (e: Exception) {
+                _authState.postValue(AuthState.Error("Error: ${e.message}"))
+            }
         }
     }
 }

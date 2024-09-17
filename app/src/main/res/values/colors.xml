@@ -8,6 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!--    App Colors-->
     <color name="yellow">#F6CD0B</color>
+    <color name="neonYellow">#FFFF00</color>
+    <color name="darkGray">#2B2B3B</color>
+    <color name="semiBlack">#1C1B1F</color>
+    <color name="semiWhite">#FDFDFD</color>
+    <color name="beige">#F3F0EB</color>
+    <color name="green">#9BC7AC</color>
+    <color name="darkGreen">#7DA68D</color>
 </resources>

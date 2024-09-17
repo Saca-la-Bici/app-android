@@ -3,6 +3,7 @@ package com.kotlin.sacalabici.framework.adapters.views.activities
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,16 +14,81 @@ import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
 
 class ProfileActivity: BaseActivity() {
     private lateinit var binding: ActivityProfileBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initializeBinding()
+
+        val btnEventos = binding.btnEventos
+        val btnAsistencia = binding.btnAsistencia
+        val btnGlobal = binding.btnGlobal
+        val vSection = binding.vSection
+        val btnConfiguration = binding.btnConfiguration
+
+        btnEventos.setOnClickListener {
+            highlightCurrentActivity("Eventos", btnEventos, btnAsistencia, btnGlobal, vSection)
+        }
+        btnAsistencia.setOnClickListener {
+            highlightCurrentActivity("Asistencia", btnEventos, btnAsistencia, btnGlobal, vSection)
+        }
+        btnGlobal.setOnClickListener {
+            highlightCurrentActivity("Global", btnEventos, btnAsistencia, btnGlobal, vSection)
+        }
+
         setupNavbar()
+        setupConfiguracionButton()
     }
 
-    private fun initializeBinding(){
+    private fun initializeBinding() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    // Método para inicializar el listener del botón de configuración
+    private fun setupConfiguracionButton() {
+        binding.btnConfiguration.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+    }
+
+    private fun highlightCurrentActivity(
+        currentActivity: String,
+        btnEventos: ImageButton,
+        btnAsistencia: ImageButton,
+        btnGlobal: ImageButton,
+        vSection: View
+    ) {
+        // Reiniciar estilos de los botones y la vista
+        resetButtonStyles(btnEventos, btnAsistencia, btnGlobal)
+
+        // Cambiar estilo del botón y actualizar la vista
+        when (currentActivity) {
+            "Eventos" -> {
+                btnEventos.setImageResource(R.drawable.ic_event_selected)
+                vSection.setBackgroundColor(Color.LTGRAY) // Cambiar color de la vista al seleccionar
+            }
+            "Asistencia" -> {
+                btnAsistencia.setImageResource(R.drawable.ic_check_selected)
+                vSection.setBackgroundColor(Color.DKGRAY) // Cambiar a otro color o contenido
+            }
+            "Global" -> {
+                btnGlobal.setImageResource(R.drawable.ic_global_selected)
+                vSection.setBackgroundColor(Color.CYAN) // Otro color o contenido
+            }
+        }
+    }
+
+    private fun resetButtonStyles(
+        btnEventos: ImageButton,
+        btnAsistencia: ImageButton,
+        btnGlobal: ImageButton
+    ) {
+        // Restablecer iconos y fondos a su estado normal
+        btnEventos.setImageResource(R.drawable.ic_event)
+        btnAsistencia.setImageResource(R.drawable.ic_check)
+        btnGlobal.setImageResource(R.drawable.ic_global)
+    }
+
 }

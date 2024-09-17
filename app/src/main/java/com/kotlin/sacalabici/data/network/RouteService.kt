@@ -14,7 +14,7 @@ object RouteService {
     suspend fun sendRoute(titulo: String, distancia: String, tiempo: String, nivel: String, start: Point, stopover: Point, end: Point
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://10.0.2.2:7070/mapa/registrarRuta")
+            val url = URL("http://3.145.117.182:8080/mapa/registrarRuta")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")

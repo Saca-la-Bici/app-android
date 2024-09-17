@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.navigation.fragment)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -50,4 +51,18 @@ dependencies {
     //MAPBOX DEPENDENCY
     implementation(libs.maps.android)
     implementation(libs.maps.compose)
+
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+    //Fragment
+    implementation("androidx.fragment:fragment-ktx:1.5.0")
+    //Data Binding
+    implementation("androidx.databinding:databinding-runtime:7.1.2")
+    //Activity
+    implementation("androidx.activity:activity-ktx:1.5.0")
+    //ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    //LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+
 }

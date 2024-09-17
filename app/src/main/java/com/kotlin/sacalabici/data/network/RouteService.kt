@@ -11,45 +11,63 @@ import java.net.URL
 
 object RouteService {
 
-    suspend fun sendRoute(titulo: String, distancia: String, tiempo: String, nivel: String, points: List<Point>): Boolean {
-        return withContext(Dispatchers.IO) {
-            try {
-                val url = URL("http://10.0.2.2:7070/mapa/registrarRuta")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "POST"
-                connection.setRequestProperty("Content-Type", "application/json")
-                connection.doOutput = true
+    suspend fun sendRoute(titulo: String, distancia: String, tiempo: String, nivel: String, start: Point, stopover: Point, end: Point
+    ): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val url = URL("http://10.0.2.2:7070/mapa/registrarRuta")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.doOutput = true
 
-                val coordinatesArray = JSONArray().apply {
-                    points.forEach { point ->
-                        put(JSONObject().apply {
-                            put("latitud", point.latitude())
-                            put("longitud", point.longitude())
-                            put("tipo", "punto")
-                        })
-                    }
-                }
+            val coordinatesArray = JSONArray().apply {
+                put(JSONObject().apply {
+                    put("latitud", start.latitude())
+                    put("longitud", start.longitude())
+                    put("tipo", "inicio")
+                })
+                put(JSONObject().apply {
+                    put("latitud", stopover.latitude())
+                    put("longitud", stopover.longitude())
+                    put("tipo", "descanso")
+                })
+                put(JSONObject().apply {
+                    put("latitud", end.latitude())
+                    put("longitud", end.longitude())
+                    put("tipo", "final")
+                })
+            }
 
-                val jsonInputString = JSONObject().apply {
-                    put("titulo", titulo)
-                    put("distancia", distancia)
-                    put("tiempo", tiempo)
-                    put("nivel", nivel)
-                    put("coordenadas", coordinatesArray)
-                }.toString()
+            val jsonInputString = JSONObject().apply {
+                put("titulo", titulo)
+                put("distancia", distancia)
+                put("tiempo", tiempo)
+                put("nivel", nivel)
+                put("coordenadas", coordinatesArray)
+            }.toString()
 
-                connection.outputStream.use {
-                    it.write(jsonInputString.toByteArray(Charsets.UTF_8))
-                }
+            // Log del JSON que se va a enviar
+            Log.d("sendRoute", "JSON a enviar: $jsonInputString")
 
-                val responseCode = connection.responseCode
-                connection.disconnect()
+            connection.outputStream.use {
+                it.write(jsonInputString.toByteArray(Charsets.UTF_8))
+            }
 
-                responseCode == HttpURLConnection.HTTP_OK
-            } catch (e: Exception) {
-                Log.e("RouteService", "Error al enviar la ruta: ${e.message}")
+            val responseCode = connection.responseCode
+            val responseMessage = connection.inputStream.bufferedReader().use { it.readText() }
+
+            connection.disconnect()
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                Log.d("sendRoute", "Respuesta del servidor: $responseMessage")
+                true
+            } else {
+                Log.e("sendRoute", "Error en la solicitud: $responseCode - $responseMessage")
                 false
             }
+        } catch (e: Exception) {
+            Log.e("sendRoute", "Excepción en la solicitud: ${e.message}")
+            false
         }
     }
 }

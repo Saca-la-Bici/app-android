@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -60,7 +61,9 @@ class RegistrarRutaActivity: AppCompatActivity() {
         val etTitulo = findViewById<EditText>(R.id.etTitulo)
         val etTiempo = findViewById<EditText>(R.id.etTiempo)
         val btnEnviar: Button = findViewById(R.id.btnEnviar)
+        val btnSiguiente: Button = findViewById(R.id.btnSiguiente)
 
+        btnSiguiente.isEnabled = false
         btnEnviar.isEnabled = false
 
         etTitulo.addTextChangedListener(textWatcher)
@@ -69,6 +72,10 @@ class RegistrarRutaActivity: AppCompatActivity() {
 
         tvNivel.setOnClickListener {
             showlevelDialogue() // Abre el diálogo para que el usuario seleccione un nivel
+        }
+
+        btnSiguiente.setOnClickListener {
+            showAdditionalFields()
         }
 
         btnEnviar.setOnClickListener {
@@ -107,6 +114,34 @@ class RegistrarRutaActivity: AppCompatActivity() {
 
     }
 
+    private fun showAdditionalFields() {
+        // Ajusta visibilidad
+        val btnEnviar: Button = findViewById(R.id.btnEnviar)
+        val etTitulo: EditText = findViewById(R.id.etTitulo)
+        val etTiempo: EditText = findViewById(R.id.etTiempo)
+        val etDistancia: EditText = findViewById(R.id.etDistancia)
+        val btnSiguiente: Button = findViewById(R.id.btnSiguiente)
+        val etInicio: EditText = findViewById(R.id.etInicio)
+        val etDescanso: EditText = findViewById(R.id.etDescanso)
+        val etFin: EditText = findViewById(R.id.etFin)
+        tvNivel = findViewById(R.id.tvNivel) // Inicializamos el TextView del nivel
+
+        // Oculta los campos actuales
+        etTitulo.visibility = View.GONE
+        etTiempo.visibility = View.GONE
+        btnSiguiente.visibility = View.GONE
+        tvNivel.visibility = View.GONE
+
+        // Muestra los campos nuevos
+        etDistancia.visibility = View.VISIBLE
+        etInicio.visibility = View.VISIBLE
+        etDescanso.visibility = View.VISIBLE
+        etFin.visibility = View.VISIBLE
+        btnEnviar.visibility = View.VISIBLE
+    }
+
+
+
     private val textWatcher = object : android.text.TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -121,13 +156,28 @@ class RegistrarRutaActivity: AppCompatActivity() {
         val titulo = findViewById<EditText>(R.id.etTitulo).text.toString().trim()
         val distancia = etDistancia.text.toString().trim()
         val tiempo = findViewById<EditText>(R.id.etTiempo).text.toString().trim()
+        val inicio = findViewById<EditText>(R.id.etInicio).text.toString().trim()
+        val descanso = findViewById<EditText>(R.id.etDescanso).text.toString().trim()
+        val fin = findViewById<EditText>(R.id.etFin).text.toString().trim()
         val btnEnviar: Button = findViewById(R.id.btnEnviar)
+        val btnSiguiente: Button = findViewById(R.id.btnSiguiente)
 
-        val todosCamposLlenos = titulo.isNotEmpty() && distancia.isNotEmpty() && tiempo.isNotEmpty()
+
+        val todosCamposLlenos = titulo.isNotEmpty() && distancia.isNotEmpty() && tiempo.isNotEmpty() && inicio.isNotEmpty() && descanso.isNotEmpty() && fin.isNotEmpty()
+        val primerosCamposLlenos = titulo.isNotEmpty() && tiempo.isNotEmpty()
         val nivelSeleccionado = nivelSeleccionado != null
         val rutaCompleta = startPoint != null && stopoverPoint != null && endPoint != null
 
         Log.d("VerifyInputs", "Titulo: $titulo, Distancia: $distancia, Tiempo: $tiempo, Nivel Seleccionado: $nivelSeleccionado, Ruta Completa: $rutaCompleta")
+
+        if(primerosCamposLlenos && nivelSeleccionado){
+            btnSiguiente.isEnabled = true
+            btnSiguiente.backgroundTintList = ContextCompat.getColorStateList(this, R.color.yellow_able)
+        }
+        else{
+            btnSiguiente.isEnabled = false
+            btnSiguiente.backgroundTintList = ContextCompat.getColorStateList(this, R.color.yellow_disabled)
+        }
 
         if (todosCamposLlenos && nivelSeleccionado && rutaCompleta) {
             btnEnviar.isEnabled = true
@@ -324,7 +374,7 @@ class RegistrarRutaActivity: AppCompatActivity() {
         end: Point
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            val url = URL("http://10.0.2.2:7070/mapa/registrarRuta") // Asegúrate de usar la IP correcta
+            val url = URL("http://10.0.2.2:7070/mapa/registrarRuta")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")
@@ -356,6 +406,9 @@ class RegistrarRutaActivity: AppCompatActivity() {
                 put("coordenadas", coordinatesArray)
             }.toString()
 
+            // Log del JSON que se va a enviar
+            Log.d("sendRoute", "JSON a enviar: $jsonInputString")
+
             connection.outputStream.use {
                 it.write(jsonInputString.toByteArray(Charsets.UTF_8))
             }
@@ -377,6 +430,4 @@ class RegistrarRutaActivity: AppCompatActivity() {
             false
         }
     }
-
-
 }

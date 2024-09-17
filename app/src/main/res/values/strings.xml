@@ -4,5 +4,7 @@
     <string name="Mapa">Mapa</string>
     <string name="Anuncios">Anuncios</string>
     <string name="Perfil">Perfil</string>
+    <string name="AnnouncementTitle">Aquí va el título</string>
+    <string name="AnnouncementDescription">Aquí va la descripción del anuncio</string>
 
 </resources>

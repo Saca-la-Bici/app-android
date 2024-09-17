@@ -10,7 +10,7 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FerpXx_123"
+        android:text="FerxX_123"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,6 @@
         android:layout_height="90dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/circle_profile"
-        android:contentDescription="Profile Image"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="@id/vUser"
         app:layout_constraintStart_toStartOf="@id/vUser"
@@ -75,7 +74,6 @@
         android:layout_height="25dp"
         android:layout_marginTop="64dp"
         android:background="@drawable/ic_blood"
-        android:contentDescription="blood icon"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="@id/vUser"
         app:layout_constraintHorizontal_bias="0.0"
@@ -141,7 +139,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Rodadas"
+        android:text="@string/PRodadas"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -169,7 +167,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Kilómetros"
+        android:text="@string/PKilometros"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -198,7 +196,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Amigos"
+        android:text="@string/PAmigos"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -231,19 +229,19 @@
             android:layout_marginEnd="8dp">
 
             <ImageButton
-                android:id="@+id/button_edit_profile"
+                android:id="@+id/btn_edit_profile"
                 android:layout_width="110dp"
                 android:layout_height="35dp"
                 android:background="@drawable/rounded_button"
                 />
 
             <TextView
-                android:id="@+id/button_edit_profile_text"
+                android:id="@+id/tv_edit_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="4dp"
-                android:text="Editar Perfil"
+                android:text="@string/PEdit"
                 android:textColor="#000000"
                 android:textSize="13sp"
                 android:textStyle="bold"/>
@@ -255,18 +253,18 @@
             android:layout_marginEnd="8dp">
 
             <ImageButton
-                android:id="@+id/button_share_profile"
+                android:id="@+id/btn_share_profile"
                 android:layout_width="140dp"
                 android:layout_height="35dp"
                 android:background="@drawable/rounded_button"/>
 
             <TextView
-                android:id="@+id/button_share_profile_text"
+                android:id="@+id/tv_share_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="4dp"
-                android:text="Compartir Perfil"
+                android:text="@string/PShareProfile"
                 android:textColor="#000000"
                 android:textSize="13sp"
                 android:textStyle="bold"/>

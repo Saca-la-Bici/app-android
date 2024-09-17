@@ -38,4 +38,11 @@
 
     <string name="facebook_app_id">1940390093140800</string>
     <string name="facebook_client_token">b5daf3a37da479db677c140e79b2268d</string>
+    <string name="PRodadas">Rodadas</string>
+    <string name="PKilometros">Kilómetros</string>
+    <string name="PAmigos">Amigos</string>
+    <string name="PEdit">Editar Perfil</string>
+    <string name="PShareProfile">Compartir perfil</string>
+
+
 </resources>

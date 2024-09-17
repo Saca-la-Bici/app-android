@@ -23,7 +23,6 @@ class ProfileActivity: BaseActivity() {
         val btnAsistencia = binding.btnAsistencia
         val btnGlobal = binding.btnGlobal
         val vSection = binding.vSection
-        val btnConfiguration = binding.btnConfiguration
 
         btnEventos.setOnClickListener {
             highlightCurrentActivity("Eventos", btnEventos, btnAsistencia, btnGlobal, vSection)
@@ -37,6 +36,7 @@ class ProfileActivity: BaseActivity() {
 
         setupNavbar()
         setupConfiguracionButton()
+        setupEditarButton()
     }
 
     private fun initializeBinding() {
@@ -46,12 +46,24 @@ class ProfileActivity: BaseActivity() {
 
     // Método para inicializar el listener del botón de configuración
     private fun setupConfiguracionButton() {
-        binding.btnConfiguration.setOnClickListener {
+        val btnConfiguration = findViewById<ImageButton>(R.id.btn_configuration)
+        btnConfiguration.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
     }
+
+    // Método para inicializar el listener del botón de configuración
+    private fun setupEditarButton() {
+        val btnEditProfile = findViewById<ImageButton>(R.id.btn_edit_profile)
+        btnEditProfile.setOnClickListener {
+            val intent = Intent(this, ProfileEditActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+    }
+
 
     private fun highlightCurrentActivity(
         currentActivity: String,

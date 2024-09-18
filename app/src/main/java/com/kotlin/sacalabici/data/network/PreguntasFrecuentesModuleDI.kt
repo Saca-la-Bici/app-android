@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.network
 
+import com.kotlin.sacalabici.utils.Constants
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

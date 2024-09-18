@@ -6,5 +6,8 @@
     <string name="Perfil">Perfil</string>
     <string name="AnnouncementTitle">Aquí va el título</string>
     <string name="AnnouncementDescription">Aquí va la descripción del anuncio</string>
+    <string name="addAnnouncement">Añadir anuncio</string>
+    <string name="add_announcement_title">Título</string>
+    <string name="add_announcement_title_hint">Título del anuncio</string>
 
 </resources>

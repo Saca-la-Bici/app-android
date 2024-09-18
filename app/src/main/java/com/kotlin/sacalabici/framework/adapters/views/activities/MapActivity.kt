@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.models.RutasBase
 import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
@@ -18,6 +19,9 @@ import com.mapbox.maps.Style
 class MapActivity: BaseActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
+
+    private val adapter : RutasAdapter = RutasAdapter()
+    private lateinit var data:ArrayList<RutasBase>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

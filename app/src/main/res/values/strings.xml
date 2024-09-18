@@ -9,5 +9,7 @@
     <string name="addAnnouncement">Añadir anuncio</string>
     <string name="add_announcement_title">Título</string>
     <string name="add_announcement_title_hint">Título del anuncio</string>
+    <string name="add_announcement_description">Descripción</string>
+    <string name="add_announcement_description_hint">¿Qué quieres compartir?</string>
 
 </resources>

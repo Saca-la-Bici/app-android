@@ -7,10 +7,14 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
 import com.kotlin.sacalabici.databinding.ActivityProfileBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
 
 class ProfileActivity: BaseActivity() {
     private lateinit var binding: ActivityProfileBinding
@@ -22,16 +26,15 @@ class ProfileActivity: BaseActivity() {
         val btnEventos = binding.btnEventos
         val btnAsistencia = binding.btnAsistencia
         val btnGlobal = binding.btnGlobal
-        val vSection = binding.vSection
 
         btnEventos.setOnClickListener {
-            highlightCurrentActivity("Eventos", btnEventos, btnAsistencia, btnGlobal, vSection)
+            highlightCurrentActivity("Eventos", btnEventos, btnAsistencia, btnGlobal)
         }
         btnAsistencia.setOnClickListener {
-            highlightCurrentActivity("Asistencia", btnEventos, btnAsistencia, btnGlobal, vSection)
+            highlightCurrentActivity("Asistencia", btnEventos, btnAsistencia, btnGlobal)
         }
         btnGlobal.setOnClickListener {
-            highlightCurrentActivity("Global", btnEventos, btnAsistencia, btnGlobal, vSection)
+            highlightCurrentActivity("Global", btnEventos, btnAsistencia, btnGlobal)
         }
 
         setupNavbar()
@@ -69,29 +72,33 @@ class ProfileActivity: BaseActivity() {
         currentActivity: String,
         btnEventos: ImageButton,
         btnAsistencia: ImageButton,
-        btnGlobal: ImageButton,
-        vSection: View
+        btnGlobal: ImageButton
     ) {
-        // Reiniciar estilos de los botones y la vista
+        // Reiniciar estilos de los botones
         resetButtonStyles(btnEventos, btnAsistencia, btnGlobal)
 
         // Cambiar estilo del botón y actualizar la vista
         when (currentActivity) {
             "Eventos" -> {
                 btnEventos.setImageResource(R.drawable.ic_event_selected)
-                vSection.setBackgroundColor(Color.LTGRAY) // Cambiar color de la vista al seleccionar
+                replaceFragment(EventFragment())
             }
             "Asistencia" -> {
                 btnAsistencia.setImageResource(R.drawable.ic_check_selected)
-                vSection.setBackgroundColor(Color.DKGRAY) // Cambiar a otro color o contenido
+                replaceFragment(MedalsFragment())
             }
             "Global" -> {
                 btnGlobal.setImageResource(R.drawable.ic_global_selected)
-                vSection.setBackgroundColor(Color.CYAN) // Otro color o contenido
+                replaceFragment(GlobalFragment())
             }
         }
     }
 
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.vFragment, fragment)
+            .commit()
+    }
     private fun resetButtonStyles(
         btnEventos: ImageButton,
         btnAsistencia: ImageButton,

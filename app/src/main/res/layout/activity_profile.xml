@@ -332,18 +332,16 @@
         app:layout_constraintEnd_toEndOf="@id/vIcons"
         app:layout_constraintVertical_bias="0.2"/>
 
-    <View
-        android:id="@+id/vSection"
+    <FrameLayout
+        android:id="@+id/vFragment"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="270dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/vIcons"
-        app:layout_constraintVertical_bias="0.314">
-
-    </View>
+        app:layout_constraintVertical_bias="0.27" />
 
     <include layout="@layout/main_navbar"/>
 

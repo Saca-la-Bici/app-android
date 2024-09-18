@@ -7,7 +7,7 @@ data class RutasBase (
     @SerializedName("titulo") var titulo: String,
     @SerializedName("distancia") var distancia: String,
     @SerializedName("tiempo") var tiempo: String,
-    @SerializedName("nivel") var nivel: Int,
+    @SerializedName("nivel") var nivel: String,
     @SerializedName("lugar") var lugar: String,
     @SerializedName("descanso") var descanso: String,
     @SerializedName("coordenadas") var coordenadas: ArrayList<CoordenadasBase>,

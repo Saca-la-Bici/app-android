@@ -10,6 +10,7 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.RutasBase
 import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
+import com.kotlin.sacalabici.framework.adapters.RutasAdapter
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions

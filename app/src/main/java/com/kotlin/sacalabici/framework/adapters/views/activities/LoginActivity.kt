@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
         authViewModel.initialize(
             FirebaseAuth.getInstance(),
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("1077042273728-8dgeo63mtbl5e25n0b6n453ptd7fhm9a.apps.googleusercontent.com")
+                .requestIdToken(Constants.REQUEST_ID_TOKEN)
                 .requestEmail()
                 .build(),
             this
@@ -47,6 +47,8 @@ class LoginActivity : AppCompatActivity() {
                 AuthState.Cancel -> {
                     Toast.makeText(this, "Inicio de sesión cancelado", Toast.LENGTH_SHORT).show()
                 }
+
+                AuthState.SignedOut -> TODO()
             }
         }
 

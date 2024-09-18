@@ -6,18 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.AuthState
-import com.kotlin.sacalabici.data.models.RegistrationState
 import com.kotlin.sacalabici.data.models.User
 import com.kotlin.sacalabici.domain.SessionRequirement
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
-class RegisterContinueViewModel : ViewModel() {
+class RegisterViewModel : ViewModel() {
 
-    private val _registrationState = MutableLiveData<RegistrationState>()
-    val registrationState: LiveData<RegistrationState> get() = _registrationState
+    private val _authState = MutableLiveData<AuthState>()
+    val authState: LiveData<AuthState> get() = _authState
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private val sessionRequirement = SessionRequirement()
 
     fun initialize(firebaseAuthInstance: FirebaseAuth) {
         firebaseAuth = firebaseAuthInstance
@@ -41,14 +40,14 @@ class RegisterContinueViewModel : ViewModel() {
                             )
                             registerUser(user)
                         } else {
-                            _registrationState.postValue(RegistrationState.Success(firebaseAuth.currentUser))
+                            _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
                         }
                     } else {
-                        _registrationState.postValue(RegistrationState.Error("Hubo un error al registrar el usuario: ${task.exception?.message}"))
+                        _authState.postValue(AuthState.Error("Hubo un error al registrar el usuario: ${task.exception?.message}"))
                     }
                 }
         } else {
-            _registrationState.postValue(RegistrationState.Error("Las contraseñas no coinciden o son demasiado cortas"))
+            _authState.postValue(AuthState.Error("Las contraseñas no coinciden o son demasiado cortas"))
         }
     }
 
@@ -58,16 +57,30 @@ class RegisterContinueViewModel : ViewModel() {
 
     private fun registerUser(user: User) {
         viewModelScope.launch {
-            try {
+            val idToken = getFirebaseIdToken()
+
+            if (idToken != null) {
+                val sessionRequirement = SessionRequirement(idToken)
                 val result = sessionRequirement(user)
+
                 if (result != null) {
-                    _registrationState.postValue(RegistrationState.Success(firebaseAuth.currentUser))
+                    _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
                 } else {
-                    _registrationState.postValue(RegistrationState.Error("Error al registrar usuario"))
+                    firebaseAuth.signOut()
+                    _authState.postValue(AuthState.Error("Error al iniciar sesión"))
                 }
-            } catch (e: Exception) {
-                _registrationState.postValue(RegistrationState.Error("Error: ${e.message}"))
+            } else {
+                firebaseAuth.signOut()
+                _authState.postValue(AuthState.Error("Error al obtener el token de Firebase"))
             }
+        }
+    }
+
+    private suspend fun getFirebaseIdToken(): String? {
+        return try {
+            firebaseAuth.currentUser?.getIdToken(true)?.await()?.token
+        } catch (e: Exception) {
+            null
         }
     }
 }

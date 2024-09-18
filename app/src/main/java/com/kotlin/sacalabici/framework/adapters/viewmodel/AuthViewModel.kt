@@ -26,16 +26,14 @@ import com.kotlin.sacalabici.data.models.User
 import com.kotlin.sacalabici.domain.SessionRequirement
 import com.kotlin.sacalabici.utils.Constants
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class AuthViewModel : ViewModel() {
-
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> get() = _authState
-
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var callbackManager: CallbackManager
-    private val sessionRequirement = SessionRequirement()  // Crear instancia de SessionRequirement
+    private lateinit var callbackManager: CallbackManager // Crear instancia de SessionRequirement
 
     fun initialize(firebaseAuthInstance: FirebaseAuth, googleOptions: GoogleSignInOptions, activity: AppCompatActivity) {
         firebaseAuth = firebaseAuthInstance
@@ -131,7 +129,6 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    // Autenticación por correo y contraseña
 // Autenticación por correo y contraseña
     fun signInWithEmailAndPassword(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
@@ -172,16 +169,30 @@ class AuthViewModel : ViewModel() {
 
     private fun registerUser(user: User) {
         viewModelScope.launch {
-            try {
+            val idToken = getFirebaseIdToken()
+
+            if (idToken != null) {
+                val sessionRequirement = SessionRequirement(idToken)
                 val result = sessionRequirement(user)
+
                 if (result != null) {
                     _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
                 } else {
+                    firebaseAuth.signOut()
                     _authState.postValue(AuthState.Error("Error al iniciar sesión"))
                 }
-            } catch (e: Exception) {
-                _authState.postValue(AuthState.Error("Error: ${e.message}"))
+            } else {
+                firebaseAuth.signOut()
+                _authState.postValue(AuthState.Error("Error al obtener el token de Firebase"))
             }
+        }
+    }
+
+    private suspend fun getFirebaseIdToken(): String? {
+        return try {
+            firebaseAuth.currentUser?.getIdToken(true)?.await()?.token
+        } catch (e: Exception) {
+            null
         }
     }
 }

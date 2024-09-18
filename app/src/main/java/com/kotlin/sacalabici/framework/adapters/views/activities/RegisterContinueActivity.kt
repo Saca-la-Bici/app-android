@@ -6,14 +6,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.kotlin.sacalabici.data.models.RegistrationState
+import com.kotlin.sacalabici.data.models.AuthState
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserContinueBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.RegisterContinueViewModel
+import com.kotlin.sacalabici.framework.adapters.viewmodel.RegisterViewModel
 
 class RegisterContinueActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterUserContinueBinding
-    private val registerViewModel: RegisterContinueViewModel by viewModels()
+    private val registerViewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,17 +23,20 @@ class RegisterContinueActivity : AppCompatActivity() {
         registerViewModel.initialize(FirebaseAuth.getInstance())
 
         // Observe registration state
-        registerViewModel.registrationState.observe(this) { registrationState ->
-            when (registrationState) {
-                is RegistrationState.Success -> {
+        registerViewModel.authState.observe(this) { authState ->
+            when (authState) {
+                is AuthState.Success -> {
                     // Registration successful
                     val intent = Intent(this, ActivitiesActivity::class.java)
                     Toast.makeText(this, "Account created", Toast.LENGTH_SHORT).show()
                     startActivity(intent)
                 }
-                is RegistrationState.Error -> {
-                    Toast.makeText(this, registrationState.message, Toast.LENGTH_SHORT).show()
+                is AuthState.Error -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
+
+                AuthState.Cancel -> TODO()
+                AuthState.SignedOut -> TODO()
             }
         }
 

@@ -13,7 +13,7 @@ import com.kotlin.sacalabici.databinding.ActivitySessionBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AuthViewModel
 import com.kotlin.sacalabici.utils.Constants
 
-class SessionActivity : AppCompatActivity() {
+class SessionActivity() : AppCompatActivity() {
 
     private lateinit var binding: ActivitySessionBinding
     private lateinit var authViewModel: AuthViewModel
@@ -28,7 +28,7 @@ class SessionActivity : AppCompatActivity() {
         authViewModel.initialize(
             FirebaseAuth.getInstance(),
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("1077042273728-8dgeo63mtbl5e25n0b6n453ptd7fhm9a.apps.googleusercontent.com")
+                .requestIdToken(Constants.REQUEST_ID_TOKEN)
                 .requestEmail()
                 .build(),
             this
@@ -50,6 +50,8 @@ class SessionActivity : AppCompatActivity() {
                 is AuthState.Cancel -> {
                     Toast.makeText(this, "Inicio de sesión cancelado", Toast.LENGTH_SHORT).show()
                 }
+
+                AuthState.SignedOut -> TODO()
             }
         }
 

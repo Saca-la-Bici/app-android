@@ -3,11 +3,13 @@ package com.kotlin.sacalabici.data.network
 import android.util.Log
 import com.kotlin.sacalabici.data.models.User
 
-class SessionAPIClient {
-    private lateinit var api: SessionAPIService
+class SessionAPIClient(private val idToken: String?) {
+
+    private val api: SessionAPIService by lazy {
+        SessionModuleDI.createSessionAPIService(idToken)
+    }
 
     suspend fun registerUser(user: User): User? {
-        api = SessionModuleDI()
         return try {
             api.registerUser(user)
         } catch (e: Exception) {

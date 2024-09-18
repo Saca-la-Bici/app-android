@@ -5,6 +5,6 @@ import com.kotlin.sacalabici.data.network.model.announcement.Announcement
 import retrofit2.http.GET
 
 interface AnnouncementApiService {
-    @GET("consultar")
+    @GET("anuncios/consultar")
     suspend fun getAnnouncementList(): List<AnnouncementBase>
 }

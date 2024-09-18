@@ -17,8 +17,10 @@ class AnnouncementsViewModel: ViewModel() {
     fun getAnnouncementList(){
         viewModelScope.launch(Dispatchers.IO) {
             val result: List<AnnouncementBase> = announcementListRequirement()
+            Log.d("Salida", result.toString())
             CoroutineScope(Dispatchers.Main).launch {
                 announcementObjectLiveData.postValue(result)
             }
-        }    }
+        }
+    }
 }

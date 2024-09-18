@@ -20,9 +20,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.kotlin.sacalabici.data.models.AuthState
 import com.kotlin.sacalabici.data.models.User
+import com.kotlin.sacalabici.data.models.UserClient
 import com.kotlin.sacalabici.domain.SessionRequirement
 import com.kotlin.sacalabici.utils.Constants
 import kotlinx.coroutines.launch
@@ -30,6 +32,7 @@ import kotlinx.coroutines.tasks.await
 
 class AuthViewModel : ViewModel() {
     private val _authState = MutableLiveData<AuthState>()
+    private val userClient = UserClient()
     val authState: LiveData<AuthState> get() = _authState
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -76,16 +79,7 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val currentUser = firebaseAuth.currentUser
                     if (currentUser != null) {
-                        val user = User(
-                            username = currentUser.displayName ?: "",
-                            nombre = "",
-                            edad = 0,
-                            tipoSangre = "",
-                            correoElectronico = currentUser.email ?: "",
-                            numeroEmergencia = currentUser.phoneNumber ?: "",
-                            firebaseUID = currentUser.uid ?: ""
-                        )
-                        registerUser(user)
+                        registerUser(currentUser)
                     } else {
                         _authState.postValue(AuthState.Error("Usuario actual no disponible"))
                     }
@@ -110,16 +104,7 @@ class AuthViewModel : ViewModel() {
             if (task.isSuccessful) {
                 val currentUser = firebaseAuth.currentUser
                 if (currentUser != null) {
-                    val user = User(
-                        username = currentUser.displayName ?: "",
-                        nombre = "",
-                        edad = 0,
-                        tipoSangre = "",
-                        correoElectronico = currentUser.email ?: "",
-                        numeroEmergencia = currentUser.phoneNumber ?: "",
-                        firebaseUID = currentUser.uid ?: ""
-                    )
-                    registerUser(user)
+                    registerUser(currentUser)
                 } else {
                     _authState.postValue(AuthState.Error("Usuario actual no disponible"))
                 }
@@ -137,16 +122,7 @@ class AuthViewModel : ViewModel() {
                     if (task.isSuccessful) {
                         val currentUser = firebaseAuth.currentUser
                         if (currentUser != null) {
-                            val user = User(
-                                username = currentUser.displayName ?: "",
-                                nombre = "",
-                                edad = 0,
-                                tipoSangre = "",
-                                correoElectronico = currentUser.email ?: "",
-                                numeroEmergencia = currentUser.phoneNumber ?: "",
-                                firebaseUID = currentUser.uid ?: ""
-                            )
-                            registerUser(user)
+                            registerUser(currentUser)
                         } else {
                             _authState.postValue(AuthState.Error("Usuario actual no disponible"))
                         }
@@ -167,32 +143,9 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    private fun registerUser(user: User) {
+    private fun registerUser(currentUser: FirebaseUser) {
         viewModelScope.launch {
-            val idToken = getFirebaseIdToken()
-
-            if (idToken != null) {
-                val sessionRequirement = SessionRequirement(idToken)
-                val result = sessionRequirement(user)
-
-                if (result != null) {
-                    _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
-                } else {
-                    firebaseAuth.signOut()
-                    _authState.postValue(AuthState.Error("Error al iniciar sesión"))
-                }
-            } else {
-                firebaseAuth.signOut()
-                _authState.postValue(AuthState.Error("Error al obtener el token de Firebase"))
-            }
-        }
-    }
-
-    private suspend fun getFirebaseIdToken(): String? {
-        return try {
-            firebaseAuth.currentUser?.getIdToken(true)?.await()?.token
-        } catch (e: Exception) {
-            null
+            userClient.registerUser(currentUser, firebaseAuth, _authState)
         }
     }
 }

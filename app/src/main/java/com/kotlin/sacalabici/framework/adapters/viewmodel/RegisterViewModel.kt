@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.kotlin.sacalabici.data.models.AuthState
 import com.kotlin.sacalabici.data.models.User
+import com.kotlin.sacalabici.data.models.UserClient
 import com.kotlin.sacalabici.domain.SessionRequirement
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -14,6 +16,7 @@ import kotlinx.coroutines.tasks.await
 class RegisterViewModel : ViewModel() {
 
     private val _authState = MutableLiveData<AuthState>()
+    private val userClient = UserClient()
     val authState: LiveData<AuthState> get() = _authState
 
     private lateinit var firebaseAuth: FirebaseAuth
@@ -29,16 +32,7 @@ class RegisterViewModel : ViewModel() {
                     if (task.isSuccessful) {
                         val currentUser = firebaseAuth.currentUser
                         if (currentUser != null) {
-                            val user = User(
-                                username = username,
-                                nombre = "",
-                                edad = edad,
-                                tipoSangre = "",
-                                correoElectronico = currentUser.email ?: "",
-                                numeroEmergencia = currentUser.phoneNumber ?: "",
-                                firebaseUID = currentUser.uid ?: ""
-                            )
-                            registerUser(user)
+                            registerUser(currentUser)
                         } else {
                             _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
                         }
@@ -55,32 +49,9 @@ class RegisterViewModel : ViewModel() {
         return password == confirmPassword && password.length >= 6
     }
 
-    private fun registerUser(user: User) {
+    private fun registerUser(currentUser: FirebaseUser) {
         viewModelScope.launch {
-            val idToken = getFirebaseIdToken()
-
-            if (idToken != null) {
-                val sessionRequirement = SessionRequirement(idToken)
-                val result = sessionRequirement(user)
-
-                if (result != null) {
-                    _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
-                } else {
-                    firebaseAuth.signOut()
-                    _authState.postValue(AuthState.Error("Error al iniciar sesión"))
-                }
-            } else {
-                firebaseAuth.signOut()
-                _authState.postValue(AuthState.Error("Error al obtener el token de Firebase"))
-            }
-        }
-    }
-
-    private suspend fun getFirebaseIdToken(): String? {
-        return try {
-            firebaseAuth.currentUser?.getIdToken(true)?.await()?.token
-        } catch (e: Exception) {
-            null
+            userClient.registerUser(currentUser, firebaseAuth, _authState)
         }
     }
 }

@@ -1,3 +1,13 @@
+/**
+ * File: RouteService.kt
+ * Description: Contiene el objeto `RouteService`, el cual se encarga de enviar los datos de una
+ * ruta al servidor. La función `sendRoute` envía una solicitud POST con los detalles de la ruta,
+ * incluyendo título, distancia, tiempo, nivel y coordenadas (puntos de inicio, descanso y final)
+ * a una URL especificada.
+ * Date: 18/09/2024
+ * Changes:
+ */
+
 package com.kotlin.sacalabici.data.network
 
 // Importaciones para funciones de red y JSON

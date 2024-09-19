@@ -8,13 +8,18 @@ import com.kotlin.sacalabici.domain.SessionRequirement
 import kotlinx.coroutines.tasks.await
 
 class UserClient {
-    suspend fun registerUser(currentUser: FirebaseUser, firebaseAuth: FirebaseAuth, _authState: MutableLiveData<AuthState>) {
+    suspend fun registerUser(
+        currentUser: FirebaseUser,
+        firebaseAuth: FirebaseAuth,
+        _authState: MutableLiveData<AuthState>,
+        username: String? = null,
+        fechaNacimiento: String? = null) {
         val idToken = getFirebaseIdToken(firebaseAuth)
 
         val user = User(
-            username = currentUser.displayName ?: "",
+            username = username ?: currentUser.displayName ?: "",
             nombre = "",
-            edad = 0,
+            fechaNacimiento = fechaNacimiento ?: "",
             tipoSangre = "",
             correoElectronico = currentUser.email ?: "",
             numeroEmergencia = currentUser.phoneNumber ?: "",

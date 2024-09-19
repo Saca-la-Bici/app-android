@@ -29,7 +29,7 @@
     <string name="TUsername">Nombre de usuario</string>
     <string name="TBirthday">Fecha de Nacimiento</string>
     <string name="TPrivacityAdd">Esta información no será pública.</string>
-    <string name="TDate">Día/Mes/Año</string>
+    <string name="TDate">Año-Mes-Día</string>
     <string name="TContinue">Continuar</string>
     <string name="TVerifyPassword">Confirmar contraseña</string>
     <string name="TFinish">Finalizar</string>

@@ -25,14 +25,14 @@ class RegisterViewModel : ViewModel() {
         firebaseAuth = firebaseAuthInstance
     }
 
-    fun registerUser(email: String, password: String, confirmPassword: String, username: String, edad: Int) {
+    fun registerUser(email: String, password: String, confirmPassword: String, username: String, fechaNacimiento: String) {
         if (arePasswordsValid(password, confirmPassword)) {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val currentUser = firebaseAuth.currentUser
                         if (currentUser != null) {
-                            registerUser(currentUser)
+                            registerUser(currentUser, username, fechaNacimiento)
                         } else {
                             _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
                         }
@@ -49,9 +49,9 @@ class RegisterViewModel : ViewModel() {
         return password == confirmPassword && password.length >= 6
     }
 
-    private fun registerUser(currentUser: FirebaseUser) {
+    private fun registerUser(currentUser: FirebaseUser, username: String, fechaNacimiento: String) {
         viewModelScope.launch {
-            userClient.registerUser(currentUser, firebaseAuth, _authState)
+            userClient.registerUser(currentUser, firebaseAuth, _authState, username, fechaNacimiento)
         }
     }
 }

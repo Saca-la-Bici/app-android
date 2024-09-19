@@ -13,19 +13,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AnnouncementViewHolder(private val binding: ItemAnnouncementBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: AnnouncementBase, context: Context){
+class AnnouncementViewHolder(
+    private val binding: ItemAnnouncementBinding,
+    private val longClickListener: (AnnouncementBase) -> Boolean
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(item: AnnouncementBase, context: Context) {
         binding.tvAnnouncementTitle.text = item.title
         binding.tvAnnouncementContent.text = item.content
-        getAnnouncementImg(item.url,binding.ivAnnouncement,context)
+        getAnnouncementImg(item.url, binding.ivAnnouncement, context)
+
+        binding.root.setOnLongClickListener {
+            longClickListener(item)
+        }
     }
 
-    private fun getAnnouncementImg(url:String, imageView: ImageView, context: Context){
-
+    private fun getAnnouncementImg(url: String, imageView: ImageView, context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.Main).launch {
-
-                val requestOptions =  RequestOptions()
+                val requestOptions = RequestOptions()
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .fitCenter()
@@ -35,5 +41,6 @@ class AnnouncementViewHolder(private val binding: ItemAnnouncementBinding) : Rec
                     .apply(requestOptions)
                     .into(imageView)
             }
-        }}
+        }
+    }
 }

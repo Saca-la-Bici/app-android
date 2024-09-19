@@ -6,6 +6,7 @@
     android:id="@+id/clAnnouncement">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/CVAnnouncement"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#F3F0EB"

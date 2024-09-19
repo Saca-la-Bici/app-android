@@ -9,7 +9,6 @@ class AnnouncementRepository() {
 
     suspend fun getAnnouncementList(): List<AnnouncementBase> = apiAnnouncement.getAnnouncementList()
 
-    suspend fun postAnnouncement(announcement: Announcement) {
+    suspend fun postAnnouncement(announcement: Announcement): Announcement? =
         apiAnnouncement.postAnnouncement(announcement)
-    }
 }

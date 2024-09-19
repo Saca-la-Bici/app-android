@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +20,7 @@ class AnnouncementsActivity: BaseActivity() {
     private lateinit var recyclerView: RecyclerView
     private val adapter : AnnouncementAdapter = AnnouncementAdapter()
     private lateinit var viewModel: AnnouncementsViewModel
+    private lateinit var addAnnouncementLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,15 @@ class AnnouncementsActivity: BaseActivity() {
         setupNavbar()
         setupClickListeners()
         viewModel.getAnnouncementList()
+
+        addAnnouncementLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                // Refresh announcements after returning from AddAnnouncementActivity
+                viewModel.getAnnouncementList()
+            }
+        }
     }
 
     private fun setupClickListeners() {
@@ -39,8 +51,8 @@ class AnnouncementsActivity: BaseActivity() {
     }
 
     private fun passToAddActivity(context: Context) {
-        var intent: Intent = Intent(context, AddAnnouncementActivity::class.java)
-        context.startActivity(intent)
+        var intent = Intent(context, AddAnnouncementActivity::class.java)
+        addAnnouncementLauncher.launch(intent)
     }
 
     private fun initializeObservers() {

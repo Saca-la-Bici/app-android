@@ -6,7 +6,6 @@ import com.kotlin.sacalabici.data.repositories.AnnouncementRepository
 class PostAnnouncementRequirement {
     private val repository = AnnouncementRepository()
 
-    suspend operator fun invoke(announcement: Announcement){
+    suspend operator fun invoke(announcement: Announcement): Announcement? =
         repository.postAnnouncement(announcement)
-    }
 }

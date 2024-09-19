@@ -11,5 +11,5 @@ interface AnnouncementApiService {
     suspend fun getAnnouncementList(): List<AnnouncementBase>
 
     @POST("anuncios/registrar")
-    suspend fun postAnnouncement(@Body announcement: Announcement)
+    suspend fun postAnnouncement(@Body announcement: Announcement): Announcement
 }

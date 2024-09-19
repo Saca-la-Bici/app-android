@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -24,11 +25,13 @@ class AddAnnouncementActivity: AppCompatActivity() {
             finish()
         }
         binding.ibCheck.setOnClickListener {
+            val id = 1
             val title = binding.etAddAnnouncementTitle.text.toString()
             val description = binding.etAddAnnouncementDescription.text.toString()
             val image = "path/test"
-            val annnouncement = Announcement(title, description, image)
+            val annnouncement = Announcement(id, title, description, image)
             viewModel.postAnnouncement(annnouncement)
+            setResult(Activity.RESULT_OK)
             finish()
         }
 

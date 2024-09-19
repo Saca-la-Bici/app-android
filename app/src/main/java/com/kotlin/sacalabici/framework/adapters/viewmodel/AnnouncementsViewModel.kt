@@ -28,8 +28,14 @@ class AnnouncementsViewModel: ViewModel() {
     }
 
     fun postAnnouncement(announcement: Announcement){
-        viewModelScope.launch(Dispatchers.IO) {
-            postAnnouncementRequirement(announcement)
+        viewModelScope.launch {
+            try {
+                Log.d("AnnouncementsViewModel", "Posting announcement: $announcement")
+                postAnnouncementRequirement(announcement)
+                Log.d("AnnouncementsViewModel", "Announcement posted successfully")
+            } catch (e: Exception) {
+                Log.e("AnnouncementsViewModel", "Error posting announcement", e)
+            }
         }
     }
 }

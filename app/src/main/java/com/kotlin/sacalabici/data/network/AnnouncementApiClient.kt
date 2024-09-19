@@ -16,12 +16,13 @@ class AnnouncementApiClient {
         }
     }
 
-    suspend fun postAnnouncement(announcement: Announcement) {
+    suspend fun postAnnouncement(announcement: Announcement): Announcement? {
         api = AnnouncementNetworkModuleDI()
         return try{
             api.postAnnouncement(announcement)
         }catch (e:java.lang.Exception){
             e.printStackTrace()
+            null
         }
     }
 }

@@ -1,6 +1,10 @@
 # Compiled class file
 *.class
 
+.gradle
+.gradle/
+/local.properties
+
 # Log file
 *.log
 
@@ -23,5 +27,4 @@
 hs_err_pid*
 replay_pid*
 
-.gradle
 local.properties

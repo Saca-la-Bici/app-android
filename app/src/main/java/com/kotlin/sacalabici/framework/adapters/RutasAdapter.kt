@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.RutasBase
 import com.kotlin.sacalabici.framework.views.activities.ModificarRutaActivity
@@ -78,6 +79,8 @@ class RutasAdapter(
             intent.putExtra("DISTANCIA", ruta.distancia)
             intent.putExtra("TIEMPO", ruta.tiempo)
             intent.putExtra("NIVEL", ruta.nivel)  // Si es necesario
+            val coordenadasJson = Gson().toJson(ruta.coordenadas)
+            intent.putExtra("COORDENADAS", coordenadasJson)
 
             context.startActivity(intent)
         }

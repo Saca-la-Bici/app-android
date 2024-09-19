@@ -22,7 +22,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.models.CoordenadasBase
 import com.kotlin.sacalabici.framework.services.RutasService
 import com.kotlin.sacalabici.helpers.MapHelper
 import com.kotlin.sacalabici.utils.InputValidator
@@ -90,6 +93,13 @@ class ModificarRutaActivity : AppCompatActivity() {
             etTiempo.setText(tiempo)
             tvNivel.text = nivel
             nivelSeleccionado = nivel
+
+            val coordenadasJson = extras.getString("COORDENADAS")
+            if (coordenadasJson != null) {
+                val coordenadasType = object : TypeToken<ArrayList<CoordenadasBase>>() {}.type
+                val coordenadas: ArrayList<CoordenadasBase> = Gson().fromJson(coordenadasJson, coordenadasType)
+                mapHelper.drawRouteWithCoordinates(mapViewForm,coordenadas)
+            }
         }
 
         // El botón de enviar está inicialmente deshabilitado hasta que se validen los inputs

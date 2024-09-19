@@ -26,7 +26,7 @@
             android:resource="@string/mapbox_access_token"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.ActivitiesActivity"
+            android:name=".framework.views.activities.ActivitiesActivity"
             android:exported="true"
             android:theme="@style/Theme.Sacalabici.NoActionBar">
 
@@ -37,18 +37,18 @@
         </activity>
 
         <activity
-            android:name=".framework.adapters.views.activities.MapActivity"
+            android:name=".framework.views.activities.MapActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             />
 
         <activity
-            android:name=".framework.adapters.views.activities.ProfileActivity"
+            android:name=".framework.views.activities.ProfileActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.AnnouncementsActivity"
+            android:name=".framework.views.activities.AnnouncementsActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
         

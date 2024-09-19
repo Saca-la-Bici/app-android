@@ -23,6 +23,7 @@ import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.getSource
+import com.mapbox.maps.extension.style.sources.getSourceAs
 import kotlinx.coroutines.launch
 
 class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
@@ -105,36 +106,38 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
                 .build()
         )
 
-        // Draw the route on the map
+        // Create a FeatureCollection with the route coordinates
         val coordinates = ruta.coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
-        val featureCollection = FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinates))))
+        val featureCollection = FeatureCollection.fromFeatures(
+            arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinates)))
+        )
 
         mapView.getMapboxMap().getStyle { style ->
-            // Remove existing source and layer if they exist
-            if (style.getSource("route-source") != null) {
+            // Check if the source already exists
+            val existingSource = style.getSourceAs<GeoJsonSource>("route-source")
+            if (existingSource != null) {
+                // If the source exists, remove it before adding the new data
                 style.removeStyleSource("route-source")
             }
-            if (style.getLayer("route-layer") != null) {
-                style.removeStyleLayer("route-layer")
-            }
 
-            // Create a new GeoJsonSource using the builder pattern
-            val source = GeoJsonSource.Builder("route-source")
+            // Now create and add the new source with the updated feature collection
+            val newSource = GeoJsonSource.Builder("route-source")
                 .featureCollection(featureCollection)
                 .build()
+            style.addSource(newSource)
 
-            style.addSource(source)
-
-            // Add a LineLayer to represent the route
-            val lineLayer = LineLayer("route-layer", "route-source").apply {
-                lineColor("#FF0000") // Set the route color
-                lineWidth(3.0)
+            // Check if the layer already exists
+            val existingLayer = style.getLayer("route-layer")
+            if (existingLayer == null) {
+                // If the layer doesn't exist, create it
+                val lineLayer = LineLayer("route-layer", "route-source").apply {
+                    lineColor("#FF0000") // Set the route color
+                    lineWidth(3.0)
+                }
+                style.addLayer(lineLayer)
             }
-
-            style.addLayer(lineLayer)
         }
     }
-
 
 }
 

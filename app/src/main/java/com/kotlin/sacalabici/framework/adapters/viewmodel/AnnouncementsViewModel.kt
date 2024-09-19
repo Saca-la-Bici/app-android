@@ -17,9 +17,9 @@ class AnnouncementsViewModel: ViewModel() {
     fun getAnnouncementList(){
         viewModelScope.launch(Dispatchers.IO) {
             val result: List<AnnouncementBase> = announcementListRequirement()
-            Log.d("Salida", result.toString())
+            val reversedResult = result.reversed()
             CoroutineScope(Dispatchers.Main).launch {
-                announcementObjectLiveData.postValue(result)
+                announcementObjectLiveData.postValue(reversedResult)
             }
         }
     }

@@ -2,13 +2,11 @@ package com.kotlin.sacalabici.framework.views.activities
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageButton
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.RutasFragment
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
-import com.kotlin.sacalabici.framework.adapters.RutasAdapter
 import com.kotlin.sacalabici.framework.services.RutasService
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -61,16 +59,19 @@ class MapActivity : BaseActivity() {
             val rutasList = RutasService.getRutasList()
 
             if (rutasList != null) {
-                // Obtener el fragmento y configurar el RecyclerView
-                val fragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
-                val recyclerView = fragment?.view?.findViewById<RecyclerView>(R.id.RVRutas)
+                // Crear el fragmento pasando la lista de rutas como argumento
+                val fragment = RutasFragment.newInstance(rutasList)
 
-                // Inicializar el adaptador y establecerlo en el RecyclerView
-                val adapter = RutasAdapter(rutasList)
-                recyclerView?.adapter = adapter
+                // Reemplaza el contenido del contenedor de fragmentos con el nuevo fragmento
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.nav_host_fragment_content_main, fragment) // Cambia el ID por el de tu contenedor
+                    .addToBackStack(null)
+                    .commit()
             } else {
                 Log.e("MapActivity", "Error al obtener la lista de rutas")
             }
         }
     }
+
+
 }

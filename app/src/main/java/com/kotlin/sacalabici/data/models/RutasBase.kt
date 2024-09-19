@@ -1,7 +1,10 @@
 package com.kotlin.sacalabici.data.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class RutasBase (
     @SerializedName("_id") var id: String,
     @SerializedName("titulo") var titulo: String,
@@ -11,4 +14,4 @@ data class RutasBase (
     @SerializedName("lugar") var lugar: String,
     @SerializedName("descanso") var descanso: String,
     @SerializedName("coordenadas") var coordenadas: ArrayList<CoordenadasBase>,
-)
+) : Parcelable

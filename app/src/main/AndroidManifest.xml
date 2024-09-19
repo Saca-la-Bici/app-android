@@ -54,6 +54,7 @@
 
         <activity
             android:name=".framework.adapters.views.activities.RegistrarRutaActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 

@@ -1,16 +1,23 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.data.network.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityRegisterannouncementBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
+import com.kotlin.sacalabici.utils.Constants
 
 class AddAnnouncementActivity: AppCompatActivity() {
     private lateinit var binding: ActivityRegisterannouncementBinding
     private lateinit var viewModel: AnnouncementsViewModel
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +25,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
         initializeBinding()
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
         initializeListeners()
+        registerImagePicker()
     }
 
     private fun initializeListeners() {
@@ -35,7 +43,10 @@ class AddAnnouncementActivity: AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
-
+        binding.ibAddImage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(intent)
+        }
     }
 
     private fun initializeBinding() {
@@ -43,5 +54,14 @@ class AddAnnouncementActivity: AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    private fun registerImagePicker() {
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val selectedImageUri = result.data?.data
+                Log.d("ImagePicker", "Selected image URI: $selectedImageUri")
+                /*TODO: Implement image upload*/
+            }
+        }
+    }
 
 }

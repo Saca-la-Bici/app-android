@@ -43,6 +43,9 @@
     <string name="PAmigos">Amigos</string>
     <string name="PEdit">Editar Perfil</string>
     <string name="PShareProfile">Compartir perfil</string>
+    <string name="genderPE">Género</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">Confirmar</string>
 
 
 </resources>

@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters
+package com.kotlin.sacalabici.framework.adapters.viewholders
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView

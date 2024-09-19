@@ -1,5 +1,7 @@
 package com.kotlin.sacalabici
 
+import RutasAdapter
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +9,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlin.sacalabici.framework.adapters.RutasAdapter
 import com.kotlin.sacalabici.data.models.RutasBase
 
 class RutasFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var rutasAdapter: RutasAdapter
+    private lateinit var rutasList: ArrayList<RutasBase>
+    private var onRutaSelectedListener: OnRutaSelectedListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +28,7 @@ class RutasFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         // Inicializar el adapter vacío
-        rutasAdapter = RutasAdapter(emptyList())
+        rutasAdapter = RutasAdapter(emptyList(), ::onRutaSelected)
         recyclerView.adapter = rutasAdapter
 
         // Obtener la lista de rutas pasada como argumento
@@ -42,6 +45,25 @@ class RutasFragment : Fragment() {
         rutasAdapter.updateRutas(rutasList)
     }
 
+    // Callback cuando una ruta es seleccionada
+    private fun onRutaSelected(ruta: RutasBase) {
+        onRutaSelectedListener?.onRutaSelected(ruta)
+    }
+
+    interface OnRutaSelectedListener {
+        fun onRutaSelected(ruta: RutasBase)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        onRutaSelectedListener = context as? OnRutaSelectedListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        onRutaSelectedListener = null
+    }
+
     companion object {
         fun newInstance(rutasList: List<RutasBase>?): RutasFragment {
             val fragment = RutasFragment()
@@ -52,6 +74,5 @@ class RutasFragment : Fragment() {
             return fragment
         }
     }
-
-
 }
+

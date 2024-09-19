@@ -7,14 +7,25 @@ import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.RutasFragment
+import com.kotlin.sacalabici.data.models.RutasBase
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
 import com.kotlin.sacalabici.framework.services.RutasService
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
+import com.mapbox.maps.Style
+import com.mapbox.maps.extension.style.layers.addLayer
+import com.mapbox.maps.extension.style.layers.generated.LineLayer
+import com.mapbox.maps.extension.style.layers.getLayer
+import com.mapbox.maps.extension.style.sources.addSource
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.extension.style.sources.getSource
 import kotlinx.coroutines.launch
 
-class MapActivity : BaseActivity() {
+class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
@@ -42,7 +53,7 @@ class MapActivity : BaseActivity() {
     }
 
     private fun initializeMap() {
-        mapView.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
+        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
             // Define las coordenadas para Querétaro
             val queretaroCoordinates = Point.fromLngLat(-100.3899, 20.5888)
 
@@ -73,7 +84,7 @@ class MapActivity : BaseActivity() {
                     fragmentManager.beginTransaction()
                         .replace(R.id.nav_host_fragment_content_main, rutasFragment)
                         .addToBackStack(null)
-                        .commit() // Llama a commit aquí solo una vez
+                        .commit()
                     rutasFragmentVisible = true
                 } else {
                     Log.e("MapActivity", "Error al obtener la lista de rutas")
@@ -81,6 +92,51 @@ class MapActivity : BaseActivity() {
             }
         }
     }
+
+    override fun onRutaSelected(ruta: RutasBase) {
+        // Zoom in on the first coordinate of the route
+        val firstCoordinate = ruta.coordenadas.firstOrNull() ?: return
+        val point = Point.fromLngLat(firstCoordinate.longitud, firstCoordinate.latitud)
+
+        mapView.getMapboxMap().setCamera(
+            CameraOptions.Builder()
+                .center(point)
+                .zoom(14.0) // Adjust zoom level as needed
+                .build()
+        )
+
+        // Draw the route on the map
+        val coordinates = ruta.coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
+        val featureCollection = FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinates))))
+
+        mapView.getMapboxMap().getStyle { style ->
+            // Remove existing source and layer if they exist
+            if (style.getSource("route-source") != null) {
+                style.removeStyleSource("route-source")
+            }
+            if (style.getLayer("route-layer") != null) {
+                style.removeStyleLayer("route-layer")
+            }
+
+            // Create a new GeoJsonSource using the builder pattern
+            val source = GeoJsonSource.Builder("route-source")
+                .featureCollection(featureCollection)
+                .build()
+
+            style.addSource(source)
+
+            // Add a LineLayer to represent the route
+            val lineLayer = LineLayer("route-layer", "route-source").apply {
+                lineColor("#FF0000") // Set the route color
+                lineWidth(3.0)
+            }
+
+            style.addLayer(lineLayer)
+        }
+    }
+
+
 }
+
 
 

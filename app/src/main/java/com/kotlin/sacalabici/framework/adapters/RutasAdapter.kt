@@ -1,5 +1,3 @@
-package com.kotlin.sacalabici.framework.adapters
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.RutasBase
 
-class RutasAdapter(private var rutasList: List<RutasBase>) : RecyclerView.Adapter<RutasAdapter.RutasViewHolder>() {
+class RutasAdapter(
+    private var rutasList: List<RutasBase>,
+    private val onRutaSelected: (RutasBase) -> Unit // Add the callback as a second parameter
+) : RecyclerView.Adapter<RutasAdapter.RutasViewHolder>() {
 
     class RutasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tituloTextView: TextView = itemView.findViewById(R.id.TVTitulo)
@@ -29,6 +30,11 @@ class RutasAdapter(private var rutasList: List<RutasBase>) : RecyclerView.Adapte
         holder.distanciaTextView.text = "Distancia: ${ruta.distancia}"
         holder.tiempoTextView.text = "Tiempo Promedio: ${ruta.tiempo}"
         holder.nivelTextView.text = "Nivel: ${ruta.nivel}"
+
+        // Set click listener for the item
+        holder.itemView.setOnClickListener {
+            onRutaSelected(ruta) // Trigger the callback with the selected route
+        }
     }
 
     override fun getItemCount(): Int {
@@ -41,4 +47,5 @@ class RutasAdapter(private var rutasList: List<RutasBase>) : RecyclerView.Adapte
         notifyDataSetChanged()
     }
 }
+
 

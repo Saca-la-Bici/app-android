@@ -2,8 +2,6 @@ package com.kotlin.sacalabici.framework.adapters.views.activities
 
 import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -74,7 +72,7 @@ open class BaseActivity : AppCompatActivity() {
                 tvActividades.setTextColor(Color.BLACK)
             }
             "ProfileActivity" -> {
-                btnPerfil.setImageResource(R.drawable.ic_perfil_selected)
+                btnPerfil.setImageResource(R.drawable.ic_profile_selected)
                 btnPerfil.background = getDrawable(R.drawable.bg_highlight_black)
                 tvPerfil.setTextColor(Color.BLACK)
             }

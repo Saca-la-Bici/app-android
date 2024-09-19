@@ -14,10 +14,10 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.109"
+        app:layout_constraintHorizontal_bias="0.101"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintVertical_bias="0.043" />
 
     <ImageButton
         android:id="@+id/btn_notifications"
@@ -27,10 +27,10 @@
         android:src="@drawable/notifications"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.863"
+        app:layout_constraintHorizontal_bias="0.85"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintVertical_bias="0.036" />
 
     <ImageButton
         android:id="@+id/btn_configuration"
@@ -43,7 +43,7 @@
         app:layout_constraintHorizontal_bias="0.958"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintVertical_bias="0.036" />
 
     <View
         android:id="@+id/vUser"
@@ -54,7 +54,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.106" />
+        app:layout_constraintVertical_bias="0.059" />
 
     <ImageView
         android:id="@+id/profile_image"
@@ -218,10 +218,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.436"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.422">
+        app:layout_constraintVertical_bias="0.376">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -232,8 +232,7 @@
                 android:id="@+id/btn_edit_profile"
                 android:layout_width="110dp"
                 android:layout_height="35dp"
-                android:background="@drawable/rounded_button"
-                />
+                android:background="@drawable/rounded_button" />
 
             <TextView
                 android:id="@+id/tv_edit_profile"
@@ -244,7 +243,7 @@
                 android:text="@string/PEdit"
                 android:textColor="#000000"
                 android:textSize="13sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </FrameLayout>
 
         <FrameLayout
@@ -256,7 +255,7 @@
                 android:id="@+id/btn_share_profile"
                 android:layout_width="140dp"
                 android:layout_height="35dp"
-                android:background="@drawable/rounded_button"/>
+                android:background="@drawable/rounded_button" />
 
             <TextView
                 android:id="@+id/tv_share_profile"
@@ -267,7 +266,7 @@
                 android:text="@string/PShareProfile"
                 android:textColor="#000000"
                 android:textSize="13sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </FrameLayout>
 
         <FrameLayout
@@ -286,14 +285,13 @@
     <View
         android:id="@+id/vIcons"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499">
-    </View>
+        app:layout_constraintVertical_bias="0.454"></View>
 
     <ImageButton
         android:id="@+id/btnEventos"
@@ -335,15 +333,28 @@
     <FrameLayout
         android:id="@+id/vFragment"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/vIcons"
-        app:layout_constraintVertical_bias="0.27" />
+        app:layout_constraintVertical_bias="0.256" >
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_faq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_faq"
+            app:backgroundTint="@color/yellow"
+            app:fabSize="mini"
+            android:layout_gravity="bottom|end"
+        />
+
+    </FrameLayout>
+
 
     <include layout="@layout/main_navbar"/>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,17 +1,11 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageButton
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
 import com.kotlin.sacalabici.databinding.ActivityProfileBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
@@ -22,6 +16,8 @@ class ProfileActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
 
         initializeBinding()
+
+        replaceFragment(EventFragment())
 
         val btnEventos = binding.btnEventos
         val btnAsistencia = binding.btnAsistencia

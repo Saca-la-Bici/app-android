@@ -65,9 +65,10 @@
         app:layout_constraintVertical_bias="0.1" />
 
     <EditText
-        android:id="@+id/etTitulo"
+        android:id="@+id/etAddAnnouncementTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:maxHeight="80dp"
         android:layout_marginStart="28dp"
         android:layout_marginEnd="28dp"
         android:background="@drawable/edit_text_border"
@@ -84,7 +85,7 @@
         app:layout_constraintVertical_bias="0.01"/>
 
     <TextView
-        android:id="@+id/tvPass"
+        android:id="@+id/tvAddAnnouncementDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_announcement_description"
@@ -93,13 +94,15 @@
         app:layout_constraintEnd_toEndOf="@+id/tvAddAnnouncementTitle"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/tvAddAnnouncementTitle"
-        app:layout_constraintTop_toBottomOf="@+id/etTitulo"
+        app:layout_constraintTop_toBottomOf="@+id/etAddAnnouncementTitle"
         app:layout_constraintVertical_bias="0.04" />
 
     <EditText
-        android:id="@+id/etPass"
+        android:id="@+id/etAddAnnouncementDescription"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:maxHeight="220dp"
         android:layout_marginStart="28dp"
         android:layout_marginEnd="28dp"
         android:hint="@string/add_announcement_description_hint"
@@ -110,10 +113,11 @@
         android:background="@drawable/edit_text_border"
         android:textAppearance="@style/HintStyle"
         android:gravity="top | start"
+        android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPass"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddAnnouncementDescription"
         app:layout_constraintVertical_bias="0.01"/>
 
     

@@ -60,6 +60,8 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:1.5.0")
     //Material
     implementation ("com.google.android.material:material:1.9.0")
+    //Fragment
+    implementation ("androidx.fragment:fragment-ktx:1.5.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

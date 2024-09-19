@@ -1,9 +1,10 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
@@ -16,7 +17,6 @@ class AnnouncementsActivity: BaseActivity() {
     private lateinit var binding: ActivityAnnouncementsBinding
     private lateinit var recyclerView: RecyclerView
     private val adapter : AnnouncementAdapter = AnnouncementAdapter()
-    //private lateinit var data:ArrayList<AnnouncementBase>
     private lateinit var viewModel: AnnouncementsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,11 +25,22 @@ class AnnouncementsActivity: BaseActivity() {
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
         val root: View = binding.root
 
-        //data = ArrayList()
         initializeComponents(root)
         initializeObservers()
         setupNavbar()
+        setupClickListeners()
         viewModel.getAnnouncementList()
+    }
+
+    private fun setupClickListeners() {
+        binding.fabAddAnouncement.setOnClickListener {
+            passToAddActivity(this)
+        }
+    }
+
+    private fun passToAddActivity(context: Context) {
+        var intent: Intent = Intent(context, AddAnnouncementActivity::class.java)
+        context.startActivity(intent)
     }
 
     private fun initializeObservers() {

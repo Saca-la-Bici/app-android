@@ -18,6 +18,7 @@ class AnnouncementViewHolder(private val binding: ItemAnnouncementBinding) : Rec
         binding.tvAnnouncementTitle.text = item.title
         binding.tvAnnouncementContent.text = item.content
         getAnnouncementImg(item.url,binding.ivAnnouncement,context)
+
     }
 
     private fun getAnnouncementImg(url:String, imageView: ImageView, context: Context){

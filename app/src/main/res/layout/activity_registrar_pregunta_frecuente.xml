@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Toolbar with Back Arrow and Centered Title -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="@drawable/ic_check_pregunta"
+        android:layout_marginTop="16dp">
+
+        <!-- Centered Title -->
+        <TextView
+            android:id="@+id/tvToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Ayuda"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
+
+        <!-- Botón de aceptar (derecha) -->
+        <ImageView
+            android:id="@+id/btnAceptar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_pregunta"
+            android:contentDescription="Aceptar"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:padding="8dp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Título"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+    <!-- Campo de texto para escribir la pregunta -->
+    <EditText
+        android:id="@+id/etPregunta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="¿Qué pregunta vas a responder?"
+        android:padding="12dp"
+        android:background="@drawable/bg_edittext"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Descripción de la pregunta -->
+    <TextView
+        android:id="@+id/tvDescripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripción"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toBottomOf="@id/etPregunta"
+        app:layout_constraintStart_toStartOf="parent" />
+    <EditText
+        android:id="@+id/etDescripcionPregunta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Escribe la respuesta aquí..."
+        android:padding="12dp"
+        android:gravity="top"
+        android:minHeight="120dp"
+        android:background="@drawable/bg_edittext"
+        app:layout_constraintTop_toBottomOf="@id/tvDescripcion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:inputType="textMultiLine" />
+
+
+    <EditText
+        android:id="@+id/etDescripcionPregunta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Escribe la respuesta aquí..."
+        android:padding="12dp"
+        android:gravity="top"
+        android:minHeight="120dp"
+        android:background="@drawable/bg_edittext"
+        app:layout_constraintTop_toBottomOf="@id/tvDescripcion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:inputType="textMultiLine" />
+
+
+    <!-- Second Item (Acerca de Rentabici) -->
+    <TextView
+        android:id="@+id/tvAcercaRentabici"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acerca de Rentabici"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/tvTuSeguridad1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rbAcercaRentabici"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp" />
+
+    <RadioButton
+        android:id="@+id/rbAcercaRentabici"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/tvAcercaRentabici"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp" />
+    <!-- Third Item (Tu seguridad) -->
+    <TextView
+        android:id="@+id/tvTuSeguridad2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tu seguridad"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/tvAcercaRentabici"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rbTuSeguridad2"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp" />
+
+    <RadioButton
+        android:id="@+id/rbTuSeguridad2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/tvTuSeguridad2"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

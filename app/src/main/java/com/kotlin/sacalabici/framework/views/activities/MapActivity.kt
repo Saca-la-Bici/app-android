@@ -34,7 +34,17 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
-    private var rutasFragmentVisible = false // Variable para el estado del fragmento
+    private var rutasFragmentVisible = false
+    private var currentSourceId: String? = null
+    private var currentLayerId: String? = null
+
+    // Para almacenar las fuentes y capas de rutas
+    private val routeSources = mutableListOf<String>()
+    private val routeLayers = mutableListOf<String>()
+
+    // Para almacenar las fuentes y capas de pines
+    private val pinSources = mutableListOf<String>()
+    private val pinLayers = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +76,7 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             mapView.mapboxMap.setCamera(
                 CameraOptions.Builder()
                     .center(queretaroCoordinates)
-                    .zoom(12.0) // Ajusta el zoom según sea necesario
+                    .zoom(12.0)
                     .build()
             )
         }
@@ -99,49 +109,81 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
     }
 
     override fun onRutaSelected(ruta: RutasBase) {
-        // Zoom in on the first coordinate of the route
+        // Eliminar todas las rutas anteriores
+        mapView.getMapboxMap().getStyle { style ->
+            // Eliminar todas las fuentes de rutas
+            routeSources.forEach { sourceId ->
+                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
+                    style.removeStyleSource(sourceId)
+                }
+            }
+            routeSources.clear()
+
+            // Eliminar todas las capas de rutas
+            routeLayers.forEach { layerId ->
+                style.getLayer(layerId)?.let {
+                    style.removeStyleLayer(layerId)
+                }
+            }
+            routeLayers.clear()
+
+            // Eliminar todos los pines anteriores
+            pinSources.forEach { sourceId ->
+                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
+                    style.removeStyleSource(sourceId)
+                }
+            }
+            pinSources.clear()
+
+            pinLayers.forEach { layerId ->
+                style.getLayer(layerId)?.let {
+                    style.removeStyleLayer(layerId)
+                }
+            }
+            pinLayers.clear()
+        }
+
+        // Genera un ID único para la nueva fuente y capa
+        val uniqueId = System.currentTimeMillis() // O cualquier otro método para generar un ID único
+        currentSourceId = "route-source-$uniqueId"
+        currentLayerId = "route-layer-$uniqueId"
+
+        // Guardar los IDs en las listas
+        routeSources.add(currentSourceId!!)
+        routeLayers.add(currentLayerId!!)
+
+        // Zoom in en la primera coordenada de la ruta
         val firstCoordinate = ruta.coordenadas.firstOrNull() ?: return
         val point = Point.fromLngLat(firstCoordinate.longitud, firstCoordinate.latitud)
 
         mapView.getMapboxMap().setCamera(
             CameraOptions.Builder()
                 .center(point)
-                .zoom(14.0) // Ajusta el nivel de zoom según sea necesario
+                .zoom(15.0)
                 .build()
         )
 
-        // Create a FeatureCollection with the route coordinates
+        // Crear una FeatureCollection con las coordenadas de la ruta
         val coordinates = ruta.coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
         val featureCollection = FeatureCollection.fromFeatures(
             arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinates)))
         )
 
         mapView.getMapboxMap().getStyle { style ->
-            // Check if the source already exists
-            val existingSource = style.getSourceAs<GeoJsonSource>("route-source")
-            if (existingSource != null) {
-                // If the source exists, remove it before adding the new data
-                style.removeStyleSource("route-source")
-            }
-
-            // Now create and add the new source with the updated feature collection
-            val newSource = GeoJsonSource.Builder("route-source")
+            // Crear y añadir la nueva fuente con la colección de características
+            val newSource = GeoJsonSource.Builder(currentSourceId!!)
                 .featureCollection(featureCollection)
                 .build()
             style.addSource(newSource)
 
-            // Check if the layer already exists
-            val existingLayer = style.getLayer("route-layer")
-            if (existingLayer == null) {
-                // If the layer doesn't exist, create it
-                val lineLayer = LineLayer("route-layer", "route-source").apply {
-                    lineColor("#FF0000") // Set the route color
-                    lineWidth(3.0)
-                }
-                style.addLayer(lineLayer)
+            // Crear y añadir la nueva capa
+            val lineLayer = LineLayer(currentLayerId!!, currentSourceId!!).apply {
+                lineColor("#FF0000")
+                lineWidth(3.0)
             }
+            style.addLayer(lineLayer)
 
-            // Add pins for each coordinate based on the route type
+            // Añadir los pines para el tipo de ruta
             addPinsForRouteType(style, ruta)
         }
     }
@@ -156,17 +198,15 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
         // Añade los iconos al estilo
         iconImages.forEach { (type, resId) ->
+            // Añade la imagen al estilo, sin verificar si ya existe
             style.addImage(type, BitmapFactory.decodeResource(resources, resId))
         }
 
         // Crea una lista de características con los puntos y tipos
         val features = ruta.coordenadas.map { coordenada ->
-            // Crea un JsonObject para almacenar los atributos del tipo
             val properties = JsonObject().apply {
                 addProperty("tipo", coordenada.tipo)
             }
-
-            // Usa el JsonObject en lugar del map
             Feature.fromGeometry(
                 Point.fromLngLat(coordenada.longitud, coordenada.latitud),
                 properties
@@ -175,33 +215,44 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
         val featureCollection = FeatureCollection.fromFeatures(features)
 
-        // Elimina la fuente de símbolos existente si la hay
-        val existingSymbolSource = style.getSourceAs<GeoJsonSource>("symbol-source")
-        if (existingSymbolSource != null) {
-            style.removeStyleSource("symbol-source")
+        // Genera un ID único para la nueva fuente y capa de pines
+        val uniqueId = System.currentTimeMillis()
+        val symbolSourceId = "symbol-source-$uniqueId"
+        val symbolLayerId = "symbol-layer-$uniqueId"
+
+        // Guardar los IDs en las listas
+        pinSources.add(symbolSourceId)
+        pinLayers.add(symbolLayerId)
+
+        mapView.getMapboxMap().getStyle { style ->
+            // Eliminar la fuente de símbolos existente si la hay
+            val existingSymbolSource = style.getSourceAs<GeoJsonSource>(symbolSourceId)
+            if (existingSymbolSource != null) {
+                style.removeStyleSource(symbolSourceId)
+            }
+
+            // Crear y añadir la nueva fuente con la colección de características
+            val symbolSource = GeoJsonSource.Builder(symbolSourceId)
+                .featureCollection(featureCollection)
+                .build()
+            style.addSource(symbolSource)
+
+            // Eliminar la capa de símbolos existente si la hay
+            val existingSymbolLayer = style.getLayer(symbolLayerId)
+            if (existingSymbolLayer != null) {
+                style.removeStyleLayer(symbolLayerId)
+            }
+
+            // Añadir la nueva capa de símbolos
+            val symbolLayer = SymbolLayer(symbolLayerId, symbolSourceId).apply {
+                iconImage("{tipo}")
+                iconAllowOverlap(true)
+                iconIgnorePlacement(true)
+                iconSize(0.07)
+                iconAnchor(IconAnchor.BOTTOM)
+            }
+
+            style.addLayer(symbolLayer)
         }
-
-        // Crea y añade la nueva fuente con la colección de características
-        val symbolSource = GeoJsonSource.Builder("symbol-source")
-            .featureCollection(featureCollection)
-            .build()
-        style.addSource(symbolSource)
-
-        // Añade la capa de símbolos
-        val symbolLayer = SymbolLayer("symbol-layer", "symbol-source").apply {
-            // Usa el valor del tipo para seleccionar el icono adecuado
-            iconImage("{tipo}")
-            iconAllowOverlap(true)
-            iconIgnorePlacement(true)
-            iconSize(0.07)
-            iconAnchor(IconAnchor.BOTTOM)
-        }
-
-        style.addLayer(symbolLayer)
     }
-
-
 }
-
-
-

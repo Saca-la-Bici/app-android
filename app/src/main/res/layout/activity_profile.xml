@@ -4,6 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Guias -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+    <!-- Contenedor principal -->
+    <View
+        android:id="@+id/VContainer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@+id/start_guideline" />
+
+    <!-- Barra de tareas -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/VContainer"
+        app:layout_constraintStart_toStartOf="@+id/VContainer" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,6 +45,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Boton Asignación de roles y persmisos -->
+    <Button
+        android:id="@+id/BAsaingRol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prueba: Asignar de roles y permisos"
+        app:layout_constraintStart_toStartOf="@+id/VContainer"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        />
 
     <include layout="@layout/main_navbar"/>
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Color de fondo del SearchView -->
+    <solid android:color="@color/whitesmoke"/>
+    <!-- Definir el radio de los bordes redondeados -->
+    <corners android:radius="32dp"/>
+    <!-- Definir el borde (opcional) -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/white"/>
+</shape>

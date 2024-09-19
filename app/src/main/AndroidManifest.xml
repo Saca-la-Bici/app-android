@@ -72,5 +72,10 @@
             android:name=".framework.adapters.views.activities.RegisterContinueActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar" />
+
+        <activity
+            android:name=".framework.adapters.views.activities.ConsultarUsuariosActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar" />
     </application>
 </manifest>

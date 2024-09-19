@@ -19,10 +19,18 @@ class ProfileActivity: BaseActivity() {
 
         initializeBinding()
         setupNavbar()
+
+        // Listeners para los botones
+        binding.BAsaingRol.setOnClickListener {
+            val intent = Intent(this, ConsultarUsuariosActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initializeBinding(){
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+
 }

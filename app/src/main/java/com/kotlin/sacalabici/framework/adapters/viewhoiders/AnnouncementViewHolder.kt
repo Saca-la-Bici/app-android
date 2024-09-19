@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.adapters.viewhoiders
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,8 +18,12 @@ class AnnouncementViewHolder(private val binding: ItemAnnouncementBinding) : Rec
     fun bind(item: AnnouncementBase, context: Context){
         binding.tvAnnouncementTitle.text = item.title
         binding.tvAnnouncementContent.text = item.content
-        getAnnouncementImg(item.url,binding.ivAnnouncement,context)
-
+        if(item.url != null){
+            binding.ivAnnouncement.visibility = View.VISIBLE
+            getAnnouncementImg(item.url,binding.ivAnnouncement,context)
+        } else {
+            binding.ivAnnouncement.visibility = View.GONE
+        }
     }
 
     private fun getAnnouncementImg(url:String, imageView: ImageView, context: Context){

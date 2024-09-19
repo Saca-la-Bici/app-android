@@ -25,10 +25,11 @@ class AddAnnouncementActivity: AppCompatActivity() {
             finish()
         }
         binding.ibCheck.setOnClickListener {
+            val emptystring = ""
             val id = 1
             val title = binding.etAddAnnouncementTitle.text.toString()
             val description = binding.etAddAnnouncementDescription.text.toString()
-            val image = "path/test"
+            val image = emptystring.takeIf { it.isNotEmpty() }
             val annnouncement = Announcement(id, title, description, image)
             viewModel.postAnnouncement(annnouncement)
             setResult(Activity.RESULT_OK)

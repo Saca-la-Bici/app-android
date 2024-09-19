@@ -4,5 +4,5 @@ data class Announcement(
     val IDUsuario: Int,
     val titulo: String,
     val contenido: String,
-    val imagen: String
+    val imagen: String?
 )

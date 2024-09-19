@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/clAddAnouncement">
 
     <ImageButton
         android:id="@+id/ibClose"
@@ -108,6 +109,7 @@
         android:paddingBottom="12dp"
         android:background="@drawable/edit_text_border"
         android:textAppearance="@style/HintStyle"
+        android:gravity="top | start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

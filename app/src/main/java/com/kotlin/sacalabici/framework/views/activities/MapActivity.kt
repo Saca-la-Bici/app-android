@@ -110,7 +110,7 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         lastSelectedRuta = ruta
         // Eliminar todas las rutas anteriores
         mapView.getMapboxMap().getStyle { style ->
-            // Eliminar todas las fuentes de rutas
+            // Eliminar todas las fuentes y capas anteriores
             routeSources.forEach { sourceId ->
                 style.getSourceAs<GeoJsonSource>(sourceId)?.let {
                     style.removeStyleSource(sourceId)
@@ -118,7 +118,6 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             }
             routeSources.clear()
 
-            // Eliminar todas las capas de rutas
             routeLayers.forEach { layerId ->
                 style.getLayer(layerId)?.let {
                     style.removeStyleLayer(layerId)
@@ -126,7 +125,6 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             }
             routeLayers.clear()
 
-            // Eliminar todos los pines anteriores
             pinSources.forEach { sourceId ->
                 style.getSourceAs<GeoJsonSource>(sourceId)?.let {
                     style.removeStyleSource(sourceId)
@@ -143,15 +141,9 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         }
 
         // Genera un ID único para la nueva fuente y capa
-        val uniqueId = System.currentTimeMillis() // O cualquier otro método para generar un ID único
-        currentSourceId = "route-source-$uniqueId"
-        currentLayerId = "route-layer-$uniqueId"
+        val uniqueId = System.currentTimeMillis()
 
-        // Guardar los IDs en las listas
-        routeSources.add(currentSourceId!!)
-        routeLayers.add(currentLayerId!!)
-
-        // Zoom in en la primera coordenada de la ruta
+        // Zoom en la primera coordenada de la ruta
         val firstCoordinate = ruta.coordenadas.firstOrNull() ?: return
         val point = Point.fromLngLat(firstCoordinate.longitud, firstCoordinate.latitud)
 
@@ -162,30 +154,64 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
                 .build()
         )
 
-        // Crear una FeatureCollection con las coordenadas de la ruta
-        val coordinates = ruta.coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
-        val featureCollection = FeatureCollection.fromFeatures(
-            arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinates)))
-        )
+        // Encontrar el índice del descanso y final usando el campo 'tipo'
+        val descansoIndex = ruta.coordenadas.indexOfFirst { it.tipo == "descanso" }
+        val finalIndex = ruta.coordenadas.indexOfFirst { it.tipo == "final" }
+
+        if (descansoIndex == -1 || finalIndex == -1) {
+            Log.e("MapActivity", "No se encontraron puntos de descanso o final en la ruta")
+            return
+        }
+
+        // Dividir las coordenadas en dos segmentos: inicio a descanso y descanso a final
+        val coordinatesInicioDescanso = ruta.coordenadas.subList(0, descansoIndex + 1)
+            .map { Point.fromLngLat(it.longitud, it.latitud) }
+        val coordinatesDescansoFinal = ruta.coordenadas.subList(descansoIndex, finalIndex + 1)
+            .map { Point.fromLngLat(it.longitud, it.latitud) }
 
         mapView.getMapboxMap().getStyle { style ->
-            // Crear y añadir la nueva fuente con la colección de características
-            val newSource = GeoJsonSource.Builder(currentSourceId!!)
-                .featureCollection(featureCollection)
-                .build()
-            style.addSource(newSource)
 
-            // Crear y añadir la nueva capa
-            val lineLayer = LineLayer(currentLayerId!!, currentSourceId!!).apply {
-                lineColor("#FF0000")
+            // **1. Línea roja desde el inicio al descanso**
+            val sourceIdInicioDescanso = "route-source-inicio-descanso-$uniqueId"
+            val layerIdInicioDescanso = "route-layer-inicio-descanso-$uniqueId"
+
+            val sourceInicioDescanso = GeoJsonSource.Builder(sourceIdInicioDescanso)
+                .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinatesInicioDescanso)))))
+                .build()
+            style.addSource(sourceInicioDescanso)
+
+            val lineLayerInicioDescanso = LineLayer(layerIdInicioDescanso, sourceIdInicioDescanso).apply {
+                lineColor("#FF0000") // Rojo para inicio a descanso
                 lineWidth(3.0)
             }
-            style.addLayer(lineLayer)
+            style.addLayer(lineLayerInicioDescanso)
+
+            // **2. Línea verde desde el descanso al final**
+            val sourceIdDescansoFinal = "route-source-descanso-final-$uniqueId"
+            val layerIdDescansoFinal = "route-layer-descanso-final-$uniqueId"
+
+            val sourceDescansoFinal = GeoJsonSource.Builder(sourceIdDescansoFinal)
+                .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinatesDescansoFinal)))))
+                .build()
+            style.addSource(sourceDescansoFinal)
+
+            val lineLayerDescansoFinal = LineLayer(layerIdDescansoFinal, sourceIdDescansoFinal).apply {
+                lineColor("#00FF00") // Verde para descanso a final
+                lineWidth(3.0)
+            }
+            style.addLayer(lineLayerDescansoFinal)
 
             // Añadir los pines para el tipo de ruta
             addPinsForRouteType(style, ruta)
+
+            // Guardar las fuentes y capas
+            routeSources.add(sourceIdInicioDescanso)
+            routeSources.add(sourceIdDescansoFinal)
+            routeLayers.add(layerIdInicioDescanso)
+            routeLayers.add(layerIdDescansoFinal)
         }
     }
+
 
     private fun addPinsForRouteType(style: Style, ruta: RutasBase) {
         // Define los iconos para diferentes tipos

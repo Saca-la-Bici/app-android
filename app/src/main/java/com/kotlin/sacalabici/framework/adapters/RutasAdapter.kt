@@ -16,6 +16,7 @@ class RutasAdapter(
         val distanciaTextView: TextView = itemView.findViewById(R.id.TVDistancia)
         val tiempoTextView: TextView = itemView.findViewById(R.id.TVTiempo)
         val nivelTextView: TextView = itemView.findViewById(R.id.TVNivel)
+        val divider: View = itemView.findViewById(R.id.LLRutasDivider)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RutasViewHolder {
@@ -30,6 +31,9 @@ class RutasAdapter(
         holder.distanciaTextView.text = "Distancia: ${ruta.distancia}"
         holder.tiempoTextView.text = "Tiempo Promedio: ${ruta.tiempo}"
         holder.nivelTextView.text = "Nivel: ${ruta.nivel}"
+
+        // Desactivar línea divisora para el último elemento
+        holder.divider.visibility = if (position == rutasList.size - 1) View.GONE else View.VISIBLE
 
         // Set click listener for the item
         holder.itemView.setOnClickListener {

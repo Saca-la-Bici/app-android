@@ -51,6 +51,11 @@
             android:name=".framework.views.activities.AnnouncementsActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+
+        <activity
+            android:name=".framework.views.activities.ModificarRutaActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
         
     </application>
 </manifest>

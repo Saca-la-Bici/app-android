@@ -23,4 +23,15 @@ class AnnouncementsViewModel: ViewModel() {
             }
         }
     }
+
+    fun deleteAnnouncement(id: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = announcementListRequirement.deleteAnnouncement(id)
+            if (result){
+                Log.d("delete", "Announcement deleted")
+            } else {
+                Log.d("delete", "Announcement not deleted")
+            }
+        }
+    }
 }

@@ -14,4 +14,14 @@ class AnnouncementApiClient {
             emptyList()
         }
     }
+
+    suspend fun deleteAnnouncement(id: String): Boolean {
+        api = AnnouncementNetworkModuleDI()
+        return try{
+            api.deleteAnnouncement(id).isSuccessful
+        }catch (e:java.lang.Exception){
+            e.printStackTrace()
+            false
+        }
+    }
 }

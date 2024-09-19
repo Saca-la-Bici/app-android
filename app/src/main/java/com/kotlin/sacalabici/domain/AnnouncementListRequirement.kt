@@ -8,4 +8,6 @@ class AnnouncementListRequirement {
 
     suspend operator fun invoke(
     ): List<AnnouncementBase> = repository.getAnnouncementList()
+
+    suspend fun deleteAnnouncement(id: String): Boolean = repository.deleteAnnouncement(id)
 }

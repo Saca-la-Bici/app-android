@@ -18,7 +18,7 @@ class AnnouncementsActivity : BaseActivity() {
     private lateinit var binding: ActivityAnnouncementsBinding
     private lateinit var recyclerView: RecyclerView
     private val adapter: AnnouncementAdapter = AnnouncementAdapter { announcement ->
-        Log.d("click", "Title: ${announcement.title}")
+        Log.d("click", "id: ${announcement.id}")
         showDialog(announcement)
         true
     }
@@ -66,7 +66,12 @@ class AnnouncementsActivity : BaseActivity() {
     }
 
     private fun showDialog(announcement: AnnouncementBase) {
-        val dialogFragment = ActionButtonDialogFragment.newInstance()
+        val dialogFragment = ActionButtonDialogFragment.newInstance(
+            announcement.id,
+            announcement.title,
+            announcement.content,
+            announcement.url
+        )
         dialogFragment.show(supportFragmentManager, ActionButtonDialogFragment.TAG)
     }
 }

@@ -183,73 +183,70 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
      * @param etDistancia Campo de texto donde se mostrará la distancia calculada.
      */
     private fun drawRoute(map: MapView, etDistancia: EditText) {
-        // Lista de puntos no nulos: inicio, parada intermedia y final
-        val points = listOfNotNull(startPoint, stopoverPoint, endPoint)
-
-        // Verifica si hay al menos dos puntos para trazar la ruta
-        if (points.size < 2) {
-            Toast.makeText(context, "Establezca al menos dos puntos para crear la ruta.", Toast.LENGTH_SHORT).show()
+        // Verificamos que los puntos están establecidos
+        if (startPoint == null || endPoint == null || stopoverPoint == null) {
+            Toast.makeText(context, "Asegúrate de establecer los puntos de inicio, descanso y final.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Punto de origen (primer punto) y destino (último punto)
-        val origin = points.first()
-        val destination = points.last()
+        // Lista de puntos: inicio, descanso y final
+        val points = listOf(startPoint!!, stopoverPoint!!, endPoint!!)
 
-        // Puntos intermedios entre origen y destino (si los hay)
-        val waypoints = points.subList(1, points.size - 1)
+        // URL de la solicitud para la API de Mapbox
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()}?geometries=geojson&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
-        // Formatea las coordenadas de los puntos intermedios
-        val waypointsCoordinates = waypoints.joinToString(";") { "${it.longitude()},${it.latitude()}" }
-
-        // URL de la solicitud a la API de direcciones de Mapbox
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${origin.longitude()},${origin.latitude()};$waypointsCoordinates;${destination.longitude()},${destination.latitude()}?geometries=geojson&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
-
-        // Lanza una coroutine para realizar la solicitud en segundo plano
+        // Lanza una coroutine para realizar la solicitud de la ruta
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                // Abre la conexión HTTP y obtiene la respuesta
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 val inputStream = connection.inputStream
                 val response = inputStream.bufferedReader().use { it.readText() }
 
-                // Procesa la respuesta JSON
                 val jsonResponse = JSONObject(response)
                 val routes = jsonResponse.getJSONArray("routes")
 
                 if (routes.length() > 0) {
-                    // Obtiene la primera ruta y sus detalles (geometría y distancia)
                     val route = routes.getJSONObject(0)
                     val geometry = route.getJSONObject("geometry")
                     val lineString = LineString.fromJson(geometry.toString())
-                    val distance = route.getDouble("distance") / 1000.0  // Distancia en kilómetros
+                    val distance = route.getDouble("distance") / 1000.0
 
                     withContext(Dispatchers.Main) {
-                        // Muestra la distancia en el campo de texto
                         etDistancia.setText(String.format("%.2f km", distance))
 
-                        // Crea y agrega la fuente para la ruta en el mapa
-                        val routeSource = geoJsonSource("route-source") {
-                            geometry(lineString)
-                        }
                         map.getMapboxMap().getStyle { style ->
-                            style.addSource(routeSource)
-
-                            // Crea y agrega la capa de la ruta en el mapa
-                            val routeLayer = lineLayer("route-layer", "route-source") {
-                                lineWidth(5.0)  // Grosor de la línea de la ruta
+                            // Agrega una capa roja para el tramo inicio -> descanso
+                            val sourceInicioDescanso = geoJsonSource("route-source-inicio-descanso") {
+                                geometry(LineString.fromLngLats(listOf(points[0], points[1])))
                             }
-                            style.addLayer(routeLayer)
+                            style.addSource(sourceInicioDescanso)
+                            val layerInicioDescanso = lineLayer("route-layer-inicio-descanso", "route-source-inicio-descanso") {
+                                lineColor("#FF0000") // Rojo
+                                lineWidth(5.0)
+                            }
+                            style.addLayer(layerInicioDescanso)
+
+                            // Agrega una capa verde para el tramo descanso -> final
+                            val sourceDescansoFinal = geoJsonSource("route-source-descanso-final") {
+                                geometry(LineString.fromLngLats(listOf(points[1], points[2])))
+                            }
+                            style.addSource(sourceDescansoFinal)
+                            val layerDescansoFinal = lineLayer("route-layer-descanso-final", "route-source-descanso-final") {
+                                lineColor("#228B22") // Verde
+                                lineWidth(5.0)
+                            }
+                            style.addLayer(layerDescansoFinal)
                         }
                     }
                 }
             } catch (e: Exception) {
-                // Muestra un mensaje de error en caso de fallo
-                Log.e("AgregarRutaActivity", "Error al obtener la ruta: ${e.message}")
+                Log.e("drawRoute", "Error al obtener la ruta: ${e.message}")
             }
         }
     }
+
+
 
     /**
      * Agrega un marcador en el mapa en la ubicación especificada.

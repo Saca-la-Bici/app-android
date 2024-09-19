@@ -2,8 +2,6 @@ package com.kotlin.sacalabici.framework.views.activities
 
 import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity

@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.views.fragments
+/*package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -71,4 +71,4 @@ class RutasFragment : Fragment() {
         adapter.RutasAdapter(dataForList, requireContext())
         recyclerView.adapter = adapter
     }
-}
+}*/

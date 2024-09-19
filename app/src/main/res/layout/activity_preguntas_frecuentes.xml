@@ -32,8 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Buscador de dudas -->
-        <!-- Buscador de dudas -->
+        <!-- Buscador de preguntas -->
         <EditText
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
@@ -44,11 +43,9 @@
             android:background="@color/lightGray"
             android:layout_margin="16dp" />
 
-
-
         <!-- Categoría Tu seguridad -->
         <TextView
-            android:id="@+id/security_header"
+            android:id="@+id/categoria1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/Categoria1"
@@ -118,7 +115,7 @@
 
         <!-- Categoría Acerca de Rentabici -->
         <TextView
-            android:id="@+id/rentabici_header"
+            android:id="@+id/categoria2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -157,40 +154,22 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Pregunta 4 - Cuadro gris -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+        <!-- Icono de agregar preguntas -->
+        <ImageButton
+            android:id="@+id/btn_agregar_pregunta"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="@color/lightGray">
+            android:layout_marginEnd="16dp"
+            android:background="@null"
+            android:src="@drawable/ic_mas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question_3" />
 
-            <LinearLayout
-                android:id="@+id/question_4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/Pregunta4"
-                    android:textSize="16sp"
-                    android:textColor="@color/black" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_forward" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
     <!-- Flecha de regreso -->
     <ImageButton
-        android:id="@+id/btn_notifications"
+        android:id="@+id/regresar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -201,7 +180,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.036" />
-
 
     <TextView
         android:id="@+id/username"
@@ -218,5 +196,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.043" />
 
+    <!-- Flecha de regreso -->
     <include layout="@layout/main_navbar"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

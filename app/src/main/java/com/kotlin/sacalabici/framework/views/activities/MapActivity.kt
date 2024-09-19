@@ -196,7 +196,7 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             style.addSource(sourceDescansoFinal)
 
             val lineLayerDescansoFinal = LineLayer(layerIdDescansoFinal, sourceIdDescansoFinal).apply {
-                lineColor("#00FF00") // Verde para descanso a final
+                lineColor("#228B22") // Verde para descanso a final
                 lineWidth(3.0)
             }
             style.addLayer(lineLayerDescansoFinal)

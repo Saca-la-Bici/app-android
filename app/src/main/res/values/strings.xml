@@ -4,5 +4,15 @@
     <string name="Mapa">Mapa</string>
     <string name="Anuncios">Anuncios</string>
     <string name="Perfil">Perfil</string>
+    <string name="Ayuda">Ayuda</string>
+    <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
+
+    <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
+
+    <string name="Categoria1">Tu seguridad</string>
+    <string name="Categoria2">Acerca de Rentabici</string>
+    <string name="Pregunta1">¿Qué llevo a la rodada?</string>
+    <string name="Pregunta2">El decálogo del ciclista</string>
+    <string name="Pregunta3">¿Qué hago si no tengo una bicicleta?</string>
 
 </resources>

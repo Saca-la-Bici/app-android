@@ -16,4 +16,5 @@
     <color name="beige">#F3F0EB</color>
     <color name="green">#9BC7AC</color>
     <color name="darkGreen">#7DA68D</color>
+    <color name="lightGray">#EFEFEF</color>
 </resources>

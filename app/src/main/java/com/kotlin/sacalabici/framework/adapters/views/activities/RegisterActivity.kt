@@ -43,12 +43,11 @@ class RegisterActivity : AppCompatActivity() {
 
             @RequiresApi(Build.VERSION_CODES.O)
             if (isValidEmail(email) && isValidUsername(username) && isValidBirthday(birthday)) {
-                val edad = calcularEdad(birthday)
 
                 val intent = Intent(this, RegisterContinueActivity::class.java)
                 intent.putExtra("email", email)
                 intent.putExtra("username", username)
-                intent.putExtra("edad", edad)
+                intent.putExtra("fechaNacimiento", birthday)
                 startActivity(intent)
             } else {
                 if (!isValidEmail(email)) {
@@ -96,18 +95,9 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun calcularEdad(birthday: String): Int {
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        val fechaNacimiento = LocalDate.parse(birthday, formatter)
-        val fechaActual = LocalDate.now()
-        val periodo = Period.between(fechaNacimiento, fechaActual)
-        return periodo.years
-    }
-
     @RequiresApi(Build.VERSION_CODES.N)
     private fun actualizarFecha(calendario: Calendar) {
-        val formatoFecha = "dd/MM/yyyy"
+        val formatoFecha = "yyyy-MM-dd"
         val formatoSimple = SimpleDateFormat(formatoFecha, Locale.ENGLISH)
         binding.BDate.text = formatoSimple.format(calendario.time)
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.RutasFragment
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
@@ -17,6 +18,7 @@ class MapActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
+    private var rutasFragmentVisible = false // Variable para el estado del fragmento
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +29,9 @@ class MapActivity : BaseActivity() {
 
         val btnDetails: ImageButton = findViewById(R.id.btnDetails)
 
-        // Botón para mostrar la lista de rutas
+        // Botón para mostrar/ocultar la lista de rutas
         btnDetails.setOnClickListener {
-            showRutasList()
+            toggleRutasList()
         }
     }
 
@@ -41,10 +43,10 @@ class MapActivity : BaseActivity() {
 
     private fun initializeMap() {
         mapView.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
-            // Define the coordinates for Querétaro
+            // Define las coordenadas para Querétaro
             val queretaroCoordinates = Point.fromLngLat(-100.3899, 20.5888)
 
-            // Move the camera to Querétaro
+            // Mueve la cámara a Querétaro
             mapView.mapboxMap.setCamera(
                 CameraOptions.Builder()
                     .center(queretaroCoordinates)
@@ -54,24 +56,31 @@ class MapActivity : BaseActivity() {
         }
     }
 
-    private fun showRutasList() {
-        lifecycleScope.launch {
-            val rutasList = RutasService.getRutasList()
+    private fun toggleRutasList() {
+        val fragmentManager = supportFragmentManager
+        val fragment: Fragment? = fragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
 
-            if (rutasList != null) {
-                // Crear el fragmento pasando la lista de rutas como argumento
-                val fragment = RutasFragment.newInstance(rutasList)
-
-                // Reemplaza el contenido del contenedor de fragmentos con el nuevo fragmento
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment_content_main, fragment) // Cambia el ID por el de tu contenedor
-                    .addToBackStack(null)
-                    .commit()
-            } else {
-                Log.e("MapActivity", "Error al obtener la lista de rutas")
+        if (fragment != null && fragment is RutasFragment) {
+            // Si el fragmento ya está visible, lo removemos
+            fragmentManager.beginTransaction().remove(fragment).commit()
+            rutasFragmentVisible = false
+        } else {
+            // Si el fragmento no está visible, lo agregamos
+            lifecycleScope.launch {
+                val rutasList = RutasService.getRutasList()
+                if (rutasList != null) {
+                    val rutasFragment = RutasFragment.newInstance(rutasList)
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment_content_main, rutasFragment)
+                        .addToBackStack(null)
+                        .commit() // Llama a commit aquí solo una vez
+                    rutasFragmentVisible = true
+                } else {
+                    Log.e("MapActivity", "Error al obtener la lista de rutas")
+                }
             }
         }
     }
-
-
 }
+
+

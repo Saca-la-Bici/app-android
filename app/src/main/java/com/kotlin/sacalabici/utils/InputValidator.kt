@@ -1,3 +1,11 @@
+/**
+ * File: InputValidator.kt
+ * Description: Contiene la clase `InputValidator`, la cual implementa la interfaz `TextWatcher`
+ * para validar la entrada de texto en un campo de texto.
+ * Date: 18/09/2024
+ * Changes:
+ */
+
 package com.kotlin.sacalabici.utils
 
 // Importaciones para TextWatcher y Editable

@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.viewmodel
+package com.kotlin.sacalabici.framework.viewmodel
 
 import androidx.lifecycle.ViewModel
 

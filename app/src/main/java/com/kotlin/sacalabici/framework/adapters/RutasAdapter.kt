@@ -13,8 +13,7 @@ class RutasAdapter(
     private val onRutaSelected: (RutasBase) -> Unit // Add the callback as a second parameter
 ) : RecyclerView.Adapter<RutasAdapter.RutasViewHolder>() {
 
-    // Para representar elemento seleccionado
-    private var selectedPosition: Int = RecyclerView.NO_POSITION
+    private var selectedRuta: RutasBase? = null
 
     class RutasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tituloTextView: TextView = itemView.findViewById(R.id.TVTitulo)
@@ -31,6 +30,11 @@ class RutasAdapter(
         return RutasViewHolder(view)
     }
 
+    fun setSelectedRuta(ruta: RutasBase?) {
+        selectedRuta = ruta
+        notifyDataSetChanged()
+    }
+
     override fun onBindViewHolder(holder: RutasViewHolder, position: Int) {
         val ruta = rutasList[position]
         holder.tituloTextView.text = ruta.titulo
@@ -39,7 +43,7 @@ class RutasAdapter(
         holder.nivelTextView.text = "Nivel: ${ruta.nivel}"
 
         // Cambiar color de background de elemento seleccionado
-        if (selectedPosition == position) {
+        if (selectedRuta == ruta) {
             holder.rutaContainer.setBackgroundColor(
                 ContextCompat.getColor(holder.itemView.context, R.color.selected_bg)
             )
@@ -51,12 +55,12 @@ class RutasAdapter(
 
         // Manejar cambio de elemento seleccionado via input de usuario
         holder.itemView.setOnClickListener {
-            val previousPosition = selectedPosition
-            selectedPosition = position
+            val previousRuta = selectedRuta
+            selectedRuta = ruta
 
             // Actualizar posición de elemento seleccionado
-            notifyItemChanged(previousPosition)
-            notifyItemChanged(selectedPosition)
+            notifyItemChanged(rutasList.indexOf(previousRuta))
+            notifyItemChanged(rutasList.indexOf(selectedRuta))
 
             onRutaSelected(ruta)
         }
@@ -76,5 +80,3 @@ class RutasAdapter(
         notifyDataSetChanged()
     }
 }
-
-

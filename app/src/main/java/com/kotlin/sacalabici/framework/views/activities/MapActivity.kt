@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.Fragment
 import com.google.gson.JsonObject
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.RutasFragment
+import com.kotlin.sacalabici.framework.views.fragments.RutasFragment
 import com.kotlin.sacalabici.data.models.RutasBase
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
 import com.kotlin.sacalabici.framework.services.RutasService
@@ -26,7 +26,6 @@ import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
-import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.extension.style.sources.getSourceAs
 import kotlinx.coroutines.launch
 
@@ -37,6 +36,7 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
     private var rutasFragmentVisible = false
     private var currentSourceId: String? = null
     private var currentLayerId: String? = null
+    private var lastSelectedRuta: RutasBase? = null
 
     // Para almacenar las fuentes y capas de rutas
     private val routeSources = mutableListOf<String>()
@@ -87,15 +87,13 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         val fragment: Fragment? = fragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
 
         if (fragment != null && fragment is RutasFragment) {
-            // Si el fragmento ya está visible, lo removemos
             fragmentManager.beginTransaction().remove(fragment).commit()
             rutasFragmentVisible = false
         } else {
-            // Si el fragmento no está visible, lo agregamos
             lifecycleScope.launch {
                 val rutasList = RutasService.getRutasList()
                 if (rutasList != null) {
-                    val rutasFragment = RutasFragment.newInstance(rutasList)
+                    val rutasFragment = RutasFragment.newInstance(rutasList, lastSelectedRuta)
                     fragmentManager.beginTransaction()
                         .replace(R.id.nav_host_fragment_content_main, rutasFragment)
                         .addToBackStack(null)
@@ -109,6 +107,7 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
     }
 
     override fun onRutaSelected(ruta: RutasBase) {
+        lastSelectedRuta = ruta
         // Eliminar todas las rutas anteriores
         mapView.getMapboxMap().getStyle { style ->
             // Eliminar todas las fuentes de rutas

@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici
+package com.kotlin.sacalabici.framework.views.fragments
 
 import RutasAdapter
 import android.content.Context
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.RutasBase
 
 class RutasFragment : Fragment() {
@@ -17,6 +18,7 @@ class RutasFragment : Fragment() {
     private lateinit var rutasAdapter: RutasAdapter
     private lateinit var rutasList: ArrayList<RutasBase>
     private var onRutaSelectedListener: OnRutaSelectedListener? = null
+    private var lastSelectedRuta: RutasBase? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,25 +29,26 @@ class RutasFragment : Fragment() {
         recyclerView = view.findViewById(R.id.RVRutas)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Inicializar el adapter vacío
-        rutasAdapter = RutasAdapter(emptyList(), ::onRutaSelected)
+        rutasAdapter = RutasAdapter(emptyList()) { ruta ->
+            onRutaSelected(ruta)
+        }
         recyclerView.adapter = rutasAdapter
 
-        // Obtener la lista de rutas pasada como argumento
         val rutasList = arguments?.getParcelableArrayList<RutasBase>("rutasList")
+        val selectedRuta = arguments?.getParcelable<RutasBase>("selectedRuta")
         rutasList?.let {
-            updateRutasList(it)
+            updateRutasList(it, selectedRuta)
         }
 
         return view
     }
 
-    // Método para actualizar la lista de rutas en el adapter
-    fun updateRutasList(rutasList: List<RutasBase>) {
+    fun updateRutasList(rutasList: List<RutasBase>, selectedRuta: RutasBase?) {
         rutasAdapter.updateRutas(rutasList)
+        this.lastSelectedRuta = selectedRuta
+        rutasAdapter.setSelectedRuta(selectedRuta)
     }
 
-    // Callback cuando una ruta es seleccionada
     private fun onRutaSelected(ruta: RutasBase) {
         onRutaSelectedListener?.onRutaSelected(ruta)
     }
@@ -65,14 +68,13 @@ class RutasFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(rutasList: List<RutasBase>?): RutasFragment {
+        fun newInstance(rutasList: List<RutasBase>?, selectedRuta: RutasBase?): RutasFragment {
             val fragment = RutasFragment()
             val args = Bundle()
-            // Convierte la lista en un ArrayList antes de agregarla al Bundle
             args.putParcelableArrayList("rutasList", rutasList?.let { ArrayList(it) })
+            args.putParcelable("selectedRuta", selectedRuta)
             fragment.arguments = args
             return fragment
         }
     }
 }
-

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,9 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
     <color name="yellow">#F6CD0B</color>
-    <color name="neonYellow">#FFFF00</color>
+    <color name="neonYellow" tools:ignore="DuplicateDefinition">#FFFF00</color>
     <color name="darkGray">#2B2B3B</color>
     <color name="semiBlack">#1C1B1F</color>
     <color name="semiWhite">#FDFDFD</color>
@@ -19,5 +18,4 @@
     <color name="lightGray">#EFEFEF</color>
 
     <!--    App Colors-->
-    <color name="yellow">#F6CD0B</color>
 </resources>

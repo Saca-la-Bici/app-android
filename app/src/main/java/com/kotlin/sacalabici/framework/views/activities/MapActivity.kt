@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.views.activities
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
@@ -19,6 +20,7 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.LineLayer
+import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
@@ -102,7 +104,7 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         mapView.getMapboxMap().setCamera(
             CameraOptions.Builder()
                 .center(point)
-                .zoom(14.0) // Adjust zoom level as needed
+                .zoom(14.0) // Ajusta el nivel de zoom según sea necesario
                 .build()
         )
 
@@ -136,8 +138,54 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
                 }
                 style.addLayer(lineLayer)
             }
+
+            // Add pins for each coordinate based on the route type
+            addPinsForRouteType(style, ruta)
         }
     }
+
+    private fun addPinsForRouteType(style: Style, ruta: RutasBase) {
+        // Define los iconos para diferentes tipos
+        val iconImages = mapOf(
+            "inicio" to R.drawable.start_icon,
+            "descanso" to R.drawable.stopover_icon,
+            "fin" to R.drawable.end_icon
+        )
+
+        // Añade los iconos al estilo
+        iconImages.forEach { (type, resId) ->
+            style.addImage(type, BitmapFactory.decodeResource(resources, resId))
+        }
+
+        // Crea una lista de características con los puntos y tipos
+        val features = ruta.coordenadas.map { coordenada ->
+            Feature.fromGeometry(
+                Point.fromLngLat(coordenada.longitud, coordenada.latitud),
+                mapOf("tipo" to coordenada.tipo)
+            )
+        }
+        val featureCollection = FeatureCollection.fromFeatures(features)
+
+        // Elimina la fuente de símbolos existente si la hay
+        val existingSymbolSource = style.getSourceAs<GeoJsonSource>("symbol-source")
+        if (existingSymbolSource != null) {
+            style.removeStyleSource("symbol-source")
+        }
+
+        // Crea y añade la nueva fuente con la colección de características
+        val symbolSource = GeoJsonSource.Builder("symbol-source")
+            .featureCollection(featureCollection)
+            .build()
+        style.addSource(symbolSource)
+
+        // Añade la capa de símbolos
+        val symbolLayer = SymbolLayer("symbol-layer", "symbol-source").apply {
+            iconImage("{tipo}") // Usa el tipo como el nombre del icono
+            iconSize(1.0)
+        }
+        style.addLayer(symbolLayer)
+    }
+
 
 }
 

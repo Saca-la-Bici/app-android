@@ -81,7 +81,7 @@
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
         <activity
-            android:name=".framework.adapters.views.activities.PreguntasFrecuentesActivity"
+            android:name=".framework.adapters.views.activities.FaqsActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             />

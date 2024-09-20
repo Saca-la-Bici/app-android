@@ -36,6 +36,7 @@ class ProfileActivity: BaseActivity() {
         setupNavbar()
         setupConfiguracionButton()
         setupEditarButton()
+        setupFAQnButton()
     }
 
     private fun initializeBinding() {
@@ -63,6 +64,14 @@ class ProfileActivity: BaseActivity() {
         }
     }
 
+    private fun setupFAQnButton() {
+        val btnConfiguration = findViewById<ImageButton>(R.id.fab_faq)
+        btnConfiguration.setOnClickListener {
+            val intent = Intent(this, FaqsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+    }
 
     private fun highlightCurrentActivity(
         currentActivity: String,

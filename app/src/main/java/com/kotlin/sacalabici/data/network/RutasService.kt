@@ -24,9 +24,9 @@ object RutasService {
             connection.disconnect()
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                // Parsear el JSON usando Gson
-                val rutasObject = Gson().fromJson(responseMessage, RutasObject::class.java)
-                rutasObject.rutas
+                // Parsear el JSON como una lista directamente
+                val rutasList = Gson().fromJson(responseMessage, Array<RutasBase>::class.java).toList()
+                rutasList
             } else {
                 Log.e("getRutasList", "Error en la solicitud: $responseCode - $responseMessage")
                 null
@@ -36,4 +36,5 @@ object RutasService {
             null
         }
     }
+
 }

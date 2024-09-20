@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.google.gson.JsonObject
 import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.models.CoordenadasBase
 import com.kotlin.sacalabici.framework.views.fragments.RutasFragment
 import com.kotlin.sacalabici.data.models.RutasBase
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
@@ -139,32 +140,33 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             return
         }
 
-        // Definir puntos de inicio, descanso y final
+        // Llamar a la función que dibuja la ruta con todas las coordenadas
+        drawRoute(mapView, ruta.coordenadas)
+
+        // Agregar los pines a los puntos relevantes
         val startPoint = Point.fromLngLat(ruta.coordenadas[0].longitud, ruta.coordenadas[0].latitud)
         val stopoverPoint = Point.fromLngLat(ruta.coordenadas[descansoIndex].longitud, ruta.coordenadas[descansoIndex].latitud)
         val endPoint = Point.fromLngLat(ruta.coordenadas[finalIndex].longitud, ruta.coordenadas[finalIndex].latitud)
-
-        // Llamar a la función que dibuja la ruta
-        drawRoute(mapView, startPoint, stopoverPoint, endPoint)
-
-        // Agregar los pines a los puntos relevantes
         addPins(mapView, startPoint, stopoverPoint, endPoint)
     }
 
 
-    private fun drawRoute(map: MapView, startPoint: Point, stopoverPoint: Point, endPoint: Point) {
-        val points = listOf(startPoint, stopoverPoint, endPoint)
+    fun coordenadasToPoint(coordenada: CoordenadasBase): Point {
+        return Point.fromLngLat(coordenada.longitud, coordenada.latitud)
+    }
 
-        // Log de los puntos de inicio, parada y fin
-        Log.d("MapActivity", "Start Point: ${startPoint.latitude()}, ${startPoint.longitude()}")
-        Log.d("MapActivity", "Stopover Point: ${stopoverPoint.latitude()}, ${stopoverPoint.longitude()}")
-        Log.d("MapActivity", "End Point: ${endPoint.latitude()}, ${endPoint.longitude()}")
+    private fun drawRoute(map: MapView, coordenadas: List<CoordenadasBase>) {
+        // Asegúrate de que haya al menos 3 puntos: inicio, descanso, final
+        if (coordenadas.size < 3) {
+            Log.e("MapActivity", "Faltan puntos en las coordenadas")
+            return
+        }
 
-        // URL para la API de direcciones de Mapbox
+        // Convertir los objetos CoordenadasBase a Point
+        val points = coordenadas.map { coordenadasToPoint(it) }
+
+        // Generar la URL para obtener la ruta desde la API de Mapbox
         val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
-
-        // Log de la URL que se genera
-        Log.d("MapActivity", "Directions API URL: $url")
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
@@ -173,58 +175,28 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
                 val inputStream = connection.inputStream
                 val response = inputStream.bufferedReader().use { it.readText() }
 
-                // Log de la respuesta cruda de la API
-                Log.d("MapActivity", "API Response: $response")
-
                 val jsonResponse = JSONObject(response)
                 val routes = jsonResponse.getJSONArray("routes")
 
-                // Log del número de rutas obtenidas
-                Log.d("MapActivity", "Number of routes: ${routes.length()}")
-
                 if (routes.length() > 0) {
                     val route = routes.getJSONObject(0)
+                    val geometry = route.getString("geometry")
 
-                    // Log de los detalles de la primera ruta
-                    Log.d("MapActivity", "First Route: $route")
+                    // Decodificar los puntos de la geometría (polyline)
+                    val decodedPoints = decodePolyline(geometry)
 
-                    val geometry = route.getString("geometry") // Obtener polyline6
+                    // Separar los tramos usando las coordenadas del punto de descanso
+                    val puntoDescanso = points[1]
 
-                    // Log del polyline6 antes de decodificar
-                    Log.d("MapActivity", "Polyline6: $geometry")
-
-                    val decodedPoints = decodePolyline(geometry) // Decodificar polyline6 a coordenadas
-
-                    // Log del número de puntos decodificados
-                    Log.d("MapActivity", "Decoded Points: ${decodedPoints.size}")
-
-                    // Log de los puntos decodificados
-                    decodedPoints.forEachIndexed { index, point ->
-                        Log.d("MapActivity", "Point $index: ${point.latitude()}, ${point.longitude()}")
-                    }
-
-                    // Dividir la ruta en dos tramos (antes y después del punto de descanso)
-                    // Dividir la ruta en dos tramos (antes y después del punto de descanso)
                     val tramo1 = decodedPoints.takeWhile {
-                        it.latitude() <= stopoverPoint.latitude() && it.longitude() <= stopoverPoint.longitude()
+                        it.latitude() != puntoDescanso.latitude() && it.longitude() != puntoDescanso.longitude()
                     }
                     val tramo2 = decodedPoints.dropWhile {
-                        it.latitude() <= stopoverPoint.latitude() && it.longitude() <= stopoverPoint.longitude()
-                    }
-
-
-                    // Log de los puntos en cada tramo
-                    Log.d("MapActivity", "Tramo 1 Points: ${tramo1.size}")
-                    tramo1.forEachIndexed { index, point ->
-                        Log.d("MapActivity", "Tramo 1 - Point $index: ${point.latitude()}, ${point.longitude()}")
-                    }
-
-                    Log.d("MapActivity", "Tramo 2 Points: ${tramo2.size}")
-                    tramo2.forEachIndexed { index, point ->
-                        Log.d("MapActivity", "Tramo 2 - Point $index: ${point.latitude()}, ${point.longitude()}")
+                        it.latitude() != puntoDescanso.latitude() && it.longitude() != puntoDescanso.longitude()
                     }
 
                     withContext(Dispatchers.Main) {
+                        // Dibujar los dos segmentos con colores diferentes
                         drawRouteSegments(map, tramo1, tramo2)
                     }
                 }
@@ -235,10 +207,11 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
     }
 
 
+
     private fun drawRouteSegments(map: MapView, tramo1: List<Point>, tramo2: List<Point>) {
         map.getMapboxMap().getStyle { style ->
 
-            // Dibujar tramo 1 en rojo
+            // Dibujar tramo 1 en rojo (antes del punto de descanso)
             val sourceIdTramo1 = "route-source-tramo1-${System.currentTimeMillis()}"
             val layerIdTramo1 = "route-layer-tramo1-${System.currentTimeMillis()}"
 
@@ -249,12 +222,13 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             routeSources.add(sourceIdTramo1) // Agregar a la lista de fuentes
 
             val lineLayerTramo1 = LineLayer(layerIdTramo1, sourceIdTramo1).apply {
-                lineColor("#FF0000") // Rojo
+                lineColor("#FF0000") // Rojo para el primer tramo
                 lineWidth(3.0)
             }
             style.addLayer(lineLayerTramo1)
             routeLayers.add(layerIdTramo1) // Agregar a la lista de capas
 
+            // Dibujar tramo 2 en verde (después del punto de descanso)
             val sourceIdTramo2 = "route-source-tramo2-${System.currentTimeMillis()}"
             val layerIdTramo2 = "route-layer-tramo2-${System.currentTimeMillis()}"
 
@@ -265,14 +239,14 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             routeSources.add(sourceIdTramo2) // Agregar a la lista de fuentes
 
             val lineLayerTramo2 = LineLayer(layerIdTramo2, sourceIdTramo2).apply {
-                lineColor("#228B22") // Rojo
+                lineColor("#228B22") // Verde para el segundo tramo
                 lineWidth(3.0)
             }
             style.addLayer(lineLayerTramo2)
             routeLayers.add(layerIdTramo2) // Agregar a la lista de capas
-
         }
     }
+
 
     private fun decodePolyline(encodedPolyline: String): List<Point> {
         return PolylineUtils.decode(encodedPolyline, 6).map { Point.fromLngLat(it.longitude(), it.latitude()) }

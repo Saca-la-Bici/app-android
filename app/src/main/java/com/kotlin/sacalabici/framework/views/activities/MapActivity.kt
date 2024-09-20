@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.Fragment
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.framework.views.fragments.RutasFragment
 import com.kotlin.sacalabici.data.models.RutasBase
@@ -27,22 +28,21 @@ import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.getSourceAs
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
     private lateinit var binding: ActivityMapBinding
     private lateinit var mapView: MapView
     private var rutasFragmentVisible = false
-    private var currentSourceId: String? = null
-    private var currentLayerId: String? = null
     private var lastSelectedRuta: RutasBase? = null
 
-    // Para almacenar las fuentes y capas de rutas
     private val routeSources = mutableListOf<String>()
     private val routeLayers = mutableListOf<String>()
-
-    // Para almacenar las fuentes y capas de pines
     private val pinSources = mutableListOf<String>()
     private val pinLayers = mutableListOf<String>()
 
@@ -55,13 +55,12 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
         val btnDetails: ImageButton = findViewById(R.id.btnDetails)
 
-        // Botón para mostrar/ocultar la lista de rutas
         btnDetails.setOnClickListener {
             toggleRutasList()
         }
     }
 
-    private fun initializeBinding(){
+    private fun initializeBinding() {
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mapView = binding.mapView
@@ -69,10 +68,8 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
     private fun initializeMap() {
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
-            // Define las coordenadas para Querétaro
             val queretaroCoordinates = Point.fromLngLat(-100.3899, 20.5888)
 
-            // Mueve la cámara a Querétaro
             mapView.mapboxMap.setCamera(
                 CameraOptions.Builder()
                     .center(queretaroCoordinates)
@@ -108,40 +105,21 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
     override fun onRutaSelected(ruta: RutasBase) {
         lastSelectedRuta = ruta
+
         // Eliminar todas las rutas anteriores
         mapView.getMapboxMap().getStyle { style ->
-            // Eliminar todas las fuentes y capas anteriores
-            routeSources.forEach { sourceId ->
-                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
-                    style.removeStyleSource(sourceId)
-                }
-            }
+            routeSources.forEach { sourceId -> style.getSourceAs<GeoJsonSource>(sourceId)?.let { style.removeStyleSource(sourceId) } }
             routeSources.clear()
 
-            routeLayers.forEach { layerId ->
-                style.getLayer(layerId)?.let {
-                    style.removeStyleLayer(layerId)
-                }
-            }
+            routeLayers.forEach { layerId -> style.getLayer(layerId)?.let { style.removeStyleLayer(layerId) } }
             routeLayers.clear()
 
-            pinSources.forEach { sourceId ->
-                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
-                    style.removeStyleSource(sourceId)
-                }
-            }
+            pinSources.forEach { sourceId -> style.getSourceAs<GeoJsonSource>(sourceId)?.let { style.removeStyleSource(sourceId) } }
             pinSources.clear()
 
-            pinLayers.forEach { layerId ->
-                style.getLayer(layerId)?.let {
-                    style.removeStyleLayer(layerId)
-                }
-            }
+            pinLayers.forEach { layerId -> style.getLayer(layerId)?.let { style.removeStyleLayer(layerId) } }
             pinLayers.clear()
         }
-
-        // Genera un ID único para la nueva fuente y capa
-        val uniqueId = System.currentTimeMillis()
 
         // Zoom en la primera coordenada de la ruta
         val firstCoordinate = ruta.coordenadas.firstOrNull() ?: return
@@ -154,80 +132,95 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
                 .build()
         )
 
-        // Encontrar el índice del descanso y final usando el campo 'tipo'
-        val descansoIndex = ruta.coordenadas.indexOfFirst { it.tipo == "descanso" }
-        val finalIndex = ruta.coordenadas.indexOfFirst { it.tipo == "final" }
+        // Usar la URL de la API de Mapbox para obtener las rutas
+        val coordinates = ruta.coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
+        val points = coordinates.take(3) // Toma los primeros 3 puntos para la solicitud
 
-        if (descansoIndex == -1 || finalIndex == -1) {
-            Log.e("MapActivity", "No se encontraron puntos de descanso o final en la ruta")
-            return
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
+
+        lifecycleScope.launch {
+            val response = fetchRouteFromApi(url)
+            response?.let {
+                // Procesar la respuesta y extraer las coordenadas para dibujar la ruta
+                val routeCoordinates = extractCoordinatesFromResponse(it)
+                drawRoute(routeCoordinates)
+            }
         }
 
-        // Dividir las coordenadas en dos segmentos: inicio a descanso y descanso a final
-        val coordinatesInicioDescanso = ruta.coordenadas.subList(0, descansoIndex + 1)
-            .map { Point.fromLngLat(it.longitud, it.latitud) }
-        val coordinatesDescansoFinal = ruta.coordenadas.subList(descansoIndex, finalIndex + 1)
-            .map { Point.fromLngLat(it.longitud, it.latitud) }
+        // Añadir los pines para el tipo de ruta
+        addPinsForRouteType(mapView.getMapboxMap().getStyle()!!, ruta)
+    }
 
-        mapView.getMapboxMap().getStyle { style ->
-
-            // **1. Línea roja desde el inicio al descanso**
-            val sourceIdInicioDescanso = "route-source-inicio-descanso-$uniqueId"
-            val layerIdInicioDescanso = "route-layer-inicio-descanso-$uniqueId"
-
-            val sourceInicioDescanso = GeoJsonSource.Builder(sourceIdInicioDescanso)
-                .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinatesInicioDescanso)))))
-                .build()
-            style.addSource(sourceInicioDescanso)
-
-            val lineLayerInicioDescanso = LineLayer(layerIdInicioDescanso, sourceIdInicioDescanso).apply {
-                lineColor("#FF0000") // Rojo para inicio a descanso
-                lineWidth(3.0)
+    private suspend fun fetchRouteFromApi(url: URL): String? {
+        return withContext(Dispatchers.IO) {
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.connect()
+            return@withContext if (connection.responseCode == 200) {
+                connection.inputStream.bufferedReader().use { it.readText() }
+            } else {
+                Log.e("MapActivity", "Error en la conexión: ${connection.responseCode}")
+                null
             }
-            style.addLayer(lineLayerInicioDescanso)
-
-            // **2. Línea verde desde el descanso al final**
-            val sourceIdDescansoFinal = "route-source-descanso-final-$uniqueId"
-            val layerIdDescansoFinal = "route-layer-descanso-final-$uniqueId"
-
-            val sourceDescansoFinal = GeoJsonSource.Builder(sourceIdDescansoFinal)
-                .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinatesDescansoFinal)))))
-                .build()
-            style.addSource(sourceDescansoFinal)
-
-            val lineLayerDescansoFinal = LineLayer(layerIdDescansoFinal, sourceIdDescansoFinal).apply {
-                lineColor("#228B22") // Verde para descanso a final
-                lineWidth(3.0)
-            }
-            style.addLayer(lineLayerDescansoFinal)
-
-            // Añadir los pines para el tipo de ruta
-            addPinsForRouteType(style, ruta)
-
-            // Guardar las fuentes y capas
-            routeSources.add(sourceIdInicioDescanso)
-            routeSources.add(sourceIdDescansoFinal)
-            routeLayers.add(layerIdInicioDescanso)
-            routeLayers.add(layerIdDescansoFinal)
         }
     }
 
+    private fun extractCoordinatesFromResponse(response: String): List<Point> {
+        // Aquí parsearías el JSON para extraer las coordenadas
+        // Este es un ejemplo simple; adapta esto a tu formato real de respuesta
+        val jsonObject = JsonParser.parseString(response).asJsonObject
+        val routes = jsonObject.getAsJsonArray("routes")
+        val coordinates = mutableListOf<Point>()
+
+        if (routes.size() > 0) {
+            val geometry = routes[0].asJsonObject.getAsJsonObject("geometry")
+            val coordinatesArray = geometry.getAsJsonArray("coordinates")
+
+            for (i in 0 until coordinatesArray.size()) {
+                val pointArray = coordinatesArray[i].asJsonArray
+                val longitude = pointArray[0].asDouble
+                val latitude = pointArray[1].asDouble
+                coordinates.add(Point.fromLngLat(longitude, latitude))
+            }
+        }
+
+        return coordinates
+    }
+
+    private fun drawRoute(coordinates: List<Point>) {
+        val uniqueId = System.currentTimeMillis()
+        val sourceId = "route-source-$uniqueId"
+        val layerId = "route-layer-$uniqueId"
+
+        mapView.getMapboxMap().getStyle { style ->
+            val source = GeoJsonSource.Builder(sourceId)
+                .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(coordinates)))))
+                .build()
+            style.addSource(source)
+
+            val lineLayer = LineLayer(layerId, sourceId).apply {
+                lineColor("#FF0000") // Rojo para la ruta
+                lineWidth(3.0)
+            }
+            style.addLayer(lineLayer)
+
+            // Guardar los IDs
+            routeSources.add(sourceId)
+            routeLayers.add(layerId)
+        }
+    }
 
     private fun addPinsForRouteType(style: Style, ruta: RutasBase) {
-        // Define los iconos para diferentes tipos
         val iconImages = mapOf(
             "inicio" to R.drawable.start_icon,
             "descanso" to R.drawable.stopover_icon,
             "final" to R.drawable.end_icon
         )
 
-        // Añade los iconos al estilo
         iconImages.forEach { (type, resId) ->
-            // Añade la imagen al estilo, sin verificar si ya existe
             style.addImage(type, BitmapFactory.decodeResource(resources, resId))
         }
 
-        // Crea una lista de características con los puntos y tipos
         val features = ruta.coordenadas.map { coordenada ->
             val properties = JsonObject().apply {
                 addProperty("tipo", coordenada.tipo)
@@ -240,43 +233,29 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
         val featureCollection = FeatureCollection.fromFeatures(features)
 
-        // Genera un ID único para la nueva fuente y capa de pines
         val uniqueId = System.currentTimeMillis()
         val symbolSourceId = "symbol-source-$uniqueId"
         val symbolLayerId = "symbol-layer-$uniqueId"
 
-        // Guardar los IDs en las listas
         pinSources.add(symbolSourceId)
         pinLayers.add(symbolLayerId)
 
         mapView.getMapboxMap().getStyle { style ->
-            // Eliminar la fuente de símbolos existente si la hay
             val existingSymbolSource = style.getSourceAs<GeoJsonSource>(symbolSourceId)
             if (existingSymbolSource != null) {
                 style.removeStyleSource(symbolSourceId)
             }
 
-            // Crear y añadir la nueva fuente con la colección de características
             val symbolSource = GeoJsonSource.Builder(symbolSourceId)
                 .featureCollection(featureCollection)
                 .build()
             style.addSource(symbolSource)
 
-            // Eliminar la capa de símbolos existente si la hay
-            val existingSymbolLayer = style.getLayer(symbolLayerId)
-            if (existingSymbolLayer != null) {
-                style.removeStyleLayer(symbolLayerId)
-            }
-
-            // Añadir la nueva capa de símbolos
             val symbolLayer = SymbolLayer(symbolLayerId, symbolSourceId).apply {
                 iconImage("{tipo}")
                 iconAllowOverlap(true)
-                iconIgnorePlacement(true)
-                iconSize(0.07)
-                iconAnchor(IconAnchor.BOTTOM)
+                iconSize(1.5)
             }
-
             style.addLayer(symbolLayer)
         }
     }

@@ -10,7 +10,7 @@
         android:id="@+id/RVuser_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_perfil"
+        android:src="@drawable/ic_profile"
         android:contentDescription="Imagen de perfil"
         android:layout_gravity="center_vertical"/>
 

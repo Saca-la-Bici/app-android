@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
@@ -32,8 +31,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.036" />
 
+    <!-- Boton Asignación de roles y persmisos de prueba modificar -->
+    <!-- Se incluyo dentro del boton para hacer clik en configuraciones cambiar eso -->
     <ImageButton
-        android:id="@+id/btn_configuration"
+        android:id="@+id/btnConfiguration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -354,17 +355,6 @@
         />
 
     </FrameLayout>
-
-
-    <!-- Boton Asignación de roles y persmisos -->
-    <Button
-        android:id="@+id/BAsaingRol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prueba: Asignar de roles y permisos"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-        />
 
     <include layout="@layout/main_navbar"/>
 

@@ -22,6 +22,7 @@ class ProfileActivity: BaseActivity() {
         val btnEventos = binding.btnEventos
         val btnAsistencia = binding.btnAsistencia
         val btnGlobal = binding.btnGlobal
+        val btnpRol = binding.btnConfiguration
 
         btnEventos.setOnClickListener {
             highlightCurrentActivity("Eventos", btnEventos, btnAsistencia, btnGlobal)
@@ -45,10 +46,10 @@ class ProfileActivity: BaseActivity() {
 
     // Método para inicializar el listener del botón de configuración
     private fun setupConfiguracionButton() {
-        val btnConfiguration = findViewById<ImageButton>(R.id.btn_configuration)
+        val btnConfiguration = findViewById<ImageButton>(R.id.btnConfiguration)
         btnConfiguration.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            // Boton puesto como prueba modificar cuando se cree la vista de configuraciónes
+            val intent = Intent(this, ConsultarUsuariosActivity::class.java)
             startActivity(intent)
         }
     }

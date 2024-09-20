@@ -146,7 +146,11 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
         // Llamar a la función que dibuja la ruta
         drawRoute(mapView, startPoint, stopoverPoint, endPoint)
+
+        // Agregar los pines a los puntos relevantes
+        addPins(mapView, startPoint, stopoverPoint, endPoint)
     }
+
 
     private fun drawRoute(map: MapView, startPoint: Point, stopoverPoint: Point, endPoint: Point) {
         val points = listOf(startPoint, stopoverPoint, endPoint)
@@ -310,72 +314,47 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         }
     }
 
+    private fun addPins(map: MapView, startPoint: Point, stopoverPoint: Point, endPoint: Point) {
+        map.getMapboxMap().getStyle { style ->
 
-    private fun addPinsForRouteType(style: Style, ruta: RutasBase) {
-        // Define los iconos para diferentes tipos
-        val iconImages = mapOf(
-            "inicio" to R.drawable.start_icon,
-            "descanso" to R.drawable.stopover_icon,
-            "final" to R.drawable.end_icon
-        )
+            // Definir íconos personalizados para los pines (inicio, descanso, final)
+            val startPinIcon = BitmapFactory.decodeResource(resources, R.drawable.start_icon)
+            val stopoverPinIcon = BitmapFactory.decodeResource(resources, R.drawable.stopover_icon)
+            val endPinIcon = BitmapFactory.decodeResource(resources, R.drawable.end_icon)
 
-        // Añade los iconos al estilo
-        iconImages.forEach { (type, resId) ->
-            // Añade la imagen al estilo, sin verificar si ya existe
-            style.addImage(type, BitmapFactory.decodeResource(resources, resId))
-        }
+            // Agregar los íconos personalizados al estilo de Mapbox
+            style.addImage("start-pin-icon", startPinIcon)
+            style.addImage("stopover-pin-icon", stopoverPinIcon)
+            style.addImage("end-pin-icon", endPinIcon)
 
-        // Crea una lista de características con los puntos y tipos
-        val features = ruta.coordenadas.map { coordenada ->
-            val properties = JsonObject().apply {
-                addProperty("tipo", coordenada.tipo)
-            }
-            Feature.fromGeometry(
-                Point.fromLngLat(coordenada.longitud, coordenada.latitud),
-                properties
+            // Crear y agregar pines de inicio, descanso y final
+            val pinPoints = listOf(
+                Pair(startPoint, "start-pin-icon"),
+                Pair(stopoverPoint, "stopover-pin-icon"),
+                Pair(endPoint, "end-pin-icon")
             )
-        }
 
-        val featureCollection = FeatureCollection.fromFeatures(features)
+            pinPoints.forEachIndexed { index, (point, iconName) ->
+                val sourceId = "pin-source-$index-${System.currentTimeMillis()}"
+                val layerId = "pin-layer-$index-${System.currentTimeMillis()}"
 
-        // Genera un ID único para la nueva fuente y capa de pines
-        val uniqueId = System.currentTimeMillis()
-        val symbolSourceId = "symbol-source-$uniqueId"
-        val symbolLayerId = "symbol-layer-$uniqueId"
+                val source = GeoJsonSource.Builder(sourceId)
+                    .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(point))))
+                    .build()
+                style.addSource(source)
+                pinSources.add(sourceId) // Agregar a la lista de fuentes de pines
 
-        // Guardar los IDs en las listas
-        pinSources.add(symbolSourceId)
-        pinLayers.add(symbolLayerId)
-
-        mapView.getMapboxMap().getStyle { style ->
-            // Eliminar la fuente de símbolos existente si la hay
-            val existingSymbolSource = style.getSourceAs<GeoJsonSource>(symbolSourceId)
-            if (existingSymbolSource != null) {
-                style.removeStyleSource(symbolSourceId)
+                val symbolLayer = SymbolLayer(layerId, sourceId)
+                    .iconImage(iconName) // Usar el nombre del ícono como cadena de texto
+                    .iconAllowOverlap(true)
+                    .iconIgnorePlacement(true)
+                    .iconSize(0.07)
+                    .iconAnchor(IconAnchor.BOTTOM)
+                style.addLayer(symbolLayer)
+                pinLayers.add(layerId) // Agregar a la lista de capas de pines
             }
-
-            // Crear y añadir la nueva fuente con la colección de características
-            val symbolSource = GeoJsonSource.Builder(symbolSourceId)
-                .featureCollection(featureCollection)
-                .build()
-            style.addSource(symbolSource)
-
-            // Eliminar la capa de símbolos existente si la hay
-            val existingSymbolLayer = style.getLayer(symbolLayerId)
-            if (existingSymbolLayer != null) {
-                style.removeStyleLayer(symbolLayerId)
-            }
-
-            // Añadir la nueva capa de símbolos
-            val symbolLayer = SymbolLayer(symbolLayerId, symbolSourceId).apply {
-                iconImage("{tipo}")
-                iconAllowOverlap(true)
-                iconIgnorePlacement(true)
-                iconSize(0.07)
-                iconAnchor(IconAnchor.BOTTOM)
-            }
-
-            style.addLayer(symbolLayer)
         }
     }
+
+
 }

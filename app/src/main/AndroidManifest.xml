@@ -74,8 +74,13 @@
             android:theme="@style/Theme.Sacalabici.NoActionBar" />
 
         <activity
-            android:name=".framework.adapters.views.activities.ConsultarUsuariosActivity"
+            android:name=".framework.adapters.views.activities.SettingsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar" />
+            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+
+        <activity
+            android:name=".framework.adapters.views.activities.ProfileEditActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
     </application>
 </manifest>

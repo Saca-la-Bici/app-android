@@ -92,7 +92,7 @@
         android:id="@+id/btnPerfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_perfil"
+        android:src="@drawable/ic_profile"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="@id/vNavBar"
         app:layout_constraintTop_toTopOf="@id/vNavBar"

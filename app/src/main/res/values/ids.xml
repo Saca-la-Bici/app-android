@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="username" type="id" />
+    <item name="blood_icon" type="id" />
+    <item name="profile_blood" type="id" />
+    <item name="profile_name" type="id" />
+    <item name="vUserinformation" type="id" />
+    <item name="text_rodadas" type="id" />
+    <item name="text_kilometros" type="id" />
+    <item name="label_rodadas" type="id" />
+    <item name="text_amigos" type="id" />
+    <item name="label_kilometros" type="id" />
+    <item name="label_amigos" type="id" />
+    <item name="profile_options" type="id" />
+    <item name="btn_edit_profile" type="id" />
+    <item name="btn_share_profile" type="id" />
+    <item name="tv_share_profile" type="id" />
+    <item name="btnAgregarAmigos" type="id" />
+    <item name="vIcons" type="id" />
+    <item name="btnEventos" type="id" />
+    <item name="btnAsistencia" type="id" />
+    <item name="btnGlobal" type="id" />
+    <item name="vFragment" type="id" />
+    <item name="fab_faq" type="id" />
+</resources>

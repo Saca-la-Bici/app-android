@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.BuildConfig
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
+import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.extension.style.layers.addLayer
@@ -193,7 +194,7 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         val points = listOf(startPoint!!, stopoverPoint!!, endPoint!!)
 
         // URL de la solicitud para la API de Mapbox
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()}?geometries=geojson&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
         // Lanza una coroutine para realizar la solicitud de la ruta
         lifecycleScope.launch(Dispatchers.IO) {
@@ -208,35 +209,43 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
 
                 if (routes.length() > 0) {
                     val route = routes.getJSONObject(0)
-                    val geometry = route.getJSONObject("geometry")
-                    val lineString = LineString.fromJson(geometry.toString())
+                    val geometry = route.getString("geometry") // Aquí obtenemos la cadena en formato polyline6
+                    val decodedPoints = decodePolyline(geometry) // Decodifica la polyline6 en coordenadas
                     val distance = route.getDouble("distance") / 1000.0
+
+                    // Divide los puntos en tramos según la separación deseada
+                    val tramo1 = decodedPoints.takeWhile { it.latitude() <= stopoverPoint!!.latitude() }
+                    val tramo2 = decodedPoints.dropWhile { it.latitude() <= stopoverPoint!!.latitude() }
 
                     withContext(Dispatchers.Main) {
                         etDistancia.setText(String.format("%.2f km", distance))
 
                         map.getMapboxMap().getStyle { style ->
                             // Agrega una capa roja para el tramo inicio -> descanso
-                            val sourceInicioDescanso = geoJsonSource("route-source-inicio-descanso") {
-                                geometry(LineString.fromLngLats(listOf(points[0], points[1])))
+                            if (tramo1.isNotEmpty()) {
+                                val sourceInicioDescanso = geoJsonSource("route-source-inicio-descanso") {
+                                    geometry(LineString.fromLngLats(tramo1))
+                                }
+                                style.addSource(sourceInicioDescanso)
+                                val layerInicioDescanso = lineLayer("route-layer-inicio-descanso", "route-source-inicio-descanso") {
+                                    lineColor("#FF0000") // Rojo
+                                    lineWidth(5.0)
+                                }
+                                style.addLayer(layerInicioDescanso)
                             }
-                            style.addSource(sourceInicioDescanso)
-                            val layerInicioDescanso = lineLayer("route-layer-inicio-descanso", "route-source-inicio-descanso") {
-                                lineColor("#FF0000") // Rojo
-                                lineWidth(5.0)
-                            }
-                            style.addLayer(layerInicioDescanso)
 
                             // Agrega una capa verde para el tramo descanso -> final
-                            val sourceDescansoFinal = geoJsonSource("route-source-descanso-final") {
-                                geometry(LineString.fromLngLats(listOf(points[1], points[2])))
+                            if (tramo2.isNotEmpty()) {
+                                val sourceDescansoFinal = geoJsonSource("route-source-descanso-final") {
+                                    geometry(LineString.fromLngLats(tramo2))
+                                }
+                                style.addSource(sourceDescansoFinal)
+                                val layerDescansoFinal = lineLayer("route-layer-descanso-final", "route-source-descanso-final") {
+                                    lineColor("#228B22") // Verde
+                                    lineWidth(5.0)
+                                }
+                                style.addLayer(layerDescansoFinal)
                             }
-                            style.addSource(sourceDescansoFinal)
-                            val layerDescansoFinal = lineLayer("route-layer-descanso-final", "route-source-descanso-final") {
-                                lineColor("#228B22") // Verde
-                                lineWidth(5.0)
-                            }
-                            style.addLayer(layerDescansoFinal)
                         }
                     }
                 }
@@ -244,6 +253,12 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                 Log.e("drawRoute", "Error al obtener la ruta: ${e.message}")
             }
         }
+    }
+
+
+    // Función para decodificar polyline6 en una lista de puntos
+    private fun decodePolyline(encodedPolyline: String): List<Point> {
+        return PolylineUtils.decode(encodedPolyline, 6).map { Point.fromLngLat(it.longitude(), it.latitude()) }
     }
 
 

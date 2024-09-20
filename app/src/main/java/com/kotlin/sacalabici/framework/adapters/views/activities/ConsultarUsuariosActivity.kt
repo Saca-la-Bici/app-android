@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kotlin.sacalabici.data.models.ConsultarUsuariosBase
@@ -10,6 +11,7 @@ import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ConsultarUsuariosActivity : AppCompatActivity() {
 
@@ -21,10 +23,9 @@ class ConsultarUsuariosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         initializeBinding()
-        setUpRecyclerView(testData())
 
         // Llamar a la función para obtener los usuarios
-        //getUsuarios()
+        getUsuarios()
     }
 
     private fun initializeBinding(){
@@ -32,29 +33,32 @@ class ConsultarUsuariosActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    private fun testData():ArrayList<ConsultarUsuariosBase>{
-        val result = ArrayList<ConsultarUsuariosBase>()
-        result.add(ConsultarUsuariosBase("Juan Perez","img1"))
-        result.add(ConsultarUsuariosBase("Maria Gomez","img2"))
-        result.add(ConsultarUsuariosBase("Pedro Lopez","img3"))
-        result.add(ConsultarUsuariosBase("Ana Martinez","img4"))
-        result.add(ConsultarUsuariosBase("Carlos Rodriguez","img5"))
-        return result
+    private fun getUsuarios() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val consultarUsuariosRepository = ConsultarUsuariosRepository()
+
+            try {
+                val usuarios = consultarUsuariosRepository.getUsuarios(limit = 0)
+
+                // Aquí agregamos un Log para verificar los datos que devuelve la API
+                Log.d("Respuesta API", "Usuarios obtenidos: $usuarios")
+
+                withContext(Dispatchers.Main) {
+                    if (!usuarios.isNullOrEmpty()) {
+                        setUpRecyclerView(ArrayList(usuarios))
+                    } else {
+                        Log.d("Error", "La lista de usuarios está vacía o es nula.")
+                    }
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("Error", "No se pudieron obtener los usuarios: ${e.message}")
+            }
+        }
     }
 
-//    private fun getUsuarios() {
-//        // Lanzar coroutine en el hilo de I/O
-//        CoroutineScope(Dispatchers.IO).launch {
-//            // Instancia del repositorio
-//            val consultarUsuariosRepository = ConsultarUsuariosRepository()
-//            // Llamada al método para obtener los usuarios
-//            val usuarios = consultarUsuariosRepository.getUsuarios()
-//
-//            CoroutineScope(Dispatchers.Main).launch {
-//                setUpRecyclerView(usuarios)
-//            }
-//        }
-//    }
+
 
     private fun setUpRecyclerView(dataForList:ArrayList<ConsultarUsuariosBase>){
         binding.RVViewUsers.setHasFixedSize(true)

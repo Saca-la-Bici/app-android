@@ -10,18 +10,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
 import com.kotlin.sacalabici.data.network.model.announcement.Announcement
-import com.kotlin.sacalabici.domain.AnnouncementListRequirement
+import com.kotlin.sacalabici.domain.DeleteAnnouncementRequirement
 import com.kotlin.sacalabici.domain.PostAnnouncementRequirement
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AnnouncementsViewModel: ViewModel() {
     val announcementObjectLiveData = MutableLiveData<List<AnnouncementBase>>()
     private val announcementListRequirement = AnnouncementListRequirement()
     private val postAnnouncementRequirement = PostAnnouncementRequirement()
+    private val deleteAnnouncementRequirement = DeleteAnnouncementRequirement()
 
     fun getAnnouncementList(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,7 +33,7 @@ class AnnouncementsViewModel: ViewModel() {
 
     fun deleteAnnouncement(id: String){
         viewModelScope.launch(Dispatchers.IO) {
-            val result = announcementListRequirement.deleteAnnouncement(id)
+            val result = deleteAnnouncementRequirement(id)
             if (result){
                 Log.d("delete", "Announcement deleted")
             } else {

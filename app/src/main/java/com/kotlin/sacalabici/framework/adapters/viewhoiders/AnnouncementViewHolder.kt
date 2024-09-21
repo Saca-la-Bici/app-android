@@ -22,7 +22,6 @@ class AnnouncementViewHolder(
     fun bind(item: AnnouncementBase, context: Context) {
         binding.tvAnnouncementTitle.text = item.title
         binding.tvAnnouncementContent.text = item.content
-        getAnnouncementImg(item.url, binding.ivAnnouncement, context)
 
         binding.root.setOnLongClickListener {
             longClickListener(item)

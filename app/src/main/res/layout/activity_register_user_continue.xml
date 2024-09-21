@@ -136,7 +136,8 @@
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TPassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:lines="1"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -171,7 +172,8 @@
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TVerifyPassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:lines="1"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

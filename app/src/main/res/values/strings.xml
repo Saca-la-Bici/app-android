@@ -20,7 +20,6 @@
 
     <!-- String de Login -->
     <string name="TPassword">Contraseña</string>
-    <string name="TUserEmail">Correo electrónico o usuario</string>
     <string name="TLoginTitle">Inicia Sesión</string>
     <string name="TForgotPassword">¿Olvidaste tu contraseña?</string>
 

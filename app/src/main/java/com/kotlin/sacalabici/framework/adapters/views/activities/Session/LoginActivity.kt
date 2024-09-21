@@ -2,6 +2,8 @@ package com.kotlin.sacalabici.framework.adapters.views.activities.Session
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityLoginBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
+import com.kotlin.sacalabici.framework.adapters.views.activities.MainActivity
 import com.kotlin.sacalabici.utils.Constants
 
 class LoginActivity : AppCompatActivity() {
@@ -34,10 +37,10 @@ class LoginActivity : AppCompatActivity() {
 
         // Observe authentication state
         authViewModel.authState.observe(this) { authState ->
-            when (authState) {
-                is AuthState.Success -> {
+            when (authState) {                is AuthState.Success -> {
                     // Handle successful login
-                    val intent = Intent(this, ActivitiesActivity::class.java)
+                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish() // Optional: Finish LoginActivity to prevent going back
                 }
@@ -56,6 +59,23 @@ class LoginActivity : AppCompatActivity() {
         binding.BSession.setOnClickListener {
             val email = binding.TILEmail.editText?.text.toString()
             val password = binding.TILPassword.editText?.text.toString()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.BSession.isEnabled = true
+            }, 5000)
+
+            if (!isValidEmail(email)) {
+                binding.BSession.isEnabled = false
+                binding.TILEmail.error = "Por favor ingresa un correo electrónico válido"
+                return@setOnClickListener
+            }
+
+            if (password.isEmpty()) {
+                binding.BSession.isEnabled = false
+                binding.TILPassword.error = "Por favor ingresa una contraseña"
+                return@setOnClickListener
+            }
+
             authViewModel.signInWithEmailAndPassword(email, password)
         }
 
@@ -76,6 +96,10 @@ class LoginActivity : AppCompatActivity() {
     private fun initializeBinding() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     @Deprecated("Deprecated in Java")

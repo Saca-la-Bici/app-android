@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivitySessionBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
+import com.kotlin.sacalabici.framework.adapters.views.activities.MainActivity
 import com.kotlin.sacalabici.utils.Constants
 
 class SessionActivity() : AppCompatActivity() {
@@ -35,17 +36,16 @@ class SessionActivity() : AppCompatActivity() {
         )
 
         // Observa los cambios de estado de autenticación
-        authViewModel.authState.observe(this) { state ->
-            when (state) {
+        authViewModel.authState.observe(this) { authState ->
+            when (authState) {
                 is AuthState.Success -> {
-                    val user = state.user
-                    Toast.makeText(this, "Bienvenido: ${user?.displayName}", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, ActivitiesActivity::class.java)
+                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
                 is AuthState.Error -> {
-                    Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
                 is AuthState.Cancel -> {
                     Toast.makeText(this, "Inicio de sesión cancelado", Toast.LENGTH_SHORT).show()

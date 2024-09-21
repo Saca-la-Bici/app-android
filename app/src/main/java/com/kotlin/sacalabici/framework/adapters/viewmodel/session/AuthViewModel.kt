@@ -123,7 +123,7 @@ class AuthViewModel : ViewModel() {
                             _authState.postValue(AuthState.Error("Usuario actual no disponible"))
                         }
                     } else {
-                        _authState.postValue(AuthState.Error("Error al iniciar sesión con correo y contraseña: ${task.exception?.message}"))
+                        _authState.postValue(AuthState.Error("Error al iniciar sesión con correo y contraseña"))
                     }
                 }
         } else {

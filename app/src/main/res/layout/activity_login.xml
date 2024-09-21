@@ -91,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/TUserEmail"
+        android:text="@string/TEmail"
         android:textSize="11sp"
         android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
@@ -113,7 +113,8 @@
             android:padding="24dp"
             android:layout_marginTop="5dp"
             android:textSize="14sp"
-            android:hint="@string/TUserEmail" />
+            android:hint="@string/TEmail"
+            android:lines="1"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,7 +147,8 @@
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TPassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:lines="1"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

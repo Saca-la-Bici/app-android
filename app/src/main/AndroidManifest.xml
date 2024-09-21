@@ -27,36 +27,16 @@
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
 
-
         <activity
-            android:name=".framework.adapters.views.activities.ActivitiesActivity"
+            android:name=".framework.adapters.views.activities.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait">
+            android:theme="@style/Theme.Sacalabici.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".framework.adapters.views.activities.MapActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".framework.adapters.views.activities.ProfileActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".framework.adapters.views.activities.AnnouncementsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".framework.adapters.views.activities.Session.SessionActivity"

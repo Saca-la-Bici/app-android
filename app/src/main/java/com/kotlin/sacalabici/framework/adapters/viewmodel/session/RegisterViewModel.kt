@@ -23,7 +23,8 @@ class RegisterViewModel : ViewModel() {
     }
 
     fun registerUser(email: String, password: String, confirmPassword: String, username: String, fechaNacimiento: String) {
-        if (arePasswordsValid(password, confirmPassword)) {
+        val passwordError = arePasswordsValid(password, confirmPassword)
+        if (passwordError.isNullOrEmpty()) {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -34,16 +35,22 @@ class RegisterViewModel : ViewModel() {
                             _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
                         }
                     } else {
-                        _authState.postValue(AuthState.Error("Hubo un error al registrar el usuario: ${task.exception?.message}"))
+                        _authState.postValue(AuthState.Error("Hubo un error al registrar el usuario"))
                     }
                 }
         } else {
-            _authState.postValue(AuthState.Error("Las contraseñas no coinciden o son demasiado cortas"))
+            _authState.postValue(AuthState.Error(passwordError))
         }
     }
 
-    private fun arePasswordsValid(password: String, confirmPassword: String): Boolean {
-        return password == confirmPassword && password.length >= 6
+    private fun arePasswordsValid(password: String, confirmPassword: String): String? {
+        if (password != confirmPassword) return "Las contraseñas no coinciden"
+        if (password.length < 8) return "La contraseña debe tener al menos 8 caracteres"
+        if (!password.contains(Regex("[0-9]"))) return "La contraseña debe contener al menos un número"
+        if (!password.contains(Regex("[A-Z]"))) return "La contraseña debe contener al menos una letra mayúscula"
+        if (!password.contains(Regex("[a-z]"))) return "La contraseña debe contener al menos una letra minúscula"
+        if (!password.contains(Regex("[^a-zA-Z0-9\\s]"))) return "La contraseña debe contener al menos un carácter especial"
+        return null // No errors
     }
 
     private fun registerUser(currentUser: FirebaseUser, username: String, fechaNacimiento: String) {

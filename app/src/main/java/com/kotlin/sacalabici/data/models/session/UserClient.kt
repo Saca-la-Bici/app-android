@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.models.session
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,7 +17,7 @@ class UserClient {
         val idToken = getFirebaseIdToken(firebaseAuth)
 
         val user = User(
-            username = username ?: currentUser.displayName ?: "",
+            username = username ?: currentUser.displayName ?: "usuario",
             nombre = "",
             fechaNacimiento = fechaNacimiento ?: "",
             tipoSangre = "",

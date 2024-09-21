@@ -44,6 +44,9 @@ dependencies {
     implementation ("androidx.fragment:fragment-ktx:1.5.0")
     //Activity
     implementation ("androidx.activity:activity-ktx:1.5.0")
+    //ConstraintLayout
+    implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

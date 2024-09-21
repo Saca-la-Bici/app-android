@@ -42,9 +42,6 @@ class AnnouncementsViewModel: ViewModel() {
         }
     }
 
-
-
-
     fun postAnnouncement(announcement: Announcement){
         viewModelScope.launch {
             try {

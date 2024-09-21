@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
@@ -29,6 +30,7 @@ class AnnouncementsFragment: Fragment() {
     }
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var addAnnouncementLauncher: ActivityResultLauncher<Intent>
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private val binding get() = _binding!!
 
@@ -78,11 +80,16 @@ class AnnouncementsFragment: Fragment() {
     private fun initializeObservers() {
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->
             setUpRecyclerView(ArrayList(announcementList))
+            swipeRefreshLayout.isRefreshing = false
         }
     }
 
     private fun initializeComponents(root: View) {
         recyclerView = root.findViewById(R.id.RVAnnouncements)
+        swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.getAnnouncementList()
+        }
     }
 
     private fun setUpRecyclerView(dataForList:ArrayList<AnnouncementBase>){
@@ -106,3 +113,4 @@ class AnnouncementsFragment: Fragment() {
         dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
     }
 }
+

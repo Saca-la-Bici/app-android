@@ -85,7 +85,6 @@ class ActionButtonDialogFragment : DialogFragment() {
                 Log.d("click", "Delete confirmed")
                 alertDialog.dismiss()
                 dismiss()
-                activity?.recreate()
             }
 
             alertDialog.show()

@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +47,12 @@ class AnnouncementsFragment: Fragment() {
         val root: View = binding.root
 
         initializeComponents(root)
+        setFragmentResultListener("actionButtonDialogResult") { _, bundle ->
+            val resultCode = bundle.getInt("resultCode")
+            if (resultCode == Activity.RESULT_OK) {
+                viewModel.getAnnouncementList()
+            }
+        }
         initializeObservers()
 
         setupClickListeners()

@@ -1,3 +1,4 @@
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
@@ -13,6 +14,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
@@ -85,6 +87,9 @@ class ActionButtonDialogFragment : DialogFragment() {
             dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
                 viewModel.deleteAnnouncement(announcement.id)
                 alertDialog.dismiss()
+                setFragmentResult("actionButtonDialogResult", Bundle().apply {
+                    putInt("resultCode", RESULT_OK)
+                })
                 dismiss()
             }
 

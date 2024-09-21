@@ -71,8 +71,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/TLoginTitle"
-        android:textFontWeight="700"
         android:textSize="25sp"
+        android:fontFamily="@font/roboto_bold"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
@@ -92,8 +92,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TUserEmail"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TVTitle" />
 
@@ -101,6 +101,7 @@
         android:id="@+id/TILEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintTop_toBottomOf="@id/TVEmail"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintEnd_toEndOf="@+id/VContainer">
@@ -122,8 +123,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TPassword"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TILEmail" />
 
@@ -131,6 +132,7 @@
         android:id="@+id/TILPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
         app:passwordToggleEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/TVPassword"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
@@ -156,8 +158,8 @@
         android:background="@drawable/underline"
         android:text="@string/TForgotPassword"
         android:paddingBottom="10dp"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_medium"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TILPassword" />
 
@@ -169,6 +171,7 @@
         android:text="@string/TLogin"
         android:textAllCaps="false"
         android:textSize="14sp"
+        android:fontFamily="@font/roboto_black"
         app:cornerRadius="14dp"
         app:backgroundTint="@color/yellow"
         android:textColor="@color/black"
@@ -194,6 +197,7 @@
         android:text="@string/TContinueWIth"
         android:textSize="11sp"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_bold"
         app:layout_constraintTop_toBottomOf="@+id/BSession"
         app:layout_constraintStart_toStartOf="@id/VContainer"
         app:layout_constraintEnd_toEndOf="@id/VContainer" />
@@ -218,8 +222,9 @@
         android:text="@string/TContinueWithGoogle"
         android:textAllCaps="false"
         android:textSize="14sp"
+        android:fontFamily="@font/roboto_light"
         app:cornerRadius="14dp"
-        android:textColor="@color/black"
+        android:textColor="@color/darkGray"
         android:backgroundTint="@color/white"
         app:layout_constraintTop_toBottomOf="@id/TVContinue"
         app:layout_constraintEnd_toEndOf="@+id/VContainer"
@@ -227,7 +232,7 @@
         app:strokeColor="#D9D9D9"
         app:strokeWidth="1dp"
         app:icon="@drawable/ic_google"
-        app:iconTint="@color/black"/>
+        app:iconTint="@color/semi_transparent_black"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/BFacebook"
@@ -238,8 +243,9 @@
         android:text="@string/TContinueWithFacebook"
         android:textAllCaps="false"
         android:textSize="14sp"
+        android:fontFamily="@font/roboto_light"
         app:cornerRadius="14dp"
-        android:textColor="@color/black"
+        android:textColor="@color/darkGray"
         android:backgroundTint="@color/white"
         app:layout_constraintTop_toBottomOf="@id/BGoogle"
         app:layout_constraintEnd_toEndOf="@+id/VContainer"
@@ -247,6 +253,6 @@
         app:strokeColor="#D9D9D9"
         app:strokeWidth="1dp"
         app:icon="@drawable/ic_facebook"
-        app:iconTint="@color/black"/>
+        app:iconTint="@color/semi_transparent_black"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

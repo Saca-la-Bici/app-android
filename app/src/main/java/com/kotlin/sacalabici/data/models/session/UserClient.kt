@@ -1,10 +1,9 @@
-package com.kotlin.sacalabici.data.models
+package com.kotlin.sacalabici.data.models.session
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.kotlin.sacalabici.domain.SessionRequirement
+import com.kotlin.sacalabici.domain.session.SessionRequirement
 import kotlinx.coroutines.tasks.await
 
 class UserClient {

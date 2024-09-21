@@ -1,19 +1,11 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.facebook.FacebookSdk
 import com.google.firebase.auth.FirebaseAuth
-import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.adapters.views.activities.Session.SessionActivity
 
 class ActivitiesActivity: BaseActivity() {
 

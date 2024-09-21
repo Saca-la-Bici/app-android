@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.adapters.views.activities.Session
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -6,14 +6,10 @@ import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserBinding
-import java.time.LocalDate
-import java.time.Period
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 

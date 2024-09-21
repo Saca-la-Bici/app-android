@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.data.models
+package com.kotlin.sacalabici.data.models.session
 
 data class User(
     val username: String = "none",

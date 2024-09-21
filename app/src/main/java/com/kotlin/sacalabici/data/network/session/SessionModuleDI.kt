@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.data.network
+package com.kotlin.sacalabici.data.network.session
 
 import com.kotlin.sacalabici.utils.Constants
 import okhttp3.OkHttpClient

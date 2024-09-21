@@ -1,8 +1,8 @@
-package com.kotlin.sacalabici.data.models
+package com.kotlin.sacalabici.data.models.session
 
 import com.google.firebase.auth.FirebaseUser
 
-sealed class AuthState {
+sealed class         AuthState {
     data class Success(val user: FirebaseUser?) : AuthState()
     data class Error(val message: String) : AuthState()
     object Cancel : AuthState()

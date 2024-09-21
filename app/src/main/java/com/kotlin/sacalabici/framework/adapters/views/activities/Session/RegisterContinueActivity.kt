@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.adapters.views.activities.Session
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,9 +6,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.kotlin.sacalabici.data.models.AuthState
+import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserContinueBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.RegisterViewModel
+import com.kotlin.sacalabici.framework.adapters.viewmodel.session.RegisterViewModel
+import com.kotlin.sacalabici.framework.adapters.views.activities.ActivitiesActivity
 
 class RegisterContinueActivity : AppCompatActivity() {
 

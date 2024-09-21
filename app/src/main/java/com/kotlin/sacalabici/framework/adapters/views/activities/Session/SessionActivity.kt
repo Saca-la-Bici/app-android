@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.adapters.views.activities.Session
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.kotlin.sacalabici.data.models.AuthState
+import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivitySessionBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.AuthViewModel
+import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
+import com.kotlin.sacalabici.framework.adapters.views.activities.ActivitiesActivity
 import com.kotlin.sacalabici.utils.Constants
 
 class SessionActivity() : AppCompatActivity() {

@@ -1,6 +1,5 @@
-package com.kotlin.sacalabici.framework.adapters.viewmodel
+package com.kotlin.sacalabici.framework.adapters.viewmodel.session
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,13 +21,10 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.kotlin.sacalabici.data.models.AuthState
-import com.kotlin.sacalabici.data.models.User
-import com.kotlin.sacalabici.data.models.UserClient
-import com.kotlin.sacalabici.domain.SessionRequirement
+import com.kotlin.sacalabici.data.models.session.AuthState
+import com.kotlin.sacalabici.data.models.session.UserClient
 import com.kotlin.sacalabici.utils.Constants
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class AuthViewModel : ViewModel() {
     private val _authState = MutableLiveData<AuthState>()

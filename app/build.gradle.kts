@@ -41,10 +41,6 @@ android {
 
 dependencies {
 
-    //Fragment
-    implementation ("androidx.fragment:fragment-ktx:1.5.0")
-    //Activity
-    implementation ("androidx.activity:activity-ktx:1.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -52,34 +48,38 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.places)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
     //Glide
-    implementation("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
-    implementation("jp.wasabeef:glide-transformations:4.3.0")
-
-    //Corrutinas
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-
-    //Fragment
-    implementation("androidx.fragment:fragment-ktx:1.5.0")
-    //Activity
-    implementation("androidx.activity:activity-ktx:1.5.0")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    //implementation(libs.androidx.swiperefreshlayout)
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     //Data binding
-    implementation("androidx.databinding:databinding-runtime:7.1.2")
-
-    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
-    implementation("com.google.android.gms:play-services-auth:20.5.0")
-
-    implementation("androidx.compose.material3:material3:1.1.1")
-
-    implementation("com.facebook.android:facebook-login:latest-version")
+    implementation ("androidx.databinding:databinding-runtime:7.1.2")
+    // ViewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    // LiveData
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    implementation ("jp.wasabeef:glide-transformations:4.3.0")
+    //Activity
+    implementation ("androidx.activity:activity-ktx:1.5.0")
+    //Material
+    implementation ("com.google.android.material:material:1.9.0")
+    //Fragment
+    implementation ("androidx.fragment:fragment-ktx:1.5.0")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    // Facebook SDK
+    implementation("com.facebook.android:facebook-login:latest.release")
     implementation("com.facebook.android:facebook-android-sdk:latest.release")
+    // Google Play Services Auth
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0")) // Latest BOM
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+
 }

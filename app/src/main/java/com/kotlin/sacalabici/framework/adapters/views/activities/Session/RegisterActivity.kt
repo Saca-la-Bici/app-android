@@ -62,6 +62,7 @@ class RegisterActivity : AppCompatActivity() {
                 intent.putExtra("username", username)
                 intent.putExtra("fechaNacimiento", birthday)
                 startActivity(intent)
+                finish()
             } else {
                 if (!isValidEmail(email)) {
                     binding.BContinue.isEnabled = false

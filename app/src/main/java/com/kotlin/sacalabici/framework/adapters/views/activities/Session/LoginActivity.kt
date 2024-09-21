@@ -112,9 +112,4 @@ class LoginActivity : AppCompatActivity() {
             authViewModel.handleGoogleSignInResult(task)
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        authViewModel.checkCurrentUser()
-    }
 }

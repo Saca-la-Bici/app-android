@@ -33,6 +33,7 @@ class RegisterContinueActivity : AppCompatActivity() {
                     Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish() // Optional: Finish RegisteerContinueActivity to prevent going back
                 }
                 is AuthState.Error -> {
                     Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()

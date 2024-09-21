@@ -1,10 +1,16 @@
 <resources>
-    <string name="app_name">Saca la Bici</string>
+    <string name="app_name">sacalabici</string>
     <string name="Actividades">Actividades</string>
     <string name="Mapa">Mapa</string>
     <string name="Anuncios">Anuncios</string>
     <string name="Perfil">Perfil</string>
-    <string name="TituloTopBar">Titulo</string>
+    <string name="AnnouncementTitle">Aquí va el título</string>
+    <string name="AnnouncementDescription">Aquí va la descripción del anuncio</string>
+    <string name="addAnnouncement">Añadir anuncio</string>
+    <string name="add_announcement_title">Título</string>
+    <string name="add_announcement_title_hint">Título del anuncio</string>
+    <string name="add_announcement_description">Descripción</string>
+    <string name="add_announcement_description_hint">¿Qué quieres compartir?</string>
 
     <!-- String de Logo -->
     <string name="CDLogo">Logo de Saca la Bici</string>

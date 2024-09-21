@@ -3,13 +3,13 @@ package com.kotlin.sacalabici.framework.adapters.views.activities
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
 import com.google.firebase.auth.FirebaseAuth
@@ -39,6 +39,7 @@ class MainActivity: AppCompatActivity() {
         initializeObservers()
         initializeListeners()
         exchangeCurrentFragment(ActivitiesFragment(), Constants.MENU_ACTIVITIES)
+        moveHighlightToButton(binding.appBarMain.btnActividades)
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -75,38 +76,30 @@ class MainActivity: AppCompatActivity() {
         } else {
             binding.topAppBar.clTopBar.visibility = View.VISIBLE
         }
-
-        highlightCurrentActivity(
-            currentMenuOption!!,
-            binding.appBarMain.btnActividades,
-            binding.appBarMain.btnPerfil,
-            binding.appBarMain.btnMapa,
-            binding.appBarMain.btnAnuncios,
-            binding.appBarMain.tvActividades,
-            binding.appBarMain.tvPerfil,
-            binding.appBarMain.tvMapa,
-            binding.appBarMain.tvAnuncios)
     }
 
     private fun initializeListeners(){
-        val currentActivity = this::class.java.simpleName
-        Log.d("currentActivity",currentActivity)
 
         binding.appBarMain.btnActividades.setOnClickListener {
             selectMenuOption(Constants.MENU_ACTIVITIES)
+            moveHighlightToButton(binding.appBarMain.btnActividades)
         }
 
         binding.appBarMain.btnMapa.setOnClickListener {
             selectMenuOption(Constants.MENU_MAP)
+            moveHighlightToButton(binding.appBarMain.btnMapa)
         }
 
         binding.appBarMain.btnAnuncios.setOnClickListener {
             selectMenuOption(Constants.MENU_ANNOUNCEMENTS)
+            moveHighlightToButton(binding.appBarMain.btnAnuncios)
         }
 
         binding.appBarMain.btnPerfil.setOnClickListener {
             selectMenuOption(Constants.MENU_PROFILE)
+            moveHighlightToButton(binding.appBarMain.btnPerfil)
         }
+
     }
 
     private fun selectMenuOption(menuOption:String){
@@ -115,62 +108,100 @@ class MainActivity: AppCompatActivity() {
         }
 
         when(menuOption){
-            Constants.MENU_ACTIVITIES -> exchangeCurrentFragment(ActivitiesFragment(),Constants.MENU_ACTIVITIES)
-            Constants.MENU_MAP -> exchangeCurrentFragment(MapFragment(),Constants.MENU_MAP)
-            Constants.MENU_ANNOUNCEMENTS -> exchangeCurrentFragment(AnnouncementsFragment(),Constants.MENU_ANNOUNCEMENTS)
-            Constants.MENU_PROFILE -> exchangeCurrentFragment(ProfileFragment(),Constants.MENU_PROFILE)
+            Constants.MENU_ACTIVITIES -> {
+                exchangeCurrentFragment(ActivitiesFragment(),Constants.MENU_ACTIVITIES)
+                highlightCurrentActivity(menuOption,
+                    binding.appBarMain.btnActividades,
+                    binding.appBarMain.tvActividades)
+            }
+            Constants.MENU_MAP -> {
+                exchangeCurrentFragment(MapFragment(),Constants.MENU_MAP)
+                highlightCurrentActivity(menuOption,
+                    binding.appBarMain.btnMapa,
+                    binding.appBarMain.tvMapa)
+            }
+            Constants.MENU_ANNOUNCEMENTS -> {
+                exchangeCurrentFragment(AnnouncementsFragment(),Constants.MENU_ANNOUNCEMENTS)
+                highlightCurrentActivity(menuOption,
+                    binding.appBarMain.btnAnuncios,
+                    binding.appBarMain.tvAnuncios)
+            }
+            Constants.MENU_PROFILE -> {
+                exchangeCurrentFragment(ProfileFragment(),Constants.MENU_PROFILE)
+                highlightCurrentActivity(menuOption,
+                    binding.appBarMain.btnPerfil,
+                    binding.appBarMain.tvPerfil)
+            }
         }
     }
 
     private fun highlightCurrentActivity(
         currentMenuOption: String,
-        btnActividades: ImageButton,
-        btnPerfil: ImageButton,
-        btnMapa: ImageButton,
-        btnAnuncios: ImageButton,
-        tvActividades: TextView,
-        tvPerfil: TextView,
-        tvMapa: TextView,
-        tvAnuncios: TextView
+        buttonClicked: ImageButton,
+        textClicked: TextView,
     ) {
-        val slideIn = AnimationUtils.loadAnimation(this, R.anim.scale_down)
-        val slideOut = AnimationUtils.loadAnimation(this, R.anim.scale_up)
 
         // Restablecer todos los botones a su estado original
-        resetButtonState(btnActividades, tvActividades, R.drawable.ic_actividades, slideOut)
-        resetButtonState(btnPerfil, tvPerfil, R.drawable.ic_perfil, slideOut)
-        resetButtonState(btnMapa, tvMapa, R.drawable.ic_mapa, slideOut)
-        resetButtonState(btnAnuncios, tvAnuncios, R.drawable.ic_anuncios, slideOut)
+        resetButtonState(
+            binding.appBarMain.btnActividades,
+            binding.appBarMain.tvActividades,
+            R.drawable.ic_actividades)
+        resetButtonState(
+            binding.appBarMain.btnPerfil,
+            binding.appBarMain.tvPerfil,
+            R.drawable.ic_perfil)
+        resetButtonState(
+            binding.appBarMain.btnMapa,
+            binding.appBarMain.tvMapa,
+            R.drawable.ic_mapa)
+        resetButtonState(
+            binding.appBarMain.btnAnuncios,
+            binding.appBarMain.tvAnuncios,
+            R.drawable.ic_anuncios)
 
         // Aplicar animaciones y cambiar el color según el botón seleccionado
         when (currentMenuOption) {
             Constants.MENU_ACTIVITIES -> {
-                selectButtonState(btnActividades, tvActividades, R.drawable.ic_actividades_selected, slideIn)
+                selectButtonState(buttonClicked, textClicked, R.drawable.ic_actividades_selected)
                 binding.topAppBar.tvTopBar.text = getString(R.string.Actividades)
             }
-            Constants.MENU_PROFILE -> selectButtonState(btnPerfil, tvPerfil, R.drawable.ic_perfil_selected, slideIn)
-            Constants.MENU_MAP -> selectButtonState(btnMapa, tvMapa, R.drawable.ic_mapa_selected, slideIn)
+            Constants.MENU_PROFILE -> selectButtonState(buttonClicked, textClicked, R.drawable.ic_perfil_selected)
+            Constants.MENU_MAP -> selectButtonState(buttonClicked, textClicked, R.drawable.ic_mapa_selected)
             Constants.MENU_ANNOUNCEMENTS -> {
-                selectButtonState(btnAnuncios, tvAnuncios, R.drawable.ic_anuncios_selected, slideIn)
+                selectButtonState(buttonClicked, textClicked, R.drawable.ic_anuncios_selected)
                 binding.topAppBar.tvTopBar.text = getString(R.string.Anuncios)
             }
         }
     }
 
     // Función para resetear el estado de un botón
-    private fun resetButtonState(button: ImageButton, textView: TextView, defaultIcon: Int, slideOut: Animation) {
+    private fun resetButtonState(button: ImageButton, textView: TextView, defaultIcon: Int) {
         button.setImageResource(defaultIcon)
-        button.background = null
         textView.setTextColor(Color.GRAY)
-        button.startAnimation(slideOut)
     }
 
     // Función para seleccionar un botón y aplicar el estado seleccionado
-    private fun selectButtonState(button: ImageButton, textView: TextView, selectedIcon: Int, slideIn: Animation) {
+    private fun selectButtonState(button: ImageButton, textView: TextView, selectedIcon: Int) {
         button.setImageResource(selectedIcon)
-        button.background = getDrawable(R.drawable.bg_highlight_black)
         textView.setTextColor(Color.BLACK)
-        button.startAnimation(slideIn)
     }
 
+    private fun moveHighlightToButton(targetButton: ImageButton) {
+        val constraintLayout = binding.appBarMain.clAppBar
+        val constraintSet = ConstraintSet()
+
+        constraintSet.clone(constraintLayout)
+
+        // Conectar el highlightView al botón seleccionado
+        constraintSet.connect(R.id.vHighlightView, ConstraintSet.START, targetButton.id, ConstraintSet.START)
+        constraintSet.connect(R.id.vHighlightView, ConstraintSet.END, targetButton.id, ConstraintSet.END)
+
+        // Aplicar la transición
+        val transition = ChangeBounds()
+        transition.duration = 300 // Cambiar duración si es necesario para debugging
+        TransitionManager.beginDelayedTransition(constraintLayout, transition)
+
+        // Aplicar el ConstraintSet
+        constraintSet.applyTo(constraintLayout)
+    }
 }

@@ -40,9 +40,14 @@ android {
 
 dependencies {
 
+    //Fragment
+    implementation ("androidx.fragment:fragment-ktx:1.5.0")
+    //Activity
+    implementation ("androidx.activity:activity-ktx:1.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.navigation.fragment)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

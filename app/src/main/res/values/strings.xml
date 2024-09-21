@@ -4,5 +4,6 @@
     <string name="Mapa">Mapa</string>
     <string name="Anuncios">Anuncios</string>
     <string name="Perfil">Perfil</string>
+    <string name="TituloTopBar">Titulo</string>
 
 </resources>

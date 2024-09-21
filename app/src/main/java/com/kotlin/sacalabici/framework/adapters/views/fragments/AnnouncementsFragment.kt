@@ -23,7 +23,10 @@ import com.kotlin.sacalabici.framework.adapters.views.activities.AddAnnouncement
 class AnnouncementsFragment: Fragment() {
     private var _binding: FragmentAnnouncementsBinding? = null
     private lateinit var recyclerView: RecyclerView
-    private val adapter : AnnouncementAdapter = AnnouncementAdapter()
+    private val adapter: AnnouncementAdapter = AnnouncementAdapter { announcement ->
+        showDialog(announcement)
+        true
+    }
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var addAnnouncementLauncher: ActivityResultLauncher<Intent>
 
@@ -91,5 +94,15 @@ class AnnouncementsFragment: Fragment() {
         recyclerView.layoutManager = linearLayoutManager
         adapter.AnnouncementAdapter(dataForList,requireContext())
         recyclerView.adapter = adapter
+    }
+
+    private fun showDialog(announcement: AnnouncementBase) {
+        val dialogFragment = ActionButtonDialogFragment.newInstance(
+            announcement.id,
+            announcement.title,
+            announcement.content,
+            announcement.url
+        )
+        dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
     }
 }

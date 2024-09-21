@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityLoginBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
-import com.kotlin.sacalabici.framework.adapters.views.activities.ActivitiesActivity
 import com.kotlin.sacalabici.utils.Constants
 
 class LoginActivity : AppCompatActivity() {

@@ -35,12 +35,16 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        viewBinding =  true
+        viewBinding = true
     }
 }
 
 dependencies {
 
+    //Fragment
+    implementation ("androidx.fragment:fragment-ktx:1.5.0")
+    //Activity
+    implementation ("androidx.activity:activity-ktx:1.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">sacalabici</string>
+    <string name="app_name">Saca la Bici</string>
     <string name="Actividades">Actividades</string>
     <string name="Mapa">Mapa</string>
     <string name="Anuncios">Anuncios</string>
     <string name="Perfil">Perfil</string>
+    <string name="TituloTopBar">Titulo</string>
 
     <!-- String de Logo -->
     <string name="CDLogo">Logo de Saca la Bici</string>

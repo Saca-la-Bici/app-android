@@ -40,9 +40,6 @@ class ConsultarUsuariosActivity : AppCompatActivity() {
             try {
                 val usuarios = consultarUsuariosRepository.getUsuarios(limit = 0)
 
-                // Aquí agregamos un Log para verificar los datos que devuelve la API
-                Log.d("Respuesta API", "Usuarios obtenidos: $usuarios")
-
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
                         setUpRecyclerView(ArrayList(usuarios))
@@ -57,8 +54,6 @@ class ConsultarUsuariosActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     private fun setUpRecyclerView(dataForList:ArrayList<ConsultarUsuariosBase>){
         binding.RVViewUsers.setHasFixedSize(true)

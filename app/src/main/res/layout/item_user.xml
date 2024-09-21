@@ -32,6 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Agregar"
-        android:backgroundTint="@color/yellow"
-        android:layout_gravity="center_vertical"/>
+        android:textColor="#1D1B20"
+        android:backgroundTint="#F6CD0B"
+        android:layout_gravity="center_vertical"
+        android:elevation="4dp"/>
 </LinearLayout>

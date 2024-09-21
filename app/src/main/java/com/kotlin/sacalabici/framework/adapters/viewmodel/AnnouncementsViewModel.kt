@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.network.model.announcement.Announcement
 import com.kotlin.sacalabici.domain.DeleteAnnouncementRequirement
 import com.kotlin.sacalabici.domain.PostAnnouncementRequirement
+import com.kotlin.sacalabici.domain.PutAnnouncementRequirement
 import kotlinx.coroutines.launch
 
 class AnnouncementsViewModel: ViewModel() {
@@ -20,6 +21,7 @@ class AnnouncementsViewModel: ViewModel() {
     private val announcementListRequirement = AnnouncementListRequirement()
     private val postAnnouncementRequirement = PostAnnouncementRequirement()
     private val deleteAnnouncementRequirement = DeleteAnnouncementRequirement()
+    private val putAnnouncementRequirement = PutAnnouncementRequirement()
 
     fun getAnnouncementList(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -52,5 +54,18 @@ class AnnouncementsViewModel: ViewModel() {
                 Log.e("AnnouncementsViewModel", "Error posting announcement", e)
             }
         }
+    }
+
+    fun putAnnouncement(id: String, annnouncement: Announcement) {
+        viewModelScope.launch {
+            try {
+                Log.d("AnnouncementsViewModel", "Putting announcement: $annnouncement")
+                putAnnouncementRequirement(id, annnouncement)
+                Log.d("AnnouncementsViewModel", "Announcement put successfully")
+            } catch (e: Exception) {
+                Log.e("AnnouncementsViewModel", "Error putting announcement", e)
+            }
+        }
+
     }
 }

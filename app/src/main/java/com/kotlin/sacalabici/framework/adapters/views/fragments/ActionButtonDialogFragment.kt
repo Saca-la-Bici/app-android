@@ -1,5 +1,6 @@
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
 
 class ActionButtonDialogFragment : DialogFragment() {
 
@@ -82,7 +84,6 @@ class ActionButtonDialogFragment : DialogFragment() {
 
             dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
                 viewModel.deleteAnnouncement(announcement.id)
-                Log.d("click", "Delete confirmed")
                 alertDialog.dismiss()
                 dismiss()
             }
@@ -91,8 +92,14 @@ class ActionButtonDialogFragment : DialogFragment() {
         }
 
         tvModify.setOnClickListener {
-            // Handle modify action
-            Log.d("click", "Modify")
+            val intent = Intent(requireContext(), ModifyAnnouncementActivity::class.java).apply {
+                putExtra("id", announcement.id)
+                putExtra("title", announcement.title)
+                putExtra("content", announcement.content)
+                putExtra("url", announcement.url)
+            }
+            startActivity(intent)
+            dismiss()
         }
     }
 

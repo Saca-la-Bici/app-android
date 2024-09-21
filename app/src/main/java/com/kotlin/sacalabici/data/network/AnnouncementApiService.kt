@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface AnnouncementApiService {
     @GET("anuncios/consultar")
@@ -20,4 +21,9 @@ interface AnnouncementApiService {
 
     @POST("anuncios/registrar")
     suspend fun postAnnouncement(@Body announcement: Announcement): Announcement
+
+    @PUT("anuncios/modificar/{id}")
+    suspend fun  putAnnouncement(
+        @Path("id") id: String,
+        @Body announcement: Announcement): Announcement
 }

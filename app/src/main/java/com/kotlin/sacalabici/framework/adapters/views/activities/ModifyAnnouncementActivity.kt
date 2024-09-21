@@ -9,22 +9,36 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.model.announcement.Announcement
-import com.kotlin.sacalabici.databinding.ActivityRegisterannouncementBinding
+import com.kotlin.sacalabici.databinding.ActivityModifyAnnouncementBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 
-class AddAnnouncementActivity: AppCompatActivity() {
-    private lateinit var binding: ActivityRegisterannouncementBinding
+class ModifyAnnouncementActivity: AppCompatActivity() {
+    private lateinit var binding: ActivityModifyAnnouncementBinding
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setContentView(R.layout.activity_modify_announcement)
         initializeBinding()
+
+        val id = intent.getStringExtra("id")
+        val title = intent.getStringExtra("title")
+        val content = intent.getStringExtra("content")
+        val url = intent.getStringExtra("url")
+        populateUI(id, title, content, url)
+
+
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
         initializeListeners()
         registerImagePicker()
+    }
+
+    private fun populateUI(id: String?, title: String?, content: String?, url: String?) {
+        binding.etModifyAnnouncementTitle.setText(title)
+        binding.etModifyAnnouncementDescription.setText(content)
     }
 
     private fun initializeListeners() {
@@ -33,12 +47,13 @@ class AddAnnouncementActivity: AppCompatActivity() {
         }
         binding.ibCheck.setOnClickListener {
             val emptystring = ""
-            val id = 1
-            val title = binding.etAddAnnouncementTitle.text.toString()
-            val description = binding.etAddAnnouncementDescription.text.toString()
+            val id = intent.getStringExtra("id") ?: emptystring
+            val idUser = 1
+            val title = binding.etModifyAnnouncementTitle.text.toString()
+            val description = binding.etModifyAnnouncementDescription.text.toString()
             val image = emptystring.takeIf { it.isNotEmpty() }
-            val annnouncement = Announcement(id, title, description, image)
-            viewModel.postAnnouncement(annnouncement)
+            val annnouncement = Announcement(idUser, title, description, image)
+            viewModel.putAnnouncement(id, annnouncement)
             setResult(Activity.RESULT_OK)
             finish()
         }
@@ -49,7 +64,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
     }
 
     private fun initializeBinding() {
-        binding = ActivityRegisterannouncementBinding.inflate(layoutInflater)
+        binding = ActivityModifyAnnouncementBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 

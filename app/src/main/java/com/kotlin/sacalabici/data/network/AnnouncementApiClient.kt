@@ -35,4 +35,14 @@ class AnnouncementApiClient {
             null
         }
     }
+
+    suspend fun putAnnouncement(id: String, announcement: Announcement): Announcement? {
+        api = AnnouncementNetworkModuleDI()
+        return try{
+            api.putAnnouncement(id, announcement)
+        }catch (e:java.lang.Exception){
+            e.printStackTrace()
+            null
+        }
+    }
 }

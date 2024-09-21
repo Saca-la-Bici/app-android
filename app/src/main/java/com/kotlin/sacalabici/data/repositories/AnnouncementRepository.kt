@@ -13,4 +13,7 @@ class AnnouncementRepository() {
 
     suspend fun postAnnouncement(announcement: Announcement): Announcement? =
         apiAnnouncement.postAnnouncement(announcement)
+
+    suspend fun putAnnouncement(id: String, announcement: Announcement): Announcement? =
+        apiAnnouncement.putAnnouncement(id, announcement)
 }

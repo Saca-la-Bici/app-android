@@ -62,6 +62,7 @@ dependencies {
     implementation ("com.google.android.material:material:1.9.0")
     //Fragment
     implementation ("androidx.fragment:fragment-ktx:1.5.0")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

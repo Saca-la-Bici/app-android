@@ -61,21 +61,9 @@ class MainActivity: AppCompatActivity() {
         } else {
             binding.topAppBar.clTopBar.visibility = View.VISIBLE
         }
-
-        /*highlightCurrentActivity(
-            currentMenuOption!!,
-            binding.appBarMain.btnActividades,
-            binding.appBarMain.btnPerfil,
-            binding.appBarMain.btnMapa,
-            binding.appBarMain.btnAnuncios,
-            binding.appBarMain.tvActividades,
-            binding.appBarMain.tvPerfil,
-            binding.appBarMain.tvMapa,
-            binding.appBarMain.tvAnuncios)*/
     }
 
     private fun initializeListeners(){
-        val currentActivity = this::class.java.simpleName
 
         binding.appBarMain.btnActividades.setOnClickListener {
             selectMenuOption(Constants.MENU_ACTIVITIES)
@@ -201,9 +189,4 @@ class MainActivity: AppCompatActivity() {
         // Aplicar el ConstraintSet
         constraintSet.applyTo(constraintLayout)
     }
-
-
-
-
-
 }

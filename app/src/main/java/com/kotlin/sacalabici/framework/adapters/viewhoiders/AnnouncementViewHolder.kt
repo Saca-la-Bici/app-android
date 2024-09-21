@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.adapters.viewhoiders
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -26,12 +27,19 @@ class AnnouncementViewHolder(
         binding.root.setOnLongClickListener {
             longClickListener(item)
         }
+        if(item.url != null){
+            binding.ivAnnouncement.visibility = View.VISIBLE
+            getAnnouncementImg(item.url,binding.ivAnnouncement,context)
+        } else {
+            binding.ivAnnouncement.visibility = View.GONE
+        }
     }
 
     private fun getAnnouncementImg(url: String, imageView: ImageView, context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.Main).launch {
-                val requestOptions = RequestOptions()
+
+                val requestOptions =  RequestOptions()
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .fitCenter()

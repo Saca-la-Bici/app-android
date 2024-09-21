@@ -4,8 +4,10 @@ import com.kotlin.sacalabici.data.network.model.AnnouncementBase
 import com.kotlin.sacalabici.data.network.model.announcement.Announcement
 import retrofit2.Response
 import retrofit2.http.DELETE
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.POST
 
 interface AnnouncementApiService {
     @GET("anuncios/consultar")
@@ -15,4 +17,7 @@ interface AnnouncementApiService {
     suspend fun deleteAnnouncement(
         @Path("id") id: String
     ): Response<Void>
+
+    @POST("anuncios/registrar")
+    suspend fun postAnnouncement(@Body announcement: Announcement): Announcement
 }

@@ -303,8 +303,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="notifications" />
-                            <entry key="sourceFile" value="C:\Users\dani-\Downloads\notifications.svg" />
+                            <entry key="outputName" value="check" />
+                            <entry key="sourceFile" value="C:\Users\dani-\Downloads\check.svg" />
                           </map>
                         </option>
                       </PersistentState>

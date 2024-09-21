@@ -5,5 +5,5 @@ data class AnnouncementBase (
     @SerializedName("_id") val id: String,
     @SerializedName("titulo") val title: String,
     @SerializedName("contenido") val content: String,
-    @SerializedName("imagen") val url: String,
+    @SerializedName("imagen") val url: String?,
 )

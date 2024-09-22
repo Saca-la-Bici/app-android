@@ -13,7 +13,7 @@ interface ConsultarUsuariosAPIService {
 
     @GET("perfil/buscarUsuarios")
     suspend fun searchUser(
-        @Query("username") username: String
+        @Query("query") username: String
     ): ConsultarUsuariosObject
 
 }

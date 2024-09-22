@@ -37,4 +37,22 @@ class ConsultarUsuariosViewModel : ViewModel() {
             }
         }
     }
+
+    fun searchUser(username: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val usuarios = consultarUsuariosRepository.searchUser(username) // Pass the actual username
+                withContext(Dispatchers.Main) {
+                    if (!usuarios.isNullOrEmpty()) {
+                        _usuarios.value = usuarios!!
+                    } else {
+                        _errorMessage.value = "No users found for this username."
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _errorMessage.value = "Error fetching users: ${e.message}"
+            }
+        }
+    }
 }

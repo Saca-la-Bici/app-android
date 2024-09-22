@@ -1,22 +1,19 @@
 package com.kotlin.sacalabici.data.repositories
 
 import android.util.Log
-import com.kotlin.sacalabici.data.models.ConsultarUsuariosBase
+import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
+import com.kotlin.sacalabici.data.models.user.User
+import com.kotlin.sacalabici.data.network.consultarUsuarios.ConsultarUsuariosAPIClient
 import com.kotlin.sacalabici.data.network.consultarUsuarios.ConsultarUsuariosAPIService
 import com.kotlin.sacalabici.data.network.consultarUsuarios.ConsultarUsuariosModuleDI
+import com.kotlin.sacalabici.data.network.session.SessionAPIClient
 
 class ConsultarUsuariosRepository {
-    private lateinit var api: ConsultarUsuariosAPIService
 
-    suspend fun getUsuarios(limit: Int): List<ConsultarUsuariosBase>? {
-        api = ConsultarUsuariosModuleDI() // Asegúrate de obtener la instancia correctamente
-        return try {
-            val response = api.getUsuarios(limit)
-            response.usuarios // Devuelve la lista de usuarios
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("Error", "Error al obtener usuarios: ${e.message}")
-            null
-        }
-    }
+    private val apiConsultarUsuarios = ConsultarUsuariosAPIClient()
+
+    suspend fun getUsuarios(limit: Int): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.getUsuarios(limit)
+
+    suspend fun searchUser(username: String): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.searchUser(username)
+
 }

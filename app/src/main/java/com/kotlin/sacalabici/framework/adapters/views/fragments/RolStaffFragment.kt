@@ -7,30 +7,42 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.ConsultarUsuariosBase
-import com.kotlin.sacalabici.data.repositories.ConsultarUsuariosRepository
+import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolStaffBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosViewModel
+
 
 class RolStaffFragment : Fragment() {
 
     private var _binding: FragmentRolStaffBinding? = null
     private val binding get() = _binding!!
     private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
-    private lateinit var data: ArrayList<ConsultarUsuariosBase>
+    private val viewModel: ConsultarUsuariosViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentRolStaffBinding.inflate(inflater, container, false)
-        getUsuarios()
+
+        // Observamos los cambios en el ViewModel
+        viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
+            if (!usuarios.isNullOrEmpty()) {
+                mostrarUsuariosStaffYUsuarios(ArrayList(usuarios))
+            }
+        })
+
+        viewModel.errorMessage.observe(viewLifecycleOwner, Observer { message ->
+            Log.d("Error", message)
+        })
+
+        // Cargar usuarios
+        viewModel.getUsuarios()
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
@@ -53,26 +65,6 @@ class RolStaffFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.RVViewUsers.layoutManager = linearLayoutManager
         binding.RVViewUsers.adapter = adapter
-    }
-
-    private fun getUsuarios() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val consultarUsuariosRepository = ConsultarUsuariosRepository()
-            try {
-                val usuarios = consultarUsuariosRepository.getUsuarios(limit = 0)
-                withContext(Dispatchers.Main) {
-                    if (!usuarios.isNullOrEmpty()) {
-                        data = ArrayList(usuarios)
-                        mostrarUsuariosStaffYUsuarios(data)
-                    } else {
-                        Log.d("Error", "La lista de usuarios está vacía o es nula.")
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.e("Error", "No se pudieron obtener los usuarios: ${e.message}")
-            }
-        }
     }
 
     private fun mostrarUsuariosStaffYUsuarios(data: ArrayList<ConsultarUsuariosBase>) {
@@ -105,8 +97,8 @@ class RolStaffFragment : Fragment() {
     }
 
     private fun resetButtonStyles() {
-        binding.btnAdministradores.setTextColor(Color.DKGRAY) // Define el color predeterminado
-        binding.btnStaff.setTextColor(Color.DKGRAY) // Define el color predeterminado
+        binding.btnAdministradores.setTextColor(Color.DKGRAY)
+        binding.btnStaff.setTextColor(Color.DKGRAY)
     }
 
     override fun onDestroyView() {

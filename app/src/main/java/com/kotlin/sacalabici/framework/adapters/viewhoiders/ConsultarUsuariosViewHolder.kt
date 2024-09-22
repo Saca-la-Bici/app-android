@@ -1,7 +1,7 @@
-package com.kotlin.sacalabici.framework.adapters.viewmodel
+package com.kotlin.sacalabici.framework.adapters.viewhoiders
 
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlin.sacalabici.data.models.ConsultarUsuariosBase
+import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.ItemUserBinding
 
 class ConsultarUsuariosViewHolder(private val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root) {

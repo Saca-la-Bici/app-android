@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
+import com.kotlin.sacalabici.data.repositories.ConsultarUsuariosRepository
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentModifyRolBinding
 

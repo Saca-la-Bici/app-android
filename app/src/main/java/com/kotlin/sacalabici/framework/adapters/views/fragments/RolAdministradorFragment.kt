@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,6 +16,12 @@ import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolAdministradorBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class RolAdministradorFragment : Fragment() {
@@ -23,6 +30,7 @@ class RolAdministradorFragment : Fragment() {
     private val binding get() = _binding!!
     private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
     private val viewModel: ConsultarUsuariosViewModel by viewModels()
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +59,29 @@ class RolAdministradorFragment : Fragment() {
         binding.btnStaff.setOnClickListener {
             highlightCurrentFragment("Staff")
         }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            private var searchJob: Job? = null
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchJob?.cancel()
+                if (query != null) {
+                    viewModel.searchUser(query)
+                } // Or appropriate ViewModel function
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchJob?.cancel()
+                searchJob = coroutineScope.launch {
+                    delay(500) // Delay of 500 milliseconds (adjust as needed)
+                    if (newText != null) {
+                        viewModel.searchUser(newText)
+                    } // Or appropriate ViewModel function
+                }
+                return true
+            }
+        })
 
         // Configurar el botón regreso
         binding.btnBack.setOnClickListener {

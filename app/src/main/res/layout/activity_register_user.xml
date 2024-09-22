@@ -78,8 +78,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/TMakeAccount"
-        android:textFontWeight="700"
         android:textSize="25sp"
+        android:fontFamily="@font/roboto_bold"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
@@ -101,8 +101,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TEmail"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TVTitle" />
 
@@ -120,7 +120,9 @@
         android:padding="24dp"
         android:layout_marginTop="5dp"
         android:textSize="14sp"
-        android:hint="@string/TEmail" />
+        android:hint="@string/TEmail"
+        android:fontFamily="@font/roboto_regular"
+        android:lines="1"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Nombre de usuario -->
@@ -130,8 +132,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TUsername"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TILEmail" />
 
@@ -149,7 +151,9 @@
         android:padding="24dp"
         android:layout_marginTop="5dp"
         android:textSize="14sp"
-        android:hint="@string/TUsername" />
+        android:hint="@string/TUsername"
+        android:fontFamily="@font/roboto_regular"
+        android:lines="1"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Fecha de nacimeinto -->
@@ -159,8 +163,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TBirthday"
-        android:textFontWeight="700"
         android:textSize="19sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TILUsername" />
 
@@ -170,8 +174,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/TPrivacityAdd"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TVBirthday" />
 
@@ -186,8 +190,9 @@
         android:textSize="14sp"
         android:layout_height="wrap_content"
         android:padding="12dp"
+        android:fontFamily="@font/roboto_medium_italic"
         app:icon="@drawable/ic_calendario"
-        app:iconTint="@color/black"
+        app:iconTint="@color/semi_transparent_black"
         app:layout_constraintTop_toBottomOf="@id/TVAdvertisement"
         app:layout_constraintEnd_toEndOf="@id/VContainer"
         app:layout_constraintStart_toStartOf="@id/VContainer"
@@ -204,6 +209,7 @@
         android:textAllCaps="false"
         android:textSize="14sp"
         android:layout_marginTop="30dp"
+        android:fontFamily="@font/roboto_black"
         app:cornerRadius="14dp"
         app:backgroundTint="@color/yellow"
         android:textColor="@color/black"

@@ -4,9 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -14,6 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sacalabici"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:minSdkVersion="21"
         tools:targetApi="31" >
 
         <meta-data
@@ -24,9 +28,8 @@
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
 
-
         <activity
-            android:name=".framework.adapters.views.activities.ActivitiesActivity"
+            android:name=".framework.adapters.views.activities.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Sacalabici.NoActionBar">
 
@@ -37,48 +40,32 @@
         </activity>
 
         <activity
-            android:name=".framework.adapters.views.activities.MapActivity"
+            android:name=".framework.adapters.views.activities.AddAnnouncementActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.ProfileActivity"
+            android:name=".framework.adapters.views.activities.Session.SessionActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.AnnouncementsActivity"
+            android:name=".framework.adapters.views.activities.Session.LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.SessionActivity"
+            android:name=".framework.adapters.views.activities.Session.RegisterActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar" />
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.LoginActivity"
+            android:name=".framework.adapters.views.activities.Session.RegisterContinueActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar" />
-
-        <activity
-            android:name=".framework.adapters.views.activities.RegisterActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar" />
-
-        <activity
-            android:name=".framework.adapters.views.activities.RegisterContinueActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar" />
-
-        <activity
-            android:name=".framework.adapters.views.activities.SettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
-
-        <activity
-            android:name=".framework.adapters.views.activities.ProfileEditActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>

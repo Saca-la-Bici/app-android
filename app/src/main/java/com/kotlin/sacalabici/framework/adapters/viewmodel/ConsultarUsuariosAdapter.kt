@@ -11,6 +11,7 @@ class ConsultarUsuariosAdapter: RecyclerView.Adapter<ConsultarUsuariosViewHolder
 
     fun ConsultarUsuariosAdapter(basicData: ArrayList<ConsultarUsuariosBase>){
         this.data = basicData
+        notifyDataSetChanged()
     }
 
 

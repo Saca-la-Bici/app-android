@@ -36,23 +36,35 @@ class ConsultarUsuariosActivity : AppCompatActivity() {
     private fun getUsuarios() {
         CoroutineScope(Dispatchers.IO).launch {
             val consultarUsuariosRepository = ConsultarUsuariosRepository()
-
             try {
                 val usuarios = consultarUsuariosRepository.getUsuarios(limit = 0)
-
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
-                        setUpRecyclerView(ArrayList(usuarios))
+                        data = ArrayList(usuarios) // Guarda todos los usuarios
+                        mostrarUsuariosAdministradoresYUsuarios(data) // Muestra por defecto
                     } else {
                         Log.d("Error", "La lista de usuarios está vacía o es nula.")
                     }
                 }
-
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("Error", "No se pudieron obtener los usuarios: ${e.message}")
             }
         }
+    }
+
+    private fun mostrarUsuariosAdministradoresYUsuarios(data: ArrayList<ConsultarUsuariosBase>) {
+        val usuariosFiltrados = data.filter {
+            it.rol.nombreRol == "Administrador" || it.rol.nombreRol == "Usuario"
+        }
+        setUpRecyclerView(ArrayList(usuariosFiltrados))
+    }
+
+    private fun mostrarUsuariosStaffYUsuarios(data: ArrayList<ConsultarUsuariosBase>) {
+        val usuariosFiltrados = data.filter {
+            it.rol.nombreRol == "Staff" || it.rol.nombreRol == "Usuario"
+        }
+        setUpRecyclerView(ArrayList(usuariosFiltrados))
     }
 
     private fun setUpRecyclerView(dataForList:ArrayList<ConsultarUsuariosBase>){
@@ -65,4 +77,5 @@ class ConsultarUsuariosActivity : AppCompatActivity() {
         adapter.ConsultarUsuariosAdapter(dataForList)
         binding.RVViewUsers.adapter = adapter
     }
+
 }

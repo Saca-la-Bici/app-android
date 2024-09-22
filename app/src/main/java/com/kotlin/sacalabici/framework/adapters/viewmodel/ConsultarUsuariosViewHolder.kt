@@ -7,6 +7,6 @@ import com.kotlin.sacalabici.databinding.ItemUserBinding
 class ConsultarUsuariosViewHolder(private val binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: ConsultarUsuariosBase) {
-        binding.RVuserName.text = item.username
+        binding.RVuserName.text = item.usuario.username
     }
 }

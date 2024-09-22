@@ -1,7 +1,6 @@
 package com.kotlin.sacalabici.data.network.consultarUsuarios
 
-import com.kotlin.sacalabici.data.models.ConsultarUsuariosBase
-import com.kotlin.sacalabici.data.models.ConsultarUsuariosObject
+import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosObject
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,6 +9,11 @@ interface ConsultarUsuariosAPIService {
     @GET("perfil/consultarUsuarios")
     suspend fun getUsuarios(
         @Query("limit") limit: Int
+    ): ConsultarUsuariosObject
+
+    @GET("perfil/buscarUsuarios")
+    suspend fun searchUser(
+        @Query("username") username: String
     ): ConsultarUsuariosObject
 
 }

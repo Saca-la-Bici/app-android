@@ -1,7 +1,7 @@
 package com.kotlin.sacalabici.data.network.session
 
 import android.util.Log
-import com.kotlin.sacalabici.data.models.session.User
+import com.kotlin.sacalabici.data.models.user.User
 
 class SessionAPIClient(private val idToken: String?) {
 

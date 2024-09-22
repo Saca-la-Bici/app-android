@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.data.models
+package com.kotlin.sacalabici.data.models.profile
 
 import com.google.gson.annotations.SerializedName
 

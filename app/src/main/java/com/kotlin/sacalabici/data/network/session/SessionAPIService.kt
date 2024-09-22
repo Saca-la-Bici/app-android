@@ -1,6 +1,6 @@
 package com.kotlin.sacalabici.data.network.session
 
-import com.kotlin.sacalabici.data.models.session.User
+import com.kotlin.sacalabici.data.models.user.User
 import retrofit2.http.Body
 import retrofit2.http.POST
 

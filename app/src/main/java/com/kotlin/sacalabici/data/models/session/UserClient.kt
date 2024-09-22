@@ -1,9 +1,9 @@
 package com.kotlin.sacalabici.data.models.session
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.kotlin.sacalabici.data.models.user.User
 import com.kotlin.sacalabici.domain.session.SessionRequirement
 import kotlinx.coroutines.tasks.await
 

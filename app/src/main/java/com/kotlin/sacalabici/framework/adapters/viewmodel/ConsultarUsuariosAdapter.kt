@@ -3,8 +3,9 @@ package com.kotlin.sacalabici.framework.adapters.viewmodel
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlin.sacalabici.data.models.ConsultarUsuariosBase
+import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.ItemUserBinding
+import com.kotlin.sacalabici.framework.adapters.viewhoiders.ConsultarUsuariosViewHolder
 
 class ConsultarUsuariosAdapter: RecyclerView.Adapter<ConsultarUsuariosViewHolder>() {
     var data:ArrayList<ConsultarUsuariosBase> = ArrayList()

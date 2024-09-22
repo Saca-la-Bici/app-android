@@ -40,7 +40,7 @@
 
     <!-- Botón de regreso -->
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/BBack"
+        android:id="@+id/btnBack"
         android:layout_width="17.71dp"
         android:layout_height="15.5dp"
         android:src="@drawable/ic_back"
@@ -75,8 +75,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Administradores"
-            android:background="@android:color/transparent"
+            android:background="@drawable/btn_admin_selected"
             android:textColor="@android:color/darker_gray" />
+
 
         <Button
             android:id="@+id/btnStaff"
@@ -91,20 +92,20 @@
     <!-- Indicador de selección -->
     <View
         android:id="@+id/VIndicator"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="10dp"
         android:background="@drawable/ic_indicator"
         app:layout_constraintTop_toBottomOf="@+id/sectionLayout"
-        app:layout_constraintStart_toStartOf="@id/VContainer"
-        app:layout_constraintEnd_toEndOf="@id/VContainer"
-        app:layout_constraintWidth_percent="0.3"/>
+        app:layout_constraintStart_toStartOf="@id/btnAdministradores"
+        app:layout_constraintEnd_toEndOf="@id/btnAdministradores"
+        android:layout_marginTop="4dp" />
 
     <!-- Linea divisora -->
     <View
         android:id="@+id/VHorizontalLine"
         android:layout_width="0dp"
         android:layout_height=".8dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="9dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/sectionLayout"
         app:layout_constraintStart_toStartOf="@id/VContainer"

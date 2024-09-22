@@ -40,7 +40,7 @@
 
     <!-- Botón de regreso -->
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/BBack"
+        android:id="@+id/btnBack"
         android:layout_width="17.71dp"
         android:layout_height="15.5dp"
         android:src="@drawable/ic_back"

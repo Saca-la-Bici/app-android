@@ -9,9 +9,8 @@ import com.kotlin.sacalabici.databinding.ItemUserBinding
 class ConsultarUsuariosAdapter: RecyclerView.Adapter<ConsultarUsuariosViewHolder>() {
     var data:ArrayList<ConsultarUsuariosBase> = ArrayList()
 
-    fun ConsultarUsuariosAdapter(basicData: ArrayList<ConsultarUsuariosBase>){
+    fun updateData(basicData: ArrayList<ConsultarUsuariosBase>){
         this.data = basicData
-        notifyDataSetChanged()
     }
 
 

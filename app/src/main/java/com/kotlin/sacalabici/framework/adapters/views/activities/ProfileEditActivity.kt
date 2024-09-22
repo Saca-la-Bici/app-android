@@ -3,18 +3,18 @@ package com.kotlin.sacalabici.framework.adapters.views.activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.ActivityProfileEditBinding
 
-class ProfileEditActivity: BaseActivity() {
+class ProfileEditActivity: AppCompatActivity() {
     private lateinit var binding: ActivityProfileEditBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initializeBinding()
-        setupNavbar()
 
         setupGenderButton()
     }

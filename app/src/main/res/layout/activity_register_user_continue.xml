@@ -78,8 +78,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/TMakeAccount"
-        android:textFontWeight="700"
         android:textSize="25sp"
+        android:fontFamily="@font/roboto_black"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
@@ -112,8 +112,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TPassword"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TVTitle" />
 
@@ -122,6 +122,7 @@
         android:id="@+id/TILPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
         app:passwordToggleEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/TVPassword"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
@@ -135,7 +136,8 @@
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TPassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:lines="1"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,8 +148,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TVerifyPassword"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TILPassword" />
 
@@ -157,6 +159,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:passwordToggleEnabled="true"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintTop_toBottomOf="@id/TVVerifyPassword"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintEnd_toEndOf="@+id/VContainer">
@@ -169,7 +172,8 @@
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TVerifyPassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:lines="1"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -183,6 +187,7 @@
         android:textAllCaps="false"
         android:textSize="14sp"
         android:layout_marginTop="50dp"
+        android:fontFamily="@font/roboto_black"
         app:cornerRadius="14dp"
         app:backgroundTint="@color/yellow"
         android:textColor="@color/black"

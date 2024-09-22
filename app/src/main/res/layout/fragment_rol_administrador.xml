@@ -75,9 +75,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Administradores"
-            android:background="@drawable/btn_admin_selected"
-            android:textColor="@android:color/darker_gray" />
-
+            android:background="@android:color/transparent"
+            android:textColor="@drawable/btn_admin_selected"
+            android:textAllCaps="false"/>
 
         <Button
             android:id="@+id/btnStaff"
@@ -86,26 +86,27 @@
             android:layout_weight="1"
             android:text="Staff"
             android:background="@android:color/transparent"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@android:color/darker_gray"
+            android:textAllCaps="false"/>
     </LinearLayout>
 
     <!-- Indicador de selección -->
     <View
         android:id="@+id/VIndicator"
-        android:layout_width="0dp"
+        android:layout_width="100"
         android:layout_height="10dp"
         android:background="@drawable/ic_indicator"
         app:layout_constraintTop_toBottomOf="@+id/sectionLayout"
-        app:layout_constraintStart_toStartOf="@id/btnAdministradores"
-        app:layout_constraintEnd_toEndOf="@id/btnAdministradores"
-        android:layout_marginTop="4dp" />
+        app:layout_constraintStart_toStartOf="@id/VContainer"
+        app:layout_constraintEnd_toEndOf="@id/VContainer"
+        app:layout_constraintWidth_percent="0.3"/>
 
     <!-- Linea divisora -->
     <View
         android:id="@+id/VHorizontalLine"
         android:layout_width="0dp"
         android:layout_height=".8dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/sectionLayout"
         app:layout_constraintStart_toStartOf="@id/VContainer"

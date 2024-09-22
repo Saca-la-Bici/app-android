@@ -76,7 +76,8 @@
             android:layout_weight="1"
             android:text="Administradores"
             android:background="@android:color/transparent"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@android:color/darker_gray"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btnStaff"
@@ -85,7 +86,8 @@
             android:layout_weight="1"
             android:text="Staff"
             android:background="@android:color/transparent"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@drawable/btn_admin_selected"
+            android:textAllCaps="false"/>
     </LinearLayout>
 
     <!-- Indicador de selección -->

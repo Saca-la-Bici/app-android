@@ -1,36 +1,38 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.adapters.views.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kotlin.sacalabici.data.models.ConsultarUsuariosBase
 import com.kotlin.sacalabici.data.repositories.ConsultarUsuariosRepository
-import com.kotlin.sacalabici.databinding.ActivityModifyRolBinding
+import com.kotlin.sacalabici.databinding.FragmentModifyRolBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ConsultarUsuariosActivity : AppCompatActivity() {
+class ModifyRolesFragment : Fragment() {
 
-    private lateinit var binding: ActivityModifyRolBinding
-    private val adapter : ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
-    private lateinit var data:ArrayList<ConsultarUsuariosBase>
+    private var _binding: FragmentModifyRolBinding? = null
+    private val binding get() = _binding!!
+    private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
+    private lateinit var data: ArrayList<ConsultarUsuariosBase>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        initializeBinding()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentModifyRolBinding.inflate(inflater, container, false)
 
         // Llamar a la función para obtener los usuarios
         getUsuarios()
-    }
 
-    private fun initializeBinding(){
-        binding = ActivityModifyRolBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        return binding.root
     }
 
     private fun getUsuarios() {
@@ -67,15 +69,20 @@ class ConsultarUsuariosActivity : AppCompatActivity() {
         setUpRecyclerView(ArrayList(usuariosFiltrados))
     }
 
-    private fun setUpRecyclerView(dataForList:ArrayList<ConsultarUsuariosBase>){
+    private fun setUpRecyclerView(dataForList: ArrayList<ConsultarUsuariosBase>) {
         binding.RVViewUsers.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(
-            this,
+            context,
             LinearLayoutManager.VERTICAL,
-            false)
+            false
+        )
         binding.RVViewUsers.layoutManager = linearLayoutManager
         adapter.ConsultarUsuariosAdapter(dataForList)
         binding.RVViewUsers.adapter = adapter
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Liberar el binding
+    }
 }

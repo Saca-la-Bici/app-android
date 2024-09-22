@@ -69,7 +69,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.SettingsActivity"
+            android:name=".framework.adapters.views.fragments.SettingsFragment"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
@@ -79,7 +79,7 @@
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.ConsultarUsuariosActivity"
+            android:name=".framework.adapters.views.fragments.ModifyRolesFragment"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
     </application>

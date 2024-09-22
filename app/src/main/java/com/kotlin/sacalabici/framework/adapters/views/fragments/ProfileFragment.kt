@@ -10,10 +10,6 @@ import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
-import com.kotlin.sacalabici.framework.adapters.views.activities.SettingsActivity
-import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
 
 class ProfileFragment: Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -58,11 +54,15 @@ class ProfileFragment: Fragment() {
     private fun setupConfiguracionButton() {
         val btnConfiguration = binding.btnConfiguration
         btnConfiguration.setOnClickListener {
-            val intent = Intent(activity, SettingsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
+            val settingsFragment = SettingsFragment()
+            // Reemplazar el fragmento actual por SettingsFragment
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, settingsFragment) // Asegúrate de que este ID coincida con el contenedor de fragmentos en tu layout
+                .addToBackStack(null) // Para permitir volver al fragmento anterior
+                .commit()
         }
     }
+
 
     private fun setupEditarButton() {
         val btnEditProfile = binding.btnEditProfile

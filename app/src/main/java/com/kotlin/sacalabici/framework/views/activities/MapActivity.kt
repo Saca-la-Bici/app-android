@@ -36,6 +36,10 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
 
@@ -151,54 +155,62 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
     }
 
 
-    fun coordenadasToPoint(coordenada: CoordenadasBase): Point {
+    private fun coordenadasToPoint(coordenada: CoordenadasBase): Point {
         return Point.fromLngLat(coordenada.longitud, coordenada.latitud)
     }
 
     private fun drawRoute(map: MapView, coordenadas: List<CoordenadasBase>) {
-        // Asegúrate de que haya al menos 3 puntos: inicio, descanso, final
         if (coordenadas.size < 3) {
             Log.e("MapActivity", "Faltan puntos en las coordenadas")
             return
         }
 
-        // Convertir los objetos CoordenadasBase a Point
         val points = coordenadas.map { coordenadasToPoint(it) }
+        Log.d("MapActivity", "Puntos para la ruta: $points")
 
-        // Generar la URL para obtener la ruta desde la API de Mapbox
         val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
-                val inputStream = connection.inputStream
-                val response = inputStream.bufferedReader().use { it.readText() }
-
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
                 val jsonResponse = JSONObject(response)
                 val routes = jsonResponse.getJSONArray("routes")
 
                 if (routes.length() > 0) {
-                    val route = routes.getJSONObject(0)
-                    val geometry = route.getString("geometry")
-
-                    // Decodificar los puntos de la geometría (polyline)
+                    val geometry = routes.getJSONObject(0).getString("geometry")
                     val decodedPoints = decodePolyline(geometry)
+                    Log.d("MapActivity", "Puntos decodificados: $decodedPoints")
 
-                    // Separar los tramos usando las coordenadas del punto de descanso
+                    // Encontrar el índice del punto de descanso
                     val puntoDescanso = points[1]
+                    Log.d("MapActivity", "Punto de descanso: $puntoDescanso")
 
-                    val tramo1 = decodedPoints.takeWhile {
-                        it.latitude() != puntoDescanso.latitude() && it.longitude() != puntoDescanso.longitude()
+                    val puntoDescansoIndex = decodedPoints.indexOfFirst {
+                        val distance = calculateDistance(it.latitude(), it.longitude(), puntoDescanso.latitude(), puntoDescanso.longitude())
+                        Log.d("MapActivity", "Comparando con punto: ${it.latitude()}, ${it.longitude()}, distancia: $distance")
+                        distance < 50.0  // Aumenta el umbral
                     }
-                    val tramo2 = decodedPoints.dropWhile {
-                        it.latitude() != puntoDescanso.latitude() && it.longitude() != puntoDescanso.longitude()
+
+
+                    if (puntoDescansoIndex == -1) {
+                        Log.e("MapActivity", "El punto de descanso no se encontró en los puntos decodificados")
+                        return@launch
                     }
+
+                    // Crear los tramos
+                    val tramo1 = decodedPoints.take(puntoDescansoIndex + 1)
+                    val tramo2 = decodedPoints.drop(puntoDescansoIndex)
+
+                    Log.d("MapActivity", "Tramo 1: $tramo1")
+                    Log.d("MapActivity", "Tramo 2: $tramo2")
 
                     withContext(Dispatchers.Main) {
-                        // Dibujar los dos segmentos con colores diferentes
                         drawRouteSegments(map, tramo1, tramo2)
                     }
+                } else {
+                    Log.e("MapActivity", "No se encontraron rutas en la respuesta de la API")
                 }
             } catch (e: Exception) {
                 Log.e("MapActivity", "Error al obtener la ruta: ${e.message}")
@@ -206,14 +218,30 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         }
     }
 
+    // Método para calcular la distancia
+    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val R = 6371e3 // Radio de la Tierra en metros
+        val phi1 = Math.toRadians(lat1)
+        val phi2 = Math.toRadians(lat2)
+        val deltaPhi = Math.toRadians(lat2 - lat1)
+        val deltaLambda = Math.toRadians(lon2 - lon1)
+
+        val a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        return R * c // Distancia en metros
+    }
 
 
     private fun drawRouteSegments(map: MapView, tramo1: List<Point>, tramo2: List<Point>) {
         map.getMapboxMap().getStyle { style ->
-
             // Dibujar tramo 1 en rojo (antes del punto de descanso)
             val sourceIdTramo1 = "route-source-tramo1-${System.currentTimeMillis()}"
             val layerIdTramo1 = "route-layer-tramo1-${System.currentTimeMillis()}"
+
+            Log.d("MapActivity", "Agregando tramo 1 con ID de fuente: $sourceIdTramo1 y capa: $layerIdTramo1")
 
             val sourceTramo1 = GeoJsonSource.Builder(sourceIdTramo1)
                 .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(tramo1)))))
@@ -232,6 +260,8 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             val sourceIdTramo2 = "route-source-tramo2-${System.currentTimeMillis()}"
             val layerIdTramo2 = "route-layer-tramo2-${System.currentTimeMillis()}"
 
+            Log.d("MapActivity", "Agregando tramo 2 con ID de fuente: $sourceIdTramo2 y capa: $layerIdTramo2")
+
             val sourceTramo2 = GeoJsonSource.Builder(sourceIdTramo2)
                 .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(tramo2)))))
                 .build()
@@ -246,6 +276,7 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             routeLayers.add(layerIdTramo2) // Agregar a la lista de capas
         }
     }
+
 
 
     private fun decodePolyline(encodedPolyline: String): List<Point> {

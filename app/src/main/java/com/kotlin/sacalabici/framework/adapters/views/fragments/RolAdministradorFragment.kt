@@ -72,6 +72,7 @@ class RolAdministradorFragment : Fragment() {
             it.rol.nombreRol == "Administrador" || it.rol.nombreRol == "Usuario"
         }
         adapter.updateData(ArrayList(usuariosFiltrados))
+
         setUpRecyclerView(ArrayList(usuariosFiltrados))
     }
 

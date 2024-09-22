@@ -5,5 +5,5 @@
     <!-- Color cuando el botón está deshabilitado -->
     <item android:state_enabled="false" android:color="@android:color/darker_gray" />
     <!-- Color predeterminado cuando el botón no está presionado -->
-    <item android:color="@color/yellow" />
+    <item android:color="@color/sacaLaBiciYellow" />
 </selector>

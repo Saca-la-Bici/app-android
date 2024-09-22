@@ -81,6 +81,7 @@ class RolStaffFragment : Fragment() {
         when (currentFragment) {
             "Administradores" -> {
                 binding.btnAdministradores.setTextColor(Color.YELLOW)
+
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.nav_host_fragment_content_main, RolAdministradorFragment())
                     .addToBackStack(null)

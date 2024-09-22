@@ -29,12 +29,14 @@
 
     <!-- Botón Agregar o Eliminar -->
     <Button
-        android:id="@+id/user_action_button"
+        android:id="@+id/btn_changerol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Agregar"
         android:textColor="#1D1B20"
         android:backgroundTint="#F6CD0B"
         android:layout_gravity="center_vertical"
-        app:cornerRadius="12dp" />
+        app:cornerRadius="12dp"
+        android:tag="user" /> <!-- Usamos un tag para simular el rol -->
+
 </LinearLayout>

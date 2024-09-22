@@ -14,12 +14,10 @@ class ConsultarUsuariosAdapter: RecyclerView.Adapter<ConsultarUsuariosViewHolder
         this.data = basicData
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConsultarUsuariosViewHolder {
         val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ConsultarUsuariosViewHolder(binding)
     }
-
 
     override fun onBindViewHolder(holder: ConsultarUsuariosViewHolder, position: Int) {
         val item = data[position]
@@ -29,4 +27,5 @@ class ConsultarUsuariosAdapter: RecyclerView.Adapter<ConsultarUsuariosViewHolder
     override fun getItemCount(): Int {
         return data.size
     }
+
 }

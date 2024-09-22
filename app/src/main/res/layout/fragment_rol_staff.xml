@@ -19,6 +19,14 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95" />
 
+    <!-- Guía central -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/center_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
     <!-- Contenedor principal -->
     <View
         android:id="@+id/VContainer"
@@ -82,24 +90,24 @@
         <Button
             android:id="@+id/btnStaff"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Staff"
             android:background="@android:color/transparent"
-            android:textColor="@drawable/btn_admin_selected"
-            android:textAllCaps="false"/>
+            android:text="Staff"
+            android:textAllCaps="false"
+            android:textColor="@drawable/btn_admin_selected" />
     </LinearLayout>
 
     <!-- Indicador de selección -->
     <View
         android:id="@+id/VIndicator"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="10dp"
         android:background="@drawable/ic_indicator"
         app:layout_constraintTop_toBottomOf="@+id/sectionLayout"
-        app:layout_constraintStart_toStartOf="@id/VContainer"
-        app:layout_constraintEnd_toEndOf="@id/VContainer"
-        app:layout_constraintWidth_percent="0.3"/>
+        app:layout_constraintStart_toStartOf="@+id/center_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.12" />
 
     <!-- Linea divisora -->
     <View

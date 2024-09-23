@@ -19,12 +19,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.data.models.CoordenadasBase
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.extension.style.layers.addLayer
+import com.mapbox.maps.extension.style.layers.generated.LineLayer
 import com.mapbox.maps.extension.style.layers.generated.lineLayer
 import com.mapbox.maps.extension.style.layers.generated.symbolLayer
 import com.mapbox.maps.extension.style.layers.getLayer
@@ -333,11 +336,19 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         }
     }
 
-    fun drawRouteWithCoordinates(map: MapView, coordenadas: List<CoordenadasBase>) {
+    fun coordenadasToPoint(coordenada: CoordenadasBase): Point {
+        return Point.fromLngLat(coordenada.longitud, coordenada.latitud)
+    }
 
+    fun drawRouteWithCoordinates(map: MapView, coordenadas: List<CoordenadasBase>) {
         this.mapView = map
-        // Lista de puntos: inicio, descanso y final
-        val points = coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
+
+        if (coordenadas.size < 3) {
+            Toast.makeText(mapView.context, "Asegúrate de establecer los puntos de inicio, descanso y final.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val points = coordenadas.map { coordenadasToPoint(it) }
         val startPoint = points.first()
         val stopoverPoint = points[1]
         val endPoint = points.last()
@@ -345,75 +356,44 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         map.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
             map.mapboxMap.setCamera(
                 CameraOptions.Builder()
-                    .center(startPoint) // Centro en Querétaro
-                    .zoom(15.0) // Nivel de zoom inicial
+                    .center(startPoint)
+                    .zoom(15.0)
                     .build()
             )
         }
 
-        if (coordenadas.size < 3) {
-            Toast.makeText(mapView.context, "Asegúrate de establecer los puntos de inicio, descanso y final.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // URL de la solicitud a la API de direcciones de Mapbox
         val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${startPoint.longitude()},${startPoint.latitude()};${stopoverPoint.longitude()},${stopoverPoint.latitude()};${endPoint.longitude()},${endPoint.latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
-        // Lanza una coroutine para realizar la solicitud en segundo plano
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
-                val inputStream = connection.inputStream
-                val response = inputStream.bufferedReader().use { it.readText() }
-
-                // Procesa la respuesta JSON
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
                 val jsonResponse = JSONObject(response)
                 val routes = jsonResponse.getJSONArray("routes")
 
                 if (routes.length() > 0) {
-                    val route = routes.getJSONObject(0)
-                    val geometry = route.getString("geometry") // Obtiene la cadena en formato polyline6
-                    val decodedPoints = decodePolyline(geometry) // Decodifica la polyline6 en coordenadas
+                    val geometry = routes.getJSONObject(0).getString("geometry")
+                    val decodedPoints = decodePolyline(geometry)
 
-                    // Divide los puntos en tramos: inicio -> descanso y descanso -> final
-                    val tramo1 = decodedPoints.takeWhile { it.latitude() <= stopoverPoint.latitude() }
-                    val tramo2 = decodedPoints.dropWhile { it.latitude() <= stopoverPoint.latitude() }
+                    val puntoDescansoIndex = decodedPoints.indexOfFirst {
+                        calculateDistance(it.latitude(), it.longitude(), stopoverPoint.latitude(), stopoverPoint.longitude()) < 50.0
+                    }
+
+                    if (puntoDescansoIndex == -1) {
+                        Log.e("MapActivity", "El punto de descanso no se encontró en los puntos decodificados")
+                        return@launch
+                    }
+
+                    val tramo1 = decodedPoints.take(puntoDescansoIndex + 1)
+                    val tramo2 = decodedPoints.drop(puntoDescansoIndex)
 
                     withContext(Dispatchers.Main) {
-
-                        // Llama a la función addMarker para agregar marcadores en los puntos de inicio, descanso y final
                         addMarker(startPoint, "start-point-symbol", "start_icon", mapView)
                         addMarker(stopoverPoint, "stopover-point-symbol", "stopover_icon", mapView)
                         addMarker(endPoint, "end-point-symbol", "end_icon", mapView)
 
-                        mapView.getMapboxMap().getStyle { style ->
-                            // Agrega una capa roja para el tramo inicio -> descanso
-                            if (tramo1.isNotEmpty()) {
-                                val sourceInicioDescanso = geoJsonSource("route-source-inicio-descanso") {
-                                    geometry(LineString.fromLngLats(tramo1))
-                                }
-                                style.addSource(sourceInicioDescanso)
-                                val layerInicioDescanso = lineLayer("route-layer-inicio-descanso", "route-source-inicio-descanso") {
-                                    lineColor("#FF0000") // Rojo
-                                    lineWidth(5.0)
-                                }
-                                style.addLayer(layerInicioDescanso)
-                            }
-
-                            // Agrega una capa verde para el tramo descanso -> final
-                            if (tramo2.isNotEmpty()) {
-                                val sourceDescansoFinal = geoJsonSource("route-source-descanso-final") {
-                                    geometry(LineString.fromLngLats(tramo2))
-                                }
-                                style.addSource(sourceDescansoFinal)
-                                val layerDescansoFinal = lineLayer("route-layer-descanso-final", "route-source-descanso-final") {
-                                    lineColor("#228B22") // Verde
-                                    lineWidth(5.0)
-                                }
-                                style.addLayer(layerDescansoFinal)
-                            }
-                        }
+                        drawRouteSegments(map, tramo1, tramo2)
                     }
                 }
             } catch (e: Exception) {
@@ -421,6 +401,54 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
             }
         }
     }
+
+    private fun drawRouteSegments(map: MapView, tramo1: List<Point>, tramo2: List<Point>) {
+        map.getMapboxMap().getStyle { style ->
+            val sourceIdTramo1 = "route-source-tramo1-${System.currentTimeMillis()}"
+            val layerIdTramo1 = "route-layer-tramo1-${System.currentTimeMillis()}"
+
+            val sourceTramo1 = GeoJsonSource.Builder(sourceIdTramo1)
+                .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(tramo1)))))
+                .build()
+            style.addSource(sourceTramo1)
+
+            val lineLayerTramo1 = LineLayer(layerIdTramo1, sourceIdTramo1).apply {
+                lineColor("#FF0000")
+                lineWidth(3.0)
+            }
+            style.addLayer(lineLayerTramo1)
+
+            val sourceIdTramo2 = "route-source-tramo2-${System.currentTimeMillis()}"
+            val layerIdTramo2 = "route-layer-tramo2-${System.currentTimeMillis()}"
+
+            val sourceTramo2 = GeoJsonSource.Builder(sourceIdTramo2)
+                .featureCollection(FeatureCollection.fromFeatures(arrayOf(Feature.fromGeometry(LineString.fromLngLats(tramo2)))))
+                .build()
+            style.addSource(sourceTramo2)
+
+            val lineLayerTramo2 = LineLayer(layerIdTramo2, sourceIdTramo2).apply {
+                lineColor("#228B22")
+                lineWidth(3.0)
+            }
+            style.addLayer(lineLayerTramo2)
+        }
+    }
+
+    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val R = 6371e3
+        val phi1 = Math.toRadians(lat1)
+        val phi2 = Math.toRadians(lat2)
+        val deltaPhi = Math.toRadians(lat2 - lat1)
+        val deltaLambda = Math.toRadians(lon2 - lon1)
+
+        val a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        return R * c
+    }
+
 
     // Función para agregar un marcador en un punto específico
 

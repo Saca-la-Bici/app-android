@@ -28,15 +28,14 @@
             android:backgroundTint="#F6CD0B" />
 
         <!-- Distancia -->
-        <TextView
-            android:id="@+id/tvNivel"
+        <EditText
+            android:id="@+id/etTiempo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="?android:attr/selectableItemBackground"
             android:backgroundTint="#F6CD0B"
             android:fontFamily="sans-serif"
-            android:hint="Selecciona el nivel"
+            android:hint="Tiempo (ej. 4h)"
             android:padding="12dp"
             android:textColor="#000000"
             android:textColorHint="#000000"
@@ -88,22 +87,11 @@
             android:visibility="gone" />
 
         <!-- Tiempo -->
-        <EditText
-            android:id="@+id/etTiempo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Tiempo (ej. 4h)"
-            android:textColorHint="#000000"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#F6CD0B" />
 
         <!-- Nivel -->
 
         <!-- MapView -->
+
         <EditText
             android:id="@+id/etDistancia"
             android:layout_width="match_parent"
@@ -112,6 +100,20 @@
             android:backgroundTint="#F6CD0B"
             android:fontFamily="sans-serif"
             android:hint="Distancia (Se calcula automáticamente)"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvNivel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:backgroundTint="#F6CD0B"
+            android:fontFamily="sans-serif"
+            android:hint="Selecciona el nivel"
             android:padding="12dp"
             android:textColor="#000000"
             android:textColorHint="#000000"

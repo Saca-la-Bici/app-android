@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.Fragment
 import com.google.gson.JsonObject
@@ -105,16 +106,22 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
             rutasFragmentVisible = false
         } else {
             lifecycleScope.launch {
-                val rutasList = RutasService.getRutasList()
-                if (rutasList != null) {
-                    val rutasFragment = RutasFragment.newInstance(rutasList, lastSelectedRuta)
-                    fragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment_content_main, rutasFragment)
-                        .addToBackStack(null)
-                        .commit()
-                    rutasFragmentVisible = true
-                } else {
-                    Log.e("MapActivity", "Error al obtener la lista de rutas")
+                try {
+                    val rutasList = RutasService.getRutasList()
+                    if (rutasList != null) {
+                        val rutasFragment = RutasFragment.newInstance(rutasList, lastSelectedRuta)
+                        fragmentManager.beginTransaction()
+                            .replace(R.id.nav_host_fragment_content_main, rutasFragment)
+                            .addToBackStack(null)
+                            .commit()
+                        rutasFragmentVisible = true
+                    } else {
+                        // Mensaje de error si la lista es null
+                        Toast.makeText(this@MapActivity, "Error al obtener la lista de rutas.", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    // Muestra un Toast con el mensaje de error si ocurre una excepción
+                    Toast.makeText(this@MapActivity, "Error al obtener la lista de rutas: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

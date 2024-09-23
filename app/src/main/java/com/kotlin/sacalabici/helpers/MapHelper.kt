@@ -27,9 +27,12 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.lineLayer
 import com.mapbox.maps.extension.style.layers.generated.symbolLayer
+import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.extension.style.sources.addSource
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
+import com.mapbox.maps.extension.style.sources.getSourceAs
 import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +48,14 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
     // Vista del mapa y campo de texto para la distancia
     private lateinit var mapView: MapView
     private lateinit var etDistancia: EditText
+
+    // Para almacenar las fuentes y capas de rutas
+    private val routeSources = mutableListOf<String>()
+    private val routeLayers = mutableListOf<String>()
+
+    // Para almacenar las fuentes y capas de pines
+    private val pinSources = mutableListOf<String>()
+    private val pinLayers = mutableListOf<String>()
 
     // Puntos en el mapa: inicio, parada intermedia y final
     var startPoint: Point? = null
@@ -402,4 +413,42 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
     }
 
     // Función para agregar un marcador en un punto específico
+
+
+    fun clearPreviousRoutes() {
+        mapView.getMapboxMap().getStyle { style ->
+            // Eliminar las fuentes de rutas anteriores
+            routeSources.forEach { sourceId ->
+                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
+                    style.removeStyleSource(sourceId)
+                }
+            }
+            routeSources.clear() // Limpiamos la lista de fuentes
+
+            // Eliminar las capas de rutas anteriores
+            routeLayers.forEach { layerId ->
+                style.getLayer(layerId)?.let {
+                    style.removeStyleLayer(layerId)
+                }
+            }
+            routeLayers.clear() // Limpiamos la lista de capas
+
+            // Eliminar las fuentes de pines anteriores
+            pinSources.forEach { sourceId ->
+                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
+                    style.removeStyleSource(sourceId)
+                }
+            }
+            pinSources.clear() // Limpiamos la lista de fuentes de pines
+
+            // Eliminar las capas de pines anteriores
+            pinLayers.forEach { layerId ->
+                style.getLayer(layerId)?.let {
+                    style.removeStyleLayer(layerId)
+                }
+            }
+            pinLayers.clear() // Limpiamos la lista de capas de pines
+        }
+    }
+
 }

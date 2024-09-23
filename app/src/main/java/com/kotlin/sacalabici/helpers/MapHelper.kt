@@ -354,13 +354,17 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                     val route = routes.getJSONObject(0)
                     val geometry = route.getString("geometry") // Obtiene la cadena en formato polyline6
                     val decodedPoints = decodePolyline(geometry) // Decodifica la polyline6 en coordenadas
-                    val distance = route.getDouble("distance") / 1000.0
 
                     // Divide los puntos en tramos: inicio -> descanso y descanso -> final
                     val tramo1 = decodedPoints.takeWhile { it.latitude() <= stopoverPoint.latitude() }
                     val tramo2 = decodedPoints.dropWhile { it.latitude() <= stopoverPoint.latitude() }
 
                     withContext(Dispatchers.Main) {
+
+                        // Llama a la función addMarker para agregar marcadores en los puntos de inicio, descanso y final
+                        addMarker(startPoint, "start-point-symbol", "start_icon", mapView)
+                        addMarker(stopoverPoint, "stopover-point-symbol", "stopover_icon", mapView)
+                        addMarker(endPoint, "end-point-symbol", "end_icon", mapView)
 
                         mapView.getMapboxMap().getStyle { style ->
                             // Agrega una capa roja para el tramo inicio -> descanso
@@ -396,4 +400,6 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
             }
         }
     }
+
+    // Función para agregar un marcador en un punto específico
 }

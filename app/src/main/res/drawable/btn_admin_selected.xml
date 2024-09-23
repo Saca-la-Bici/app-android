@@ -3,7 +3,7 @@
     <!-- Color cuando el botón está presionado -->
     <item android:state_pressed="true" android:color="@android:color/holo_orange_light" />
     <!-- Color cuando el botón está deshabilitado -->
-    <item android:state_enabled="false" android:color="@android:color/darker_gray" />
+    <item android:state_enabled="false" android:color="@color/darkGray" />
     <!-- Color predeterminado cuando el botón no está presionado -->
     <item android:color="@color/sacaLaBiciYellow" />
 </selector>

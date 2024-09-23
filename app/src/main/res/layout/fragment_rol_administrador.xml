@@ -61,11 +61,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/TProfile"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05"/>
+        style="@style/TextAppearance.TitleMedium"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        />
 
     <!-- Sección de roles -->
     <LinearLayout
@@ -139,18 +140,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="2dp"
-        app:layout_constraintTop_toBottomOf="@id/searchView"
-        app:layout_constraintBottom_toTopOf="@id/vNavBar"
-        app:layout_constraintLeft_toLeftOf="@+id/VContainer"
-        app:layout_constraintRight_toRightOf="@id/VContainer" />
-
-    <!--NAV-BAR-->
-    <View
-        android:id="@+id/vNavBar"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        app:layout_constraintStart_toStartOf="@id/VContainer"
+        app:layout_constraintEnd_toEndOf="@id/VContainer"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

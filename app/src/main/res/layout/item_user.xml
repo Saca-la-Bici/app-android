@@ -7,13 +7,16 @@
     android:padding="24dp">
 
     <!-- Imagen de perfil -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/RVuser_image"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_profile"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/baseline_person_24"
         android:contentDescription="Imagen de perfil"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical"
+        android:background="@color/gray"
+        app:shapeAppearanceOverlay="@style/RoundedImage" />
+
 
     <!-- Nombre del usuario -->
     <TextView
@@ -22,21 +25,24 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Nombre del Usuario"
-        android:textSize="16sp"
         android:textColor="@android:color/black"
         android:layout_gravity="center_vertical"
-        android:paddingStart="16dp" />
+        android:paddingStart="16dp"
+        style="@style/TextAppearance.LabelSmall" />
 
     <!-- Botón Agregar o Eliminar -->
     <Button
         android:id="@+id/btn_changerol"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="Agregar"
         android:textColor="#1D1B20"
         android:backgroundTint="@color/yellow"
         android:layout_gravity="center_vertical"
         app:cornerRadius="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginLeft="15dp"
         android:textAllCaps="false"/>
 
 </LinearLayout>

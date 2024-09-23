@@ -78,11 +78,11 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
 
         // Carga el estilo de Mapbox y centra el mapa en Querétaro
         map.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
-            val queretaroCoordinates = Point.fromLngLat(-100.3899, 20.5888)
+            val queretaroCoordinates = Point.fromLngLat(-100.4091, 20.5925)
             map.mapboxMap.setCamera(
                 CameraOptions.Builder()
                     .center(queretaroCoordinates) // Centro en Querétaro
-                    .zoom(12.0) // Nivel de zoom inicial
+                    .zoom(15.0) // Nivel de zoom inicial
                     .build()
             )
 

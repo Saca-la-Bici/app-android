@@ -90,11 +90,11 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
 
         // Carga el estilo de Mapbox y centra el mapa en Querétaro
         map.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
-            val queretaroCoordinates = Point.fromLngLat(-100.3899, 20.5888)
+            val queretaroCoordinates = Point.fromLngLat(-100.4091, 20.5925)
             map.mapboxMap.setCamera(
                 CameraOptions.Builder()
                     .center(queretaroCoordinates) // Centro en Querétaro
-                    .zoom(12.0) // Nivel de zoom inicial
+                    .zoom(15.0) // Nivel de zoom inicial
                     .build()
             )
 
@@ -333,18 +333,28 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         }
     }
 
-    fun drawRouteWithCoordinates(mapView: MapView, coordenadas: List<CoordenadasBase>) {
-        // Verifica si hay al menos tres coordenadas: inicio, descanso y final
-        if (coordenadas.size < 3) {
-            Toast.makeText(mapView.context, "Asegúrate de establecer los puntos de inicio, descanso y final.", Toast.LENGTH_SHORT).show()
-            return
-        }
+    fun drawRouteWithCoordinates(map: MapView, coordenadas: List<CoordenadasBase>) {
 
+        this.mapView = map
         // Lista de puntos: inicio, descanso y final
         val points = coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
         val startPoint = points.first()
         val stopoverPoint = points[1]
         val endPoint = points.last()
+
+        map.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
+            map.mapboxMap.setCamera(
+                CameraOptions.Builder()
+                    .center(startPoint) // Centro en Querétaro
+                    .zoom(15.0) // Nivel de zoom inicial
+                    .build()
+            )
+        }
+
+        if (coordenadas.size < 3) {
+            Toast.makeText(mapView.context, "Asegúrate de establecer los puntos de inicio, descanso y final.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         // URL de la solicitud a la API de direcciones de Mapbox
         val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${startPoint.longitude()},${startPoint.latitude()};${stopoverPoint.longitude()},${stopoverPoint.latitude()};${endPoint.longitude()},${endPoint.latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")

@@ -47,11 +47,11 @@ object RutasService {
         nivel: String,
         start: Point,
         stopover: Point,
-        end: Point
+        end: Point,
     ): Boolean = withContext(Dispatchers.IO) {   // Ejecuta la lógica con corrutinas
         try {
             // URL de la solicitud POST para registrar la ruta
-            val url = URL("http://3.145.117.182:8080/mapa/registrarRuta")
+            val url = URL("http://3.145.117.182:8080/mapa/registrarRuta/")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "PUT"
             connection.setRequestProperty("Content-Type", "application/json")

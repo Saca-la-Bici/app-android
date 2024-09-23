@@ -70,12 +70,6 @@ class ModificarRutaActivity : AppCompatActivity() {
 
         // Inicializa la clase MapHelper para manejar el mapa y los puntos de ruta
         var mapHelper = MapHelper(this)
-        mapHelper.initializeMap(
-            mapViewForm, etDistancia,
-            onStartPointSet = { point -> startPoint = point },  // Almacena el punto de inicio
-            onStopoverPointSet = { point -> stopoverPoint = point },  // Almacena el punto de descanso
-            onEndPointSet = { point -> endPoint = point }  // Almacena el punto final
-        )
 
         // Inicialización de otros elementos de UI (título, tiempo y botón de enviar)
         val etTitulo = findViewById<EditText>(R.id.etTitulo)

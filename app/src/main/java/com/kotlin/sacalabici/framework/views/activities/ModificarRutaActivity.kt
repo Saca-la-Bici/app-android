@@ -55,6 +55,7 @@ class ModificarRutaActivity : AppCompatActivity() {
     private var nivelSeleccionado: String? = null
     private val niveles = arrayOf("Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5") // Opciones de nivel
 
+    private lateinit var etID: String
     /**
      * Se ejecuta al crear la actividad. Inicializa los elementos de UI, el mapa y la lógica de validación de inputs.
      */
@@ -78,6 +79,7 @@ class ModificarRutaActivity : AppCompatActivity() {
 
         val extras = intent.extras
         if (extras != null) {
+            val id = extras.getString("ID") ?: ""
             val titulo = extras.getString("TITULO")
             val distancia = extras.getString("DISTANCIA")
             val tiempo = extras.getString("TIEMPO")
@@ -89,6 +91,7 @@ class ModificarRutaActivity : AppCompatActivity() {
             etTiempo.setText(tiempo)
             tvNivel.text = nivel
             nivelSeleccionado = nivel
+            etID = id
 
             val coordenadasJson = extras.getString("COORDENADAS")
             if (coordenadasJson != null) {
@@ -129,7 +132,7 @@ class ModificarRutaActivity : AppCompatActivity() {
 
 
         // El botón de enviar está inicialmente deshabilitado hasta que se validen los inputs
-        btnEnviar.isEnabled = false
+        btnEnviar.isEnabled = true
 
         // Crea un validador de entradas para activar el botón de enviar si los campos están completos
         val inputValidator = InputValidator { verifyInputs() }
@@ -151,19 +154,20 @@ class ModificarRutaActivity : AppCompatActivity() {
             val distancia = etDistancia.text.toString()
             val tiempo = etTiempo.text.toString()
             val nivel = nivelSeleccionado.toString()
+            val id = etID
 
             if (startPoint != null && stopoverPoint != null && endPoint != null) {
                 lifecycleScope.launch {
                     val routeService = RutasService
-                    val result = routeService.modifyRoute(
+                    val result = routeService.modifyRoute(id,
                         titulo, distancia, tiempo, nivel,
                         startPoint!!, stopoverPoint!!, endPoint!!
                     )
                     if (result) {
-                        Toast.makeText(this@ModificarRutaActivity, "Ruta guardada exitosamente.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ModificarRutaActivity, "Ruta modificada exitosamente.", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
-                        Toast.makeText(this@ModificarRutaActivity, "Error al guardar la ruta.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ModificarRutaActivity, "Error al modificar la ruta.", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {

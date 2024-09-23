@@ -75,6 +75,7 @@ class RutasAdapter(
             val intent = Intent(context, ModificarRutaActivity::class.java)
 
             // Agrega datos adicionales al Intent como extras
+            intent.putExtra("ID",ruta.id)
             intent.putExtra("TITULO", ruta.titulo)
             intent.putExtra("DISTANCIA", ruta.distancia)
             intent.putExtra("TIEMPO", ruta.tiempo)

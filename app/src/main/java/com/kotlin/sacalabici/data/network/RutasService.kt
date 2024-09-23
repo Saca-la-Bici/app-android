@@ -41,6 +41,7 @@ object RutasService {
     }
 
     suspend fun modifyRoute(
+        id: String,
         titulo: String,
         distancia: String,
         tiempo: String,
@@ -51,7 +52,7 @@ object RutasService {
     ): Boolean = withContext(Dispatchers.IO) {   // Ejecuta la lógica con corrutinas
         try {
             // URL de la solicitud POST para registrar la ruta
-            val url = URL("http://3.145.117.182:8080/mapa/registrarRuta/")
+            val url = URL("http://3.145.117.182:8080/mapa/modificarRuta/$id")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "PUT"
             connection.setRequestProperty("Content-Type", "application/json")

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="24dp">
 
     <!-- Imagen de perfil -->
     <ImageView
@@ -25,7 +25,7 @@
         android:textSize="16sp"
         android:textColor="@android:color/black"
         android:layout_gravity="center_vertical"
-        android:paddingStart="16dp"/>
+        android:paddingStart="16dp" />
 
     <!-- Botón Agregar o Eliminar -->
     <Button
@@ -34,9 +34,9 @@
         android:layout_height="wrap_content"
         android:text="Agregar"
         android:textColor="#1D1B20"
-        android:backgroundTint="#F6CD0B"
+        android:backgroundTint="@color/yellow"
         android:layout_gravity="center_vertical"
         app:cornerRadius="12dp"
-        android:tag="user" /> <!-- Usamos un tag para simular el rol -->
+        android:textAllCaps="false"/>
 
 </LinearLayout>

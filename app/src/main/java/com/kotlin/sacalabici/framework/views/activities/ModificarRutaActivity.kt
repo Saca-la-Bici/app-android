@@ -1,7 +1,7 @@
 package com.kotlin.sacalabici.framework.views.activities
 
 /**
- * File: RegistrarRutaActivity.kt
+ * File: ModificarRutaActivity.kt
  * Description:Esta clase permite a los usuarios registrar una nueva ruta interactuando con un mapa
  *  *              de Mapbox. Los usuarios pueden seleccionar puntos de inicio, descanso y final,
  *  *              calcular la distancia entre ellos, asignar un nivel de dificultad y proporcionar

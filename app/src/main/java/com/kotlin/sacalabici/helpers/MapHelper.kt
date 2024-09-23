@@ -1,5 +1,3 @@
-package com.kotlin.sacalabici.helpers
-
 /**
  * File: MapHelper.kt
  * Description: Esta clase maneja la interacción con Mapbox, permitiendo al usuario establecer
@@ -9,6 +7,8 @@ package com.kotlin.sacalabici.helpers
  * Date: 18/09/2024
  * Changes:
  */
+
+package com.kotlin.sacalabici.helpers
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -21,9 +21,9 @@ import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.data.models.CoordenadasBase
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
+import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
-import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.toColor
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.lineLayer
 import com.mapbox.maps.extension.style.layers.generated.symbolLayer
@@ -184,74 +184,85 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
      * @param map Vista del mapa donde se dibujará la ruta.
      * @param etDistancia Campo de texto donde se mostrará la distancia calculada.
      */
-    fun drawRoute(map: MapView, etDistancia: EditText) {
-        // Lista de puntos no nulos: inicio, parada intermedia y final
-        val points = listOfNotNull(startPoint, stopoverPoint, endPoint)
-
-        // Verifica si hay al menos dos puntos para trazar la ruta
-        if (points.size < 2) {
-            Toast.makeText(context, "Establezca al menos dos puntos para crear la ruta.", Toast.LENGTH_SHORT).show()
+    private fun drawRoute(map: MapView, etDistancia: EditText) {
+        // Verificamos que los puntos están establecidos
+        if (startPoint == null || endPoint == null || stopoverPoint == null) {
+            Toast.makeText(context, "Asegúrate de establecer los puntos de inicio, descanso y final.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Punto de origen (primer punto) y destino (último punto)
-        val origin = points.first()
-        val destination = points.last()
+        // Lista de puntos: inicio, descanso y final
+        val points = listOf(startPoint!!, stopoverPoint!!, endPoint!!)
 
-        // Puntos intermedios entre origen y destino (si los hay)
-        val waypoints = points.subList(1, points.size - 1)
+        // URL de la solicitud para la API de Mapbox
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
-        // Formatea las coordenadas de los puntos intermedios
-        val waypointsCoordinates = waypoints.joinToString(";") { "${it.longitude()},${it.latitude()}" }
-
-        // URL de la solicitud a la API de direcciones de Mapbox
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${origin.longitude()},${origin.latitude()};$waypointsCoordinates;${destination.longitude()},${destination.latitude()}?geometries=geojson&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
-
-        // Lanza una coroutine para realizar la solicitud en segundo plano
+        // Lanza una coroutine para realizar la solicitud de la ruta
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                // Abre la conexión HTTP y obtiene la respuesta
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 val inputStream = connection.inputStream
                 val response = inputStream.bufferedReader().use { it.readText() }
 
-                // Procesa la respuesta JSON
                 val jsonResponse = JSONObject(response)
                 val routes = jsonResponse.getJSONArray("routes")
 
                 if (routes.length() > 0) {
-                    // Obtiene la primera ruta y sus detalles (geometría y distancia)
                     val route = routes.getJSONObject(0)
-                    val geometry = route.getJSONObject("geometry")
-                    val lineString = LineString.fromJson(geometry.toString())
-                    val distance = route.getDouble("distance") / 1000.0  // Distancia en kilómetros
+                    val geometry = route.getString("geometry") // Aquí obtenemos la cadena en formato polyline6
+                    val decodedPoints = decodePolyline(geometry) // Decodifica la polyline6 en coordenadas
+                    val distance = route.getDouble("distance") / 1000.0
+
+                    // Divide los puntos en tramos según la separación deseada
+                    val tramo1 = decodedPoints.takeWhile { it.latitude() <= stopoverPoint!!.latitude() }
+                    val tramo2 = decodedPoints.dropWhile { it.latitude() <= stopoverPoint!!.latitude() }
 
                     withContext(Dispatchers.Main) {
-                        // Muestra la distancia en el campo de texto
                         etDistancia.setText(String.format("%.2f km", distance))
 
-                        // Crea y agrega la fuente para la ruta en el mapa
-                        val routeSource = geoJsonSource("route-source") {
-                            geometry(lineString)
-                        }
                         map.getMapboxMap().getStyle { style ->
-                            style.addSource(routeSource)
-
-                            // Crea y agrega la capa de la ruta en el mapa
-                            val routeLayer = lineLayer("route-layer", "route-source") {
-                                lineWidth(5.0)  // Grosor de la línea de la ruta
+                            // Agrega una capa roja para el tramo inicio -> descanso
+                            if (tramo1.isNotEmpty()) {
+                                val sourceInicioDescanso = geoJsonSource("route-source-inicio-descanso") {
+                                    geometry(LineString.fromLngLats(tramo1))
+                                }
+                                style.addSource(sourceInicioDescanso)
+                                val layerInicioDescanso = lineLayer("route-layer-inicio-descanso", "route-source-inicio-descanso") {
+                                    lineColor("#FF0000") // Rojo
+                                    lineWidth(5.0)
+                                }
+                                style.addLayer(layerInicioDescanso)
                             }
-                            style.addLayer(routeLayer)
+
+                            // Agrega una capa verde para el tramo descanso -> final
+                            if (tramo2.isNotEmpty()) {
+                                val sourceDescansoFinal = geoJsonSource("route-source-descanso-final") {
+                                    geometry(LineString.fromLngLats(tramo2))
+                                }
+                                style.addSource(sourceDescansoFinal)
+                                val layerDescansoFinal = lineLayer("route-layer-descanso-final", "route-source-descanso-final") {
+                                    lineColor("#228B22") // Verde
+                                    lineWidth(5.0)
+                                }
+                                style.addLayer(layerDescansoFinal)
+                            }
                         }
                     }
                 }
             } catch (e: Exception) {
-                // Muestra un mensaje de error en caso de fallo
-                Log.e("AgregarRutaActivity", "Error al obtener la ruta: ${e.message}")
+                Log.e("drawRoute", "Error al obtener la ruta: ${e.message}")
             }
         }
     }
+
+
+    // Función para decodificar polyline6 en una lista de puntos
+    private fun decodePolyline(encodedPolyline: String): List<Point> {
+        return PolylineUtils.decode(encodedPolyline, 6).map { Point.fromLngLat(it.longitude(), it.latitude()) }
+    }
+
+
 
     /**
      * Agrega un marcador en el mapa en la ubicación especificada.
@@ -312,32 +323,24 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
     }
 
     fun drawRouteWithCoordinates(mapView: MapView, coordenadas: List<CoordenadasBase>) {
-        // Verifica si hay al menos dos coordenadas para trazar la ruta
-        if (coordenadas.size < 2) {
-            Toast.makeText(mapView.context, "Establezca al menos dos coordenadas para crear la ruta.", Toast.LENGTH_SHORT).show()
+        // Verifica si hay al menos tres coordenadas: inicio, descanso y final
+        if (coordenadas.size < 3) {
+            Toast.makeText(mapView.context, "Asegúrate de establecer los puntos de inicio, descanso y final.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Lista de puntos a utilizar en la ruta
+        // Lista de puntos: inicio, descanso y final
         val points = coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
-
-        // Punto de origen (primer punto) y destino (último punto)
-        val origin = points.first()
-        val destination = points.last()
-
-        // Puntos intermedios entre origen y destino (si los hay)
-        val waypoints = points.subList(1, points.size - 1)
-
-        // Formatea las coordenadas de los puntos intermedios
-        val waypointsCoordinates = waypoints.joinToString(";") { "${it.longitude()},${it.latitude()}" }
+        val startPoint = points.first()
+        val stopoverPoint = points[1]
+        val endPoint = points.last()
 
         // URL de la solicitud a la API de direcciones de Mapbox
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${origin.longitude()},${origin.latitude()};$waypointsCoordinates;${destination.longitude()},${destination.latitude()}?geometries=geojson&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${startPoint.longitude()},${startPoint.latitude()};${stopoverPoint.longitude()},${stopoverPoint.latitude()};${endPoint.longitude()},${endPoint.latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
         // Lanza una coroutine para realizar la solicitud en segundo plano
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                // Abre la conexión HTTP y obtiene la respuesta
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 val inputStream = connection.inputStream
@@ -348,40 +351,49 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                 val routes = jsonResponse.getJSONArray("routes")
 
                 if (routes.length() > 0) {
-                    // Obtiene la primera ruta y sus detalles (geometría y distancia)
                     val route = routes.getJSONObject(0)
-                    val geometry = route.getJSONObject("geometry")
-                    val lineString = LineString.fromJson(geometry.toString())
+                    val geometry = route.getString("geometry") // Obtiene la cadena en formato polyline6
+                    val decodedPoints = decodePolyline(geometry) // Decodifica la polyline6 en coordenadas
+                    val distance = route.getDouble("distance") / 1000.0
+
+                    // Divide los puntos en tramos: inicio -> descanso y descanso -> final
+                    val tramo1 = decodedPoints.takeWhile { it.latitude() <= stopoverPoint.latitude() }
+                    val tramo2 = decodedPoints.dropWhile { it.latitude() <= stopoverPoint.latitude() }
 
                     withContext(Dispatchers.Main) {
-                        // Crea y agrega la fuente para la ruta en el mapa
-                        val routeSource = geoJsonSource("route-source") {
-                            geometry(lineString)
-                        }
+
                         mapView.getMapboxMap().getStyle { style ->
-                            style.addSource(routeSource)
-
-                            // Crea y agrega la capa de la ruta en el mapa
-                            val routeLayer = lineLayer("route-layer", "route-source") {
-                                lineWidth(5.0)  // Grosor de la línea de la ruta // Color de la línea de la ruta
-                            }
-                            style.addLayer(routeLayer)
-
-                            // Agrega marcadores en el punto de inicio y destino
-                            addMarker(origin, "start-marker", "start_icon", mapView)
-                            addMarker(destination, "end-marker", "end_icon", mapView)
-                            waypoints.forEachIndexed { index, point ->
-                                addMarker(point, "waypoint-marker-$index", "stopover_icon", mapView)
+                            // Agrega una capa roja para el tramo inicio -> descanso
+                            if (tramo1.isNotEmpty()) {
+                                val sourceInicioDescanso = geoJsonSource("route-source-inicio-descanso") {
+                                    geometry(LineString.fromLngLats(tramo1))
+                                }
+                                style.addSource(sourceInicioDescanso)
+                                val layerInicioDescanso = lineLayer("route-layer-inicio-descanso", "route-source-inicio-descanso") {
+                                    lineColor("#FF0000") // Rojo
+                                    lineWidth(5.0)
+                                }
+                                style.addLayer(layerInicioDescanso)
                             }
 
+                            // Agrega una capa verde para el tramo descanso -> final
+                            if (tramo2.isNotEmpty()) {
+                                val sourceDescansoFinal = geoJsonSource("route-source-descanso-final") {
+                                    geometry(LineString.fromLngLats(tramo2))
+                                }
+                                style.addSource(sourceDescansoFinal)
+                                val layerDescansoFinal = lineLayer("route-layer-descanso-final", "route-source-descanso-final") {
+                                    lineColor("#228B22") // Verde
+                                    lineWidth(5.0)
+                                }
+                                style.addLayer(layerDescansoFinal)
+                            }
                         }
                     }
                 }
             } catch (e: Exception) {
-                // Muestra un mensaje de error en caso de fallo
-                Log.e("ModificarRutaActivity", "Error al obtener la ruta: ${e.message}")
+                Log.e("drawRouteCoordinates", "Error al obtener la ruta: ${e.message}")
             }
         }
     }
-
 }

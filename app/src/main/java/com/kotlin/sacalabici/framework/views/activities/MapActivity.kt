@@ -82,13 +82,13 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
     private fun initializeMap() {
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
             // Define las coordenadas para Querétaro
-            val queretaroCoordinates = Point.fromLngLat(-100.3899, 20.5888)
+            val queretaroCoordinates = Point.fromLngLat(-100.4091, 20.5925)
 
             // Mueve la cámara a Querétaro
             mapView.mapboxMap.setCamera(
                 CameraOptions.Builder()
                     .center(queretaroCoordinates)
-                    .zoom(12.0)
+                    .zoom(15.0)
                     .build()
             )
         }

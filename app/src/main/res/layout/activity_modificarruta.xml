@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/tools"
     android:fillViewport="true"
     android:background="#FFFFFF">
 
@@ -115,12 +115,29 @@
             android:backgroundTint="#F6CD0B"
             android:background="?android:attr/selectableItemBackground" />
 
-        <!-- MapView -->
-        <com.mapbox.maps.MapView
-            android:id="@+id/mapView"
+        <!-- FrameLayout para superponer el botón sobre el MapView -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp" />
+            android:layout_height="400dp">
 
+            <!-- MapView -->
+            <com.mapbox.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- Botón Eliminar en la esquina superior derecha -->
+            <ImageButton
+                android:id="@+id/btnEliminarRuta"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/erase_icon"
+                android:background="@android:color/transparent"
+                android:layout_gravity="top|end"
+                android:layout_margin="8dp" />
+        </FrameLayout>
+
+        <!-- Otros botones -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -151,15 +168,8 @@
                 android:text="Modificar Ruta"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/btnEliminarRuta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Eliminar Ruta"
-                android:layout_margin="16dp"
-                android:layout_gravity="top" />
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
 

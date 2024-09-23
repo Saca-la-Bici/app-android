@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -43,7 +44,7 @@ class ModificarRutaActivity : AppCompatActivity() {
     private lateinit var mapViewForm: MapView
     private lateinit var etDistancia: EditText
     private lateinit var tvNivel: TextView
-    private lateinit var btnEliminarRuta: Button
+    private lateinit var btnEliminarRuta: ImageButton
 
     // Puntos de la ruta (inicio, descanso, final)
     private var startPoint: Point? = null

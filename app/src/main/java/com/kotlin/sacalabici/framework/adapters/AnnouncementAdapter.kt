@@ -1,4 +1,3 @@
-// AnnouncementAdapter.kt
 package com.kotlin.sacalabici.framework.adapters
 
 import android.content.Context
@@ -10,7 +9,8 @@ import com.kotlin.sacalabici.databinding.ItemAnnouncementBinding
 import com.kotlin.sacalabici.framework.adapters.viewhoiders.AnnouncementViewHolder
 
 class AnnouncementAdapter(
-    private val longClickListener: (AnnouncementBase) -> Boolean
+    private val longClickListener: (AnnouncementBase) -> Boolean,
+    private val clickListener: (AnnouncementBase) -> Unit
 ) : RecyclerView.Adapter<AnnouncementViewHolder>() {
     var data: ArrayList<AnnouncementBase> = ArrayList()
     lateinit var context: Context
@@ -23,6 +23,12 @@ class AnnouncementAdapter(
     override fun onBindViewHolder(holder: AnnouncementViewHolder, position: Int) {
         val item = data[position]
         holder.bind(item, context)
+        holder.itemView.setOnClickListener {
+            clickListener(item)
+        }
+        holder.itemView.setOnLongClickListener {
+            longClickListener(item)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnnouncementViewHolder {

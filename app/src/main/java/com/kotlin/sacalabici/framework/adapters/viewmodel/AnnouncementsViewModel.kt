@@ -23,20 +23,29 @@ class AnnouncementsViewModel: ViewModel() {
     private val deleteAnnouncementRequirement = DeleteAnnouncementRequirement()
     private val putAnnouncementRequirement = PutAnnouncementRequirement()
 
-    fun getAnnouncementList(){
+    // Fetch announcements asynchronously
+    fun getAnnouncementList() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result: List<AnnouncementBase> = announcementListRequirement()
-            val reversedResult = result.reversed()
-            CoroutineScope(Dispatchers.Main).launch {
+            try {
+                // Fetch announcements from the API (or any source)
+                val result: List<AnnouncementBase> = announcementListRequirement()
+                // Reverse the result list as needed
+                val reversedResult = result.reversed()
+                // Post the result to the LiveData, no need to switch to Main explicitly
                 announcementObjectLiveData.postValue(reversedResult)
+            } catch (e: Exception) {
+                Log.e("AnnouncementsViewModel", "Error fetching announcements", e)
+                // Handle error, e.g., post an empty list or an error state
+                announcementObjectLiveData.postValue(emptyList())
             }
         }
     }
 
-    fun deleteAnnouncement(id: String){
+    // Delete announcement
+    fun deleteAnnouncement(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = deleteAnnouncementRequirement(id)
-            if (result){
+            if (result) {
                 Log.d("delete", "Announcement deleted")
             } else {
                 Log.d("delete", "Announcement not deleted")
@@ -44,8 +53,9 @@ class AnnouncementsViewModel: ViewModel() {
         }
     }
 
-    fun postAnnouncement(announcement: Announcement){
-        viewModelScope.launch {
+    // Post a new announcement
+    fun postAnnouncement(announcement: Announcement) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 Log.d("AnnouncementsViewModel", "Posting announcement: $announcement")
                 postAnnouncementRequirement(announcement)
@@ -56,16 +66,16 @@ class AnnouncementsViewModel: ViewModel() {
         }
     }
 
-    fun putAnnouncement(id: String, annnouncement: Announcement) {
-        viewModelScope.launch {
+    // Update an existing announcement
+    fun putAnnouncement(id: String, announcement: Announcement) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("AnnouncementsViewModel", "Putting announcement: $annnouncement")
-                putAnnouncementRequirement(id, annnouncement)
-                Log.d("AnnouncementsViewModel", "Announcement put successfully")
+                Log.d("AnnouncementsViewModel", "Putting announcement: $announcement")
+                putAnnouncementRequirement(id, announcement)
+                Log.d("AnnouncementsViewModel", "Announcement updated successfully")
             } catch (e: Exception) {
-                Log.e("AnnouncementsViewModel", "Error putting announcement", e)
+                Log.e("AnnouncementsViewModel", "Error updating announcement", e)
             }
         }
-
     }
 }

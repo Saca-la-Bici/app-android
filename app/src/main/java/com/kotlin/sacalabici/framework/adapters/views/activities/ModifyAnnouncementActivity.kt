@@ -52,8 +52,8 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
             val title = binding.etModifyAnnouncementTitle.text.toString()
             val description = binding.etModifyAnnouncementDescription.text.toString()
             val image = emptystring.takeIf { it.isNotEmpty() }
-            val annnouncement = Announcement(idUser, title, description, image)
-            viewModel.putAnnouncement(id, annnouncement)
+            val announcement = Announcement(idUser, title, description, image)
+            viewModel.putAnnouncement(id, announcement)
             setResult(Activity.RESULT_OK)
             finish()
         }

@@ -11,6 +11,7 @@ package com.kotlin.sacalabici.framework.views.activities
  * Changes:
  */
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -165,8 +166,9 @@ class ModificarRutaActivity : AppCompatActivity() {
                         startPoint!!, stopoverPoint!!, endPoint!!
                     )
                     if (result) {
+                        val intent = Intent(this@ModificarRutaActivity, MapActivity::class.java)
                         Toast.makeText(this@ModificarRutaActivity, "Ruta modificada exitosamente.", Toast.LENGTH_SHORT).show()
-                        finish()
+                        startActivity(intent)
                     } else {
                         Toast.makeText(this@ModificarRutaActivity, "Error al modificar la ruta.", Toast.LENGTH_SHORT).show()
                     }

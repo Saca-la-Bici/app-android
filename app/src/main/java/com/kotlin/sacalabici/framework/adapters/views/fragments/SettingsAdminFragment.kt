@@ -28,6 +28,14 @@ class SettingsAdminFragment : Fragment() {
                 .commit()
         }
 
+        binding.BBack.setOnClickListener {
+            val profileFragment = ProfileFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, profileFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         return binding.root
     }
 

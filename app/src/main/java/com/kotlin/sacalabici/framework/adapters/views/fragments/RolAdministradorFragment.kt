@@ -23,7 +23,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 class RolAdministradorFragment : Fragment() {
 
     private var _binding: FragmentRolAdministradorBinding? = null
@@ -67,25 +66,29 @@ class RolAdministradorFragment : Fragment() {
                 searchJob?.cancel()
                 if (query != null) {
                     viewModel.searchUser(query)
-                } // Or appropriate ViewModel function
+                }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 searchJob?.cancel()
                 searchJob = coroutineScope.launch {
-                    delay(500) // Delay of 500 milliseconds (adjust as needed)
+                    delay(500)
                     if (newText != null) {
                         viewModel.searchUser(newText)
-                    } // Or appropriate ViewModel function
+                    }
                 }
                 return true
             }
         })
 
-        // Configurar el botón regreso
+        // Reemplazo explícito del fragmento con SettingsAdminFragment
         binding.btnBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            val settingsAdminFragment = SettingsAdminFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         return binding.root

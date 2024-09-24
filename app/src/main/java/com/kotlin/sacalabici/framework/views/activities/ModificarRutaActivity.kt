@@ -45,6 +45,7 @@ class ModificarRutaActivity : AppCompatActivity() {
     private lateinit var etDistancia: EditText
     private lateinit var tvNivel: TextView
     private lateinit var btnEliminarRuta: ImageButton
+    private lateinit var btnEnviar: Button
 
     // Puntos de la ruta (inicio, descanso, final)
     private var startPoint: Point? = null
@@ -55,6 +56,8 @@ class ModificarRutaActivity : AppCompatActivity() {
     private var nivelSeleccionado: String? = null
     private val niveles = arrayOf("Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5") // Opciones de nivel
 
+    private lateinit var etTitulo: EditText
+    private lateinit var etTiempo: EditText
     private lateinit var etID: String
     /**
      * Se ejecuta al crear la actividad. Inicializa los elementos de UI, el mapa y la lógica de validación de inputs.
@@ -68,14 +71,14 @@ class ModificarRutaActivity : AppCompatActivity() {
         etDistancia = findViewById(R.id.etDistancia)
         tvNivel = findViewById(R.id.tvNivel) // Inicializa el TextView del nivel
         btnEliminarRuta = findViewById(R.id.btnEliminarRuta) // Usa la variable de clase
+        btnEnviar = findViewById(R.id.btnEnviar)
 
         // Inicializa la clase MapHelper para manejar el mapa y los puntos de ruta
         var mapHelper = MapHelper(this)
 
         // Inicialización de otros elementos de UI (título, tiempo y botón de enviar)
-        val etTitulo = findViewById<EditText>(R.id.etTitulo)
-        val etTiempo = findViewById<EditText>(R.id.etTiempo)
-        val btnEnviar: Button = findViewById(R.id.btnEnviar)
+        etTitulo = findViewById(R.id.etTitulo)
+        etTiempo = findViewById(R.id.etTiempo)
 
         val extras = intent.extras
         if (extras != null) {
@@ -98,7 +101,15 @@ class ModificarRutaActivity : AppCompatActivity() {
                 val coordenadasType = object : TypeToken<ArrayList<CoordenadasBase>>() {}.type
                 val coordenadas: ArrayList<CoordenadasBase> = Gson().fromJson(coordenadasJson, coordenadasType)
                 mapHelper.drawRouteWithCoordinates(mapViewForm,coordenadas)
+
+                if (coordenadas.size >= 3) {
+                    startPoint = Point.fromLngLat(coordenadas[0].longitud, coordenadas[0].latitud)
+                    stopoverPoint = Point.fromLngLat(coordenadas[1].longitud, coordenadas[1].latitud)
+                    endPoint = Point.fromLngLat(coordenadas[2].longitud, coordenadas[2].latitud)
+                }
             }
+
+            verifyInputs()
         }
 
 
@@ -106,16 +117,8 @@ class ModificarRutaActivity : AppCompatActivity() {
         btnEliminarRuta.setOnClickListener {
 
             mapHelper.clearPreviousRoutes()
-
-            // Restablece los campos de entrada de texto
-            val etInicio = findViewById<EditText>(R.id.etInicio)
-            val etDescanso = findViewById<EditText>(R.id.etDescanso)
-            val etFin = findViewById<EditText>(R.id.etFin)
-
             etTiempo.text.clear()
             etDistancia.text.clear()
-
-            // Restablece el TextView para el nivel
             tvNivel.text = "" // Esto limpia el nivel seleccionado
 
             // Inicializa la clase MapHelper para manejar el mapa y los puntos de ruta
@@ -130,10 +133,6 @@ class ModificarRutaActivity : AppCompatActivity() {
             Toast.makeText(this, "Ruta eliminada. Por favor, selecciona una nueva ruta.", Toast.LENGTH_SHORT).show()
         }
 
-
-        // El botón de enviar está inicialmente deshabilitado hasta que se validen los inputs
-        btnEnviar.isEnabled = true
-
         // Crea un validador de entradas para activar el botón de enviar si los campos están completos
         val inputValidator = InputValidator { verifyInputs() }
 
@@ -146,6 +145,8 @@ class ModificarRutaActivity : AppCompatActivity() {
         tvNivel.setOnClickListener {
             showlevelDialogue()  // Abre el diálogo de selección de nivel
         }
+
+        verifyInputs()
 
         // Lógica del botón de enviar cuando se hace clic
         btnEnviar.setOnClickListener {

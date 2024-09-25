@@ -23,8 +23,6 @@ class ActionButtonDialogFragment : DialogFragment() {
 
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var announcement: AnnouncementBase
-    private lateinit var firebaseTokenManager: FirebaseTokenManager
-    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

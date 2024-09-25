@@ -65,7 +65,7 @@ dependencies {
     implementation(libs.maps.android)
     implementation(libs.maps.compose)
 
-   //Fragment
+    //Fragment
     implementation(libs.androidx.fragment.ktx)
     //Data Binding
     implementation(libs.androidx.databinding.runtime)

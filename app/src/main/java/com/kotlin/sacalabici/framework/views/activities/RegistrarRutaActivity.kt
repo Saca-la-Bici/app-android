@@ -24,9 +24,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.network.RouteService
+import com.kotlin.sacalabici.framework.services.RutasService
 import com.kotlin.sacalabici.helpers.MapHelper
 import com.kotlin.sacalabici.utils.InputValidator
 import com.mapbox.geojson.LineString
@@ -123,7 +122,7 @@ class RegistrarRutaActivity : AppCompatActivity() {
 
             if (startPoint != null && stopoverPoint != null && endPoint != null) {
                 lifecycleScope.launch {
-                    val routeService = RouteService
+                    val routeService = RutasService
                     val result = routeService.sendRoute(
                         titulo, distancia, tiempo, nivel,
                         startPoint!!, stopoverPoint!!, endPoint!!
@@ -140,19 +139,6 @@ class RegistrarRutaActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun updateStartPoint(point: Point) {
-        startPoint = point
-    }
-
-    private fun updateStopoverPoint(point: Point) {
-        stopoverPoint = point
-    }
-
-    private fun updateEndPoint(point: Point) {
-        endPoint = point
-    }
-
 
     /**
      * Verifica si los campos de entrada (título, distancia, tiempo) están completos, si se ha seleccionado

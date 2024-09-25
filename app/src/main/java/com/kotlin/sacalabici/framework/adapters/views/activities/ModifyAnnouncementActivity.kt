@@ -10,7 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.network.model.announcement.Announcement
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityModifyAnnouncementBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 
@@ -48,11 +48,10 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
         binding.ibCheck.setOnClickListener {
             val emptystring = ""
             val id = intent.getStringExtra("id") ?: emptystring
-            val idUser = 1
             val title = binding.etModifyAnnouncementTitle.text.toString()
             val description = binding.etModifyAnnouncementDescription.text.toString()
             val image = emptystring.takeIf { it.isNotEmpty() }
-            val announcement = Announcement(idUser, title, description, image)
+            val announcement = Announcement(title, description, image)
             viewModel.putAnnouncement(id, announcement)
             setResult(Activity.RESULT_OK)
             finish()

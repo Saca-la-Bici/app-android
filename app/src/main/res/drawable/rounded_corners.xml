@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Shadow Layer -->
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#17000000" />  <!-- Semi-transparent shadow color -->
-            <corners android:radius="36dp" />
-        </shape>
-    </item>
-
-    <!-- Shape Layer -->
-    <item android:top="4dp">  <!-- Offset to create shadow -->
+    <item android:top="4dp"> <!-- Offset to create shadow -->
         <shape android:shape="rectangle">
             <solid android:color="#FFFFFF" />
-            <corners android:radius="36dp" />
+            <corners android:topLeftRadius="36dp" android:topRightRadius="36dp" />
         </shape>
     </item>
 </layer-list>

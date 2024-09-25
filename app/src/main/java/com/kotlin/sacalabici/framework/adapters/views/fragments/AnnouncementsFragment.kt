@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +18,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.FirebaseTokenManager
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
 import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 import com.kotlin.sacalabici.framework.adapters.views.activities.AddAnnouncementActivity
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.delay
 import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -67,7 +72,6 @@ class AnnouncementsFragment: Fragment() {
             }
         }
         initializeObservers()
-
         setupClickListeners()
         fetchAnnouncementsWithDelay()
 

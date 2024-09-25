@@ -1,14 +1,14 @@
-package com.kotlin.sacalabici.data.network
+package com.kotlin.sacalabici.data.network.announcements
 
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
-import com.kotlin.sacalabici.data.network.model.announcement.Announcement
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.POST
-import retrofit2.http.PUT
 
 interface AnnouncementApiService {
     @GET("anuncios/consultar")
@@ -22,7 +22,7 @@ interface AnnouncementApiService {
     @POST("anuncios/registrar")
     suspend fun postAnnouncement(@Body announcement: Announcement): Announcement
 
-    @PUT("anuncios/modificar/{id}")
+    @PATCH("anuncios/modificar/{id}")
     suspend fun  putAnnouncement(
         @Path("id") id: String,
         @Body announcement: Announcement): Announcement

@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.ItemAnnouncementBinding
 import com.kotlin.sacalabici.framework.adapters.viewhoiders.AnnouncementViewHolder
 

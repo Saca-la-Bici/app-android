@@ -25,10 +25,10 @@ class SettingsAdminFragment : Fragment() {
         _binding = FragmentSettingsAdminBinding.inflate(inflater, container, false)
 
         binding.btnRoles.setOnClickListener {
-            val modifyRolesFragment = ModifyRolesFragment()
+            val rolAdministradorFragment = RolAdministradorFragment()
             // Reemplazar el fragmento actual por SettingsFragment
             parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, modifyRolesFragment) // Asegúrate de que este ID coincida con el contenedor de fragmentos en tu layout
+                .replace(R.id.nav_host_fragment_content_main, rolAdministradorFragment) // Asegúrate de que este ID coincida con el contenedor de fragmentos en tu layout
                 .addToBackStack(null) // Para permitir volver al fragmento anterior
                 .commit()
         }

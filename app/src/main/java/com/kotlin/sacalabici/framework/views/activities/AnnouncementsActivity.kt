@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.views.activities
 
 import android.content.Intent
 import android.graphics.Color
@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.databinding.ActivityAnnouncementsBinding
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 
-class ActivitiesActivity: BaseActivity() {
-    private lateinit var binding: AcivityActivitiesBinding
+class AnnouncementsActivity: BaseActivity() {
+    private lateinit var binding: ActivityAnnouncementsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +22,7 @@ class ActivitiesActivity: BaseActivity() {
     }
 
     private fun initializeBinding(){
-        binding = AcivityActivitiesBinding.inflate(layoutInflater)
+        binding = ActivityAnnouncementsBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 }

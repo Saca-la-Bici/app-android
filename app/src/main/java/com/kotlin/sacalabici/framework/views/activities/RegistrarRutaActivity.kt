@@ -10,7 +10,7 @@
  */
 
 
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.views.activities
 
 import android.graphics.BitmapFactory
 import android.os.Bundle

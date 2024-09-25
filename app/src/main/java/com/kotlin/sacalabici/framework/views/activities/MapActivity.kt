@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.views.activities
 
 import android.content.Intent
 import android.graphics.Color
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView

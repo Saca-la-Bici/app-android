@@ -24,8 +24,6 @@ import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 import com.kotlin.sacalabici.framework.adapters.views.activities.AddAnnouncementActivity
 import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -71,7 +69,6 @@ class AnnouncementsFragment: Fragment() {
         initializeObservers()
 
         setupClickListeners()
-        // Fetch announcement list initially with delay
         fetchAnnouncementsWithDelay()
 
         addAnnouncementLauncher = registerForActivityResult(
@@ -149,10 +146,8 @@ class AnnouncementsFragment: Fragment() {
 
     private fun fetchAnnouncementsWithDelay() {
         lifecycleScope.launch(Dispatchers.Main) {
-            // Show progress bar while data is being fetched
             progressBar.visibility = View.VISIBLE
-            // Introduce a delay before fetching data (simulating API delay)
-            delay(50) // 2 seconds delay
+            delay(50)
             viewModel.getAnnouncementList()
         }
     }

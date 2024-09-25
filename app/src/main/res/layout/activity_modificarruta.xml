@@ -103,17 +103,17 @@
         <!-- Nivel -->
         <TextView
             android:id="@+id/tvNivel"
-            android:layout_width="match_parent"
+            android:layout_width="253dp"
             android:layout_height="wrap_content"
-            android:hint="Selecciona el nivel"
-            android:textColorHint="#000000"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif"
-            android:padding="12dp"
             android:layout_marginBottom="10dp"
+            android:background="?android:attr/selectableItemBackground"
             android:backgroundTint="#F6CD0B"
-            android:background="?android:attr/selectableItemBackground" />
+            android:fontFamily="sans-serif"
+            android:hint="Selecciona el nivel"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#000000"
+            android:textSize="16sp" />
 
         <!-- FrameLayout para superponer el botón sobre el MapView -->
         <FrameLayout
@@ -129,12 +129,13 @@
             <!-- Botón Eliminar en la esquina superior derecha -->
             <ImageButton
                 android:id="@+id/btnEliminarRuta"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/erase_icon"
                 android:background="@android:color/transparent"
-                android:layout_gravity="top|end"
-                android:layout_margin="8dp" />
+                android:layout_gravity="bottom|end"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/white"/>
         </FrameLayout>
 
         <!-- Otros botones -->

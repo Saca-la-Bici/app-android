@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.network.announcements.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
 import com.kotlin.sacalabici.framework.adapters.views.activities.Session.SessionActivity
 import com.kotlin.sacalabici.framework.adapters.views.fragments.ActivitiesFragment
@@ -32,6 +34,8 @@ class MainActivity: AppCompatActivity() {
 
     private lateinit var firebaseAuth: FirebaseAuth
 
+    private lateinit var tokenManager: FirebaseTokenManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,6 +46,8 @@ class MainActivity: AppCompatActivity() {
         moveHighlightToButton(binding.appBarMain.btnActividades)
 
         firebaseAuth = FirebaseAuth.getInstance()
+        tokenManager = FirebaseTokenManager(firebaseAuth)
+        tokenManager.getIdToken()
 
         FacebookSdk.sdkInitialize(applicationContext)
 

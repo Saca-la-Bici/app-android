@@ -13,14 +13,18 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.network.announcements.FirebaseTokenManager
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 
 class ActionButtonDialogFragment : DialogFragment() {
 
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var announcement: AnnouncementBase
+    private lateinit var firebaseTokenManager: FirebaseTokenManager
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -9,7 +9,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.kotlin.sacalabici.data.network.model.announcement.Announcement
+import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.data.network.announcements.FirebaseTokenManager
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityRegisterannouncementBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 import com.kotlin.sacalabici.utils.Constants
@@ -21,7 +23,6 @@ class AddAnnouncementActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initializeBinding()
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
         initializeListeners()

@@ -1,11 +1,15 @@
 package com.kotlin.sacalabici.data.repositories
 
-import com.kotlin.sacalabici.data.network.AnnouncementApiClient
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
-import com.kotlin.sacalabici.data.network.model.announcement.Announcement
+import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.data.network.announcements.AnnouncementApiClient
+import com.kotlin.sacalabici.data.network.announcements.FirebaseTokenManager
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 
 class AnnouncementRepository() {
-    private val apiAnnouncement = AnnouncementApiClient()
+    val firebaseAuth = FirebaseAuth.getInstance()
+    val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
+    private val apiAnnouncement = AnnouncementApiClient(firebaseTokenManager)
 
     suspend fun getAnnouncementList(): List<AnnouncementBase> = apiAnnouncement.getAnnouncementList()
 

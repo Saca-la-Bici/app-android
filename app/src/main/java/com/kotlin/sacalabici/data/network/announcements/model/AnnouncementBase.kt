@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.data.network.model
+package com.kotlin.sacalabici.data.network.announcements.model
 import com.google.gson.annotations.SerializedName
 
 data class AnnouncementBase (

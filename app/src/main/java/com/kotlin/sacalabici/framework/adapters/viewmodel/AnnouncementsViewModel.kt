@@ -4,13 +4,13 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.domain.AnnouncementListRequirement
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.network.model.announcement.Announcement
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.domain.DeleteAnnouncementRequirement
 import com.kotlin.sacalabici.domain.PostAnnouncementRequirement
 import kotlinx.coroutines.launch

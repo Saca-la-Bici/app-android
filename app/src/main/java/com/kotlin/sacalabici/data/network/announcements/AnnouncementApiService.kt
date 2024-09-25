@@ -1,7 +1,7 @@
-package com.kotlin.sacalabici.data.network
+package com.kotlin.sacalabici.data.network.announcements
 
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
-import com.kotlin.sacalabici.data.network.model.announcement.Announcement
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.Body

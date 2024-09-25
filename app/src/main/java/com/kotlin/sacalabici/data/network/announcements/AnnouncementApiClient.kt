@@ -1,13 +1,17 @@
-package com.kotlin.sacalabici.data.network
+package com.kotlin.sacalabici.data.network.announcements
 
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
-import com.kotlin.sacalabici.data.network.model.announcement.Announcement
+import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 
-class AnnouncementApiClient {
+class AnnouncementApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
     private lateinit var api: AnnouncementApiService
 
     suspend fun getAnnouncementList(): List<AnnouncementBase>{
-        api = AnnouncementNetworkModuleDI()
+        val token = firebaseTokenManager.returnToken()
+        Log.d("token", "Token: $token")
+        api = AnnouncementNetworkModuleDI(token)
         return try{
             api.getAnnouncementList()
         }catch (e:java.lang.Exception){
@@ -17,7 +21,8 @@ class AnnouncementApiClient {
     }
 
     suspend fun deleteAnnouncement(id: String): Boolean {
-        api = AnnouncementNetworkModuleDI()
+        val token = firebaseTokenManager.returnToken()
+        api = AnnouncementNetworkModuleDI(token)
         return try{
             api.deleteAnnouncement(id).isSuccessful
         }catch (e:java.lang.Exception){
@@ -27,7 +32,8 @@ class AnnouncementApiClient {
     }
 
     suspend fun postAnnouncement(announcement: Announcement): Announcement? {
-        api = AnnouncementNetworkModuleDI()
+        val token = firebaseTokenManager.returnToken()
+        api = AnnouncementNetworkModuleDI(token)
         return try{
             api.postAnnouncement(announcement)
         }catch (e:java.lang.Exception){

@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.views.activities
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -71,6 +72,7 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         btnDetails.setOnClickListener {
             toggleRutasList()
         }
+
     }
 
     private fun initializeBinding(){

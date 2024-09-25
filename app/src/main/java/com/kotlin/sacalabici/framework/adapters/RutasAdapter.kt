@@ -1,11 +1,14 @@
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.RutasBase
+import com.kotlin.sacalabici.framework.views.activities.ModificarRutaActivity
 import kotlinx.coroutines.selects.select
 
 class RutasAdapter(
@@ -22,6 +25,7 @@ class RutasAdapter(
         val nivelTextView: TextView = itemView.findViewById(R.id.TVNivel)
         val divider: View = itemView.findViewById(R.id.LLRutasDivider)
         val rutaContainer: View = itemView.findViewById(R.id.rutaContainer)
+        val btnModificar: View = itemView.findViewById(R.id.btnMod)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RutasViewHolder {
@@ -65,9 +69,27 @@ class RutasAdapter(
             onRutaSelected(ruta)
         }
 
+        // Manejar clic en el botón de modificar
+        holder.btnModificar.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, ModificarRutaActivity::class.java)
+
+            // Agrega datos adicionales al Intent como extras
+            intent.putExtra("ID",ruta.id)
+            intent.putExtra("TITULO", ruta.titulo)
+            intent.putExtra("DISTANCIA", ruta.distancia)
+            intent.putExtra("TIEMPO", ruta.tiempo)
+            intent.putExtra("NIVEL", ruta.nivel)  // Si es necesario
+            val coordenadasJson = Gson().toJson(ruta.coordenadas)
+            intent.putExtra("COORDENADAS", coordenadasJson)
+
+            context.startActivity(intent)
+        }
+
+
+
         // Desactivar línea divisora para el último elemento
         holder.divider.visibility = if (position == rutasList.size - 1) View.GONE else View.VISIBLE
-
     }
 
     override fun getItemCount(): Int {

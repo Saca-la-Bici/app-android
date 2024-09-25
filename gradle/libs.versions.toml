@@ -10,6 +10,7 @@ appcompat = "1.7.0"
 mapsCompose = "11.6.0"
 material = "1.12.0"
 navigationFragment = "2.8.0"
+core = "1.45.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -21,6 +22,7 @@ maps-android = { module = "com.mapbox.maps:android", version.ref = "androidVersi
 maps-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "mapsCompose" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
+core = { group = "com.google.ar", name = "core", version.ref = "core" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

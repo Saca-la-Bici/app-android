@@ -54,10 +54,10 @@ class ProfileFragment: Fragment() {
     private fun setupConfiguracionButton() {
         val btnConfiguration = binding.btnConfiguration
         btnConfiguration.setOnClickListener {
-            val settingsFragment = SettingsFragment()
+            val settingsAdminFragment = SettingsAdminFragment()
             // Reemplazar el fragmento actual por SettingsFragment
             parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, settingsFragment) // Asegúrate de que este ID coincida con el contenedor de fragmentos en tu layout
+                .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment) // Asegúrate de que este ID coincida con el contenedor de fragmentos en tu layout
                 .addToBackStack(null) // Para permitir volver al fragmento anterior
                 .commit()
         }

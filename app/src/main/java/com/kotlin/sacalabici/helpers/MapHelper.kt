@@ -214,15 +214,18 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         // Lanza una coroutine para realizar la solicitud de la ruta
         lifecycleScope.launch(Dispatchers.IO) {
             try {
+                // Abre la conexión HTTP y obtiene la respuesta
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 val inputStream = connection.inputStream
                 val response = inputStream.bufferedReader().use { it.readText() }
 
+                // Procesa la respuesta JSON
                 val jsonResponse = JSONObject(response)
                 val routes = jsonResponse.getJSONArray("routes")
 
                 if (routes.length() > 0) {
+                    // Obtiene la primera ruta y sus detalles (geometría y distancia)
                     val route = routes.getJSONObject(0)
                     val geometry = route.getString("geometry") // Aquí obtenemos la cadena en formato polyline6
                     val decodedPoints = decodePolyline(geometry) // Decodifica la polyline6 en coordenadas
@@ -233,6 +236,7 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                     val tramo2 = decodedPoints.dropWhile { it.latitude() <= stopoverPoint!!.latitude() }
 
                     withContext(Dispatchers.Main) {
+                        // Muestra la distancia en el campo de texto
                         etDistancia.setText(String.format("%.2f km", distance))
 
                         map.getMapboxMap().getStyle { style ->

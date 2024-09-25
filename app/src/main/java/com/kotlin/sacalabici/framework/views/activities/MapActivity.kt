@@ -2,22 +2,28 @@ package com.kotlin.sacalabici.framework.views.activities
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.BuildConfig
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.CoordenadasBase
 import com.kotlin.sacalabici.framework.views.fragments.RutasFragment
 import com.kotlin.sacalabici.data.models.RutasBase
+import com.kotlin.sacalabici.databinding.AcivityActivitiesBinding
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
 import com.kotlin.sacalabici.framework.services.RutasService
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.LineString
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.maps.CameraOptions
@@ -66,13 +72,18 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         setupNavbar()
         initializeMap()
 
-        val btnDetails: ImageButton = findViewById(R.id.btnDetails)
+        val btnAgregarRuta: ImageButton = findViewById(R.id.btnAdd)
+        btnAgregarRuta.setOnClickListener {
+            val intent = Intent(this, RegistrarRutaActivity::class.java)
+            startActivity(intent)
 
-        // Botón para mostrar/ocultar la lista de rutas
-        btnDetails.setOnClickListener {
-            toggleRutasList()
+            val btnDetails: ImageButton = findViewById(R.id.btnDetails)
+            // Botón para mostrar/ocultar la lista de rutas
+            btnDetails.setOnClickListener {
+                toggleRutasList()
+            }
+
         }
-
     }
 
     private fun initializeBinding(){

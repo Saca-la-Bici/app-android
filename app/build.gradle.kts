@@ -65,17 +65,23 @@ dependencies {
     implementation(libs.maps.android)
     implementation(libs.maps.compose)
 
-    //Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
-    //Fragment
-    implementation("androidx.fragment:fragment-ktx:1.5.0")
+   //Fragment
+    implementation(libs.androidx.fragment.ktx)
     //Data Binding
-    implementation("androidx.databinding:databinding-runtime:7.1.2")
+    implementation(libs.androidx.databinding.runtime)
     //Activity
-    implementation("androidx.activity:activity-ktx:1.5.0")
-    //ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
-    //LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    implementation(libs.activity.ktx)
 
+    //Coroutines
+    implementation (libs.kotlinx.coroutines.core)
+    implementation (libs.kotlinx.coroutines.android)
+
+    // ViewModel y LiveData
+    implementation (libs.androidx.activity.ktx)
+    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation (libs.androidx.lifecycle.livedata.ktx)
+
+    //Retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
 }

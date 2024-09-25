@@ -1,12 +1,14 @@
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.databinding.FragmentActivitiesBinding
+import com.kotlin.sacalabici.framework.adapters.views.activities.AddActivityActivity
 
 class ActivitiesFragment: Fragment() {
     private var _binding: FragmentActivitiesBinding? = null
@@ -18,15 +20,14 @@ class ActivitiesFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
+        addActivity()
         return root
     }
 
-    private fun registerActivity() {
+    private fun addActivity() {
         val btnRegister = binding.fabAddActivity
         btnRegister.setOnClickListener {
             showActivityDialogue()
@@ -39,22 +40,32 @@ class ActivitiesFragment: Fragment() {
     * */
     private fun showActivityDialogue() {
         val options = arrayOf("Añadir rodada", "Añadir taller", "Añadir evento")
+        val intent = Intent(requireContext(), AddActivityActivity::class.java)
 
+        // Crear diálogo
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Elige un tipo de actividad")
         builder.setItems(options) { dialog, which ->
             when (which) {
                 0 -> {
-
+                    intent.putExtra("tipo", "Rodada")
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
                 }
                 1 -> {
-
+                    intent.putExtra("tipo", "Taller")
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
                 }
                 2 -> {
-
+                    intent.putExtra("tipo", "Evento")
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
                 }
             }
         }
+
+        builder.show()
     }
 
     override fun onDestroyView() {

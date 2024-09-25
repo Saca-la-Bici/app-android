@@ -67,5 +67,11 @@
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".framework.adapters.views.activities.AddActivityActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>

@@ -113,7 +113,7 @@
             <!-- Botón de fecha -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/BDate"
-                android:text="@string/dateLabel"
+                android:text="@string/activity_dateLabel"
                 app:backgroundTint="@color/white"
                 android:textColor="@color/black"
                 android:textSize="14sp"

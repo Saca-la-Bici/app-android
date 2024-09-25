@@ -76,14 +76,14 @@ class MapActivity : BaseActivity(), RutasFragment.OnRutaSelectedListener {
         btnAgregarRuta.setOnClickListener {
             val intent = Intent(this, RegistrarRutaActivity::class.java)
             startActivity(intent)
-
-            val btnDetails: ImageButton = findViewById(R.id.btnDetails)
-            // Botón para mostrar/ocultar la lista de rutas
-            btnDetails.setOnClickListener {
-                toggleRutasList()
-            }
-
         }
+
+        val btnDetails: ImageButton = findViewById(R.id.btnDetails)
+        // Botón para mostrar/ocultar la lista de rutas
+        btnDetails.setOnClickListener {
+            toggleRutasList()
+        }
+
     }
 
     private fun initializeBinding(){

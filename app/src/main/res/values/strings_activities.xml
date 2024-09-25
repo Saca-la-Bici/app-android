@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_rodada"> Añadir rodada </string>
+    <string name="add_evento"> Añadir evento </string>
+    <string name="add_taller"> Añadir taller </string>
+    <string name="activity_title"> Título </string>
+    <string name="activity_date"> Fecha </string>
+    <string name="activity_hour"> Hora </string>
+    <string name="activity_duration"> Duración </string>
+    <string name="activity_ubi"> Dirección </string>
+    <string name="activity_desc"> Descripción </string>
+    <string name="activity_dateLabel">Año-Mes-Día</string>
+    <string name="activity_ready"> Listo </string>
+
+    <string-array name="hours">
+        <item>00</item>
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+    </string-array>
+
+    <string-array name="minutes">
+        <item>00</item>
+        <item>05</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>55</item>
+    </string-array>
+</resources>

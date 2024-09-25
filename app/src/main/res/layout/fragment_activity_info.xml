@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Botón para regresar -->
+        <ImageButton
+            android:id="@+id/ibClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle"
+            app:layout_constraintHorizontal_bias="0.05" />
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Añadir actividad"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.05"/>
+
+        <!-- Placeholder de img -->
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="80dp"
+            android:background="@null"
+            android:src="@drawable/ic_add_image"
+            android:alpha="0.2"
+            android:scaleType="centerInside"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Input título -->
+        <TextView
+            android:id="@+id/tvAddActivityTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintVertical_bias="0.05" />
+
+        <!-- Cuadro de texto para título -->
+        <EditText
+            android:id="@+id/etAddActivityTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="80dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="28dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="@string/activity_title"
+            android:paddingStart="15dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="12dp"
+            android:textAppearance="@style/HintStyle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddActivityTitle"
+            app:layout_constraintVertical_bias="0.01"
+            android:textSize="16sp" />
+
+        <!-- Encapsulamiento de fecha, hora y duración -->
+        <LinearLayout
+            android:id="@+id/dateTimePickerLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etAddActivityTitle">
+
+            <!--    Título de fecha actividad-->
+            <TextView
+                android:id="@+id/tvAddActivityDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity_date"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
+                app:layout_constraintTop_toBottomOf="@+id/etAddAnnouncementTitle"
+                app:layout_constraintVertical_bias="0.04"
+                android:textSize="15sp"
+                />
+
+
+            <!-- Botón de fecha -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BDate"
+                android:text="@string/dateLabel"
+                app:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:padding="12dp"
+                app:strokeColor="#D9D9D9"
+                app:strokeWidth="1dp"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAddActivityDate"
+                app:layout_constraintWidth_percent="0.83"/>
+
+            <!--    Título de hora actividad-->
+            <TextView
+                android:id="@+id/tvAddActivityHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity_hour"
+                app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
+                app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
+                app:layout_constraintTop_toBottomOf="@+id/BDate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintVertical_bias="0.1"
+                android:textSize="15sp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Hora -->
+            <LinearLayout
+                android:id="@+id/timePicker"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAddActivityHours">
+
+                <Spinner
+                    android:id="@+id/hourSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:entries="@array/hours" />
+
+                <Spinner
+                    android:id="@+id/minutesSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:entries="@array/minutes" />
+
+            </LinearLayout>
+
+            <!--    Título de duración actividad-->
+            <TextView
+                android:id="@+id/tvAddActivityDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity_duration"
+                app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
+                app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
+                app:layout_constraintTop_toBottomOf="@+id/timePicker"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintVertical_bias="0.1"
+                android:textSize="15sp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Duración -->
+            <LinearLayout
+                android:id="@+id/durationPicker"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAddActivityHours">
+
+                <Spinner
+                    android:id="@+id/hourSpinnerDur"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:entries="@array/hours" />
+
+                <Spinner
+                    android:id="@+id/minutesSpinnerDur"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:entries="@array/minutes" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Input Dirección -->
+
+        <!-- Cuadro de texto para dirección -->
+        <TextView
+            android:id="@+id/tvAddActivityUbi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_ubi"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.093"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateTimePickerLayout"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <EditText
+            android:id="@+id/etAddActivityUbi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="80dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="28dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="@string/activity_ubi"
+            android:paddingStart="15dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="12dp"
+            android:textAppearance="@style/HintStyle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddActivityUbi"
+            app:layout_constraintVertical_bias="0.01"
+            android:textSize="16sp" />
+
+        <!-- Input descripción -->
+        <TextView
+            android:id="@+id/tvAddActivityDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_desc"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
+            app:layout_constraintTop_toBottomOf="@+id/etAddActivityUbi"
+            app:layout_constraintVertical_bias="0.06" />
+
+        <EditText
+            android:id="@+id/etAddActivityDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:maxHeight="220dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="28dp"
+            android:hint="@string/activity_desc"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:background="@drawable/edit_text_border"
+            android:textAppearance="@style/HintStyle"
+            android:gravity="top | start"
+            android:inputType="textMultiLine"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddActivityDescription"
+            app:layout_constraintVertical_bias="0.01"/>
+
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="346dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/yellow"
+            android:text="@string/activity_ready"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etAddActivityDescription"
+            android:visibility="visible"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

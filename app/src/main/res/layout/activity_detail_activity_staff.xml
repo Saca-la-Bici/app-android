@@ -206,13 +206,13 @@
             </Button>
 
             <Button
-                android:id="@+id/btnJoin"
+                android:id="@+id/btnStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@color/yellow"
-                android:text="Unirse"
+                android:text="Iniciar"
                 android:textColor="@color/semiWhite">
             </Button>
         </LinearLayout>

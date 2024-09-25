@@ -13,4 +13,35 @@
     <string name="add_announcement_description">Descripción</string>
     <string name="add_announcement_description_hint">¿Qué quieres compartir?</string>
 
+    <!-- String de Logo -->
+    <string name="CDLogo">Logo de Saca la Bici</string>
+
+    <!-- String de Fecha -->
+    <string name="TContinueWithGoogle">Continuar con Google</string>
+    <string name="TContinueWithFacebook">Continuar con Facebook</string>
+    <string name="TSessionTitle">Explora y disfruta Querétaro</string>
+    <string name="TSessionSubtitle">Es genial tenerte aquí</string>
+    <string name="TSignUp">Crea una cuenta</string>
+    <string name="TLogin">Iniciar sesión</string>
+    <string name="TContinueWIth">O continúa con</string>
+
+    <!-- String de Login -->
+    <string name="TPassword">Contraseña</string>
+    <string name="TLoginTitle">Inicia Sesión</string>
+    <string name="TForgotPassword">¿Olvidaste tu contraseña?</string>
+
+    <!-- String de Register -->
+    <string name="TMakeAccount">Crear cuenta</string>
+    <string name="TEmail">Correo electrónico</string>
+    <string name="TUsername">Nombre de usuario</string>
+    <string name="TBirthday">Fecha de Nacimiento</string>
+    <string name="TPrivacityAdd">Esta información no será pública.</string>
+    <string name="TDate">Año-Mes-Día</string>
+    <string name="TContinue">Continuar</string>
+    <string name="TVerifyPassword">Confirmar contraseña</string>
+    <string name="TFinish">Finalizar</string>
+
+
+    <string name="facebook_app_id">1940390093140800</string>
+    <string name="facebook_client_token">b5daf3a37da479db677c140e79b2268d</string>
 </resources>

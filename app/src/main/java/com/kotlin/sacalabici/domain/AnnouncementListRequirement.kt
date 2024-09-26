@@ -1,6 +1,6 @@
 package com.kotlin.sacalabici.domain
 
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.data.repositories.AnnouncementRepository
 
 class AnnouncementListRequirement {

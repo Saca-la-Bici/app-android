@@ -156,21 +156,21 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameLabel"
+        android:id="@+id/emergencyNumberFrame"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/namePE"
+        app:layout_constraintTop_toBottomOf="@id/bloodFrame"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"
-        android:hint="Nombre de usuario"
+        android:hint="Número de emergencia"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/usernamePEdit"
+            android:id="@+id/emergencyNumberLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="FerxX_123"
+            android:text="442 458 3918"
             android:padding="24dp"
             />
     </com.google.android.material.textfield.TextInputLayout>

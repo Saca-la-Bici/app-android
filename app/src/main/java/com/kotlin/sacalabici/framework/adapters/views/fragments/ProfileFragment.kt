@@ -11,8 +11,11 @@ import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
+import com.kotlin.sacalabici.framework.adapters.viewmodel.ProfileViewModel
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
 
 class ProfileFragment : Fragment() {
@@ -20,15 +23,17 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
+    private lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
+
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java) // Inicializa ViewModel
         val root: View = binding.root
-
         initializeFragment(EventFragment())
 
         val btnEventos = binding.btnEventos
@@ -47,15 +52,38 @@ class ProfileFragment : Fragment() {
 
         setupEditButton()
 
+        // Registra el ActivityResultLauncher para el botón de edición
         editProfileLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-                // Aquí podrías manejar la actualización de la información del perfil si es necesario
+                // Actualiza el perfil después de editar
+                viewModel.getProfile("vQhLRvU4wpSyHwsUyRM8VJ9wCEI2")
             }
         }
-
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Observa el LiveData del ViewModel
+        viewModel.profileObjectLiveData.observe(viewLifecycleOwner, Observer { profile ->
+            profile?.let {
+                // Actualiza la interfaz de usuario con los nuevos datos del perfil
+                binding.username.text = profile.user
+                binding.profileName.text = profile.name
+                binding.profileBlood.text = profile.bloodtype
+                binding.textRodadas.text = profile.activitiesCompleted.toString()
+                binding.textKilometros.text = "${profile.KmCompleted}km"
+                profile.printProfileDetails()
+            }
+        })
+
+        // Obtiene el perfil cuando se crea la vista
+
+        viewModel.getProfile("vQhLRvU4wpSyHwsUyRM8VJ9wCEI2")
+
     }
 
     private fun initializeFragment(fragment: Fragment) {

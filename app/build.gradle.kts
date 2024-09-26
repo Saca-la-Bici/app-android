@@ -122,4 +122,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.3.0")) // Latest BOM
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+
+    implementation("com.mapbox.maps:android:10.10.0")
+
 }

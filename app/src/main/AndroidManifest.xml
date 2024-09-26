@@ -97,5 +97,7 @@
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".framework.adapters.views.activities.DetailActivity" />
+
     </application>
 </manifest>

@@ -16,10 +16,13 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ActionButtonDialogFragment : DialogFragment() {
 
@@ -31,7 +34,6 @@ class ActionButtonDialogFragment : DialogFragment() {
         viewModel = ViewModelProvider(this).get(AnnouncementsViewModel::class.java)
         arguments?.let {
             val id = it.getString("id") ?: throw IllegalArgumentException("ID is required")
-            Log.d("mod", id)
             val title = it.getString("title") ?: throw IllegalArgumentException("Title is required")
             val content = it.getString("content") ?: throw IllegalArgumentException("Content is required")
             val url = it.getString("url") // url can be null
@@ -86,14 +88,17 @@ class ActionButtonDialogFragment : DialogFragment() {
             }
 
             dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
+                Log.d("delete", "Mandamos viewmodel ${announcement.id}")
                 viewModel.deleteAnnouncement(announcement.id)
-                alertDialog.dismiss()
-                setFragmentResult("actionButtonDialogResult", Bundle().apply {
-                    putInt("resultCode", RESULT_OK)
-                })
-                dismiss()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(500)
+                    alertDialog.dismiss()
+                    setFragmentResult("actionButtonDialogResult", Bundle().apply {
+                        putInt("resultCode", RESULT_OK)
+                    })
+                    dismiss()
+                }
             }
-
             alertDialog.show()
         }
 

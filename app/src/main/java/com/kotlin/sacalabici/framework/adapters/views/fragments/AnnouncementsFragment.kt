@@ -5,11 +5,9 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -18,26 +16,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.network.announcements.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
 import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
 import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 import com.kotlin.sacalabici.framework.adapters.views.activities.AddAnnouncementActivity
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
 import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AnnouncementsFragment: Fragment() {
     private var _binding: FragmentAnnouncementsBinding? = null
     private lateinit var recyclerView: RecyclerView
-    private lateinit var progressBar: ProgressBar
     private val adapter: AnnouncementAdapter = AnnouncementAdapter(
         longClickListener = { announcement: AnnouncementBase ->
             showDialog(announcement)
@@ -128,29 +121,23 @@ class AnnouncementsFragment: Fragment() {
     private fun initializeObservers() {
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->
             lifecycleScope.launch {
-                // Show progress bar while waiting for data to load
-                progressBar.visibility = View.VISIBLE
-                delay(50) // Delay of 2 seconds
+                delay(50)
                 setUpRecyclerView(ArrayList(announcementList))
                 swipeRefreshLayout.isRefreshing = false
-                progressBar.visibility = View.GONE
             }
         }
     }
 
     private fun initializeComponents(root: View) {
         recyclerView = root.findViewById(R.id.RVAnnouncements)
-        progressBar = root.findViewById(R.id.progressBar)
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
             fetchAnnouncementsWithDelay()
         }
-        progressBar.visibility = View.VISIBLE
     }
 
     private fun fetchAnnouncementsWithDelay() {
         lifecycleScope.launch(Dispatchers.Main) {
-            progressBar.visibility = View.VISIBLE
             delay(50)
             viewModel.getAnnouncementList()
         }

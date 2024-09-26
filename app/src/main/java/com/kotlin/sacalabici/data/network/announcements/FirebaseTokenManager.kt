@@ -25,13 +25,16 @@ class FirebaseTokenManager(private val firebaseAuth: FirebaseAuth) {
     }
 
     suspend fun getTokenSynchronously(): String? {
+        Log.d("delete", "inicio de getToken")
         return suspendCancellableCoroutine { continuation ->
             firebaseAuth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    Log.d("delete", "si funciona el token")
                     val token = task.result?.token
                     _token.value = token
                     continuation.resume(token)
                 } else {
+                    Log.e("token", "Error al obtener el token", task.exception)
                     continuation.resume(null)
                 }
             }

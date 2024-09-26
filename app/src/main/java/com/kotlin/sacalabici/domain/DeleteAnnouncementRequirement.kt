@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.domain
 
+import android.util.Log
 import com.kotlin.sacalabici.data.repositories.AnnouncementRepository
 
 class DeleteAnnouncementRequirement {
@@ -7,7 +8,9 @@ class DeleteAnnouncementRequirement {
 
     suspend operator fun invoke(
         id: String
-    ): Boolean = repository.deleteAnnouncement(id)
-
+    ): Boolean {
+        Log.d("delete", "Estamos en el requirement")
+        return repository.deleteAnnouncement(id)
+    }
 
 }

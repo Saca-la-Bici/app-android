@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,14 +11,14 @@ import kotlinx.coroutines.launch
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.domain.DeleteAnnouncementRequirement
 import com.kotlin.sacalabici.domain.PostAnnouncementRequirement
-import com.kotlin.sacalabici.domain.PutAnnouncementRequirement
+import com.kotlin.sacalabici.domain.PatchAnnouncementRequirement
 
 class AnnouncementsViewModel: ViewModel() {
     val announcementObjectLiveData = MutableLiveData<List<AnnouncementBase>>()
     private val announcementListRequirement = AnnouncementListRequirement()
     private val postAnnouncementRequirement = PostAnnouncementRequirement()
     private val deleteAnnouncementRequirement = DeleteAnnouncementRequirement()
-    private val putAnnouncementRequirement = PutAnnouncementRequirement()
+    private val patchAnnouncementRequirement = PatchAnnouncementRequirement()
 
     fun getAnnouncementList() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -33,7 +34,12 @@ class AnnouncementsViewModel: ViewModel() {
 
     fun deleteAnnouncement(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = deleteAnnouncementRequirement(id)
+            try {
+                Log.d("delete", "Estamos en el viewmodel")
+                deleteAnnouncementRequirement(id)
+            } catch (e: Exception) {
+                throw e
+            }
         }
     }
 
@@ -50,7 +56,7 @@ class AnnouncementsViewModel: ViewModel() {
     fun putAnnouncement(id: String, announcement: Announcement) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                putAnnouncementRequirement(id, announcement)
+                patchAnnouncementRequirement(id, announcement)
             } catch (e: Exception) {
                 throw e
             }

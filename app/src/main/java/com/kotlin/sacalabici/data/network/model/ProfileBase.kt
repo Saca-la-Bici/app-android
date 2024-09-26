@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.data.network.model
 
 import com.google.gson.annotations.SerializedName
+import java.sql.Date
 
 data class ProfileBase(
     @SerializedName("_id") val id: String,
@@ -14,7 +15,8 @@ data class ProfileBase(
     @SerializedName("tiempoRecorrido") val TimeCompleted: Int,
     @SerializedName("rodadasCompletadas") val activitiesCompleted: Int,
     @SerializedName("firebaseUID") val fireUID: String,
-    @SerializedName("_v") val url:Int
+    @SerializedName("fechaRegistro") val date: String,
+    @SerializedName("__v") val url: Int
 )
 {
     fun printProfileDetails() {
@@ -28,6 +30,7 @@ data class ProfileBase(
         println("Time Completed: $TimeCompleted")
         println("Activities Completed: $activitiesCompleted")
         println("Firebase UID: $fireUID")
+        println("Fecha de registro: $date")
         println("URL: $url")
     }
 }

@@ -58,7 +58,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getProfile("WjISQUibNeSLepZ95xkNhdU4kwN2").observe(viewLifecycleOwner) { profile ->
+        viewModel.getProfile("VF7Xd7Bgcdd54dUFzpPajm0QwtI2").observe(viewLifecycleOwner) { profile ->
             if (profile != null) {
                 binding.username.text = profile.user
             }

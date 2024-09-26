@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,21 +23,21 @@ class ProfileViewModel : ViewModel() {
                 if (result != null) {
                     _profileObjectLiveData.postValue(result)
                 } else {
-                    postErrorProfile()
+                    postErrorProfile(result.toString())
                 }
             } catch (e: Exception) {
                 // Manejo de excepciones de red
-                postErrorProfile()
+                postErrorProfile("pilin")
             }
         }
         return profileObjectLiveData
     }
 
-    private fun postErrorProfile() {
+    private fun postErrorProfile(error: String) {
         _profileObjectLiveData.postValue(
             ProfileBase(
                 id = "",
-                user = "Error",
+                user = error,
                 name = "",
                 birthdate = "",
                 bloodtype = "",
@@ -46,6 +47,7 @@ class ProfileViewModel : ViewModel() {
                 activitiesCompleted = 0,
                 fireUID = "",
                 emergencyNumber = "",
+                date = "",
                 url = 0
             )
         )

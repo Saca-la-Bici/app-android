@@ -1,18 +1,27 @@
 package com.kotlin.sacalabici.framework.adapters.views.activities
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.network.model.ActivityModel
+import com.kotlin.sacalabici.data.network.model.Informacion
 import com.kotlin.sacalabici.databinding.ActivityAddactivityBinding
+import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.adapters.views.fragments.AddActivityInfoFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.AddActivityRouteFragment
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AddActivityActivity: AppCompatActivity(),
     AddActivityInfoFragment.OnFragmentInteractionListener
 {
     private lateinit var binding: ActivityAddactivityBinding
+    private lateinit var viewModel: ActivitiesViewModel
     private lateinit var type: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,11 +29,11 @@ class AddActivityActivity: AppCompatActivity(),
         setContentView(R.layout.activity_addactivity)
 
         initializeBinding()
+        viewModel = ViewModelProvider(this).get(ActivitiesViewModel::class.java)
 
         // Guardar el tipo de actividad a crear
         type = intent.getStringExtra("type").toString()
 
-        // Verifica si el fragmento ya está agregado
         if (savedInstanceState == null) {
             // Crea una instancia del fragmento
             val fragment = AddActivityInfoFragment().apply {
@@ -37,11 +46,6 @@ class AddActivityActivity: AppCompatActivity(),
                 .replace(R.id.fragmentAddActivity, fragment)
                 .commit()
         }
-
-        /*
-        * Dependiendo si es Rodada, Taller o Evento será la información que espere
-        * */
-
     }
 
     private fun initializeBinding(){
@@ -50,7 +54,42 @@ class AddActivityActivity: AppCompatActivity(),
     }
 
     /*
-    * Función que se llama desde el AddActivityInfoFragment
+    * Función llamada desde AddActivityInfoFragment
+    * Recibe la información general del primer fragmento
+    * */
+    override fun receiveInformation(
+        title: String,
+        date: String,
+        hour: String,
+        minutes: String,
+        hourDur: String,
+        minutesDur: String,
+        ubi: String,
+        description: String
+    ) {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val dateAct: Date = dateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
+        val hourAct = "$hour:$minutes"
+        val duration = "$hourDur:$minutesDur"
+
+        if (type == "Rodada") {
+            val rodadaInfo = Informacion(title, dateAct, hourAct, ubi, description, duration, "", "Rodada")
+            viewModel.receiveRodadaInfo(rodadaInfo)
+
+        } else if (type == "Taller") {
+            val tallerInfo = Informacion(title, dateAct, hourAct, ubi, description, duration, "", "Taller")
+            val taller = ActivityModel(listOf(tallerInfo))
+            viewModel.postActivityTaller(taller)
+
+        } else if (type == "Evento") {
+            val eventoInfo = Informacion(title, dateAct, hourAct, ubi, description, duration, "", "Evento")
+            val evento = ActivityModel(listOf(eventoInfo))
+            viewModel.postActivityEvento(evento)
+        }
+    }
+
+    /*
+    * Función llamada desde AddActivityInfoFragment
     * Si es rodada, cambia al siguiente fragmento para elegir una ruta
     * */
     override fun onNextClicked(type: String) {
@@ -62,6 +101,8 @@ class AddActivityActivity: AppCompatActivity(),
                 .commit()
         } else {
             Toast.makeText(this, "Actividad completada", Toast.LENGTH_SHORT).show()
+            setResult(Activity.RESULT_OK)
+            finish()
         }
     }
 }

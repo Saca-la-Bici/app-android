@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+
 class AddActivityInfoFragment: Fragment() {
     private var type: String? = null
     private lateinit var listener: OnFragmentInteractionListener
@@ -29,6 +30,14 @@ class AddActivityInfoFragment: Fragment() {
     * */
     interface OnFragmentInteractionListener {
         fun onNextClicked(type: String)
+        fun receiveInformation(title: String,
+                               date: String,
+                               hour: String,
+                               minutes: String,
+                               hourDur: String,
+                               minutesDur: String,
+                               ubi: String,
+                               description: String)
     }
 
     override fun onAttach(context: Context) {
@@ -102,15 +111,14 @@ class AddActivityInfoFragment: Fragment() {
                 val date = binding.BDate.text.toString()
                 val hour = binding.hourSpinner.selectedItem.toString()
                 val minutes = binding.minutesSpinner.selectedItem.toString()
+                val hourDur = binding.hourSpinnerDur.selectedItem.toString()
+                val minutesDur = binding.minutesSpinnerDur.selectedItem.toString()
                 val ubi = binding.etAddActivityUbi.text.toString()
                 val description = binding.etAddActivityDescription.text.toString()
 
                 // Enviar información al ViewModel
-                viewModel.receiveInformation(title, date, hour, minutes, ubi, description)
-
-                if (type == "Rodada") {
-                    listener.onNextClicked("Rodada")
-                }
+                listener.receiveInformation(title, date, hour, minutes, hourDur, minutesDur, ubi, description)
+                listener.onNextClicked(type.toString())
             }
         }
     }
@@ -134,8 +142,15 @@ class AddActivityInfoFragment: Fragment() {
             binding.etAddActivityTitle.error = null
         }
 
-        if (binding.hourSpinner.selectedItemPosition == 0) {
+        if (binding.hourSpinner.selectedItemPosition == 0 &&
+            binding.minutesSpinner.selectedItemPosition == 0) {
             Toast.makeText(requireContext(), "Por favor, selecciona una hora", Toast.LENGTH_SHORT).show()
+            isValid = false
+        }
+
+        if (binding.hourSpinnerDur.selectedItemPosition == 0 &&
+            binding.minutesSpinnerDur.selectedItemPosition == 0) {
+            Toast.makeText(requireContext(), "Por favor, selecciona una duración", Toast.LENGTH_SHORT).show()
             isValid = false
         }
 

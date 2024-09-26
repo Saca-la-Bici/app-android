@@ -1,23 +1,25 @@
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
+import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
-import com.kotlin.sacalabici.framework.adapters.views.activities.SettingsActivity
-import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
 
-class ProfileFragment: Fragment() {
+class ProfileFragment : Fragment() {
+
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,8 +45,15 @@ class ProfileFragment: Fragment() {
             highlightCurrentFragment("Global", btnEventos, btnAsistencia, btnGlobal)
         }
 
-        setupConfiguracionButton()
-        setupEditarButton()
+        setupEditButton()
+
+        editProfileLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                // Aquí podrías manejar la actualización de la información del perfil si es necesario
+            }
+        }
 
         return root
     }
@@ -55,22 +64,15 @@ class ProfileFragment: Fragment() {
             .commit()
     }
 
-    private fun setupConfiguracionButton() {
-        val btnConfiguration = binding.btnConfiguration
-        btnConfiguration.setOnClickListener {
-            val intent = Intent(activity, SettingsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
+    private fun setupEditButton() {
+        binding.btnEditProfile.setOnClickListener {
+            passToEditActivity(requireContext())
         }
     }
 
-    private fun setupEditarButton() {
-        val btnEditProfile = binding.btnEditProfile
-        btnEditProfile.setOnClickListener {
-            val intent = Intent(activity, ProfileEditActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
-        }
+    private fun passToEditActivity(context: Context) {
+        val intent = Intent(context, ProfileEditActivity::class.java)
+        editProfileLauncher.launch(intent)
     }
 
     private fun highlightCurrentFragment(

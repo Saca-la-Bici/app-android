@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name=".framework.adapters.views.activities.AddAnnouncementActivity"
+            android:name=".framework.adapters.views.activities.ProfileEditActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 

@@ -52,38 +52,32 @@ class ProfileFragment : Fragment() {
 
         setupEditButton()
 
-        // Registra el ActivityResultLauncher para el botón de edición
-        editProfileLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                // Actualiza el perfil después de editar
-                viewModel.getProfile("vQhLRvU4wpSyHwsUyRM8VJ9wCEI2")
-            }
-        }
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Observa el LiveData del ViewModel
-        viewModel.profileObjectLiveData.observe(viewLifecycleOwner, Observer { profile ->
-            profile?.let {
-                // Actualiza la interfaz de usuario con los nuevos datos del perfil
+        viewModel.getProfile("WjISQUibNeSLepZ95xkNhdU4kwN2").observe(viewLifecycleOwner) { profile ->
+            if (profile != null) {
                 binding.username.text = profile.user
+            }
+            if (profile != null) {
                 binding.profileName.text = profile.name
+            }
+            if (profile != null) {
                 binding.profileBlood.text = profile.bloodtype
+            }
+            if (profile != null) {
                 binding.textRodadas.text = profile.activitiesCompleted.toString()
+            }
+            if (profile != null) {
                 binding.textKilometros.text = "${profile.KmCompleted}km"
+            }
+            if (profile != null) {
                 profile.printProfileDetails()
             }
-        })
-
-        // Obtiene el perfil cuando se crea la vista
-
-        viewModel.getProfile("vQhLRvU4wpSyHwsUyRM8VJ9wCEI2")
-
+        }
     }
 
     private fun initializeFragment(fragment: Fragment) {

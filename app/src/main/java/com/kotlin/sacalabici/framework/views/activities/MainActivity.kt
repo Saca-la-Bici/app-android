@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.views.activities
 
 import android.content.Intent
 import android.graphics.Color
@@ -18,7 +18,7 @@ import com.kotlin.sacalabici.databinding.ActivityMainBinding
 import com.kotlin.sacalabici.framework.adapters.views.activities.Session.SessionActivity
 import com.kotlin.sacalabici.framework.adapters.views.fragments.ActivitiesFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.AnnouncementsFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.MapFragment
+import com.kotlin.sacalabici.framework.views.fragments.MapFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
 import com.kotlin.sacalabici.utils.Constants
 

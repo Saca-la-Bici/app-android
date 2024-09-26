@@ -18,8 +18,8 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
 import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
-import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
-import com.kotlin.sacalabici.framework.adapters.views.activities.AddAnnouncementActivity
+import com.kotlin.sacalabici.framework.views.activities.AddAnnouncementActivity
+import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
 
 class AnnouncementsFragment: Fragment() {
     private var _binding: FragmentAnnouncementsBinding? = null

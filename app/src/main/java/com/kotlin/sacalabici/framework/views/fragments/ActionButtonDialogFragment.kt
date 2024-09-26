@@ -14,8 +14,8 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
 import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
 
 class ActionButtonDialogFragment : DialogFragment() {
 

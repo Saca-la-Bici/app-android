@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.views.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -11,8 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.data.network.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityRegisterannouncementBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.AnnouncementsViewModel
-import com.kotlin.sacalabici.utils.Constants
+import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
 
 class AddAnnouncementActivity: AppCompatActivity() {
     private lateinit var binding: ActivityRegisterannouncementBinding

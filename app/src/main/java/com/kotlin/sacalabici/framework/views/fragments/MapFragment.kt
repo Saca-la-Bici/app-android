@@ -1,14 +1,14 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.kotlin.sacalabici.databinding.FragmentMapBinding
+import com.kotlin.sacalabici.databinding.ActivityMapBinding
 
 class MapFragment: Fragment() {
-    private var _binding: FragmentMapBinding? = null
+    private var _binding: ActivityMapBinding? = null
 
     private val binding get() = _binding!!
 
@@ -18,7 +18,7 @@ class MapFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentMapBinding.inflate(inflater, container, false)
+        _binding = ActivityMapBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
 

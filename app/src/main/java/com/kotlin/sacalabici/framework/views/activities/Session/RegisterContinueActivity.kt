@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserContinueBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.session.RegisterViewModel
-import com.kotlin.sacalabici.framework.adapters.views.activities.MainActivity
+import com.kotlin.sacalabici.framework.views.activities.MainActivity
 
 class RegisterContinueActivity : AppCompatActivity() {
 

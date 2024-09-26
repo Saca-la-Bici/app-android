@@ -11,7 +11,7 @@ class ActivitiesNetworkModuleDI {
 
     operator fun invoke(): ActivitiesApiService {
         return Retrofit.Builder()
-            .baseUrl(Constants.ACTIVITY_BASE_URL)
+            .baseUrl(Constants.ANNOUNCEMENT_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonFactory)
             .build()

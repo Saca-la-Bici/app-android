@@ -16,6 +16,7 @@ import com.kotlin.sacalabici.framework.adapters.views.fragments.AddActivityRoute
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class AddActivityActivity: AppCompatActivity(),
     AddActivityInfoFragment.OnFragmentInteractionListener
@@ -69,6 +70,7 @@ class AddActivityActivity: AppCompatActivity(),
     ) {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val dateAct: Date = dateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
+
         val hourAct = "$hour:$minutes"
         val duration = "$hourDur:$minutesDur"
 

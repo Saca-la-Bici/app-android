@@ -40,7 +40,6 @@ class ActivitiesFragment: Fragment() {
     * */
     private fun showActivityDialogue() {
         val options = arrayOf("Añadir rodada", "Añadir taller", "Añadir evento")
-        val intent = Intent(requireContext(), AddActivityActivity::class.java)
 
         // Crear diálogo
         val builder = AlertDialog.Builder(requireContext())
@@ -48,17 +47,20 @@ class ActivitiesFragment: Fragment() {
         builder.setItems(options) { dialog, which ->
             when (which) {
                 0 -> {
-                    intent.putExtra("tipo", "Rodada")
+                    val intent = Intent(requireContext(), AddActivityActivity::class.java)
+                    intent.putExtra("type", "Rodada")
                     //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)
                 }
                 1 -> {
-                    intent.putExtra("tipo", "Taller")
+                    val intent = Intent(requireContext(), AddActivityActivity::class.java)
+                    intent.putExtra("type", "Taller")
                     //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)
                 }
                 2 -> {
-                    intent.putExtra("tipo", "Evento")
+                    val intent = Intent(requireContext(), AddActivityActivity::class.java)
+                    intent.putExtra("type", "Evento")
                     //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(intent)
                 }

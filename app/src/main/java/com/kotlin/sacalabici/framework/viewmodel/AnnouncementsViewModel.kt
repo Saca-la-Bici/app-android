@@ -4,52 +4,60 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.domain.AnnouncementListRequirement
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.network.model.announcement.Announcement
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.domain.DeleteAnnouncementRequirement
 import com.kotlin.sacalabici.domain.PostAnnouncementRequirement
-import kotlinx.coroutines.launch
+import com.kotlin.sacalabici.domain.PatchAnnouncementRequirement
 
 class AnnouncementsViewModel: ViewModel() {
     val announcementObjectLiveData = MutableLiveData<List<AnnouncementBase>>()
     private val announcementListRequirement = AnnouncementListRequirement()
     private val postAnnouncementRequirement = PostAnnouncementRequirement()
     private val deleteAnnouncementRequirement = DeleteAnnouncementRequirement()
+    private val patchAnnouncementRequirement = PatchAnnouncementRequirement()
 
-    fun getAnnouncementList(){
+    fun getAnnouncementList() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result: List<AnnouncementBase> = announcementListRequirement()
-            val reversedResult = result.reversed()
-            CoroutineScope(Dispatchers.Main).launch {
-                announcementObjectLiveData.postValue(reversedResult)
-            }
-        }
-    }
-
-    fun deleteAnnouncement(id: String){
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = deleteAnnouncementRequirement(id)
-            if (result){
-                Log.d("delete", "Announcement deleted")
-            } else {
-                Log.d("delete", "Announcement not deleted")
-            }
-        }
-    }
-
-    fun postAnnouncement(announcement: Announcement){
-        viewModelScope.launch {
             try {
-                Log.d("AnnouncementsViewModel", "Posting announcement: $announcement")
-                postAnnouncementRequirement(announcement)
-                Log.d("AnnouncementsViewModel", "Announcement posted successfully")
+                val result: List<AnnouncementBase> = announcementListRequirement()
+                val reversedResult = result.reversed()
+                announcementObjectLiveData.postValue(reversedResult)
             } catch (e: Exception) {
-                Log.e("AnnouncementsViewModel", "Error posting announcement", e)
+                announcementObjectLiveData.postValue(emptyList())
+            }
+        }
+    }
+
+    fun deleteAnnouncement(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                deleteAnnouncementRequirement(id)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    fun postAnnouncement(announcement: Announcement) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                postAnnouncementRequirement(announcement)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    fun putAnnouncement(id: String, announcement: Announcement) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                patchAnnouncementRequirement(id, announcement)
+            } catch (e: Exception) {
+                throw e
             }
         }
     }

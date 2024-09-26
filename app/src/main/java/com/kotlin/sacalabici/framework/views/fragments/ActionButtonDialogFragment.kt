@@ -1,5 +1,7 @@
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,10 +14,15 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.network.model.AnnouncementBase
+import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ActionButtonDialogFragment : DialogFragment() {
 
@@ -82,17 +89,27 @@ class ActionButtonDialogFragment : DialogFragment() {
 
             dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
                 viewModel.deleteAnnouncement(announcement.id)
-                Log.d("click", "Delete confirmed")
-                alertDialog.dismiss()
-                dismiss()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(500)
+                    alertDialog.dismiss()
+                    setFragmentResult("actionButtonDialogResult", Bundle().apply {
+                        putInt("resultCode", RESULT_OK)
+                    })
+                    dismiss()
+                }
             }
-
             alertDialog.show()
         }
 
         tvModify.setOnClickListener {
-            // Handle modify action
-            Log.d("click", "Modify")
+            val intent = Intent(requireContext(), ModifyAnnouncementActivity::class.java).apply {
+                putExtra("id", announcement.id)
+                putExtra("title", announcement.title)
+                putExtra("content", announcement.content)
+                putExtra("url", announcement.url)
+            }
+            startActivity(intent)
+            dismiss()
         }
     }
 

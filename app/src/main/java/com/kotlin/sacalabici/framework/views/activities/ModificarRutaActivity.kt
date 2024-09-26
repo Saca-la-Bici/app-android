@@ -33,6 +33,7 @@ import com.kotlin.sacalabici.helpers.MapHelper
 import com.kotlin.sacalabici.utils.InputValidator
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -52,6 +53,8 @@ class ModificarRutaActivity : AppCompatActivity() {
     private var startPoint: Point? = null
     private var stopoverPoint: Point? = null
     private var endPoint: Point? = null
+    private var referencePoint1: Point? = null
+    private var referencePoint2: Point? = null
 
     // Variable para almacenar el nivel de dificultad seleccionado
     private var nivelSeleccionado: String? = null
@@ -127,7 +130,9 @@ class ModificarRutaActivity : AppCompatActivity() {
                 mapViewForm, etDistancia,
                 onStartPointSet = { point -> startPoint = point },  // Almacena el punto de inicio
                 onStopoverPointSet = { point -> stopoverPoint = point },  // Almacena el punto de descanso
-                onEndPointSet = { point -> endPoint = point }  // Almacena el punto final
+                onEndPointSet = { point -> endPoint = point },
+                onReferencePoint1Set = {point -> referencePoint1 = point},
+                onReferencePoint2Set = {point -> referencePoint2 = point}// Almacena el punto final
             )
 
             // Mostrar un mensaje confirmando que la ruta ha sido eliminada
@@ -158,17 +163,17 @@ class ModificarRutaActivity : AppCompatActivity() {
             val nivel = nivelSeleccionado.toString()
             val id = etID
 
-            if (startPoint != null && stopoverPoint != null && endPoint != null) {
+            if (startPoint != null && stopoverPoint != null && endPoint != null && referencePoint1 != null && referencePoint2 != null) {
                 lifecycleScope.launch {
                     val routeService = RutasService
                     val result = routeService.modifyRoute(id,
                         titulo, distancia, tiempo, nivel,
-                        startPoint!!, stopoverPoint!!, endPoint!!
+                        startPoint!!, stopoverPoint!!, endPoint!!, referencePoint1!!, referencePoint2!!
                     )
                     if (result) {
-                        val intent = Intent(this@ModificarRutaActivity, MapActivity::class.java)
                         Toast.makeText(this@ModificarRutaActivity, "Ruta modificada exitosamente.", Toast.LENGTH_SHORT).show()
-                        startActivity(intent)
+                        delay(2000)
+                        finish()
                     } else {
                         Toast.makeText(this@ModificarRutaActivity, "Error al modificar la ruta.", Toast.LENGTH_SHORT).show()
                     }

@@ -62,14 +62,17 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
 
     // Puntos en el mapa: inicio, parada intermedia y final
     var startPoint: Point? = null
+    var referencePoint1: Point? = null
     var stopoverPoint: Point? = null
+    var referencePoint2: Point? = null
     var endPoint: Point? = null
 
     // Callbacks para los puntos: acciones cuando se establecen los puntos
     private var onStartPointSet: ((Point) -> Unit)? = null
     private var onStopoverPointSet: ((Point) -> Unit)? = null
     private var onEndPointSet: ((Point) -> Unit)? = null
-
+    private var onReferencePoint1Set: ((Point) -> Unit)? = null
+    private var onReferencePoint2Set: ((Point) -> Unit)? = null
 
     /**
      * Inicializa el mapa con los elementos de la vista y los callbacks para los puntos.
@@ -83,13 +86,15 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
      */
 
 
-    fun initializeMap(map: MapView, distancia: EditText, onStartPointSet: (Point) -> Unit, onStopoverPointSet: (Point) -> Unit, onEndPointSet: (Point) -> Unit) {
+    fun initializeMap(map: MapView, distancia: EditText, onStartPointSet: (Point) -> Unit, onStopoverPointSet: (Point) -> Unit, onEndPointSet: (Point) -> Unit, onReferencePoint1Set: (Point) -> Unit, onReferencePoint2Set: (Point) -> Unit) {
         // Asigna las vistas y callbacks proporcionadas
         this.mapView = map
         this.etDistancia = distancia
         this.onStartPointSet = onStartPointSet
         this.onStopoverPointSet = onStopoverPointSet
         this.onEndPointSet = onEndPointSet
+        this.onReferencePoint1Set = onReferencePoint1Set
+        this.onReferencePoint2Set = onReferencePoint2Set
 
         // Carga el estilo de Mapbox y centra el mapa en Querétaro
         map.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
@@ -105,7 +110,7 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
             enableLocationComponent(map)
 
             // Configura los listeners de clicks largos para establecer puntos
-            setupMapLongClickListener(map,distancia,onStartPointSet,onStopoverPointSet,onEndPointSet)
+            setupMapLongClickListener(map,distancia,onStartPointSet,onStopoverPointSet,onEndPointSet,onReferencePoint1Set,onReferencePoint2Set)
         }
     }
 
@@ -135,7 +140,9 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         distancia: EditText,
         onStartPointSet: (Point) -> Unit,
         onStopoverPointSet: (Point) -> Unit,
-        onEndPointSet: (Point) -> Unit
+        onEndPointSet: (Point) -> Unit,
+        onReferencePoint1Set: (Point) -> Unit,
+        onReferencePoint2Set: (Point) -> Unit
     ) {
         // Agrega un listener para detectar clics largos en el mapa
         map.getMapboxMap().addOnMapLongClickListener { point ->
@@ -155,6 +162,13 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                     // Agrega un marcador en el mapa para el punto de inicio
                     addMarker(point, "start-point-symbol", "start_icon", map)
                 }
+                referencePoint1 == null -> {
+
+                    // Establece el punto de inicio
+                    referencePoint1 = point
+                    onReferencePoint1Set(point)  // Llama al callback para el punto de inicio
+                    Toast.makeText(context, "Punto de referencia 1 establecido.", Toast.LENGTH_SHORT).show()
+                }
                 stopoverPoint == null -> {
 
                     // Establece el punto de descanso
@@ -164,6 +178,13 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
 
                     // Agrega un marcador en el mapa para el punto de descanso
                     addMarker(point, "stopover-point-symbol", "stopover_icon", map)
+                }
+                referencePoint2 == null -> {
+
+                    // Establece el punto de inicio
+                    referencePoint2 = point
+                    onReferencePoint2Set(point)  // Llama al callback para el punto de inicio
+                    Toast.makeText(context, "Punto de referencia 2 establecido.", Toast.LENGTH_SHORT).show()
                 }
                 endPoint == null -> {
 
@@ -206,10 +227,10 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         }
 
         // Lista de puntos: inicio, descanso y final
-        val points = listOf(startPoint!!, stopoverPoint!!, endPoint!!)
+        val points = listOf(startPoint!!, referencePoint1!!, stopoverPoint!!, referencePoint2!!, endPoint!!)
 
         // URL de la solicitud para la API de Mapbox
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()};${points[3].longitude()},${points[3].latitude()};${points[4].longitude()},${points[4].latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
         // Lanza una coroutine para realizar la solicitud de la ruta
         lifecycleScope.launch(Dispatchers.IO) {
@@ -354,7 +375,9 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
 
         val points = coordenadas.map { coordenadasToPoint(it) }
         val startPoint = points.first()
-        val stopoverPoint = points[1]
+        val referencePoint1 = points[1]
+        val stopoverPoint = points[2]
+        val referencePoint2 = points[3]
         val endPoint = points.last()
 
         map.getMapboxMap().loadStyleUri("mapbox://styles/mapbox/streets-v11") {
@@ -366,7 +389,13 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
             )
         }
 
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${startPoint.longitude()},${startPoint.latitude()};${stopoverPoint.longitude()},${stopoverPoint.latitude()};${endPoint.longitude()},${endPoint.latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/" +
+                "${startPoint.longitude()},${startPoint.latitude()};" +
+                "${referencePoint1.longitude()},${referencePoint1.latitude()};" +
+                "${stopoverPoint.longitude()},${stopoverPoint.latitude()};" +
+                "${referencePoint2.longitude()},${referencePoint2.latitude()};" +
+                "${endPoint.longitude()},${endPoint.latitude()}?" +
+                "geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {

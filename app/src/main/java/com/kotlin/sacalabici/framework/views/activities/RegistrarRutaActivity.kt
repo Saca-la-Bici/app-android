@@ -65,6 +65,8 @@ class RegistrarRutaActivity : AppCompatActivity() {
     private var startPoint: Point? = null
     private var stopoverPoint: Point? = null
     private var endPoint: Point? = null
+    private var referencePoint1: Point? = null
+    private var referencePoint2: Point? = null
 
     // Variable para almacenar el nivel de dificultad seleccionado
     private var nivelSeleccionado: String? = null
@@ -88,7 +90,9 @@ class RegistrarRutaActivity : AppCompatActivity() {
             mapViewForm, etDistancia,
             onStartPointSet = { point -> startPoint = point },  // Almacena el punto de inicio
             onStopoverPointSet = { point -> stopoverPoint = point },  // Almacena el punto de descanso
-            onEndPointSet = { point -> endPoint = point }  // Almacena el punto final
+            onEndPointSet = { point -> endPoint = point } ,
+            onReferencePoint1Set = {point -> referencePoint1 = point},
+            onReferencePoint2Set = {point -> referencePoint2 = point}// Almacena el punto final
         )
 
         // Inicialización de otros elementos de UI (título, tiempo y botón de enviar)
@@ -120,12 +124,12 @@ class RegistrarRutaActivity : AppCompatActivity() {
             val tiempo = etTiempo.text.toString()
             val nivel = nivelSeleccionado.toString()
 
-            if (startPoint != null && stopoverPoint != null && endPoint != null) {
+            if (startPoint != null && stopoverPoint != null && endPoint != null && referencePoint1 != null && referencePoint2 != null) {
                 lifecycleScope.launch {
                     val routeService = RutasService
                     val result = routeService.sendRoute(
                         titulo, distancia, tiempo, nivel,
-                        startPoint!!, stopoverPoint!!, endPoint!!
+                        startPoint!!, stopoverPoint!!, endPoint!!, referencePoint1!!, referencePoint2!!
                     )
                     if (result) {
                         Toast.makeText(this@RegistrarRutaActivity, "Ruta guardada exitosamente.", Toast.LENGTH_SHORT).show()

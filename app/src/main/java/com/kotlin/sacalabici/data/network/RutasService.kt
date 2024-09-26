@@ -49,6 +49,8 @@ object RutasService {
         start: Point,
         stopover: Point,
         end: Point,
+        reference1: Point,
+        reference2: Point
     ): Boolean = withContext(Dispatchers.IO) {   // Ejecuta la lógica con corrutinas
         try {
             // URL de la solicitud POST para registrar la ruta
@@ -66,9 +68,19 @@ object RutasService {
                     put("tipo", "inicio")
                 })
                 put(JSONObject().apply {
+                    put("latitud", reference1.latitude())
+                    put("longitud", reference1.longitude())
+                    put("tipo", "referencia")
+                })
+                put(JSONObject().apply {
                     put("latitud", stopover.latitude())
                     put("longitud", stopover.longitude())
                     put("tipo", "descanso")
+                })
+                put(JSONObject().apply {
+                    put("latitud", reference2.latitude())
+                    put("longitud", reference2.longitude())
+                    put("tipo", "referencia")
                 })
                 put(JSONObject().apply {
                     put("latitud", end.latitude())
@@ -121,7 +133,9 @@ object RutasService {
         nivel: String,
         start: Point,
         stopover: Point,
-        end: Point
+        end: Point,
+        reference1: Point,
+        reference2: Point
     ): Boolean = withContext(Dispatchers.IO) {   // Ejecuta la lógica con corrutinas
         try {
             // URL de la solicitud POST para registrar la ruta
@@ -139,9 +153,19 @@ object RutasService {
                     put("tipo", "inicio")
                 })
                 put(JSONObject().apply {
+                    put("latitud", reference1.latitude())
+                    put("longitud", reference1.longitude())
+                    put("tipo", "referencia")
+                })
+                put(JSONObject().apply {
                     put("latitud", stopover.latitude())
                     put("longitud", stopover.longitude())
                     put("tipo", "descanso")
+                })
+                put(JSONObject().apply {
+                    put("latitud", reference2.latitude())
+                    put("longitud", reference2.longitude())
+                    put("tipo", "referencia")
                 })
                 put(JSONObject().apply {
                     put("latitud", end.latitude())

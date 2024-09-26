@@ -23,7 +23,7 @@ interface AnnouncementApiService {
     suspend fun postAnnouncement(@Body announcement: Announcement): Announcement
 
     @PATCH("anuncios/modificar/{id}")
-    suspend fun  putAnnouncement(
+    suspend fun  patchAnnouncement(
         @Path("id") id: String,
         @Body announcement: Announcement): Announcement
 }

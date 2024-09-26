@@ -52,11 +52,11 @@ class AnnouncementApiClient(private val firebaseTokenManager: FirebaseTokenManag
         }
     }
 
-    suspend fun putAnnouncement(id: String, announcement: Announcement): Announcement? {
+    suspend fun patchAnnouncement(id: String, announcement: Announcement): Announcement? {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = AnnouncementNetworkModuleDI(token)
         return try {
-            api.putAnnouncement(id, announcement)
+            api.patchAnnouncement(id, announcement)
         } catch (e: Exception) {
             e.printStackTrace()
             null

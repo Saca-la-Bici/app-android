@@ -7,5 +7,5 @@ class PatchAnnouncementRequirement {
     private val repository = AnnouncementRepository()
 
     suspend operator fun invoke(id: String, announcement: Announcement): Announcement? =
-        repository.putAnnouncement(id, announcement)
+        repository.patchAnnouncement(id, announcement)
 }

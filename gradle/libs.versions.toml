@@ -15,6 +15,12 @@ kotlinxCoroutinesCore = "1.7.3"
 lifecycleViewmodelKtx = "2.8.5"
 mapsCompose = "11.6.0"
 material = "1.12.0"
+googleGmsGoogleServices = "4.4.2"
+firebaseAnalytics = "22.1.0"
+firebaseAuth = "23.0.0"
+navigationFragment = "2.8.1"
+places = "4.0.0"
+swiperefreshlayout = "1.1.0"
 navigationFragment = "2.8.0"
 core = "1.45.0"
 
@@ -36,6 +42,11 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 maps-android = { module = "com.mapbox.maps:android", version.ref = "androidVersion" }
 maps-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "mapsCompose" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 core = { group = "com.google.ar", name = "core", version.ref = "core" }
@@ -43,4 +54,5 @@ core = { group = "com.google.ar", name = "core", version.ref = "core" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 

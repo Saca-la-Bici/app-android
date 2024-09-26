@@ -24,8 +24,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.framework.services.RutasService
+import com.kotlin.sacalabici.data.network.FirebaseTokenManager
+import com.kotlin.sacalabici.data.network.routes.RouteApiClient
 import com.kotlin.sacalabici.helpers.MapHelper
 import com.kotlin.sacalabici.utils.InputValidator
 import com.mapbox.geojson.LineString
@@ -43,6 +45,7 @@ import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -118,21 +121,40 @@ class RegistrarRutaActivity : AppCompatActivity() {
 
         // Lógica del botón de enviar cuando se hace clic
         btnEnviar.setOnClickListener {
-            // Obtiene los valores ingresados por el usuario
-            val titulo = etTitulo.text.toString()
-            val distancia = etDistancia.text.toString()
-            val tiempo = etTiempo.text.toString()
-            val nivel = nivelSeleccionado.toString()
-
+            // Verificar que todos los puntos estén definidos
             if (startPoint != null && stopoverPoint != null && endPoint != null && referencePoint1 != null && referencePoint2 != null) {
                 lifecycleScope.launch {
-                    val routeService = RutasService
-                    val result = routeService.sendRoute(
-                        titulo, distancia, tiempo, nivel,
-                        startPoint!!, stopoverPoint!!, endPoint!!, referencePoint1!!, referencePoint2!!
+                    // Obtener la instancia de FirebaseAuth
+                    val firebaseAuth = FirebaseAuth.getInstance()
+
+                    // Crear una instancia de FirebaseTokenManager con FirebaseAuth
+                    val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
+
+                    // Obtener el token de manera síncrona
+                    val routeApiClient = RouteApiClient(firebaseTokenManager) // Pasar el token en lugar del objeto FirebaseTokenManager
+
+                    // Obtener los valores ingresados por el usuario
+                    val titulo = etTitulo.text.toString()
+                    val distancia = etDistancia.text.toString()
+                    val tiempo = etTiempo.text.toString()
+                    val nivel = nivelSeleccionado.toString()
+
+                    // Llamar a la función sendRoute
+                    val result = routeApiClient.sendRoute(
+                        titulo = titulo,
+                        distancia = distancia,
+                        tiempo = tiempo,
+                        nivel = nivel,
+                        start = startPoint!!,
+                        stopover = stopoverPoint!!,
+                        end = endPoint!!,
+                        reference1 = referencePoint1!!,
+                        reference2 = referencePoint2!!
                     )
+
                     if (result) {
                         Toast.makeText(this@RegistrarRutaActivity, "Ruta guardada exitosamente.", Toast.LENGTH_SHORT).show()
+                        delay(2000) // Pausa antes de cerrar la actividad, si deseas
                         finish()
                     } else {
                         Toast.makeText(this@RegistrarRutaActivity, "Error al guardar la ruta.", Toast.LENGTH_SHORT).show()
@@ -142,6 +164,8 @@ class RegistrarRutaActivity : AppCompatActivity() {
                 Toast.makeText(this, "Por favor, establezca todos los puntos de la ruta.", Toast.LENGTH_SHORT).show()
             }
         }
+
+
     }
 
     /**

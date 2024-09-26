@@ -4,10 +4,12 @@ import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.data.models.CoordenadasBase
 import com.kotlin.sacalabici.data.models.RutasBase
-import com.kotlin.sacalabici.framework.services.RutasService
+import com.kotlin.sacalabici.data.network.FirebaseTokenManager
+import com.kotlin.sacalabici.data.network.routes.RouteApiClient
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.LineString
@@ -35,7 +37,14 @@ class MapViewModel : ViewModel() {
     fun getRutasList() {
         viewModelScope.launch {
             try {
-                val rutasList = RutasService.getRutasList()
+                val firebaseAuth = FirebaseAuth.getInstance()
+
+                // Crear una instancia de FirebaseTokenManager con FirebaseAuth
+                val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
+                // Obtener el token de manera síncrona
+                val routeApiClient = RouteApiClient(firebaseTokenManager)
+                // Llama a getRutasList del RouteApiClient
+                val rutasList = routeApiClient.getRutasList()
                 rutasListLiveData.postValue(rutasList)
             } catch (e: Exception) {
                 toastMessageLiveData.postValue("Error al obtener la lista de rutas: ${e.message}")

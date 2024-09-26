@@ -79,12 +79,6 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.views.activities.MapActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".framework.views.activities.RegistrarRutaActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false"

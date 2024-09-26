@@ -8,6 +8,5 @@ import kotlinx.android.parcel.Parcelize
 data class CoordenadasBase (
     @SerializedName("latitud") var latitud: Double,
     @SerializedName("longitud") var longitud: Double,
-    @SerializedName("tipo") var tipo: String,
-    @SerializedName("_id") var id: String,
+    @SerializedName("tipo") var tipo: String
 ) : Parcelable

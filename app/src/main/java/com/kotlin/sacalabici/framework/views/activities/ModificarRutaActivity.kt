@@ -24,11 +24,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.CoordenadasBase
-import com.kotlin.sacalabici.framework.services.RutasService
+import com.kotlin.sacalabici.data.network.FirebaseTokenManager
+import com.kotlin.sacalabici.data.network.routes.RouteApiClient
 import com.kotlin.sacalabici.helpers.MapHelper
 import com.kotlin.sacalabici.utils.InputValidator
 import com.mapbox.geojson.Point
@@ -66,6 +68,7 @@ class ModificarRutaActivity : AppCompatActivity() {
     /**
      * Se ejecuta al crear la actividad. Inicializa los elementos de UI, el mapa y la lógica de validación de inputs.
      */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_modificarruta)
@@ -103,14 +106,18 @@ class ModificarRutaActivity : AppCompatActivity() {
             val coordenadasJson = extras.getString("COORDENADAS")
             if (coordenadasJson != null) {
                 val coordenadasType = object : TypeToken<ArrayList<CoordenadasBase>>() {}.type
-                val coordenadas: ArrayList<CoordenadasBase> = Gson().fromJson(coordenadasJson, coordenadasType)
-                mapHelper.drawRouteWithCoordinates(mapViewForm,coordenadas)
+                val coordenadas: ArrayList<CoordenadasBase> =
+                    Gson().fromJson(coordenadasJson, coordenadasType)
+                mapHelper.drawRouteWithCoordinates(mapViewForm, coordenadas)
 
                 if (coordenadas.size >= 3) {
                     startPoint = Point.fromLngLat(coordenadas[0].longitud, coordenadas[0].latitud)
-                    referencePoint1 = Point.fromLngLat(coordenadas[1].longitud, coordenadas[1].latitud)
-                    stopoverPoint = Point.fromLngLat(coordenadas[2].longitud, coordenadas[2].latitud)
-                    referencePoint2 = Point.fromLngLat(coordenadas[3].longitud, coordenadas[3].latitud)
+                    referencePoint1 =
+                        Point.fromLngLat(coordenadas[1].longitud, coordenadas[1].latitud)
+                    stopoverPoint =
+                        Point.fromLngLat(coordenadas[2].longitud, coordenadas[2].latitud)
+                    referencePoint2 =
+                        Point.fromLngLat(coordenadas[3].longitud, coordenadas[3].latitud)
                     endPoint = Point.fromLngLat(coordenadas[4].longitud, coordenadas[4].latitud)
                 }
             }
@@ -131,14 +138,22 @@ class ModificarRutaActivity : AppCompatActivity() {
             mapHelper.initializeMap(
                 mapViewForm, etDistancia,
                 onStartPointSet = { point -> startPoint = point },  // Almacena el punto de inicio
-                onStopoverPointSet = { point -> stopoverPoint = point },  // Almacena el punto de descanso
+                onStopoverPointSet = { point ->
+                    stopoverPoint = point
+                },  // Almacena el punto de descanso
                 onEndPointSet = { point -> endPoint = point },
-                onReferencePoint1Set = {point -> referencePoint1 = point},
-                onReferencePoint2Set = {point -> referencePoint2 = point}// Almacena el punto final
+                onReferencePoint1Set = { point -> referencePoint1 = point },
+                onReferencePoint2Set = { point ->
+                    referencePoint2 = point
+                }// Almacena el punto final
             )
 
             // Mostrar un mensaje confirmando que la ruta ha sido eliminada
-            Toast.makeText(this, "Ruta eliminada. Por favor, selecciona una nueva ruta.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Ruta eliminada. Por favor, selecciona una nueva ruta.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         // Crea un validador de entradas para activar el botón de enviar si los campos están completos
@@ -158,32 +173,53 @@ class ModificarRutaActivity : AppCompatActivity() {
 
         // Lógica del botón de enviar cuando se hace clic
         btnEnviar.setOnClickListener {
-            // Obtiene los valores ingresados por el usuario
-            val titulo = etTitulo.text.toString()
-            val distancia = etDistancia.text.toString()
-            val tiempo = etTiempo.text.toString()
-            val nivel = nivelSeleccionado.toString()
-            val id = etID
-
+            // Verificar que todos los puntos estén definidos
             if (startPoint != null && stopoverPoint != null && endPoint != null && referencePoint1 != null && referencePoint2 != null) {
                 lifecycleScope.launch {
-                    val routeService = RutasService
-                    val result = routeService.modifyRoute(id,
-                        titulo, distancia, tiempo, nivel,
-                        startPoint!!, stopoverPoint!!, endPoint!!, referencePoint1!!, referencePoint2!!
+                    // Obtener la instancia de FirebaseAuth
+                    val firebaseAuth = FirebaseAuth.getInstance()
+
+                    // Crear una instancia de FirebaseTokenManager con FirebaseAuth
+                    val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
+                    // Obtener el token de manera síncrona
+                    val routeApiClient = RouteApiClient(firebaseTokenManager) // Pasar el token en lugar del objeto FirebaseTokenManager
+
+                    // Obtener los valores ingresados por el usuario
+                    val titulo = etTitulo.text.toString()
+                    val distancia = etDistancia.text.toString()
+                    val tiempo = etTiempo.text.toString()
+                    val nivel = nivelSeleccionado.toString()
+                    val id = etID
+
+                    // Llamar a la función modifyRoute
+                    val (result, errorMessage) = routeApiClient.modifyRoute(
+                        id = id,
+                        titulo = titulo,
+                        distancia = distancia,
+                        tiempo = tiempo,
+                        nivel = nivel,
+                        start = startPoint!!,
+                        stopover = stopoverPoint!!,
+                        end = endPoint!!,
+                        reference1 = referencePoint1!!,
+                        reference2 = referencePoint2!!
                     )
+
                     if (result) {
                         Toast.makeText(this@ModificarRutaActivity, "Ruta modificada exitosamente.", Toast.LENGTH_SHORT).show()
                         delay(2000)
                         finish()
                     } else {
-                        Toast.makeText(this@ModificarRutaActivity, "Error al modificar la ruta.", Toast.LENGTH_SHORT).show()
+                        // Mostrar el mensaje de error
+                        Toast.makeText(this@ModificarRutaActivity, "Error al modificar la ruta: ${errorMessage ?: "Desconocido"}", Toast.LENGTH_SHORT).show()
+                        Log.d("ModificarRuta","Error al modificar la ruta: $errorMessage")
                     }
                 }
             } else {
                 Toast.makeText(this, "Por favor, establezca todos los puntos de la ruta.", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private fun updateStartPoint(point: Point) {

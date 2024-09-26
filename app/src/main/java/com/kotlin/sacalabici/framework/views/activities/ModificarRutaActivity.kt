@@ -108,8 +108,10 @@ class ModificarRutaActivity : AppCompatActivity() {
 
                 if (coordenadas.size >= 3) {
                     startPoint = Point.fromLngLat(coordenadas[0].longitud, coordenadas[0].latitud)
-                    stopoverPoint = Point.fromLngLat(coordenadas[1].longitud, coordenadas[1].latitud)
-                    endPoint = Point.fromLngLat(coordenadas[2].longitud, coordenadas[2].latitud)
+                    referencePoint1 = Point.fromLngLat(coordenadas[1].longitud, coordenadas[1].latitud)
+                    stopoverPoint = Point.fromLngLat(coordenadas[2].longitud, coordenadas[2].latitud)
+                    referencePoint2 = Point.fromLngLat(coordenadas[3].longitud, coordenadas[3].latitud)
+                    endPoint = Point.fromLngLat(coordenadas[4].longitud, coordenadas[4].latitud)
                 }
             }
 

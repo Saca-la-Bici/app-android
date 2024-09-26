@@ -53,6 +53,7 @@ class MapActivity : AppCompatActivity(), RutasFragment.OnRutaSelectedListener {
 
         val btnAgregarRuta: ImageButton = findViewById(R.id.btnAdd)
         btnAgregarRuta.setOnClickListener {
+            Log.d("AgregarRuta", "Se inicia la actividad")
             val intent = Intent(this, RegistrarRutaActivity::class.java)
             startActivity(intent)
         }
@@ -70,16 +71,21 @@ class MapActivity : AppCompatActivity(), RutasFragment.OnRutaSelectedListener {
     }
 
     private fun initializeMap() {
+        Log.d("InitializeMap", "Se inicia el mapa") // Log para indicar que se inició la inicialización del mapa
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
+            Log.d("InitializeMap", "Se cargó el estilo del mapa") // Log para indicar que se cargó el estilo
             val queretaroCoordinates = Point.fromLngLat(-100.4091, 20.5925)
+            Log.d("InitializeMap", "Coordenadas de Querétaro: $queretaroCoordinates") // Log para mostrar coordenadas
             mapView.mapboxMap.setCamera(
                 CameraOptions.Builder()
                     .center(queretaroCoordinates)
                     .zoom(15.0)
                     .build()
             )
+            Log.d("InitializeMap", "Se configuró la cámara del mapa") // Log para indicar que se configuró la cámara
         }
     }
+
 
     private fun toggleRutasList() {
         val fragmentManager = supportFragmentManager

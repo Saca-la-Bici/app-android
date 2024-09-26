@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.data.network.announcements
+package com.kotlin.sacalabici.data.network
 
 import android.util.Log
 import androidx.lifecycle.LiveData

@@ -9,8 +9,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.kotlin.sacalabici.data.network.announcements.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityRegisterannouncementBinding
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel

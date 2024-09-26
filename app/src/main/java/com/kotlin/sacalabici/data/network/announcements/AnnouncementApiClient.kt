@@ -1,6 +1,6 @@
 package com.kotlin.sacalabici.data.network.announcements
 
-import android.util.Log
+import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 

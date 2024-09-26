@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.network.announcements
 
+import com.kotlin.sacalabici.data.network.AuthInterceptor
 import com.kotlin.sacalabici.utils.Constants
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

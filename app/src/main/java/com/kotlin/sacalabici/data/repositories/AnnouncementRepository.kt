@@ -3,7 +3,7 @@ package com.kotlin.sacalabici.data.repositories
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.network.announcements.AnnouncementApiClient
-import com.kotlin.sacalabici.data.network.announcements.FirebaseTokenManager
+import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 

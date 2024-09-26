@@ -9,7 +9,6 @@ class DeleteAnnouncementRequirement {
     suspend operator fun invoke(
         id: String
     ): Boolean {
-        Log.d("delete", "Estamos en el requirement")
         return repository.deleteAnnouncement(id)
     }
 

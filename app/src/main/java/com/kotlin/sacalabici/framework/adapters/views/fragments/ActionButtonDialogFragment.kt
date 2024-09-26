@@ -88,7 +88,6 @@ class ActionButtonDialogFragment : DialogFragment() {
             }
 
             dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
-                Log.d("delete", "Mandamos viewmodel ${announcement.id}")
                 viewModel.deleteAnnouncement(announcement.id)
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(500)

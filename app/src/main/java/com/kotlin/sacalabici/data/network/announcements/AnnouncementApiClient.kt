@@ -25,20 +25,15 @@ class AnnouncementApiClient(private val firebaseTokenManager: FirebaseTokenManag
     }
 
     suspend fun deleteAnnouncement(id: String): Boolean {
-        Log.d("delete", "inicio de apiclient")
         val token: String?
         try{
             token = firebaseTokenManager.getTokenSynchronously()
-            Log.d("delete", "token obtenido ${token}")
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("delete", "error al obtener el token: ${e.message}")
             return false
         }
         api = AnnouncementNetworkModuleDI(token)
         return try {
-            Log.d("delete", "si funciona el token")
-            Log.d("delete", api.deleteAnnouncement(id).isSuccessful.toString())
             api.deleteAnnouncement(id).isSuccessful
         } catch (e: Exception) {
             e.printStackTrace()

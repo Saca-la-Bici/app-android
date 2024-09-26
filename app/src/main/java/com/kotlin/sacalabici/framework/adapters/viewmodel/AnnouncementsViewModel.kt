@@ -35,7 +35,6 @@ class AnnouncementsViewModel: ViewModel() {
     fun deleteAnnouncement(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("delete", "Estamos en el viewmodel")
                 deleteAnnouncementRequirement(id)
             } catch (e: Exception) {
                 throw e

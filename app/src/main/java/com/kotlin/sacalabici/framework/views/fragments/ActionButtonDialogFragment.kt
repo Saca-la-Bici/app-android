@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
+import com.kotlin.sacalabici.framework.views.activities.announcement.ModifyAnnouncementActivity
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
 import kotlinx.coroutines.delay

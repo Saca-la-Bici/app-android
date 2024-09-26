@@ -20,9 +20,9 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
 import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
-import com.kotlin.sacalabici.framework.adapters.views.activities.AddAnnouncementActivity
+import com.kotlin.sacalabici.framework.views.activities.announcement.AddAnnouncementActivity
 import kotlinx.coroutines.delay
-import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
+import com.kotlin.sacalabici.framework.views.activities.announcement.ModifyAnnouncementActivity
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
 import kotlinx.coroutines.Dispatchers

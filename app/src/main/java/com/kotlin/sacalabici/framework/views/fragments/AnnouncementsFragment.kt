@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.app.Activity
 import android.app.Activity.RESULT_OK
@@ -20,7 +20,7 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
 import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
-import com.kotlin.sacalabici.framework.adapters.views.activities.AddAnnouncementActivity
+import com.kotlin.sacalabici.framework.views.activities.AddAnnouncementActivity
 import kotlinx.coroutines.delay
 import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
 import androidx.lifecycle.lifecycleScope

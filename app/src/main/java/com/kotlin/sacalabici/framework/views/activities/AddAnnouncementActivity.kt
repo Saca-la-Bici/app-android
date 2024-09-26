@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.views.activities
 
 import android.app.Activity
 import android.content.Intent

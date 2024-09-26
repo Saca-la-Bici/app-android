@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.databinding.FragmentActivityInfoBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale

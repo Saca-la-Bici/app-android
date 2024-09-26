@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import androidx.fragment.app.Fragment
 

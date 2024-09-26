@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities
+package com.kotlin.sacalabici.framework.views.activities
 
 import android.app.Activity
 import android.os.Bundle
@@ -10,9 +10,9 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Informacion
 import com.kotlin.sacalabici.databinding.ActivityAddactivityBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
-import com.kotlin.sacalabici.framework.adapters.views.fragments.AddActivityInfoFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.AddActivityRouteFragment
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment
+import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

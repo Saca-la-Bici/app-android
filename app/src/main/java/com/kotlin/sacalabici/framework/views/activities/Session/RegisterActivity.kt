@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserBinding
+import com.kotlin.sacalabici.framework.views.activities.Session.SessionActivity
 import java.time.LocalDate
 import java.time.Period
 import java.util.Calendar

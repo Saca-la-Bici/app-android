@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

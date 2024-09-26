@@ -124,5 +124,18 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
 
     implementation("com.mapbox.maps:android:10.10.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3") // Verifica que sea la versión más reciente
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    //implementation ("com.mapbox.android:mapbox-android-core:1.9.0")
+
+    implementation ("com.google.android.gms:play-services-location:20.7.0") // O la versión más reciente
+
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+
+
+
 
 }

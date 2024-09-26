@@ -114,61 +114,66 @@
              />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <FrameLayout
-        android:id="@+id/frame_gender"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/genderFrame"
         android:layout_width="300dp"
-        android:layout_height="60dp"
-        app:layout_constraintTop_toBottomOf="@id/usernameLabel"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/usernameLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="12dp"
+        android:hint="Género"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-        <ImageButton
-            android:id="@+id/btn_gender"
+        <AutoCompleteTextView
+            android:id="@+id/genderDropDown"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/pop_up_button_pe" />
-
-        <TextView
-            android:id="@+id/tv_gender"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Género"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_gravity="center" />
-
-    </FrameLayout>
+            android:inputType="none"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <ImageButton
-        android:id="@+id/presentacionPE"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/bloodFrame"
         android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:background="@drawable/pop_up_button_pe"
-        app:layout_constraintTop_toBottomOf="@id/frame_gender"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/genderFrame"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp"
+        android:hint="Tipo de sangre"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-    <ImageButton
-        android:id="@+id/nivelPE"
+        <AutoCompleteTextView
+            android:id="@+id/bloodDropDown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/usernameLabel"
         android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:background="@drawable/pop_up_button_pe"
-        app:layout_constraintTop_toBottomOf="@id/presentacionPE"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/namePE"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"/>
-    <ImageButton
-        android:id="@+id/tiposangrePE"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:background="@drawable/pop_up_button_pe"
-        app:layout_constraintTop_toBottomOf="@id/nivelPE"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="12dp"
+        android:hint="Nombre de usuario"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/usernamePEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FerxX_123"
+            android:padding="24dp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <include layout="@layout/main_navbar"/>

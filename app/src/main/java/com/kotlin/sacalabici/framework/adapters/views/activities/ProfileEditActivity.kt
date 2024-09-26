@@ -2,6 +2,8 @@ package com.kotlin.sacalabici.framework.adapters.views.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -15,32 +17,46 @@ class ProfileEditActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         initializeBinding()
+        setupGenderDropdown()
+        setupBloodDropdown()
 
-        setupGenderButton()
     }
 
     private fun initializeBinding(){
         binding = ActivityProfileEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-    private fun setupGenderButton() {
-        val btnConfiguration = findViewById<ImageButton>(R.id.btn_gender)
-        btnConfiguration.setOnClickListener {
-            val singleItems = arrayOf("Mujer", "Hombre", "Otro", "Prefiero no decirlo")
-            val checkedItem = 1
 
-            MaterialAlertDialogBuilder(this) // 'this' refers to the context of the activity
-                .setTitle(resources.getString(R.string.genderPE))
-                .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
-                    // Respond to neutral button press
-                }
-                .setPositiveButton(resources.getString(R.string.ok)) { dialog, which ->
-                    // Respond to positive button press
-                }
-                .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
-                    // Respond to item chosen
-                }
-                .show()
-            }
+    private fun setupGenderDropdown() {
+        val genderDropdownConfig = findViewById<AutoCompleteTextView>(R.id.genderDropDown)
+        val genders = resources.getStringArray(R.array.genders)
+        val arrayAdapter = ArrayAdapter(this, R.layout.drop_down_item, genders)
+        genderDropdownConfig.setAdapter(arrayAdapter)
+
+        val defaultValue = "Masculino"
+        genderDropdownConfig.setText(defaultValue, false)
+
+        val index = arrayAdapter.getPosition(defaultValue)
+        if (index >= 0) {
+            genderDropdownConfig.setSelection(index)
         }
     }
+
+    private fun setupBloodDropdown() {
+        val bloodDropdownConfig = findViewById<AutoCompleteTextView>(R.id.bloodDropDown)
+        val bloodTypes = resources.getStringArray(R.array.bloodTypes)
+        val arrayAdapter = ArrayAdapter(this, R.layout.drop_down_item, bloodTypes)
+        bloodDropdownConfig.setAdapter(arrayAdapter)
+
+        val defaultValue = "O+"
+        bloodDropdownConfig.setText(defaultValue, false)
+
+//        val index = arrayAdapter.getPosition(defaultValue)
+//        if (index >= 0) {
+////            bloodDropdownConfig.setSelection(index)
+//        }
+    }
+
+
+}
+

@@ -17,6 +17,7 @@ import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolStaffBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosViewModel
+import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,6 +32,7 @@ class RolStaffFragment : Fragment() {
     private val binding get() = _binding!!
     private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
     private val viewModel: ConsultarUsuariosViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreateView(
@@ -38,6 +40,10 @@ class RolStaffFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRolStaffBinding.inflate(inflater, container, false)
+
+        // Obtener el firebaseUID
+        val firebaseUID = authViewModel.getCurrentUserId()
+        Log.d("UID", "Firebase UID: $firebaseUID")
 
         // Observamos los cambios en el ViewModel
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
@@ -51,7 +57,7 @@ class RolStaffFragment : Fragment() {
         })
 
         // Cargar usuarios
-        viewModel.getUsuarios(roles = "Staff,Usuario", reset = true)
+        viewModel.getUsuarios(roles = "Staff,Usuario", reset = true, firebaseUID = firebaseUID!!)
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
@@ -95,7 +101,7 @@ class RolStaffFragment : Fragment() {
 
                 if (totalItemCount <= (lastVisibleItem + 1)) {
                     // Si se llega al final, cargar más usuarios
-                    viewModel.getUsuarios()
+                    viewModel.getUsuarios(firebaseUID = firebaseUID!!)
                 }
             }
         })

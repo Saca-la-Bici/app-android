@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.viewmodel.session
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -33,6 +34,11 @@ class AuthViewModel : ViewModel() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager // Crear instancia de SessionRequirement
+
+    // Inicializar Firebase Auth
+    init {
+        firebaseAuth = FirebaseAuth.getInstance()
+    }
 
     fun initialize(firebaseAuthInstance: FirebaseAuth, googleOptions: GoogleSignInOptions, activity: AppCompatActivity) {
         firebaseAuth = firebaseAuthInstance
@@ -138,6 +144,12 @@ class AuthViewModel : ViewModel() {
             _authState.postValue(AuthState.Success(currentUser))
         }
     }
+
+    fun getCurrentUserId(): String? {
+        val currentUser = firebaseAuth.currentUser
+        return currentUser?.uid
+    }
+
 
     private fun registerUser(currentUser: FirebaseUser) {
         viewModelScope.launch {

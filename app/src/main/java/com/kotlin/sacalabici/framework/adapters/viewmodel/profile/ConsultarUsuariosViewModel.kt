@@ -26,7 +26,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
     private var isLoading = false
     private var currentRoles: String = "Administrador,Usuario" //Valor inicial al entrar a modificar roles
 
-    fun getUsuarios(roles: String? = null, reset: Boolean = false) {
+    fun getUsuarios(roles: String? = null, firebaseUID: String, reset: Boolean = false) {
         // Usa los roles actuales si roles es null
         val rolesToUse = roles ?: currentRoles
 
@@ -35,6 +35,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
         // Evitar múltiples llamadas si ya estamos cargando
         if (isLoading) return
 
+        // Reiniciar la paginación y la lista de usuarios si es necesario
         if (reset) {
             currentPage = 1  // Reiniciar la paginación
             _usuarios.value = emptyList()  // Limpiar la lista actual de usuarios
@@ -48,7 +49,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val usuarios = consultarUsuariosRepository.getUsuarios(page = currentPage, limit = pageSize, roles = rolesToUse)
+                val usuarios = consultarUsuariosRepository.getUsuarios(page = currentPage, limit = pageSize, roles = rolesToUse, firebaseUID = firebaseUID)
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
                         val currentList = _usuarios.value?.toMutableList() ?: mutableListOf()
@@ -67,6 +68,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
             }
         }
     }
+
 
     fun searchUser(username: String) {
         viewModelScope.launch(Dispatchers.IO) {

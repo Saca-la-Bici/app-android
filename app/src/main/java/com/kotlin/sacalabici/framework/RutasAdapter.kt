@@ -1,4 +1,5 @@
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,6 +65,12 @@ class RutasAdapter(
             // Actualizar posición de elemento seleccionado
             notifyItemChanged(rutasList.indexOf(previousRuta))
             notifyItemChanged(rutasList.indexOf(selectedRuta))
+
+            Log.d("Ruta Seleccionada",ruta.titulo)
+            Log.d("Ruta Seleccionada",ruta.nivel)
+            Log.d("Ruta Seleccionada",ruta.tiempo)
+            Log.d("Ruta Seleccionada",ruta.distancia)
+            Log.d("Ruta Seleccionada", ruta.coordenadas.toString())
 
             onRutaSelected(ruta)
         }

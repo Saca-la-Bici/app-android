@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
+import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,10 @@ import com.kotlin.sacalabici.domain.routes.PutRouteRequirement
 import com.kotlin.sacalabici.domain.routes.RouteListRequirement
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
+import com.mapbox.maps.MapView
+import com.mapbox.maps.extension.style.layers.getLayer
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.extension.style.sources.getSourceAs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,6 +40,16 @@ class MapViewModel : ViewModel() {
     private val routeListRequirement = RouteListRequirement()
     private val postRouteRequirement = PostRouteRequirement()
     private val patchRouteRequirement = PutRouteRequirement()
+
+    private lateinit var mapView: MapView
+
+    // Para almacenar las fuentes y capas de rutas
+    private val routeSources = mutableListOf<String>()
+    private val routeLayers = mutableListOf<String>()
+
+    // Para almacenar las fuentes y capas de pines
+    private val pinSources = mutableListOf<String>()
+    private val pinLayers = mutableListOf<String>()
 
     fun getRouteList() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -120,6 +135,42 @@ class MapViewModel : ViewModel() {
     // Función para decodificar la polyline
     private fun decodePolyline(encodedPolyline: String): List<Point> {
         return PolylineUtils.decode(encodedPolyline, 6).map { Point.fromLngLat(it.longitude(), it.latitude()) }
+    }
+
+    fun clearPreviousRoutes() {
+        mapView.getMapboxMap().getStyle { style ->
+            // Eliminar las fuentes de rutas anteriores
+            routeSources.forEach { sourceId ->
+                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
+                    style.removeStyleSource(sourceId)
+                }
+            }
+            routeSources.clear() // Limpiamos la lista de fuentes
+
+            // Eliminar las capas de rutas anteriores
+            routeLayers.forEach { layerId ->
+                style.getLayer(layerId)?.let {
+                    style.removeStyleLayer(layerId)
+                }
+            }
+            routeLayers.clear() // Limpiamos la lista de capas
+
+            // Eliminar las fuentes de pines anteriores
+            pinSources.forEach { sourceId ->
+                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
+                    style.removeStyleSource(sourceId)
+                }
+            }
+            pinSources.clear() // Limpiamos la lista de fuentes de pines
+
+            // Eliminar las capas de pines anteriores
+            pinLayers.forEach { layerId ->
+                style.getLayer(layerId)?.let {
+                    style.removeStyleLayer(layerId)
+                }
+            }
+            pinLayers.clear() // Limpiamos la lista de capas de pines
+        }
     }
 
 

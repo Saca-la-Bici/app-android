@@ -37,6 +37,10 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     private val routeSources = mutableListOf<String>()
     private val routeLayers = mutableListOf<String>()
 
+    private var lastSelectedRuta: RouteBase? = null
+
+    private var isRutasListVisible = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -101,7 +105,17 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     }
 
     private fun toggleRutasList() {
-        viewModel.getRouteList()
+        // Cambia el estado de la lista
+        isRutasListVisible = !isRutasListVisible
+
+        if (isRutasListVisible) {
+            // Si la lista es visible, obtén y muestra las rutas
+            viewModel.getRouteList()
+            // Aquí deberías agregar el código para mostrar la lista en la interfaz de usuario
+        } else {
+            // Si la lista no es visible, oculta las rutas
+            // Aquí deberías agregar el código para ocultar la lista en la interfaz de usuario
+        }
     }
 
     private fun drawRouteSegments(map: MapView, tramo1: List<Point>, tramo2: List<Point>) {
@@ -141,6 +155,20 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     }
 
     override fun onRutaSelected(ruta: RouteBase) {
+        lastSelectedRuta = ruta
+
+        viewModel.clearPreviousRoutes()
+
+        val firstCoordinate = ruta.coordenadas.firstOrNull() ?: return
+        val point = Point.fromLngLat(firstCoordinate.longitud, firstCoordinate.latitud)
+
+        mapView.getMapboxMap().setCamera(
+            CameraOptions.Builder()
+                .center(point)
+                .zoom(15.0)
+                .build()
+        )
+
         ruta?.let {
             viewModel.lastSelectedRuta = it
             viewModel.drawRoute(it.coordenadas)

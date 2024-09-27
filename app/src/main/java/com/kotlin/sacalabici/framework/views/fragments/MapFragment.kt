@@ -71,7 +71,7 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
                 // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment
                 val rutasFragment = RutasFragment.newInstance(it, viewModel.lastSelectedRuta)
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment_content_main, rutasFragment)
+                    .replace(R.id.fragment_container, rutasFragment)
                     .addToBackStack(null)
                     .commit()
             } ?: run {

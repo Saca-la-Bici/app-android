@@ -16,7 +16,6 @@ class RutasFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var rutasAdapter: RutasAdapter
-    private lateinit var rutasList: ArrayList<RouteBase>
     private var onRutaSelectedListener: OnRutaSelectedListener? = null
     private var lastSelectedRuta: RouteBase? = null
 

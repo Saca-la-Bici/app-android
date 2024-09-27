@@ -20,24 +20,29 @@ class ActivitiesViewHolder(
 ): RecyclerView.ViewHolder(binding.root){
 
     fun bind(item: ActivityBase, context: Context) {
-        binding.tvActivityTitle.text = item.title
-        binding.tvActivityDate.text = item.date
-        binding.tvActivityTime.text = item.time
-        binding.tvActivityDuration.text = item.duration
-        binding.tvPeopleEnrolled.text = item.peopleEnrolled.toString()
 
-        binding.root.setOnLongClickListener {
-            longClickListener(item)
-        }
+        val activity = item.activities.firstOrNull()
 
-        if(item.imageURL != null){
-            binding.ivActivityImage.visibility = View.VISIBLE
-            getActivityImage(item.imageURL, binding.ivActivityImage, context)
-        } else {
-            binding.ivActivityImage.visibility = View.GONE
+        if (activity != null) {
+
+            binding.tvActivityTitle.text = activity.title
+            binding.tvActivityDate.text = activity.date.toString()
+            binding.tvActivityTime.text = activity.time
+            binding.tvActivityDuration.text = activity.duration
+            binding.tvPeopleEnrolled.text = activity.peopleEnrolled.toString()
+
+            binding.root.setOnLongClickListener {
+                longClickListener(item)
+            }
+
+            if (activity.imageURL != null) {
+                binding.ivActivityImage.visibility = View.VISIBLE
+                getActivityImage(activity.imageURL, binding.ivActivityImage, context)
+            } else {
+                binding.ivActivityImage.visibility = View.GONE
+            }
         }
     }
-
     private fun getActivityImage(url: String, imageView: ImageView, context: Context){
         CoroutineScope(Dispatchers.IO).launch {
             CoroutineScope(Dispatchers.Main).launch {

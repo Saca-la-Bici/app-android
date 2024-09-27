@@ -135,16 +135,21 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     }
 
     private fun toggleRutasList() {
-        val fragmentManager = requireActivity().supportFragmentManager
+        val fragmentManager = childFragmentManager
         val rutasFragment = fragmentManager.findFragmentById(R.id.fragment_container)
 
-        if (rutasFragment != null) {
+        Log.d("ToggleRutas", rutasFragment.toString())
+
+        if (isRutasFragmentVisible) {
             // Si el fragmento ya está visible, lo eliminamos
-            fragmentManager.beginTransaction()
-                .remove(rutasFragment)
-                .commit()
+            if (rutasFragment != null) {
+                childFragmentManager.beginTransaction()
+                    .remove(rutasFragment) // Asegúrate de que este ID sea el correcto
+                    .addToBackStack(null)
+                    .commit()
+                Log.d("ToggleRutas", "Fragmento RutasFragment eliminado")
+            }
             isRutasFragmentVisible = false
-            Log.d("ToggleRutas", "Fragmento RutasFragment eliminado")
         } else {
             // Si el fragmento no está visible, lo añadimos
             viewModel.getRouteList() // Esto activará la observación y añadirá el fragmento

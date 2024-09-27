@@ -51,6 +51,13 @@ class ProfileFragment : Fragment() {
         }
 
         setupEditButton()
+        editProfileLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                viewModel.getProfile("VF7Xd7Bgcdd54dUFzpPajm0QwtI2")
+            }
+        }
 
         return root
     }
@@ -94,6 +101,7 @@ class ProfileFragment : Fragment() {
 
     private fun passToEditActivity(context: Context) {
         val intent = Intent(context, ProfileEditActivity::class.java)
+
         editProfileLauncher.launch(intent)
     }
 

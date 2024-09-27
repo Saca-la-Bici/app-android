@@ -18,7 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.BuildConfig
-import com.kotlin.sacalabici.data.models.CoordenadasBase
+import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.LineString
@@ -361,11 +361,11 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         }
     }
 
-    fun coordenadasToPoint(coordenada: CoordenadasBase): Point {
+    fun coordenadasToPoint(coordenada: CoordenatesBase): Point {
         return Point.fromLngLat(coordenada.longitud, coordenada.latitud)
     }
 
-    fun drawRouteWithCoordinates(map: MapView, coordenadas: List<CoordenadasBase>) {
+    fun drawRouteWithCoordinates(map: MapView, coordenadas: List<CoordenatesBase>) {
         this.mapView = map
 
         if (coordenadas.size < 3) {
@@ -520,6 +520,12 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
             }
             pinLayers.clear() // Limpiamos la lista de capas de pines
         }
-    }
 
+        // Restablecer los puntos a null
+        startPoint = null
+        referencePoint1 = null
+        stopoverPoint = null
+        referencePoint2 = null
+        endPoint = null
+    }
 }

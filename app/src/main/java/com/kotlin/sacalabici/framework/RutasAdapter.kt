@@ -7,16 +7,15 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.RutasBase
-import com.kotlin.sacalabici.framework.views.activities.ModificarRutaActivity
-import kotlinx.coroutines.selects.select
+import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.framework.views.activities.ModifyRouteActivity
 
 class RutasAdapter(
-    private var rutasList: List<RutasBase>,
-    private val onRutaSelected: (RutasBase) -> Unit // Add the callback as a second parameter
+    private var rutasList: List<RouteBase>,
+    private val onRutaSelected: (RouteBase) -> Unit // Add the callback as a second parameter
 ) : RecyclerView.Adapter<RutasAdapter.RutasViewHolder>() {
 
-    private var selectedRuta: RutasBase? = null
+    private var selectedRuta: RouteBase? = null
 
     class RutasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tituloTextView: TextView = itemView.findViewById(R.id.TVTitulo)
@@ -34,7 +33,7 @@ class RutasAdapter(
         return RutasViewHolder(view)
     }
 
-    fun setSelectedRuta(ruta: RutasBase?) {
+    fun setSelectedRuta(ruta: RouteBase?) {
         selectedRuta = ruta
         notifyDataSetChanged()
     }
@@ -72,7 +71,7 @@ class RutasAdapter(
         // Manejar clic en el botón de modificar
         holder.btnModificar.setOnClickListener {
             val context = holder.itemView.context
-            val intent = Intent(context, ModificarRutaActivity::class.java)
+            val intent = Intent(context, ModifyRouteActivity::class.java)
 
             // Agrega datos adicionales al Intent como extras
             intent.putExtra("ID",ruta.id)
@@ -86,8 +85,6 @@ class RutasAdapter(
             context.startActivity(intent)
         }
 
-
-
         // Desactivar línea divisora para el último elemento
         holder.divider.visibility = if (position == rutasList.size - 1) View.GONE else View.VISIBLE
     }
@@ -97,8 +94,10 @@ class RutasAdapter(
     }
 
     // Método para actualizar la lista de rutas
-    fun updateRutas(newRutas: List<RutasBase>) {
+    fun updateRutas(newRutas: List<RouteBase>) {
         rutasList = newRutas
         notifyDataSetChanged()
     }
+
+
 }

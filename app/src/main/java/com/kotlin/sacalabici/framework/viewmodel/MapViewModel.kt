@@ -1,18 +1,17 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
-import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.BuildConfig
-import com.kotlin.sacalabici.data.models.CoordenadasBase
-import com.kotlin.sacalabici.data.models.RutasBase
-import com.kotlin.sacalabici.data.network.FirebaseTokenManager
-import com.kotlin.sacalabici.data.network.routes.RouteApiClient
-import com.mapbox.geojson.Feature
-import com.mapbox.geojson.FeatureCollection
-import com.mapbox.geojson.LineString
+import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
+import com.kotlin.sacalabici.data.models.routes.Route
+import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
+import com.kotlin.sacalabici.domain.routes.PostRouteRequirement
+import com.kotlin.sacalabici.domain.routes.PutRouteRequirement
+import com.kotlin.sacalabici.domain.routes.RouteListRequirement
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
 import kotlinx.coroutines.Dispatchers
@@ -29,31 +28,47 @@ import kotlin.math.sqrt
 
 class MapViewModel : ViewModel() {
 
-    val rutasListLiveData = MutableLiveData<List<RutasBase>?>()
+    val routeObjectLiveData = MutableLiveData<List<RouteBase>?>()
     val routeSegmentsLiveData = MutableLiveData<Pair<List<Point>, List<Point>>>()
     val toastMessageLiveData = MutableLiveData<String>()
-    var lastSelectedRuta: RutasBase? = null
+    var lastSelectedRuta: RouteBase? = null
+    private val routeListRequirement = RouteListRequirement()
+    private val postRouteRequirement = PostRouteRequirement()
+    private val patchRouteRequirement = PutRouteRequirement()
 
-    fun getRutasList() {
-        viewModelScope.launch {
+    fun getRouteList() {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                val firebaseAuth = FirebaseAuth.getInstance()
-
-                // Crear una instancia de FirebaseTokenManager con FirebaseAuth
-                val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
-                // Obtener el token de manera síncrona
-                val routeApiClient = RouteApiClient(firebaseTokenManager)
-                // Llama a getRutasList del RouteApiClient
-                val rutasList = routeApiClient.getRutasList()
-                rutasListLiveData.postValue(rutasList)
+                val result: List<RouteBase> = routeListRequirement()
+                val reversedResult = result.reversed()
+                this@MapViewModel.routeObjectLiveData.postValue(reversedResult)
             } catch (e: Exception) {
-                toastMessageLiveData.postValue("Error al obtener la lista de rutas: ${e.message}")
-                rutasListLiveData.postValue(null)
+                this@MapViewModel.routeObjectLiveData.postValue(emptyList())
             }
         }
     }
 
-    fun drawRoute(coordenadas: List<CoordenadasBase>) {
+    fun postRoute(route: Route) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                postRouteRequirement(route)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    fun putRoute(id: String, route: Route) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                patchRouteRequirement(id, route)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    fun drawRoute(coordenadas: List<CoordenatesBase>) {
         val points = coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
         val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points.joinToString(";") { "${it.longitude()},${it.latitude()}" }}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
@@ -106,4 +121,6 @@ class MapViewModel : ViewModel() {
     private fun decodePolyline(encodedPolyline: String): List<Point> {
         return PolylineUtils.decode(encodedPolyline, 6).map { Point.fromLngLat(it.longitude(), it.latitude()) }
     }
+
+
 }

@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ConsultarUsuariosViewModel : ViewModel() {
-
     private val _usuarios = MutableLiveData<List<ConsultarUsuariosBase>>()
     val usuarios: LiveData<List<ConsultarUsuariosBase>> get() = _usuarios
 
@@ -20,20 +19,39 @@ class ConsultarUsuariosViewModel : ViewModel() {
 
     private val consultarUsuariosRepository = ConsultarUsuariosRepository()
 
-    fun getUsuarios() {
+    // Variables para la paginación
+    private var currentPage = 1
+    private val pageSize = 7
+    private var isLoading = false
+
+    fun getUsuarios(reset: Boolean = false) {
+        if (isLoading) return  // Evitar hacer la consulta si ya estamos cargando
+
+        if (reset) {
+            currentPage = 1  // Reiniciar la paginación
+            _usuarios.value = emptyList()  // Limpiar la lista actual de usuarios
+        }
+
+        isLoading = true
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val usuarios = consultarUsuariosRepository.getUsuarios(limit = 0)
+                val usuarios = consultarUsuariosRepository.getUsuarios(page = currentPage, limit = pageSize)
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
-                        _usuarios.value = usuarios!!
+                        val currentList = _usuarios.value?.toMutableList() ?: mutableListOf()
+                        currentList.addAll(usuarios)  // Agregar nuevos usuarios a la lista actual
+                        _usuarios.value = currentList
+                        currentPage++  // Incrementar la página
                     } else {
-                        _errorMessage.value = "La lista de usuarios está vacía o es nula."
+                        _errorMessage.value = "No hay más usuarios para cargar."
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 _errorMessage.value = "No se pudieron obtener los usuarios: ${e.message}"
+            } finally {
+                isLoading = false
             }
         }
     }
@@ -41,18 +59,19 @@ class ConsultarUsuariosViewModel : ViewModel() {
     fun searchUser(username: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val usuarios = consultarUsuariosRepository.searchUser(username) // Pass the actual username
+                val usuarios = consultarUsuariosRepository.searchUser(username)
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
                         _usuarios.value = usuarios!!
                     } else {
-                        _errorMessage.value = "No users found for this username."
+                        _errorMessage.value = "No se encontraron usuarios con ese nombre."
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _errorMessage.value = "Error fetching users: ${e.message}"
+                _errorMessage.value = "Error al buscar usuarios: ${e.message}"
             }
         }
     }
 }
+

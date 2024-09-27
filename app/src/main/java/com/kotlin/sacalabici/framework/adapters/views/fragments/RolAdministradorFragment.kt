@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolAdministradorBinding
@@ -79,6 +80,22 @@ class RolAdministradorFragment : Fragment() {
                     }
                 }
                 return true
+            }
+        })
+
+        // Agregar scroll listener
+        binding.RVViewUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+                if (totalItemCount <= (lastVisibleItem + 1)) {
+                    // Si se llega al final, cargar más usuarios
+                    viewModel.getUsuarios()
+                }
             }
         })
 

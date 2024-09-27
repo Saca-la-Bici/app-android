@@ -12,7 +12,7 @@ class ConsultarUsuariosRepository {
 
     private val apiConsultarUsuarios = ConsultarUsuariosAPIClient()
 
-    suspend fun getUsuarios(limit: Int): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.getUsuarios(limit)
+    suspend fun getUsuarios(page: Int, limit: Int): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.getUsuarios(page, limit)
 
     suspend fun searchUser(username: String): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.searchUser(username)
 

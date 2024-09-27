@@ -27,6 +27,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.87"/>
+
     <!-- Contenedor principal -->
     <View
         android:id="@+id/VContainer"
@@ -143,6 +150,6 @@
         app:layout_constraintTop_toBottomOf="@+id/searchView"
         app:layout_constraintStart_toStartOf="@id/VContainer"
         app:layout_constraintEnd_toEndOf="@id/VContainer"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

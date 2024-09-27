@@ -8,6 +8,7 @@ interface ConsultarUsuariosAPIService {
     //http://localhost:8080/perfil/consultarUsuarios
     @GET("perfil/consultarUsuarios")
     suspend fun getUsuarios(
+        @Query("page") page: Int,
         @Query("limit") limit: Int
     ): ConsultarUsuariosObject
 

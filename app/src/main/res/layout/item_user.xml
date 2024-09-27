@@ -33,7 +33,7 @@
     <!-- Botón Agregar o Eliminar -->
     <Button
         android:id="@+id/btn_changerol"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Agregar"
         android:textColor="#1D1B20"

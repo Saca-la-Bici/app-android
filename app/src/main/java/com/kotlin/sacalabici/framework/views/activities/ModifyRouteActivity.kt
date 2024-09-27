@@ -11,36 +11,39 @@ package com.kotlin.sacalabici.framework.views.activities
  * Changes:
  */
 
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.CoordenadasBase
-import com.kotlin.sacalabici.framework.services.RutasService
+import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
+import com.kotlin.sacalabici.data.models.routes.Route
+import com.kotlin.sacalabici.databinding.ActivityModificarrutaBinding
+import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.helpers.MapHelper
 import com.kotlin.sacalabici.utils.InputValidator
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
-import kotlinx.coroutines.launch
 
 /**
  * Activity para registrar una nueva ruta, donde los usuarios pueden interactuar con un mapa para establecer
  * puntos de inicio, descanso y final, calcular la distancia, seleccionar un nivel de dificultad y proporcionar
  * detalles como el título y tiempo estimado de la ruta.
  */
-class ModificarRutaActivity : AppCompatActivity() {
+class ModifyRouteActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityModificarrutaBinding
+    private lateinit var viewModel: MapViewModel
     // Variables de UI para el mapa, campo de distancia y nivel de dificultad
     private lateinit var mapViewForm: MapView
     private lateinit var etDistancia: EditText
@@ -52,6 +55,8 @@ class ModificarRutaActivity : AppCompatActivity() {
     private var startPoint: Point? = null
     private var stopoverPoint: Point? = null
     private var endPoint: Point? = null
+    private var referencePoint1: Point? = null
+    private var referencePoint2: Point? = null
 
     // Variable para almacenar el nivel de dificultad seleccionado
     private var nivelSeleccionado: String? = null
@@ -63,9 +68,13 @@ class ModificarRutaActivity : AppCompatActivity() {
     /**
      * Se ejecuta al crear la actividad. Inicializa los elementos de UI, el mapa y la lógica de validación de inputs.
      */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_modificarruta)
+        initializeBinding()
+
+        viewModel = ViewModelProvider(this).get(MapViewModel::class.java)
 
         // Inicialización de los componentes de UI
         mapViewForm = findViewById(R.id.mapView)
@@ -99,14 +108,17 @@ class ModificarRutaActivity : AppCompatActivity() {
 
             val coordenadasJson = extras.getString("COORDENADAS")
             if (coordenadasJson != null) {
-                val coordenadasType = object : TypeToken<ArrayList<CoordenadasBase>>() {}.type
-                val coordenadas: ArrayList<CoordenadasBase> = Gson().fromJson(coordenadasJson, coordenadasType)
-                mapHelper.drawRouteWithCoordinates(mapViewForm,coordenadas)
+                val coordenadasType = object : TypeToken<ArrayList<CoordenatesBase>>() {}.type
+                val coordenadas: ArrayList<CoordenatesBase> =
+                    Gson().fromJson(coordenadasJson, coordenadasType)
+                mapHelper.drawRouteWithCoordinates(mapViewForm, coordenadas)
 
-                if (coordenadas.size >= 3) {
+                if (coordenadas.size >= 5) {
                     startPoint = Point.fromLngLat(coordenadas[0].longitud, coordenadas[0].latitud)
-                    stopoverPoint = Point.fromLngLat(coordenadas[1].longitud, coordenadas[1].latitud)
-                    endPoint = Point.fromLngLat(coordenadas[2].longitud, coordenadas[2].latitud)
+                    referencePoint1 = Point.fromLngLat(coordenadas[1].longitud, coordenadas[1].latitud)
+                    stopoverPoint = Point.fromLngLat(coordenadas[2].longitud, coordenadas[2].latitud)
+                    referencePoint2 = Point.fromLngLat(coordenadas[3].longitud, coordenadas[3].latitud)
+                    endPoint = Point.fromLngLat(coordenadas[4].longitud, coordenadas[4].latitud)
                 }
             }
 
@@ -117,6 +129,12 @@ class ModificarRutaActivity : AppCompatActivity() {
         // Lógica para el botón de eliminar la ruta del mapa
         btnEliminarRuta.setOnClickListener {
 
+            startPoint = null
+            stopoverPoint = null
+            endPoint = null
+            referencePoint1 = null
+            referencePoint2 = null
+
             mapHelper.clearPreviousRoutes()
             etTiempo.text.clear()
             etDistancia.text.clear()
@@ -126,12 +144,22 @@ class ModificarRutaActivity : AppCompatActivity() {
             mapHelper.initializeMap(
                 mapViewForm, etDistancia,
                 onStartPointSet = { point -> startPoint = point },  // Almacena el punto de inicio
-                onStopoverPointSet = { point -> stopoverPoint = point },  // Almacena el punto de descanso
-                onEndPointSet = { point -> endPoint = point }  // Almacena el punto final
+                onStopoverPointSet = { point ->
+                    stopoverPoint = point
+                },  // Almacena el punto de descanso
+                onEndPointSet = { point -> endPoint = point },
+                onReferencePoint1Set = { point -> referencePoint1 = point },
+                onReferencePoint2Set = { point ->
+                    referencePoint2 = point
+                }// Almacena el punto final
             )
 
             // Mostrar un mensaje confirmando que la ruta ha sido eliminada
-            Toast.makeText(this, "Ruta eliminada. Por favor, selecciona una nueva ruta.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Ruta eliminada. Por favor, selecciona una nueva ruta.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         // Crea un validador de entradas para activar el botón de enviar si los campos están completos
@@ -149,48 +177,34 @@ class ModificarRutaActivity : AppCompatActivity() {
 
         verifyInputs()
 
-        // Lógica del botón de enviar cuando se hace clic
-        btnEnviar.setOnClickListener {
-            // Obtiene los valores ingresados por el usuario
+        binding.btnEnviar.setOnClickListener {
             val titulo = etTitulo.text.toString()
             val distancia = etDistancia.text.toString()
             val tiempo = etTiempo.text.toString()
             val nivel = nivelSeleccionado.toString()
             val id = etID
 
-            if (startPoint != null && stopoverPoint != null && endPoint != null) {
-                lifecycleScope.launch {
-                    val routeService = RutasService
-                    val result = routeService.modifyRoute(id,
-                        titulo, distancia, tiempo, nivel,
-                        startPoint!!, stopoverPoint!!, endPoint!!
-                    )
-                    if (result) {
-                        val intent = Intent(this@ModificarRutaActivity, MapActivity::class.java)
-                        Toast.makeText(this@ModificarRutaActivity, "Ruta modificada exitosamente.", Toast.LENGTH_SHORT).show()
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this@ModificarRutaActivity, "Error al modificar la ruta.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Por favor, establezca todos los puntos de la ruta.", Toast.LENGTH_SHORT).show()
-            }
+            val coordenadas = arrayListOf<CoordenatesBase>(
+                CoordenatesBase(startPoint!!.latitude(), startPoint!!.longitude(),"start"),      // Punto de inicio
+                CoordenatesBase(referencePoint1!!.latitude(), referencePoint1!!.longitude(),"reference1"),  // Punto de referencia 1
+                CoordenatesBase(stopoverPoint!!.latitude(), stopoverPoint!!.longitude(),"stopover"),  // Punto de parada
+                CoordenatesBase(referencePoint2!!.latitude(), referencePoint2!!.longitude(),"reference2"),  // Punto de referencia 2
+                CoordenatesBase(endPoint!!.latitude(), endPoint!!.longitude(),"end")          // Punto final
+            )
+
+            val announcement = Route(titulo,distancia,tiempo,nivel,coordenadas)
+            viewModel.putRoute(id, announcement)
+            setResult(Activity.RESULT_OK)
+            finish()
         }
+
+        // Lógica del botón de enviar cuando se hace clic
     }
 
-    private fun updateStartPoint(point: Point) {
-        startPoint = point
+    private fun initializeBinding() {
+        binding = ActivityModificarrutaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
-
-    private fun updateStopoverPoint(point: Point) {
-        stopoverPoint = point
-    }
-
-    private fun updateEndPoint(point: Point) {
-        endPoint = point
-    }
-
 
     /**
      * Verifica si los campos de entrada (título, distancia, tiempo) están completos, si se ha seleccionado

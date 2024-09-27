@@ -119,10 +119,27 @@
             android:textColorHint="#000000"
             android:textSize="16sp" />
 
-        <com.mapbox.maps.MapView
-            android:id="@+id/mapView"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp" />
+            android:layout_height="400dp">
+
+            <!-- MapView -->
+            <com.mapbox.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- Botón Eliminar en la esquina superior derecha -->
+            <ImageButton
+                android:id="@+id/btnEliminarRuta"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/erase_icon"
+                android:background="@android:color/transparent"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/white"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

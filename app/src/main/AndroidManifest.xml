@@ -46,6 +46,7 @@
 
         <activity
             android:name=".framework.views.activities.announcement.AddAnnouncementActivity"
+            android:name=".framework.adapters.views.activities.ProfileEditActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
@@ -79,20 +80,14 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.views.activities.MapActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".framework.views.activities.RegistrarRutaActivity"
+            android:name=".framework.views.activities.AddRouteActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.views.activities.ModificarRutaActivity"
+            android:name=".framework.views.activities.ModifyRouteActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>

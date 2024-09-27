@@ -1,18 +1,24 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
-import android.graphics.Color
+import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.BuildConfig
-import com.kotlin.sacalabici.data.models.CoordenadasBase
-import com.kotlin.sacalabici.data.models.RutasBase
-import com.kotlin.sacalabici.framework.services.RutasService
-import com.mapbox.geojson.Feature
-import com.mapbox.geojson.FeatureCollection
-import com.mapbox.geojson.LineString
+import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
+import com.kotlin.sacalabici.data.models.routes.Route
+import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
+import com.kotlin.sacalabici.domain.routes.PostRouteRequirement
+import com.kotlin.sacalabici.domain.routes.PutRouteRequirement
+import com.kotlin.sacalabici.domain.routes.RouteListRequirement
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
+import com.mapbox.maps.MapView
+import com.mapbox.maps.extension.style.layers.getLayer
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.extension.style.sources.getSourceAs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,24 +33,57 @@ import kotlin.math.sqrt
 
 class MapViewModel : ViewModel() {
 
-    val rutasListLiveData = MutableLiveData<List<RutasBase>?>()
+    val routeObjectLiveData = MutableLiveData<List<RouteBase>?>()
     val routeSegmentsLiveData = MutableLiveData<Pair<List<Point>, List<Point>>>()
     val toastMessageLiveData = MutableLiveData<String>()
-    var lastSelectedRuta: RutasBase? = null
+    var lastSelectedRuta: RouteBase? = null
+    private val routeListRequirement = RouteListRequirement()
+    private val postRouteRequirement = PostRouteRequirement()
+    private val patchRouteRequirement = PutRouteRequirement()
 
-    fun getRutasList() {
-        viewModelScope.launch {
+    private lateinit var mapView: MapView
+
+    // Para almacenar las fuentes y capas de rutas
+    private val routeSources = mutableListOf<String>()
+    private val routeLayers = mutableListOf<String>()
+
+    // Para almacenar las fuentes y capas de pines
+    private val pinSources = mutableListOf<String>()
+    private val pinLayers = mutableListOf<String>()
+
+    fun getRouteList() {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                val rutasList = RutasService.getRutasList()
-                rutasListLiveData.postValue(rutasList)
+                val result: List<RouteBase> = routeListRequirement()
+                val reversedResult = result.reversed()
+                this@MapViewModel.routeObjectLiveData.postValue(reversedResult)
             } catch (e: Exception) {
-                toastMessageLiveData.postValue("Error al obtener la lista de rutas: ${e.message}")
-                rutasListLiveData.postValue(null)
+                this@MapViewModel.routeObjectLiveData.postValue(emptyList())
             }
         }
     }
 
-    fun drawRoute(coordenadas: List<CoordenadasBase>) {
+    fun postRoute(route: Route) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                postRouteRequirement(route)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    fun putRoute(id: String, route: Route) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                patchRouteRequirement(id, route)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    fun drawRoute(coordenadas: List<CoordenatesBase>) {
         val points = coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
         val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points.joinToString(";") { "${it.longitude()},${it.latitude()}" }}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
@@ -97,4 +136,42 @@ class MapViewModel : ViewModel() {
     private fun decodePolyline(encodedPolyline: String): List<Point> {
         return PolylineUtils.decode(encodedPolyline, 6).map { Point.fromLngLat(it.longitude(), it.latitude()) }
     }
+
+    fun clearPreviousRoutes() {
+        mapView.getMapboxMap().getStyle { style ->
+            // Eliminar las fuentes de rutas anteriores
+            routeSources.forEach { sourceId ->
+                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
+                    style.removeStyleSource(sourceId)
+                }
+            }
+            routeSources.clear() // Limpiamos la lista de fuentes
+
+            // Eliminar las capas de rutas anteriores
+            routeLayers.forEach { layerId ->
+                style.getLayer(layerId)?.let {
+                    style.removeStyleLayer(layerId)
+                }
+            }
+            routeLayers.clear() // Limpiamos la lista de capas
+
+            // Eliminar las fuentes de pines anteriores
+            pinSources.forEach { sourceId ->
+                style.getSourceAs<GeoJsonSource>(sourceId)?.let {
+                    style.removeStyleSource(sourceId)
+                }
+            }
+            pinSources.clear() // Limpiamos la lista de fuentes de pines
+
+            // Eliminar las capas de pines anteriores
+            pinLayers.forEach { layerId ->
+                style.getLayer(layerId)?.let {
+                    style.removeStyleLayer(layerId)
+                }
+            }
+            pinLayers.clear() // Limpiamos la lista de capas de pines
+        }
+    }
+
+
 }

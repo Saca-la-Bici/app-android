@@ -3,22 +3,18 @@ package com.kotlin.sacalabici.framework.views.fragments
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.CoordenadasBase
-import com.kotlin.sacalabici.data.models.RutasBase
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
-import com.kotlin.sacalabici.framework.views.activities.RegistrarRutaActivity
+import com.kotlin.sacalabici.framework.views.activities.AddRouteActivity
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.LineString
@@ -28,7 +24,6 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.LineLayer
-import com.mapbox.maps.extension.style.layers.generated.SymbolLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 
@@ -41,6 +36,10 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     private lateinit var mapView: MapView
     private val routeSources = mutableListOf<String>()
     private val routeLayers = mutableListOf<String>()
+
+    private var lastSelectedRuta: RouteBase? = null
+
+    private var isRutasFragmentVisible = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +58,7 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
 
         // Configura los listeners de los botones
         binding.btnAdd.setOnClickListener {
-            val intent = Intent(requireContext(), RegistrarRutaActivity::class.java)
+            val intent = Intent(requireContext(), AddRouteActivity::class.java)
             startActivity(intent)
         }
 
@@ -71,12 +70,12 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     }
 
     private fun observeViewModel() {
-        viewModel.rutasListLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
+        viewModel.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
             rutasList?.let {
                 // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment
                 val rutasFragment = RutasFragment.newInstance(it, viewModel.lastSelectedRuta)
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment_content_main, rutasFragment)
+                    .replace(R.id.fragment_container, rutasFragment)
                     .addToBackStack(null)
                     .commit()
             } ?: run {
@@ -106,7 +105,22 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     }
 
     private fun toggleRutasList() {
-        viewModel.getRutasList()
+        val fragmentManager = requireActivity().supportFragmentManager
+        val rutasFragment = fragmentManager.findFragmentById(R.id.fragment_container)
+
+        if (isRutasFragmentVisible) {
+            // Si el fragmento ya está visible, lo eliminamos
+            rutasFragment?.let {
+                fragmentManager.beginTransaction()
+                    .remove(it)
+                    .commit()
+            }
+            isRutasFragmentVisible = false
+        } else {
+            // Si el fragmento no está visible, lo añadimos
+            viewModel.getRouteList() // Esto activará la observación y añadirá el fragmento
+            isRutasFragmentVisible = true
+        }
     }
 
     private fun drawRouteSegments(map: MapView, tramo1: List<Point>, tramo2: List<Point>) {
@@ -145,7 +159,21 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onRutaSelected(ruta: RutasBase) {
+    override fun onRutaSelected(ruta: RouteBase) {
+        lastSelectedRuta = ruta
+
+        viewModel.clearPreviousRoutes()
+
+        val firstCoordinate = ruta.coordenadas.firstOrNull() ?: return
+        val point = Point.fromLngLat(firstCoordinate.longitud, firstCoordinate.latitud)
+
+        mapView.getMapboxMap().setCamera(
+            CameraOptions.Builder()
+                .center(point)
+                .zoom(15.0)
+                .build()
+        )
+
         ruta?.let {
             viewModel.lastSelectedRuta = it
             viewModel.drawRoute(it.coordenadas)

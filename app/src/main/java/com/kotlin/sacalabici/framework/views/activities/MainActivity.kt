@@ -154,7 +154,7 @@ class MainActivity: AppCompatActivity() {
         resetButtonState(
             binding.appBarMain.btnPerfil,
             binding.appBarMain.tvPerfil,
-            R.drawable.ic_perfil)
+            R.drawable.ic_profile)
         resetButtonState(
             binding.appBarMain.btnMapa,
             binding.appBarMain.tvMapa,
@@ -170,7 +170,7 @@ class MainActivity: AppCompatActivity() {
                 selectButtonState(buttonClicked, textClicked, R.drawable.ic_actividades_selected)
                 binding.topAppBar.tvTopBar.text = getString(R.string.Actividades)
             }
-            Constants.MENU_PROFILE -> selectButtonState(buttonClicked, textClicked, R.drawable.ic_perfil_selected)
+            Constants.MENU_PROFILE -> selectButtonState(buttonClicked, textClicked, R.drawable.ic_profile_selected)
             Constants.MENU_MAP -> selectButtonState(buttonClicked, textClicked, R.drawable.ic_mapa_selected)
             Constants.MENU_ANNOUNCEMENTS -> {
                 selectButtonState(buttonClicked, textClicked, R.drawable.ic_anuncios_selected)

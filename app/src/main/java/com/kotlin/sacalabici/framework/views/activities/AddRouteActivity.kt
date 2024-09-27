@@ -18,6 +18,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +53,7 @@ class AddRouteActivity : AppCompatActivity() {
     private lateinit var mapViewForm: MapView
     private lateinit var etDistancia: EditText
     private lateinit var tvNivel: TextView
+    private lateinit var btnEliminarRuta: ImageButton
 
     // Puntos de la ruta (inicio, descanso, final)
     private var startPoint: Point? = null
@@ -92,6 +94,7 @@ class AddRouteActivity : AppCompatActivity() {
         // Inicialización de otros elementos de UI (título, tiempo y botón de enviar)
         val etTitulo = findViewById<EditText>(R.id.etTitulo)
         val etTiempo = findViewById<EditText>(R.id.etTiempo)
+        btnEliminarRuta = findViewById(R.id.btnEliminarRuta)
         val btnEnviar: Button = findViewById(R.id.btnEnviar)
 
         // El botón de enviar está inicialmente deshabilitado hasta que se validen los inputs
@@ -108,6 +111,41 @@ class AddRouteActivity : AppCompatActivity() {
         // Al hacer clic en el TextView del nivel, se abre un diálogo para seleccionar el nivel
         tvNivel.setOnClickListener {
             showlevelDialogue()  // Abre el diálogo de selección de nivel
+        }
+
+        btnEliminarRuta.setOnClickListener {
+
+            startPoint = null
+            stopoverPoint = null
+            endPoint = null
+            referencePoint1 = null
+            referencePoint2 = null
+
+            mapHelper.clearPreviousRoutes()
+            etTiempo.text.clear()
+            etDistancia.text.clear()
+            tvNivel.text = "" // Esto limpia el nivel seleccionado
+
+            // Inicializa la clase MapHelper para manejar el mapa y los puntos de ruta
+            mapHelper.initializeMap(
+                mapViewForm, etDistancia,
+                onStartPointSet = { point -> startPoint = point },  // Almacena el punto de inicio
+                onStopoverPointSet = { point ->
+                    stopoverPoint = point
+                },  // Almacena el punto de descanso
+                onEndPointSet = { point -> endPoint = point },
+                onReferencePoint1Set = { point -> referencePoint1 = point },
+                onReferencePoint2Set = { point ->
+                    referencePoint2 = point
+                }// Almacena el punto final
+            )
+
+            // Mostrar un mensaje confirmando que la ruta ha sido eliminada
+            Toast.makeText(
+                this,
+                "Ruta eliminada. Por favor, selecciona una nueva ruta.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         // Lógica del botón de enviar cuando se hace clic

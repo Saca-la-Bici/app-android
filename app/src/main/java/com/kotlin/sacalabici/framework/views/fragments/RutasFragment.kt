@@ -58,7 +58,12 @@ class RutasFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        onRutaSelectedListener = context as? OnRutaSelectedListener
+        val parentFragment = MapFragment()
+        if (parentFragment is OnRutaSelectedListener) {
+            onRutaSelectedListener = parentFragment
+        } else {
+            throw RuntimeException("$parentFragment must implement OnRutaSelectedListener")
+        }
     }
 
     override fun onDetach() {

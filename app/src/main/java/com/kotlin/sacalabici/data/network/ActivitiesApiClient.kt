@@ -2,26 +2,39 @@ package com.kotlin.sacalabici.data.network
 
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 
-class ActivitiesApiClient {
+class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
     private lateinit var api: ActivitiesApiService
-    val networkModule = ActivitiesNetworkModuleDI()
+    private val networkModule = ActivitiesNetworkModuleDI()
 
     suspend fun postActivityTaller(taller: ActivityModel): ActivityModel? {
-        api = networkModule.invoke()
-        return try{
-            api.postActivityTaller(taller)
-        }catch (e:java.lang.Exception){
-            e.printStackTrace()
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = networkModule.invoke(token)
+            try {
+                api.postActivityTaller(taller)
+            } catch (e:java.lang.Exception){
+                e.printStackTrace()
+                null
+            }
+        } else {
             null
         }
     }
 
+
     suspend fun postActivityEvento(evento: ActivityModel): ActivityModel? {
-        api = networkModule.invoke()
-        return try {
-            api.postActivityEvento(evento)
-        } catch (e: java.lang.Exception){
-            e.printStackTrace()
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = networkModule.invoke(token)
+            try {
+                api.postActivityEvento(evento)
+            } catch (e: java.lang.Exception){
+                e.printStackTrace()
+                null
+            }
+        } else {
             null
         }
     }

@@ -45,7 +45,7 @@
         </activity>
 
         <activity
-            android:name=".framework.adapters.views.activities.AddAnnouncementActivity"
+            android:name=".framework.views.activities.AddAnnouncementActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
@@ -55,7 +55,7 @@
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.Session.SessionActivity"
+            android:name=".framework.views.activities.Session.SessionActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
@@ -79,7 +79,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.AddActivityActivity"
+            android:name=".framework.views.activities.AddActivityActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>

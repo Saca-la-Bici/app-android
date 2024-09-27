@@ -26,7 +26,8 @@ class AddActivityInfoFragment: Fragment() {
 
     /*
     * Permite que el fragmento se comunique con la actividad
-    * Le notificará cuando sea una Rodada y se seleccione "Siguiente"
+    * Le notificará cuando se seleccione el botón "Siguiente"
+    * Llama a la función para recibir la información del formulario
     * */
     interface OnFragmentInteractionListener {
         fun onNextClicked(type: String)

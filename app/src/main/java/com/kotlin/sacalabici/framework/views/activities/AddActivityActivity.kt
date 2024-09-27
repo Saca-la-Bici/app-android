@@ -56,7 +56,7 @@ class AddActivityActivity: AppCompatActivity(),
 
     /*
     * Función llamada desde AddActivityInfoFragment
-    * Recibe la información general del primer fragmento
+    * Recibe la información general del formulario en el primer fragmento
     * */
     override fun receiveInformation(
         title: String,
@@ -106,5 +106,13 @@ class AddActivityActivity: AppCompatActivity(),
             setResult(Activity.RESULT_OK)
             finish()
         }
+    }
+
+    /*
+    * Función llamada desde AddActivityRouteFragment
+    * Recibe la ruta seleccionada por el usuario
+    * */
+    override fun receiveRuta() {
+
     }
 }

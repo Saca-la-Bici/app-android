@@ -9,10 +9,16 @@ class ActivitiesNetworkModuleDI {
     private val gsonFactory: GsonConverterFactory = GsonConverterFactory.create()
     private val okHttpClient: OkHttpClient = OkHttpClient()
 
-    operator fun invoke(): ActivitiesApiService {
+    private fun createOkHttpClient(token: String?): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(token))
+            .build()
+    }
+
+    operator fun invoke(token: String?): ActivitiesApiService {
         return Retrofit.Builder()
             .baseUrl(Constants.ANNOUNCEMENT_BASE_URL)
-            .client(okHttpClient)
+            .client(createOkHttpClient(token))
             .addConverterFactory(gsonFactory)
             .build()
             .create(ActivitiesApiService::class.java)

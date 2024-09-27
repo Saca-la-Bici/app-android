@@ -1,7 +1,7 @@
 package com.kotlin.sacalabici.utils
 
 object Constants {
-    const val ANNOUNCEMENT_BASE_URL = "http://10.0.2.2:8080/"
+    const val ANNOUNCEMENT_BASE_URL = "http://3.145.117.182:8080/"
     const val MENU_ACTIVITIES = "ACTIVITES"
     const val MENU_MAP = "MAP"
     const val MENU_ANNOUNCEMENTS = "ANNOUNCEMENTS"

@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ProfileViewModel
+import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
 
 class ProfileFragment : Fragment() {

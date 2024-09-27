@@ -39,7 +39,7 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
 
     private var lastSelectedRuta: RouteBase? = null
 
-    private var isRutasListVisible = false
+    private var isRutasFragmentVisible = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,16 +105,21 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     }
 
     private fun toggleRutasList() {
-        // Cambia el estado de la lista
-        isRutasListVisible = !isRutasListVisible
+        val fragmentManager = requireActivity().supportFragmentManager
+        val rutasFragment = fragmentManager.findFragmentById(R.id.fragment_container)
 
-        if (isRutasListVisible) {
-            // Si la lista es visible, obtén y muestra las rutas
-            viewModel.getRouteList()
-            // Aquí deberías agregar el código para mostrar la lista en la interfaz de usuario
+        if (isRutasFragmentVisible) {
+            // Si el fragmento ya está visible, lo eliminamos
+            rutasFragment?.let {
+                fragmentManager.beginTransaction()
+                    .remove(it)
+                    .commit()
+            }
+            isRutasFragmentVisible = false
         } else {
-            // Si la lista no es visible, oculta las rutas
-            // Aquí deberías agregar el código para ocultar la lista en la interfaz de usuario
+            // Si el fragmento no está visible, lo añadimos
+            viewModel.getRouteList() // Esto activará la observación y añadirá el fragmento
+            isRutasFragmentVisible = true
         }
     }
 

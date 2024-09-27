@@ -96,6 +96,7 @@ class AddRouteActivity : AppCompatActivity() {
         val etTiempo = findViewById<EditText>(R.id.etTiempo)
         btnEliminarRuta = findViewById(R.id.btnEliminarRuta)
         val btnEnviar: Button = findViewById(R.id.btnEnviar)
+        val btnBack: ImageButton = findViewById(R.id.btnBack)
 
         // El botón de enviar está inicialmente deshabilitado hasta que se validen los inputs
         btnEnviar.isEnabled = false
@@ -111,6 +112,10 @@ class AddRouteActivity : AppCompatActivity() {
         // Al hacer clic en el TextView del nivel, se abre un diálogo para seleccionar el nivel
         tvNivel.setOnClickListener {
             showlevelDialogue()  // Abre el diálogo de selección de nivel
+        }
+
+        btnBack.setOnClickListener{
+            finish()
         }
 
         btnEliminarRuta.setOnClickListener {

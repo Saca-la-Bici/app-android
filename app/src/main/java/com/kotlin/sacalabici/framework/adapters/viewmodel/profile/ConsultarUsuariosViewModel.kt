@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,20 +24,31 @@ class ConsultarUsuariosViewModel : ViewModel() {
     private var currentPage = 1
     private val pageSize = 7
     private var isLoading = false
+    private var currentRoles: String = "Administrador,Usuario" //Valor inicial al entrar a modificar roles
 
-    fun getUsuarios(reset: Boolean = false) {
-        if (isLoading) return  // Evitar hacer la consulta si ya estamos cargando
+    fun getUsuarios(roles: String? = null, reset: Boolean = false) {
+        // Usa los roles actuales si roles es null
+        val rolesToUse = roles ?: currentRoles
+
+        Log.d("ConsultarUsuariosViewModel", "Roles a consultar: $rolesToUse")
+
+        // Evitar múltiples llamadas si ya estamos cargando
+        if (isLoading) return
 
         if (reset) {
             currentPage = 1  // Reiniciar la paginación
             _usuarios.value = emptyList()  // Limpiar la lista actual de usuarios
+            // Solo actualiza los roles si es necesario
+            if (roles != null) {
+                currentRoles = roles // Actualiza solo si roles no es null
+            }
         }
 
         isLoading = true
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val usuarios = consultarUsuariosRepository.getUsuarios(page = currentPage, limit = pageSize)
+                val usuarios = consultarUsuariosRepository.getUsuarios(page = currentPage, limit = pageSize, roles = rolesToUse)
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
                         val currentList = _usuarios.value?.toMutableList() ?: mutableListOf()

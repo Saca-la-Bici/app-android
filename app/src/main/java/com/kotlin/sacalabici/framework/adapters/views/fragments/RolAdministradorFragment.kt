@@ -41,7 +41,7 @@ class RolAdministradorFragment : Fragment() {
         // Observamos los cambios en el ViewModel
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
-                mostrarUsuariosAdministradoresYUsuarios(ArrayList(usuarios))
+                setUpRecyclerView(ArrayList(usuarios))
             }
         })
 
@@ -50,7 +50,7 @@ class RolAdministradorFragment : Fragment() {
         })
 
         // Cargar usuarios
-        viewModel.getUsuarios()
+        viewModel.getUsuarios(roles = "Administrador,Usuario", reset = true)
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
@@ -116,15 +116,7 @@ class RolAdministradorFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.RVViewUsers.layoutManager = linearLayoutManager
         binding.RVViewUsers.adapter = adapter
-    }
-
-    private fun mostrarUsuariosAdministradoresYUsuarios(data: ArrayList<ConsultarUsuariosBase>) {
-        val usuariosFiltrados = data.filter {
-            it.rol.nombreRol == "Administrador" || it.rol.nombreRol == "Usuario"
-        }
-        adapter.updateData(ArrayList(usuariosFiltrados))
-
-        setUpRecyclerView(ArrayList(usuariosFiltrados))
+        adapter.updateData(dataForList)
     }
 
     private fun highlightCurrentFragment(currentFragment: String) {

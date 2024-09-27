@@ -6,10 +6,10 @@ import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 class ConsultarUsuariosAPIClient {
     private lateinit var api: ConsultarUsuariosAPIService
 
-    suspend fun getUsuarios(page: Int, limit: Int): List<ConsultarUsuariosBase>? {
+    suspend fun getUsuarios(page: Int, limit: Int, rol: String): List<ConsultarUsuariosBase>? {
         api = ConsultarUsuariosModuleDI() // Asegúrate de obtener la instancia correctamente
         return try {
-            val response = api.getUsuarios(page, limit)
+            val response = api.getUsuarios(page, limit, rol)
             response.usuarios // Devuelve la lista de usuarios
         } catch (e: Exception) {
             e.printStackTrace()

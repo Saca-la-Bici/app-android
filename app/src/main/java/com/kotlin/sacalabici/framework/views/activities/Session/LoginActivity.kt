@@ -14,6 +14,7 @@ import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityLoginBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
+import com.kotlin.sacalabici.framework.views.activities.Session.RecoverPasswordActivity
 import com.kotlin.sacalabici.utils.Constants
 
 class LoginActivity : AppCompatActivity() {
@@ -56,6 +57,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // Listeners para los botones
+
+        binding.TVForgotPassword.setOnClickListener{
+            val intent=Intent(this, RecoverPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.BSession.setOnClickListener {
             val email = binding.TILEmail.editText?.text.toString()
             val password = binding.TILPassword.editText?.text.toString()

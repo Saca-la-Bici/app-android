@@ -23,6 +23,8 @@ places = "4.0.0"
 swiperefreshlayout = "1.1.0"
 core = "1.45.0"
 playServicesFido = "20.0.1"
+activity = "1.9.2"
+constraintlayout = "2.1.4"
 
 [libraries]
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -50,6 +52,8 @@ places = { group = "com.google.android.libraries.places", name = "places", versi
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 core = { group = "com.google.ar", name = "core", version.ref = "core" }
 play-services-fido = { group = "com.google.android.gms", name = "play-services-fido", version.ref = "playServicesFido" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

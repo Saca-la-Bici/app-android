@@ -1,14 +1,14 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities.Session
+package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.kotlin.sacalabici.databinding.ActivityRegisterUserBinding
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserContinueBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.session.RegisterContinueViewModel
-import com.kotlin.sacalabici.framework.adapters.viewmodel.session.RegisterFinishViewModel
+import com.kotlin.sacalabici.framework.viewmodel.session.RegisterContinueViewModel
 
 class RegisterContinueActivity : AppCompatActivity() {
 
@@ -33,8 +33,13 @@ class RegisterContinueActivity : AppCompatActivity() {
             val password = binding.TILPassword.editText?.text.toString()
             val confirmPassword = binding.TILVerifyPassword.editText?.text.toString()
 
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.BContinue.isEnabled = true
+            }, 5000)
+
             val errorMessage = registerContinueViewModel.arePasswordsValid(password, confirmPassword)
             if (errorMessage != null) {
+                binding.BContinue.isEnabled = false
                 Toast.makeText(this@RegisterContinueActivity, errorMessage, Toast.LENGTH_SHORT).show()
             } else {
                 val intent = Intent(this@RegisterContinueActivity, RegisterFinishActivity::class.java)

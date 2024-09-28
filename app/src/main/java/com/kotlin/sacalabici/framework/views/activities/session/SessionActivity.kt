@@ -1,30 +1,30 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities.Session
+@file:Suppress("DEPRECATION")
+
+package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivitySessionBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
+import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
 import com.kotlin.sacalabici.utils.Constants
 
-class SessionActivity() : AppCompatActivity() {
+class SessionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySessionBinding
-    private lateinit var authViewModel: AuthViewModel
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
-
-        authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
         // Inicializa el ViewModel con Firebase y GoogleSignInOptions
         authViewModel.initialize(

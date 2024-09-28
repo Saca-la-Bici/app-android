@@ -1,8 +1,10 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities.Session
+package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -21,11 +23,12 @@ import com.hbb20.CountryCodePicker
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityLoginFinishBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.session.LoginFinishViewModel
+import com.kotlin.sacalabici.framework.viewmodel.session.LoginFinishViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
+@Suppress("NAME_SHADOWING")
 class LoginFinishActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginFinishBinding
     private val loginFinishViewModel: LoginFinishViewModel by viewModels()
@@ -117,13 +120,29 @@ class LoginFinishActivity : AppCompatActivity() {
             val phoneNumber = phoneNumberEditText.text.toString()
             val name = binding.TILName.editText?.text.toString()
 
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.BFinish.isEnabled = true
+            }, 5000)
+
+
             lifecycleScope.launch {
                 val errorMessage =
                     loginFinishViewModel.validate(birthdate, bloodType, phoneNumber, name)
                 Log.d("RegisterFinishActivity", "errorMessage: $errorMessage")
                 if (errorMessage != null) {
-                    Toast.makeText(this@LoginFinishActivity, errorMessage, Toast.LENGTH_SHORT)
-                        .show()
+                    binding.BFinish.isEnabled = false
+                    Toast.makeText(this@LoginFinishActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                    when {
+                        errorMessage.contains("tipo de sangre") -> {
+                            binding.autoCompleteTextView.error = errorMessage
+                        }
+                        errorMessage.contains("número de teléfono") -> {
+                            phoneNumberEditText.error = errorMessage
+                        }
+                        errorMessage.contains("nombre") -> {
+                            binding.TILName.error = errorMessage
+                        }
+                    }
                 } else {
                     loginFinishViewModel.registerUser(
                         name,

@@ -1,10 +1,11 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities.Session
+@file:Suppress("DEPRECATION")
+
+package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityLoginBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
+import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
 import com.kotlin.sacalabici.utils.Constants
 

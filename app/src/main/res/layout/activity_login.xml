@@ -110,12 +110,13 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
             android:padding="24dp"
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TEmail"
-            android:lines="1"/>
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -143,13 +144,14 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
             android:padding="24dp"
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TPassword"
             android:inputType="textPassword"
-            android:lines="1"/>
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

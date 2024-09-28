@@ -1,8 +1,10 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities.Session
+package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -17,11 +19,12 @@ import com.hbb20.CountryCodePicker
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserFinishBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.session.RegisterFinishViewModel
+import com.kotlin.sacalabici.framework.viewmodel.session.RegisterFinishViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
+@Suppress("NAME_SHADOWING")
 class RegisterFinishActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterUserFinishBinding
     private val registerFinishViewModel: RegisterFinishViewModel by viewModels()
@@ -108,13 +111,26 @@ class RegisterFinishActivity : AppCompatActivity() {
             val bloodType = binding.autoCompleteTextView.text.toString()
             val phoneNumber = phoneNumberEditText.text.toString()
 
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.BFinish.isEnabled = true
+            }, 5000)
+
+
             lifecycleScope.launch {
                 val errorMessage =
                     registerFinishViewModel.validate(birthdate, bloodType, phoneNumber)
                 Log.d("RegisterFinishActivity", "errorMessage: $errorMessage")
                 if (errorMessage != null) {
-                    Toast.makeText(this@RegisterFinishActivity, errorMessage, Toast.LENGTH_SHORT)
-                        .show()
+                    binding.BFinish.isEnabled = false
+                    Toast.makeText(this@RegisterFinishActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                    when {
+                        errorMessage.contains("tipo de sangre") -> {
+                            binding.autoCompleteTextView.error = errorMessage
+                        }
+                        errorMessage.contains("número de teléfono") -> {
+                            phoneNumberEditText.error = errorMessage
+                        }
+                    }
                 } else {
                     registerFinishViewModel.registerUser(
                         email!!,

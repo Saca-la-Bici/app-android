@@ -95,7 +95,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
                 val usuarios = consultarUsuariosRepository.searchUser(username, firebaseUID)
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
-                        _usuarios.value = usuarios
+                        _usuarios.value = usuarios!!
                     } else {
                         _errorMessage.value = "No se encontraron usuarios con ese nombre."
                         isSearching = false  // Restaurar si no hay resultados
@@ -110,11 +110,4 @@ class ConsultarUsuariosViewModel : ViewModel() {
             }
         }
     }
-
-    // Función para limpiar el estado de búsqueda y volver a la paginación
-    fun resetSearch() {
-        isSearching = false  // Volver al modo de paginación
-        getUsuarios(firebaseUID = "firebaseUID_actual", reset = true)  // Restablecer la paginación si es necesario
-    }
 }
-

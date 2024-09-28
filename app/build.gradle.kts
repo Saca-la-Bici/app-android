@@ -69,6 +69,9 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation(libs.play.services.fido)
     implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.lifecycle.process)
     //implementation(libs.androidx.swiperefreshlayout)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     //Data binding
@@ -122,4 +125,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.3.0")) // Latest BOM
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+
+    implementation("com.hbb20:ccp:2.7.0")
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.12.52")
+
 }

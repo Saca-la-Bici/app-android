@@ -1,7 +1,5 @@
 package com.kotlin.sacalabici.data.network.profile
 
-import com.kotlin.sacalabici.data.network.profile.ProfileApiService
-import com.kotlin.sacalabici.data.network.model.profile.Profile
 import com.kotlin.sacalabici.utils.Constants
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

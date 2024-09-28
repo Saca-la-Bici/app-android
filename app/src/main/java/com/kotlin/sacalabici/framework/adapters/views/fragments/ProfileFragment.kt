@@ -82,7 +82,7 @@ class ProfileFragment : Fragment() {
                 binding.textKilometros.text = "${profile.KmCompleted}km"
             }
             if (profile != null) {
-                profile.printProfileDetails()
+
             }
         }
     }

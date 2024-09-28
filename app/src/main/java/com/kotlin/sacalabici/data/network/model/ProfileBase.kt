@@ -18,19 +18,3 @@ data class ProfileBase(
     @SerializedName("fechaRegistro") val date: String,
     @SerializedName("__v") val url: Int
 )
-{
-    fun printProfileDetails() {
-        println("User: $user")
-        println("Name: $name")
-        println("Birthdate: $birthdate")
-        println("Blood Type: $bloodtype")
-        println("Email: $email")
-        println("Emergency Number: $emergencyNumber")
-        println("Kilometers Completed: $KmCompleted")
-        println("Time Completed: $TimeCompleted")
-        println("Activities Completed: $activitiesCompleted")
-        println("Firebase UID: $fireUID")
-        println("Fecha de registro: $date")
-        println("URL: $url")
-    }
-}

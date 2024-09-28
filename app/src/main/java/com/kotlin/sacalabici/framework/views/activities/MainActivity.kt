@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.views.activities
 
+import android.app.Application
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -12,11 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
-import com.kotlin.sacalabici.framework.adapters.views.activities.Session.SessionActivity
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import com.kotlin.sacalabici.framework.views.fragments.ActivitiesFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.AnnouncementsFragment
 import com.kotlin.sacalabici.framework.views.fragments.MapFragment
@@ -49,6 +51,7 @@ class MainActivity: AppCompatActivity() {
         tokenManager.getIdToken()
 
         FacebookSdk.sdkInitialize(applicationContext)
+        AppEventsLogger.activateApp(applicationContext as Application)
 
         if (firebaseAuth.currentUser == null) {
             // Usuario no está autenticado, redirige a SessionActivity

@@ -225,7 +225,7 @@
         <com.mapbox.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="380dp"
-            android:layout_height="698dp"
+            android:layout_height="800dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -241,6 +241,7 @@
             android:layout_height="wrap_content"
             android:text="Ocultar ruta"
             android:textColor="@color/semiWhite"
+            android:backgroundTint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/mapView"
             app:layout_constraintStart_toStartOf="parent"

@@ -53,6 +53,11 @@
     <string name="genderPE">Género</string>
     <string name="cancel">Cancelar</string>
     <string name="ok">Confirmar</string>
+    <string name="TNombreCompleto">Nombre completo</string>
+    <string name="TNumeroEmergencia">Número de emergencia</string>
+    <string name="País">País\n</string>
+    <string name="TPhoneNumber">Número de teléfono</string>
+    <string name="TBloodType">Tipo de sangre</string>
 
 
 </resources>

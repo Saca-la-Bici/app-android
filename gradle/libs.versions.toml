@@ -13,6 +13,9 @@ firebaseAuth = "23.0.0"
 navigationFragment = "2.8.1"
 places = "4.0.0"
 swiperefreshlayout = "1.1.0"
+material3Android = "1.3.0"
+firebaseCrashlyticsBuildtools = "3.0.2"
+lifecycleProcess = "2.8.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,6 +29,9 @@ androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "s
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

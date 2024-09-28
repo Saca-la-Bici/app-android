@@ -57,7 +57,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.Session.RegisterActivity"
+            android:name=".framework.adapters.views.activities.Session.RegisterUserActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
@@ -69,17 +69,24 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".framework.adapters.views.activities.Session.RegisterFinishActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".framework.adapters.views.activities.Session.LoginFinishActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".framework.adapters.views.fragments.SettingsAdminFragment"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
         <activity
             android:name=".framework.adapters.views.activities.ProfileEditActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
-
-        <activity
-            android:name=".framework.adapters.views.fragments.ModifyRolesFragment"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
     </application>

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -35,22 +36,40 @@ class LoginActivity : AppCompatActivity() {
             this
         )
 
-        // Observe authentication state
+        // Observe registration state
         authViewModel.authState.observe(this) { authState ->
-            when (authState) {                is AuthState.Success -> {
-                    // Handle successful login
+            when (authState) {
+                is AuthState.Success -> {
+                    // Registration successful
                     Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
-                    finish() // Optional: Finish LoginActivity to prevent going back
+                    finish() // Optional: Finish RegisteerContinueActivity to prevent going back
                 }
+
                 is AuthState.Error -> {
                     Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
-                AuthState.Cancel -> {
-                    Toast.makeText(this, "Inicio de sesión cancelado", Toast.LENGTH_SHORT).show()
+                is AuthState.IncompleteProfile -> {
+                    val intent = Intent(this, LoginFinishActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                is AuthState.CompleteProfile -> {
+                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+                is AuthState.Unauthenticated -> {
+                    val intent = Intent(this, SessionActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
 
+                AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
             }
         }
@@ -90,6 +109,7 @@ class LoginActivity : AppCompatActivity() {
         binding.BBack.setOnClickListener {
             val intent = Intent(this, SessionActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

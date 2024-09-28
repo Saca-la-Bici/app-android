@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.framework.adapters.views.activities.Session
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -35,22 +36,38 @@ class SessionActivity() : AppCompatActivity() {
             this
         )
 
-        // Observa los cambios de estado de autenticación
+        // Observe registration state
         authViewModel.authState.observe(this) { authState ->
             when (authState) {
                 is AuthState.Success -> {
+                    // Registration successful
                     Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
-                    finish()
+                    finish() // Optional: Finish RegisteerContinueActivity to prevent going back
                 }
+
                 is AuthState.Error -> {
                     Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
-                is AuthState.Cancel -> {
-                    Toast.makeText(this, "Inicio de sesión cancelado", Toast.LENGTH_SHORT).show()
+                is AuthState.IncompleteProfile -> {
+                    val intent = Intent(this, LoginFinishActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                is AuthState.CompleteProfile -> {
+                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+                is AuthState.Unauthenticated -> {
+                    Log.d("SessionActivity", "Usuario no autenticado")
                 }
 
+                AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
             }
         }
@@ -70,7 +87,7 @@ class SessionActivity() : AppCompatActivity() {
         }
 
         binding.BRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
+            val intent = Intent(this, RegisterUserActivity::class.java)
             startActivity(intent)
         }
     }
@@ -93,7 +110,7 @@ class SessionActivity() : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        authViewModel.checkCurrentUser()
+        authViewModel.startAuthStateListener()
     }
 }
 

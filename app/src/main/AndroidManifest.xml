@@ -31,7 +31,8 @@
             android:name="com.mapbox.AccessToken"
             android:resource="@string/mapbox_access_token" />
 
-        <!-- Main Activity -->
+
+
         <activity
             android:name=".framework.views.activities.MainActivity"
             android:exported="true"
@@ -43,7 +44,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Otras actividades con orientación en portrait -->
         <activity
             android:name=".framework.adapters.views.activities.ProfileEditActivity"
             android:exported="false"
@@ -53,19 +53,19 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".framework.adapters.views.activities.Session.SessionActivity"
+            android:name=".framework.views.activities.session.SessionActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".framework.adapters.views.activities.Session.LoginActivity"
+            android:name=".framework.views.activities.session.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".framework.adapters.views.activities.Session.RegisterActivity"
+            android:name=".framework.views.activities.session.RegisterUserActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".framework.adapters.views.activities.Session.RegisterContinueActivity"
+            android:name=".framework.views.activities.session.RegisterContinueActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -82,7 +82,27 @@
         <activity
             android:name=".framework.views.activities.ModifyRouteActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
-    </application>
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".framework.views.activities.session.RegisterFinishActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".framework.views.activities.session.LoginFinishActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".framework.adapters.views.fragments.SettingsAdminFragment"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+    </application>
+    <queries>
+        <package android:name="com.facebook.katana" /> <!-- Facebook App -->
+        <package android:name="com.facebook.orca" />   <!-- Messenger -->
+    </queries>
 </manifest>

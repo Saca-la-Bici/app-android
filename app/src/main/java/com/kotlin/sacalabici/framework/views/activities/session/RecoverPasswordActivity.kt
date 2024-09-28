@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.framework.adapters.views.activities.Session.LoginActivity
 import com.google.android.material.textfield.TextInputEditText
+import com.kotlin.sacalabici.framework.views.activities.session.LoginActivity
 
 class RecoverPasswordActivity : AppCompatActivity() {
 

@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -44,10 +45,10 @@ class AnnouncementsViewModel: ViewModel() {
         }
     }
 
-    fun postAnnouncement(announcement: Announcement) {
+    fun postAnnouncement(announcement: Announcement, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                postAnnouncementRequirement(announcement)
+                postAnnouncementRequirement(announcement, context)
             } catch (e: Exception) {
                 throw e
             }

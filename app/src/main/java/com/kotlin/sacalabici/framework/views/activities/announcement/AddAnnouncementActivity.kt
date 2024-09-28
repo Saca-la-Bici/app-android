@@ -35,9 +35,9 @@ class AddAnnouncementActivity: AppCompatActivity() {
         binding.ibCheck.setOnClickListener {
             val title = binding.etAddAnnouncementTitle.text.toString()
             val description = binding.etAddAnnouncementDescription.text.toString()
-            val image = selectedImageUri.toString()
+            val image = selectedImageUri
             val annnouncement = Announcement(title, description, image)
-            viewModel.postAnnouncement(annnouncement)
+            viewModel.postAnnouncement(annnouncement, this)
             setResult(Activity.RESULT_OK)
             finish()
         }
@@ -56,7 +56,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
-                Log.d("ImagePicker", "Selected image URI: $selectedImageUri")
+                Log.d("uri", "Selected image URI: $selectedImageUri")
                 binding.ibAddImage.setImageURI(selectedImageUri)
             }
         }

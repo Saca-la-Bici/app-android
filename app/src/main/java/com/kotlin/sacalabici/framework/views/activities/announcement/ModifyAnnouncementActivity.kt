@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.framework.views.activities.announcement
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -18,6 +19,7 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
     private lateinit var binding: ActivityModifyAnnouncementBinding
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private var selectedImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +52,7 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
             val id = intent.getStringExtra("id") ?: emptystring
             val title = binding.etModifyAnnouncementTitle.text.toString()
             val description = binding.etModifyAnnouncementDescription.text.toString()
-            val image = emptystring.takeIf { it.isNotEmpty() }
+            val image = selectedImageUri
             val announcement = Announcement(title, description, image)
             viewModel.putAnnouncement(id, announcement)
             setResult(Activity.RESULT_OK)
@@ -70,9 +72,9 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
     private fun registerImagePicker() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val selectedImageUri = result.data?.data
+                selectedImageUri = result.data?.data
                 Log.d("ImagePicker", "Selected image URI: $selectedImageUri")
-                /*TODO: Implement image upload*/
+                binding.ibAddImage.setImageURI(selectedImageUri)
             }
         }
     }

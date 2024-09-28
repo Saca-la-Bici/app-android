@@ -113,6 +113,9 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
 
+    // OkHttp
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+
     // Facebook SDK
     implementation("com.facebook.android:facebook-login:latest.release")
     implementation("com.facebook.android:facebook-android-sdk:latest.release")

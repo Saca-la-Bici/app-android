@@ -42,6 +42,7 @@
     <string name="TFinish">Finalizar</string>
 
     <!-- String de Perfil -->
+    <string name="TProfile">Asignación de roles y permisos</string>
 
     <string name="facebook_app_id">1940390093140800</string>
     <string name="facebook_client_token">b5daf3a37da479db677c140e79b2268d</string>
@@ -53,6 +54,11 @@
     <string name="genderPE">Género</string>
     <string name="cancel">Cancelar</string>
     <string name="ok">Confirmar</string>
+    <string name="TNombreCompleto">Nombre completo</string>
+    <string name="TNumeroEmergencia">Número de emergencia</string>
+    <string name="País">País\n</string>
+    <string name="TPhoneNumber">Número de teléfono</string>
+    <string name="TBloodType">Tipo de sangre</string>
 
 
     <string-array name="genders">

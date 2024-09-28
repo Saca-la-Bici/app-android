@@ -79,5 +79,20 @@
         <item>AB-</item>
     </string-array>
 
+    <!-- String de Registrar Pregunta Frecuente -->
+    <string name="NuevaPregunta">Añadir Pregunta</string>
+    <string name="Categoria">Categoria</string>
+    <string name="TuSeguridad">Tu seguridad</string>
+    <string name="AcercaBici">Acerca de la bici</string>
+    <string name="InfoGeneral">Información general</string>
+    <string name="Titulo">Titulo</string>
+    <string name="TituloPregunta">¿Qué pregunta vas a responder?</string>
+    <string name="Descripcion">Descripción</string>
+    <string name="DescripcionRespuesta">Escribe la respuesta aquí...</string>
+    <string name="AgregarImagen">Agregar imagen</string>
+
+
+
+
 </resources>
 

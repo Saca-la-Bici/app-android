@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- Flecha de cerrar -->
+    <ImageButton
+        android:id="@+id/icon_cerrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/ic_close"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.035" />
+
+
+
+
+    <!-- Palomita de aceptar -->
+    <ImageButton
+        android:id="@+id/icon_aceptar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/ic_check_yellow"
+        app:tint="@color/yellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.035" />
+
+
+    <TextView
+        android:id="@+id/tituloAnadirPregunta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/NuevaPregunta"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.035" />
+
+
+    <!-- Categoría -->
+    <TextView
+        android:id="@+id/categoria_subtitulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/Categoria"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/tituloAnadirPregunta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- Categoria 1 -->
+    <TextView
+        android:id="@+id/categoria1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/TuSeguridad"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoria_subtitulo"
+        />
+
+
+    <ImageButton
+        android:id="@+id/circle_categoria1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_radio_button_unchecked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/categoria1"
+        app:layout_constraintBottom_toBottomOf="@+id/categoria1"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
+
+
+    <!-- Categoria 2 -->
+    <TextView
+        android:id="@+id/categoria2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/AcercaBici"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoria1"
+        />
+
+
+    <ImageButton
+        android:id="@+id/circle_categoria2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_radio_button_unchecked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/categoria2"
+        app:layout_constraintBottom_toBottomOf="@+id/categoria2"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
+
+
+    <!-- Categoria 3 -->
+    <TextView
+        android:id="@+id/categoria3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/InfoGeneral"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoria2"
+        />
+
+
+    <ImageButton
+        android:id="@+id/circle_categoria3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_radio_button_unchecked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/categoria3"
+        app:layout_constraintBottom_toBottomOf="@+id/categoria3"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
+
+
+
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/titulo_pregunta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/Titulo"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/categoria3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- Cuadro para introducir título -->
+    <EditText
+        android:id="@+id/titulo_pregunta_cuadro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/TituloPregunta"
+        android:textColor="@color/mediumGray"
+        android:textSize="15sp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bg_introduce_text_square"
+        app:layout_constraintTop_toBottomOf="@+id/titulo_pregunta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Descripción -->
+    <TextView
+        android:id="@+id/descripcion_pregunta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/Descripcion"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/titulo_pregunta_cuadro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- Cuadro para introducir descripcion -->
+    <EditText
+        android:id="@+id/descripcion_pregunta_cuadro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/DescripcionRespuesta"
+        android:textColor="@color/mediumGray"
+        android:textSize="15sp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bg_introduce_text_square"
+        app:layout_constraintTop_toBottomOf="@+id/descripcion_pregunta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- Botón agregar imagen -->
+    <TextView
+        android:id="@+id/botonAgregarImagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/AgregarImagen"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_btn_rounded_dark_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintVertical_bias="0.9"/>
+
+
+    <!-- Icono de agregar preguntas -->
+    <ImageButton
+        android:id="@+id/icon_agregar_pregunta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/ic_add_image_faq"
+        app:tint="@color/white"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="@+id/botonAgregarImagen"
+        app:layout_constraintBottom_toBottomOf="@+id/botonAgregarImagen"
+        app:layout_constraintStart_toStartOf="@+id/botonAgregarImagen"/>
+    <!-- Main Navbar -->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

@@ -136,7 +136,9 @@
             android:textSize="14sp"
             android:hint="@string/TPassword"
             android:inputType="textPassword"
-            android:lines="1"/>
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -171,7 +173,9 @@
             android:textSize="14sp"
             android:hint="@string/TVerifyPassword"
             android:inputType="textPassword"
-            android:lines="1"/>
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

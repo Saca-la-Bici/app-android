@@ -175,7 +175,9 @@
         android:textSize="14sp"
         android:hint="@string/TNombreCompleto"
         android:fontFamily="@font/roboto_regular"
-        android:lines="1"/>
+        android:maxLines="1"
+        android:lines="1"
+        android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Número de emergencia -->
@@ -217,7 +219,9 @@
             android:textSize="14sp"
             android:hint="@string/TPhoneNumber"
             android:fontFamily="@font/roboto_regular"
+            android:maxLines="1"
             android:lines="1"
+            android:singleLine="true"
             android:inputType="phone" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -275,7 +279,10 @@
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TBloodType"
-            android:fontFamily="@font/roboto_regular"/>
+            android:fontFamily="@font/roboto_regular"
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

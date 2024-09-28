@@ -55,25 +55,25 @@
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.Session.SessionActivity"
+            android:name=".framework.views.activities.session.SessionActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.Session.LoginActivity"
+            android:name=".framework.views.activities.session.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.Session.RegisterUserActivity"
+            android:name=".framework.views.activities.session.RegisterUserActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.Session.RegisterContinueActivity"
+            android:name=".framework.views.activities.session.RegisterContinueActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
@@ -93,13 +93,13 @@
 
 
         <activity
-            android:name=".framework.adapters.views.activities.Session.RegisterFinishActivity"
+            android:name=".framework.views.activities.session.RegisterFinishActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.activities.Session.LoginFinishActivity"
+            android:name=".framework.views.activities.session.LoginFinishActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>

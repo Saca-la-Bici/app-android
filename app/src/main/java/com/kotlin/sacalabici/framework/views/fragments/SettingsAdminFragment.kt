@@ -12,6 +12,7 @@ import com.google.firebase.auth.auth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentSettingsAdminBinding
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
+import com.kotlin.sacalabici.framework.views.fragments.ProfileFragment
 
 
 class SettingsAdminFragment : Fragment() {

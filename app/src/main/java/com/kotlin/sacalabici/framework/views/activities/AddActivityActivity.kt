@@ -107,7 +107,7 @@ class AddActivityActivity: AppCompatActivity(),
     * Función que llama la lista de rutas desde el viewModel
     * */
     private fun toggleRutasList() {
-        viewModelRoute.getRutasList()
+        viewModelRoute.getRouteList()
     }
 
     /*
@@ -131,7 +131,7 @@ class AddActivityActivity: AppCompatActivity(),
     * */
     private fun observeViewModel() {
         // Observa los LiveData del ViewModel
-        viewModelRoute.rutasListLiveData.observe(this, Observer { rutasList ->
+        viewModelRoute.routeObjectLiveData.observe(this, Observer { rutasList ->
             rutasList?.let {
                 // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment
                 val routeFragment = AddActivityRouteFragment.newInstance(it, viewModelRoute.lastSelectedRuta)

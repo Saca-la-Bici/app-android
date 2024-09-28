@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
-import com.kotlin.sacalabici.framework.views.activities.Session.SessionActivity
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import com.kotlin.sacalabici.framework.views.fragments.ActivitiesFragment
 import com.kotlin.sacalabici.framework.views.fragments.AnnouncementsFragment
 import com.kotlin.sacalabici.framework.views.fragments.MapFragment

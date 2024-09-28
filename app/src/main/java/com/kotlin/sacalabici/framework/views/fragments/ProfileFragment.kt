@@ -10,6 +10,10 @@ import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
+import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsAdminFragment
 
 class ProfileFragment: Fragment() {
     private var _binding: FragmentProfileBinding? = null

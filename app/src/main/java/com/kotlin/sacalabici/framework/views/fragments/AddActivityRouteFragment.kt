@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlin.sacalabici.data.models.RutasBase
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.databinding.FragmentActivityRouteBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment.OnFragmentInteractionListener
@@ -19,11 +19,11 @@ import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment.O
 class AddActivityRouteFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var rutasAdapter: RutasAdapter
-    private lateinit var rutasList: ArrayList<RutasBase>
+    private lateinit var rutasList: ArrayList<RouteBase>
 
     private var onRutaSelectedListener: OnRutaSelectedListener? = null
     private var onRutaConfirmListener: OnRutaConfirmListener? = null
-    private var lastSelectedRuta: RutasBase? = null
+    private var lastSelectedRuta: RouteBase? = null
 
     private var _binding: FragmentActivityRouteBinding? = null
     private val binding get() = _binding!!
@@ -58,8 +58,8 @@ class AddActivityRouteFragment: Fragment() {
         }
         recyclerView.adapter = rutasAdapter
 
-        val rutasList = arguments?.getParcelableArrayList<RutasBase>("rutasList")
-        val selectedRuta = arguments?.getParcelable<RutasBase>("selectedRuta")
+        val rutasList = arguments?.getParcelableArrayList<RouteBase>("rutasList")
+        val selectedRuta = arguments?.getParcelable<RouteBase>("selectedRuta")
         rutasList?.let {
             updateRutasList(it, selectedRuta)
         }
@@ -69,22 +69,22 @@ class AddActivityRouteFragment: Fragment() {
         return root
     }
 
-    fun updateRutasList(rutasList: List<RutasBase>, selectedRuta: RutasBase?) {
+    fun updateRutasList(rutasList: List<RouteBase>, selectedRuta: RouteBase?) {
         rutasAdapter.updateRutas(rutasList)
         this.lastSelectedRuta = selectedRuta
         rutasAdapter.setSelectedRuta(selectedRuta)
     }
 
-    private fun onRutaSelected(ruta: RutasBase) {
+    private fun onRutaSelected(ruta: RouteBase) {
         onRutaSelectedListener?.onRutaSelected(ruta)
     }
 
     interface OnRutaSelectedListener {
-        fun onRutaSelected(ruta: RutasBase)
+        fun onRutaSelected(ruta: RouteBase)
     }
 
     companion object {
-        fun newInstance(rutasList: List<RutasBase>?, selectedRuta: RutasBase?): RutasFragment {
+        fun newInstance(rutasList: List<RouteBase>?, selectedRuta: RouteBase?): RutasFragment {
             val fragment = RutasFragment()
             val args = Bundle()
             args.putParcelableArrayList("rutasList", rutasList?.let { ArrayList(it) })
@@ -93,7 +93,7 @@ class AddActivityRouteFragment: Fragment() {
             return fragment
         }
 
-        fun newInstanceList(rutasList: List<RutasBase>): AddActivityRouteFragment {
+        fun newInstanceList(rutasList: List<RouteBase>): AddActivityRouteFragment {
             val fragment = AddActivityRouteFragment()
             val args = Bundle()
             args.putParcelableArrayList("rutasList", ArrayList(rutasList))

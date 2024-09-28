@@ -59,7 +59,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".framework.views.activities.Session.SessionActivity"
+            android:name=".framework.views.activities.session.SessionActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -67,7 +67,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".framework.views.activities.session.RegisterUserActivity"
+            android:name=".framework.views.activities.session.LoginFinishActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".framework.views.activities.session.RecoverPasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -75,20 +79,20 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".framework.views.activities.session.RegisterFinishActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".framework.views.activities.session.RegisterUserActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".framework.views.activities.AddActivityActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".framework.views.activities.RegistrarRutaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".framework.views.activities.Session.RecoverPasswordActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
 
         <!-- Otras actividades relevantes -->
         <activity
@@ -98,17 +102,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".framework.views.activities.ModifyRouteActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".framework.views.activities.session.RegisterFinishActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".framework.views.activities.session.LoginFinishActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>

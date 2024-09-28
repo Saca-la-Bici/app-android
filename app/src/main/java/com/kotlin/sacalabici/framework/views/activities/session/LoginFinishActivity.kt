@@ -25,6 +25,7 @@ import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityLoginFinishBinding
 import com.kotlin.sacalabici.framework.viewmodel.session.LoginFinishViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
 

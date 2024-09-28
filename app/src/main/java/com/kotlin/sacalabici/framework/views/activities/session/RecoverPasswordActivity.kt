@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.views.activities.Session
+package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.content.Intent
 import android.os.Bundle

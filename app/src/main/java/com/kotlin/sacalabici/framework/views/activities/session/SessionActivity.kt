@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.views.activities.Session
+package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,8 +11,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivitySessionBinding
-import com.kotlin.sacalabici.framework.adapters.views.activities.Session.LoginActivity
-import com.kotlin.sacalabici.framework.adapters.views.activities.Session.RegisterActivity
 import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
 import com.kotlin.sacalabici.utils.Constants

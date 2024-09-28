@@ -2,25 +2,22 @@ package com.kotlin.sacalabici.data.network.announcements
 
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementObjectBase
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 
 class AnnouncementApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
 
     private lateinit var api: AnnouncementApiService
 
-    suspend fun getAnnouncementList(): List<AnnouncementBase> {
+    suspend fun getAnnouncementList(): AnnouncementObjectBase? {
         val token = firebaseTokenManager.getTokenSynchronously() // Obtener el token de forma sincrónica
+        api = AnnouncementNetworkModuleDI(token)
 
-        return if (token != null) {
-            api = AnnouncementNetworkModuleDI(token)
-            try {
-                api.getAnnouncementList()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emptyList()
-            }
-        } else {
-            emptyList()
+        return try {
+            api.getAnnouncementList()
+        } catch (e:java.lang.Exception) {
+            e.printStackTrace()
+            null
         }
     }
 

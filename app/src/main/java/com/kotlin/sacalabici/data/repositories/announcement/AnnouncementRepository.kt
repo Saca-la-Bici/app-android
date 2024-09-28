@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.network.announcements.AnnouncementApiClient
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementObjectBase
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 
 class AnnouncementRepository() {
@@ -12,7 +13,7 @@ class AnnouncementRepository() {
     val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
     private val apiAnnouncement = AnnouncementApiClient(firebaseTokenManager)
 
-    suspend fun getAnnouncementList(): List<AnnouncementBase> =
+    suspend fun getAnnouncementList(): AnnouncementObjectBase? =
         apiAnnouncement.getAnnouncementList()
 
     suspend fun deleteAnnouncement(id: String): Boolean {

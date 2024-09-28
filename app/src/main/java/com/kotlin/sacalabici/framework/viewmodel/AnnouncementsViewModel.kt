@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementObjectBase
 import com.kotlin.sacalabici.domain.announcement.AnnouncementListRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +15,7 @@ import com.kotlin.sacalabici.domain.announcement.PatchAnnouncementRequirement
 
 class AnnouncementsViewModel: ViewModel() {
     val announcementObjectLiveData = MutableLiveData<List<AnnouncementBase>>()
+    val roleLiveData = MutableLiveData<String>()
     private val announcementListRequirement = AnnouncementListRequirement()
     private val postAnnouncementRequirement = PostAnnouncementRequirement()
     private val deleteAnnouncementRequirement = DeleteAnnouncementRequirement()
@@ -22,9 +24,10 @@ class AnnouncementsViewModel: ViewModel() {
     fun getAnnouncementList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result: List<AnnouncementBase> = announcementListRequirement()
-                val reversedResult = result.reversed()
+                val result: AnnouncementObjectBase? = announcementListRequirement()
+                val reversedResult = result!!.announcements.reversed()
                 announcementObjectLiveData.postValue(reversedResult)
+                roleLiveData.postValue(result.role)
             } catch (e: Exception) {
                 announcementObjectLiveData.postValue(emptyList())
             }

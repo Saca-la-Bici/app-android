@@ -57,7 +57,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
                 Log.d("ImagePicker", "Selected image URI: $selectedImageUri")
-                /*TODO: Implement image upload*/
+                binding.ibAddImage.setImageURI(selectedImageUri)
             }
         }
     }

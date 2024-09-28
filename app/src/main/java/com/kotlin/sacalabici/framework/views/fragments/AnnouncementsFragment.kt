@@ -119,6 +119,13 @@ class AnnouncementsFragment: Fragment() {
     }
 
     private fun initializeObservers() {
+        viewModel.roleLiveData.observe(viewLifecycleOwner) { role ->
+            if (role == "Administrador") {
+                binding.fabAddAnouncement.visibility = View.VISIBLE
+            } else {
+                binding.fabAddAnouncement.visibility = View.GONE
+            }
+        }
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->
             lifecycleScope.launch {
                 delay(50)

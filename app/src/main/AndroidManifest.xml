@@ -46,6 +46,10 @@
 
         <activity
             android:name=".framework.views.activities.announcement.AddAnnouncementActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+
+        <activity
             android:name=".framework.adapters.views.activities.ProfileEditActivity"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>

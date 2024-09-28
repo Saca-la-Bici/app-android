@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityRegisterannouncementBinding
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
+import java.io.File
 
 class AddAnnouncementActivity: AppCompatActivity() {
     private lateinit var binding: ActivityRegisterannouncementBinding
@@ -62,4 +63,15 @@ class AddAnnouncementActivity: AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cleanTemporaryFiles()
+    }
+
+    private fun cleanTemporaryFiles() {
+        val tempFile = File(cacheDir, "tempFile") // Usa el mismo nombre que usaste al crear el archivo
+        if (tempFile.exists()) {
+            tempFile.delete()
+        }
+    }
 }

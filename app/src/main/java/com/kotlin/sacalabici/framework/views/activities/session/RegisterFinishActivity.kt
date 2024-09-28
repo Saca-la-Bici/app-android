@@ -63,8 +63,6 @@ class RegisterFinishActivity : AppCompatActivity() {
         registerFinishViewModel.authState.observe(this) { authState ->
             when (authState) {
                 is AuthState.Success -> {
-                    // Registration successful
-                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
@@ -101,7 +99,7 @@ class RegisterFinishActivity : AppCompatActivity() {
         }
 
         binding.BBack.setOnClickListener {
-            val intent = Intent(this@RegisterFinishActivity, RegisterUserActivity::class.java)
+            val intent = Intent(this@RegisterFinishActivity, SessionActivity::class.java)
             startActivity(intent)
             finish()
         }

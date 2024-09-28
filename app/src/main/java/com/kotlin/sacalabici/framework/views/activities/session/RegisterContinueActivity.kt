@@ -24,7 +24,7 @@ class RegisterContinueActivity : AppCompatActivity() {
         val name = intent.getStringExtra("name")
 
         binding.BBack.setOnClickListener {
-            val intent = Intent(this@RegisterContinueActivity, RegisterUserActivity::class.java)
+            val intent = Intent(this@RegisterContinueActivity, SessionActivity::class.java)
             startActivity(intent)
             finish()
         }

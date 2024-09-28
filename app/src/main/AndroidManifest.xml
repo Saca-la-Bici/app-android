@@ -19,7 +19,6 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Sacalabici.NoActionBar"
-        android:screenOrientation="portrait"
         tools:targetApi="tiramisu">
 
         <meta-data
@@ -32,46 +31,58 @@
             android:name="com.mapbox.AccessToken"
             android:resource="@string/mapbox_access_token" />
 
+        <!-- Main Activity -->
         <activity
             android:name=".framework.views.activities.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Sacalabici.NoActionBar">
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- Otras actividades con orientación en portrait -->
         <activity
             android:name=".framework.adapters.views.activities.ProfileEditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".framework.adapters.views.activities.ModifyAnnouncementActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".framework.adapters.views.activities.Session.SessionActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".framework.adapters.views.activities.Session.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".framework.adapters.views.activities.Session.RegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".framework.adapters.views.activities.Session.RegisterContinueActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".framework.views.activities.Session.RecoverPasswordActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
+        <!-- Otras actividades relevantes -->
         <activity
             android:name=".framework.views.activities.AddRouteActivity"
             android:configChanges="orientation|screenSize"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".framework.views.activities.ModifyRouteActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

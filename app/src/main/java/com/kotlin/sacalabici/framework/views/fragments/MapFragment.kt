@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -89,14 +90,27 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
         return root
     }
 
+    companion object {
+        private const val REQUEST_CODE_ADD_ROUTE = 1
+    }
+
+
     private fun setupListeners() {
         binding.btnAdd.setOnClickListener {
             val intent = Intent(requireContext(), AddRouteActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_ADD_ROUTE)
         }
 
         binding.btnDetails.setOnClickListener {
             toggleRutasList()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_ADD_ROUTE && resultCode == AppCompatActivity.RESULT_OK) {
+            // Llamar al método para obtener la lista de rutas nuevamente
+            viewModel.getRouteList() // Esto activará la observación en el ViewModel
         }
     }
 

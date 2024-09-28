@@ -10,32 +10,27 @@ import androidx.core.app.ActivityCompat
 import com.kotlin.sacalabici.R
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
-import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.maps.CameraOptions
 import com.mapbox.geojson.Point
 import okhttp3.*
 import org.json.JSONObject
-import java.io.IOException
-import okhttp3.MediaType.Companion.toMediaType
-import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
+import com.google.android.gms.tasks.Task
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.FusedLocationProviderClient
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import android.util.Log
 import android.view.View
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+
+
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var mapView: MapView
     private lateinit var startButton: Button
+    private lateinit var ocultarButton: Button
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val client = OkHttpClient()
@@ -54,14 +49,16 @@ class DetailActivity : AppCompatActivity() {
         // Inicializa el MapView
         mapView = findViewById(R.id.mapView)
         val btnRuta: Button = findViewById(R.id.btnRuta)
+        ocultarButton = findViewById(R.id.btnOcultarRuta) // Inicializa el botón para ocultar el mapa
 
         // Inicialmente ocultar el MapView
         mapView.visibility = View.GONE
 
         // Configurar el botón
         btnRuta.setOnClickListener {
-            // Mostrar el MapView cuando se presione el botón "Ver Ruta"
+            // Mostrar el MapView con el botón para quitarlo cuando se presione el botón "Ver Ruta"
             mapView.visibility = View.VISIBLE
+            ocultarButton.visibility = View.VISIBLE
 
             // Establece el estilo del mapa
             mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
@@ -73,6 +70,12 @@ class DetailActivity : AppCompatActivity() {
                 .build()
 
             mapView.getMapboxMap().setCamera(queretaroLocation)
+        }
+
+        // Configurar el botón para ocultar el mapa
+        ocultarButton.setOnClickListener {
+            mapView.visibility = View.GONE
+            ocultarButton.visibility = View.GONE
         }
     }
 

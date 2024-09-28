@@ -230,12 +230,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnRuta"
-            tools:ignore="NotSibling" >
+            app:layout_constraintVertical_bias="1.0"
+            tools:ignore="NotSibling">
 
         </com.mapbox.maps.MapView>
 
-
-
+        <Button
+            android:id="@+id/btnOcultarRuta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ocultar ruta"
+            android:textColor="@color/semiWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/mapView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

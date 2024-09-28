@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.views.activities
 
+import android.app.Application
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
@@ -49,6 +51,7 @@ class MainActivity: AppCompatActivity() {
         tokenManager.getIdToken()
 
         FacebookSdk.sdkInitialize(applicationContext)
+        AppEventsLogger.activateApp(applicationContext as Application)
 
         if (firebaseAuth.currentUser == null) {
             // Usuario no está autenticado, redirige a SessionActivity
@@ -154,7 +157,7 @@ class MainActivity: AppCompatActivity() {
         resetButtonState(
             binding.appBarMain.btnPerfil,
             binding.appBarMain.tvPerfil,
-            R.drawable.ic_perfil)
+            R.drawable.ic_profile)
         resetButtonState(
             binding.appBarMain.btnMapa,
             binding.appBarMain.tvMapa,
@@ -170,7 +173,7 @@ class MainActivity: AppCompatActivity() {
                 selectButtonState(buttonClicked, textClicked, R.drawable.ic_actividades_selected)
                 binding.topAppBar.tvTopBar.text = getString(R.string.Actividades)
             }
-            Constants.MENU_PROFILE -> selectButtonState(buttonClicked, textClicked, R.drawable.ic_perfil_selected)
+            Constants.MENU_PROFILE -> selectButtonState(buttonClicked, textClicked, R.drawable.ic_profile_selected)
             Constants.MENU_MAP -> selectButtonState(buttonClicked, textClicked, R.drawable.ic_mapa_selected)
             Constants.MENU_ANNOUNCEMENTS -> {
                 selectButtonState(buttonClicked, textClicked, R.drawable.ic_anuncios_selected)

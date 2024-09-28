@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Flecha de regreso -->
+    <ImageButton
+        android:id="@+id/icon_regresar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.035" />
+
+    <TextView
+        android:id="@+id/tituloAyuda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Ayuda"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.035" />
+
+    <!-- Sección de ayuda -->
+    <TextView
+        android:id="@+id/help_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="16dp"
+        android:text="@string/TituloAyuda"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Buscador de preguntas -->
+    <EditText
+        android:id="@+id/search_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/PreguntaAyuda"
+        android:drawableStart="@drawable/ic_search"
+        android:padding="8dp"
+        android:background="@color/lightGray"
+        app:layout_constraintTop_toBottomOf="@+id/help_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/categoria1"
+        android:layout_margin="16dp" />
+
+    <!-- Categoría1: Tu seguridad -->
+    <TextView
+        android:id="@+id/categoria1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/Categoria1"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Pregunta 1 con bg_rounded_gray_button.xml -->
+    <TextView
+        android:id="@+id/preguntafrecuente1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/Pregunta1"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:background="@drawable/bg_rounded_gray_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoria1"
+        />
+
+    <ImageButton
+        android:id="@+id/arrow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/preguntafrecuente1"
+        app:layout_constraintBottom_toBottomOf="@+id/preguntafrecuente1"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
+
+    <!-- Pregunta 2 con bg_rounded_gray_button.xml -->
+    <TextView
+        android:id="@+id/preguntafrecuente2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/Pregunta2"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:background="@drawable/bg_rounded_gray_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preguntafrecuente1"
+        />
+
+    <ImageButton
+        android:id="@+id/arrow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/preguntafrecuente2"
+        app:layout_constraintBottom_toBottomOf="@+id/preguntafrecuente2"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
+
+    <!-- Categoría2: Bicicletas y Equipamiento -->
+    <TextView
+        android:id="@+id/categoria2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/Categoria2"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/preguntafrecuente2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Pregunta 3 con bg_rounded_gray_button.xml -->
+    <TextView
+        android:id="@+id/preguntafrecuente3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/Pregunta3"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:background="@drawable/bg_rounded_gray_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoria2"
+        />
+
+    <ImageButton
+        android:id="@+id/arrow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/preguntafrecuente3"
+        app:layout_constraintBottom_toBottomOf="@+id/preguntafrecuente3"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
+
+    <!-- Pregunta 4 con bg_rounded_gray_button.xml -->
+    <TextView
+        android:id="@+id/preguntafrecuente4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/Pregunta4"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:background="@drawable/bg_rounded_gray_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preguntafrecuente3"
+        />
+
+    <ImageButton
+        android:id="@+id/arrow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/preguntafrecuente4"
+        app:layout_constraintBottom_toBottomOf="@+id/preguntafrecuente4"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
+
+    <!-- Icono de agregar preguntas -->
+    <ImageButton
+        android:id="@+id/btn_agregar_pregunta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        android:background="@null"
+        android:src="@drawable/ic_add_yellow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <!-- Main Navbar -->
+    <include layout="@layout/main_navbar"
+        android:id="@+id/main_navbar"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

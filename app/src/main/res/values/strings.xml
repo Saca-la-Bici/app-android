@@ -79,5 +79,18 @@
         <item>AB-</item>
     </string-array>
 
+    <!-- strings de Consultar faqs -->
+    <string name="Ayuda">Ayuda</string>
+    <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
+    <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
+
+    <!-- Strings para preguntas frecuentes: borrar después de aplicar el RecyclerView -->
+    <string name="Categoria1">Tu seguridad</string>
+    <string name="Categoria2">Bicicletas y Equipamiento</string>
+    <string name="Pregunta1">¿La rodada es apta para principiantes?</string>
+    <string name="Pregunta2">El decálogo del ciclista</string>
+    <string name="Pregunta3">¿Si no tengo casco, no puedo rodar?</string>
+    <string name="Pregunta4">¿Se permiten bicicletas eléctricas o patines?</string>
+
 </resources>
 

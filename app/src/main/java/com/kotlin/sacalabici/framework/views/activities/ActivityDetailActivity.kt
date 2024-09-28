@@ -30,9 +30,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.FusedLocationProviderClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import android.util.Log
-
-
-
+import android.view.View
 
 class DetailActivity : AppCompatActivity() {
 
@@ -43,7 +41,6 @@ class DetailActivity : AppCompatActivity() {
     private val client = OkHttpClient()
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1000
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,29 +53,30 @@ class DetailActivity : AppCompatActivity() {
 
         // Inicializa el MapView
         mapView = findViewById(R.id.mapView)
+        val btnRuta: Button = findViewById(R.id.btnRuta)
 
-        // Establece el estilo del mapa
-        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
+        // Inicialmente ocultar el MapView
+        mapView.visibility = View.GONE
 
-        // Configura la cámara para centrarse en Querétaro
-        val queretaroLocation = CameraOptions.Builder()
-            .center(Point.fromLngLat(-100.3899, 20.5884)) // Longitud, Latitud
-            .zoom(12.0)
-            .build()
+        // Configurar el botón
+        btnRuta.setOnClickListener {
+            // Mostrar el MapView cuando se presione el botón "Ver Ruta"
+            mapView.visibility = View.VISIBLE
 
-        mapView.getMapboxMap().setCamera(queretaroLocation)
+            // Establece el estilo del mapa
+            mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
 
+            // Configura la cámara para centrarse en Querétaro
+            val queretaroLocation = CameraOptions.Builder()
+                .center(Point.fromLngLat(-100.3899, 20.5884)) // Longitud, Latitud
+                .zoom(12.0)
+                .build()
 
-
-
-        // Configura el botón de iniciar
-        startButton = findViewById(R.id.btnStart) // Asegúrate de que el ID del botón sea correcto
-        startButton.setOnClickListener {
-            obtenerUbicacionActual()
+            mapView.getMapboxMap().setCamera(queretaroLocation)
         }
     }
 
-    private fun obtenerUbicacionActual() {
+    fun obtenerUbicacionActual() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Solicitar permisos de ubicación
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
@@ -130,6 +128,4 @@ class DetailActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

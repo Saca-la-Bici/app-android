@@ -19,10 +19,10 @@ class ConsultarUsuariosAPIClient {
     }
 
 
-    suspend fun searchUser(username: String): List<ConsultarUsuariosBase>? {
+    suspend fun searchUser(username: String, firebaseUID: String): List<ConsultarUsuariosBase>? {
         api = ConsultarUsuariosModuleDI() // Asegúrate de obtener la instancia correctamente
         return try {
-            val response = api.searchUser(username)
+            val response = api.searchUser(username, firebaseUID)
             response.usuarios // Devuelve la lista de usuarios
         } catch (e: Exception) {
             e.printStackTrace()

@@ -18,34 +18,43 @@ class ConsultarUsuariosViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     private val consultarUsuariosRepository = ConsultarUsuariosRepository()
 
     // Variables para la paginación
     private var currentPage = 1
     private val pageSize = 7
-    private var isLoading = false
-    private var currentRoles: String = "Administrador,Usuario" //Valor inicial al entrar a modificar roles
+    private var currentRoles: String = "Administrador,Usuario"
+    private var isLastPage = false
 
+    // Bandera para saber si estamos en modo búsqueda
+    private var isSearching = false
+
+    // Función para obtener usuarios con paginación
     fun getUsuarios(roles: String? = null, firebaseUID: String, reset: Boolean = false) {
-        // Usa los roles actuales si roles es null
+        if (firebaseUID.isBlank()) {
+            _errorMessage.value = "Firebase UID no puede estar vacío."
+            return
+        }
+
         val rolesToUse = roles ?: currentRoles
 
-        Log.d("ConsultarUsuariosViewModel", "Roles a consultar: $rolesToUse")
+        // Si ya estamos buscando, no cargamos usuarios paginados
+        if (_isLoading.value == true || isLastPage || isSearching) return
 
-        // Evitar múltiples llamadas si ya estamos cargando
-        if (isLoading) return
-
-        // Reiniciar la paginación y la lista de usuarios si es necesario
+        // Reiniciar la paginación si es necesario
         if (reset) {
-            currentPage = 1  // Reiniciar la paginación
-            _usuarios.value = emptyList()  // Limpiar la lista actual de usuarios
-            // Solo actualiza los roles si es necesario
+            currentPage = 1
+            _usuarios.value = emptyList()  // Reiniciar la lista paginada
+            isLastPage = false
             if (roles != null) {
-                currentRoles = roles // Actualiza solo si roles no es null
+                currentRoles = roles
             }
         }
 
-        isLoading = true
+        _isLoading.value = true
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -53,39 +62,59 @@ class ConsultarUsuariosViewModel : ViewModel() {
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
                         val currentList = _usuarios.value?.toMutableList() ?: mutableListOf()
-                        currentList.addAll(usuarios)  // Agregar nuevos usuarios a la lista actual
+                        currentList.addAll(usuarios)
                         _usuarios.value = currentList
-                        currentPage++  // Incrementar la página
+                        currentPage++
                     } else {
+                        isLastPage = true
                         _errorMessage.value = "No hay más usuarios para cargar."
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
-                _errorMessage.value = "No se pudieron obtener los usuarios: ${e.message}"
+                withContext(Dispatchers.Main) {
+                    _errorMessage.value = "No se pudieron obtener los usuarios: ${e.message}"
+                }
             } finally {
-                isLoading = false
+                _isLoading.postValue(false)
             }
         }
     }
 
+    // Función para buscar usuarios
+    fun searchUser(username: String, firebaseUID: String) {
+        if (firebaseUID.isBlank()) {
+            _errorMessage.value = "Firebase UID no puede estar vacío."
+            return
+        }
 
-    fun searchUser(username: String) {
+        _isLoading.value = true
+        isSearching = true  // Cambiamos el estado a búsqueda
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val usuarios = consultarUsuariosRepository.searchUser(username)
+                val usuarios = consultarUsuariosRepository.searchUser(username, firebaseUID)
                 withContext(Dispatchers.Main) {
                     if (!usuarios.isNullOrEmpty()) {
-                        _usuarios.value = usuarios!!
+                        _usuarios.value = usuarios
                     } else {
                         _errorMessage.value = "No se encontraron usuarios con ese nombre."
+                        isSearching = false  // Restaurar si no hay resultados
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
-                _errorMessage.value = "Error al buscar usuarios: ${e.message}"
+                withContext(Dispatchers.Main) {
+                    _errorMessage.value = "Error al buscar usuarios: ${e.message}"
+                }
+            } finally {
+                _isLoading.postValue(false)
             }
         }
+    }
+
+    // Función para limpiar el estado de búsqueda y volver a la paginación
+    fun resetSearch() {
+        isSearching = false  // Volver al modo de paginación
+        getUsuarios(firebaseUID = "firebaseUID_actual", reset = true)  // Restablecer la paginación si es necesario
     }
 }
 

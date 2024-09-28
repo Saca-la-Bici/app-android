@@ -72,7 +72,7 @@ class RolAdministradorFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchJob?.cancel()
                 if (query != null) {
-                    viewModel.searchUser(query)
+                    viewModel.searchUser(query, firebaseUID!!)
                 }
                 return true
             }
@@ -82,7 +82,7 @@ class RolAdministradorFragment : Fragment() {
                 searchJob = coroutineScope.launch {
                     delay(500)
                     if (newText != null) {
-                        viewModel.searchUser(newText)
+                        viewModel.searchUser(newText, firebaseUID!!)
                     }
                 }
                 return true

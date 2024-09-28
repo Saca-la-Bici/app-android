@@ -14,9 +14,10 @@ interface ConsultarUsuariosAPIService {
         @Query("firebaseUID") firebaseUID: String,
     ): ConsultarUsuariosObject
 
+    //http://localhost:8080/perfil/buscarUsuarios?query=name&firebaseUID=firebaseUID
     @GET("perfil/buscarUsuarios")
     suspend fun searchUser(
-        @Query("query") username: String
+        @Query("query") username: String,
+        @Query("firebaseUID") firebaseUID: String,
     ): ConsultarUsuariosObject
-
 }

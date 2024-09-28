@@ -35,7 +35,7 @@ class AuthViewModel : ViewModel() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager // Crear instancia de SessionRequirement
 
-    // Inicializar Firebase Auth
+    // Inicializar Firebase Auth cuando el ViewModel es creado
     init {
         firebaseAuth = FirebaseAuth.getInstance()
     }

@@ -73,7 +73,7 @@ class RolStaffFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchJob?.cancel()
                 if (query != null) {
-                    viewModel.searchUser(query)
+                    viewModel.searchUser(query, firebaseUID!!)
                 } // Or appropriate ViewModel function
                 return true
             }
@@ -83,7 +83,7 @@ class RolStaffFragment : Fragment() {
                 searchJob = coroutineScope.launch {
                     delay(500) // Delay of 500 milliseconds (adjust as needed)
                     if (newText != null) {
-                        viewModel.searchUser(newText)
+                        viewModel.searchUser(newText, firebaseUID!!)
                     } // Or appropriate ViewModel function
                 }
                 return true

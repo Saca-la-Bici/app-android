@@ -1,6 +1,6 @@
 [versions]
 activityKtx = "1.9.2"
-agp = "8.5.1"
+agp = "8.5.2"
 androidVersion = "11.6.0"
 converterGson = "2.9.0"
 databindingRuntime = "8.6.1"

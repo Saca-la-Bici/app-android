@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.framework.adapters.ActivitiesAdapter
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 
 class EventosFragment : Fragment() {
 
@@ -28,13 +28,14 @@ class EventosFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_eventos, container, false)
 
-        // Inicializar adapter aquí, donde el fragmento ya está adjunto a su contexto
-        adapter = ActivitiesAdapter(ArrayList(), requireContext()) { evento ->
-            true
-        }
-
+        // Inicializar RecyclerView
         recyclerView = view.findViewById(R.id.recyclerViewEventos)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Inicializar adapter aquí, donde el fragmento ya está adjunto a su contexto
+        adapter = ActivitiesAdapter(ArrayList()) { evento ->
+            true
+        }
         recyclerView.adapter = adapter
 
         // Inicializar SwipeRefreshLayout
@@ -44,9 +45,9 @@ class EventosFragment : Fragment() {
         }
 
         // Observar cambios en eventos
-        activitiesViewModel.rodadasLiveData.observe(viewLifecycleOwner) { eventos ->
+        activitiesViewModel.eventosLiveData.observe(viewLifecycleOwner) { eventos ->
             adapter.updateData(eventos)  // Método para actualizar los datos del adapter
-            swipeRefreshLayout.isRefreshing = false  // Detener la animación de refresco
+            swipeRefreshLayout.isRefreshing = false  // Detener la animación
         }
 
         // Cargar los datos iniciales

@@ -1,20 +1,21 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.network.model.ActivityBase
-import com.kotlin.sacalabici.domain.GetEventosRequirement
-import com.kotlin.sacalabici.domain.GetRodadasRequirement
-import com.kotlin.sacalabici.domain.GetTalleresRequirement
+import com.kotlin.sacalabici.data.models.activities.Activity
+import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
+import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
+import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ActivitiesViewModel: ViewModel() {
     // LiveData para observar los datos de la UI
-    val rodadasLiveData = MutableLiveData<List<ActivityBase>>()
-    val eventosLiveData = MutableLiveData<List<ActivityBase>>()
-    val talleresLiveData = MutableLiveData<List<ActivityBase>>()
+    val rodadasLiveData = MutableLiveData<List<Activity>>()
+    val eventosLiveData = MutableLiveData<List<Activity>>()
+    val talleresLiveData = MutableLiveData<List<Activity>>()
 
     // Requisitos para obtener los datos
     private val getRodadasRequirement = GetRodadasRequirement()
@@ -24,9 +25,13 @@ class ActivitiesViewModel: ViewModel() {
     // Función para cargar rodadas
     fun getRodadas() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result: List<ActivityBase> = getRodadasRequirement()
-            launch(Dispatchers.Main) {
+            try {
+                val result = getRodadasRequirement()
+                Log.d("ActivitiesViewModel", "Rodadas result: $result")
                 rodadasLiveData.postValue(result)
+            } catch (e: Exception) {
+                Log.e("ActivitiesViewModel", "Error obteniendo rodadas", e)
+                rodadasLiveData.postValue(emptyList())
             }
         }
     }
@@ -34,9 +39,13 @@ class ActivitiesViewModel: ViewModel() {
     // Función para cargar eventos
     fun getEventos() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result: List<ActivityBase> = getEventosRequirement()
-            launch(Dispatchers.Main) {
+            try {
+                val result = getEventosRequirement()
+                Log.d("ActivitiesViewModel", "Eventos result: $result")
                 eventosLiveData.postValue(result)
+            } catch (e: Exception) {
+                Log.e("ActivitiesViewModel", "Error obteniendo eventos", e)
+                eventosLiveData.postValue(emptyList())
             }
         }
     }
@@ -44,9 +53,13 @@ class ActivitiesViewModel: ViewModel() {
     // Función para cargar talleres
     fun getTalleres() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result: List<ActivityBase> = getTalleresRequirement()
-            launch(Dispatchers.Main) {
+            try {
+                val result = getTalleresRequirement()
+                Log.d("ActivitiesViewModel", "Talleres result: $result")
                 talleresLiveData.postValue(result)
+            } catch (e: Exception) {
+                Log.e("ActivitiesViewModel", "Error obteniendo talleres", e)
+                talleresLiveData.postValue(emptyList())
             }
         }
     }

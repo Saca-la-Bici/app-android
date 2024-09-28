@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,7 +31,7 @@ class ActivitiesFragment: Fragment() {
                 0 -> "Rodadas"
                 1 -> "Eventos"
                 2 -> "Talleres"
-                else -> "Rodadas"
+                else -> null
             }
         }.attach()
         return root

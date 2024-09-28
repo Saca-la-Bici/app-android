@@ -4,25 +4,23 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.kotlin.sacalabici.data.network.model.ActivityBase
+import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ItemActivityBinding
-import com.kotlin.sacalabici.framework.adapters.viewhoiders.ActivitiesViewHolder
+import com.kotlin.sacalabici.framework.viewholders.ActivitiesViewHolder
 
 class ActivitiesAdapter(
-    private val data: ArrayList<ActivityBase>,
-    private val context: Context,
-    private val longClickListener: (ActivityBase) -> Boolean
+    private var data: List<Activity>,
+    private val longClickListener: (Activity) -> Boolean
 ): RecyclerView.Adapter<ActivitiesViewHolder>(){
 
-    fun updateData(newData: List<ActivityBase>) {
-        data.clear()
-        data.addAll(newData)
+    fun updateData(newData: List<Activity>) {
+        data = newData
         notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ActivitiesViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(item,context)
+        holder.bind(item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivitiesViewHolder {

@@ -12,6 +12,11 @@
     <string name="activity_dateLabel">Año-Mes-Día</string>
     <string name="activity_ready"> Listo </string>
     <integer name="activity_participants">0</integer>
+    <string name="activity_date_list">Fecha: %1$s</string>
+    <string name="activity_time_list">Hora: %1$s</string>
+    <string name="activity_duration_list">Duración: %1$s</string>
+    <string name="activity_location_list">Ubicación: %1$s</string>
+    <string name="activity_join">Unirse</string>
 
     <string-array name="hours">
         <item>00</item>

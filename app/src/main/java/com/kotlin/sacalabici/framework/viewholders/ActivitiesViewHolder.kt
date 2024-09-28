@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.viewhoiders
+package com.kotlin.sacalabici.framework.viewholders
 
 import android.content.Context
 import android.view.View
@@ -8,55 +8,58 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.kotlin.sacalabici.data.network.model.ActivityBase
+import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ItemActivityBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ActivitiesViewHolder(
     private val binding: ItemActivityBinding,
-    private val longClickListener: (ActivityBase) -> Boolean
+    private val longClickListener: (Activity) -> Boolean
 ): RecyclerView.ViewHolder(binding.root){
 
-    fun bind(item: ActivityBase, context: Context) {
+    fun bind(item: Activity) {
+        val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(item.date)
 
-        val activity = item.activities.firstOrNull()
+        binding.tvActivityTitle.text = item.title
+        binding.tvActivityDate.text = binding.root.context.getString(R.string.activity_date_list, formattedDate)
+        binding.tvActivityTime.text = binding.root.context.getString(R.string.activity_time_list, item.time)
+        binding.tvActivityDuration.text = binding.root.context.getString(R.string.activity_duration_list, item.duration)
+        binding.tvPeopleEnrolled.text = item.peopleEnrolled.toString()
+        binding.tvActivityLocation.text = binding.root.context.getString(R.string.activity_location_list, item.location)
 
-        if (activity != null) {
-
-            binding.tvActivityTitle.text = activity.title
-            binding.tvActivityDate.text = activity.date.toString()
-            binding.tvActivityTime.text = activity.time
-            binding.tvActivityDuration.text = activity.duration
-            binding.tvPeopleEnrolled.text = activity.peopleEnrolled.toString()
-
-            binding.root.setOnLongClickListener {
-                longClickListener(item)
-            }
-
-            if (activity.imageURL != null) {
-                binding.ivActivityImage.visibility = View.VISIBLE
-                getActivityImage(activity.imageURL, binding.ivActivityImage, context)
-            } else {
-                binding.ivActivityImage.visibility = View.GONE
-            }
+        binding.root.setOnLongClickListener {
+            longClickListener(item)
         }
-    }
-    private fun getActivityImage(url: String, imageView: ImageView, context: Context){
-        CoroutineScope(Dispatchers.IO).launch {
-            CoroutineScope(Dispatchers.Main).launch {
 
-                val requestOptions = RequestOptions()
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .fitCenter()
-                    .priority(Priority.HIGH)
-
-                Glide.with(context).load(url)
-                    .apply(requestOptions)
-                    .into(imageView)
-            }
+        if (item.imageURL != null) {
+            binding.ivActivityImage.visibility = View.VISIBLE
+            getActivityImage(item.imageURL, binding.ivActivityImage)
+        } else {
+            binding.ivActivityImage.visibility = View.GONE
         }
+
+        if (item.type == "Rodada"){
+            binding.tvActivityLevel.visibility = View.VISIBLE
+        } else {
+            binding.tvActivityLevel.visibility = View.GONE
+        }
+
     }
+
+    private fun getActivityImage(url: String, imageView: ImageView) {
+        val requestOptions = RequestOptions()
+            .centerCrop()
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .fitCenter()
+            .priority(Priority.HIGH)
+
+        Glide.with(itemView.context)
+            .load(url)
+            .apply(requestOptions)
+            .into(imageView)
+    }
+
+
 }

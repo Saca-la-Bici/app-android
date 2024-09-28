@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Informacion
+import com.kotlin.sacalabici.data.network.model.Rodada
 import kotlinx.coroutines.launch
 import com.kotlin.sacalabici.domain.PostActivityRequirement
 
@@ -28,18 +29,22 @@ class ActivitiesViewModel: ViewModel() {
             try {
                 Log.d("ActivitiesViewModel", "Registrando evento: $evento")
                 requirement.postActivityEvento(evento)
-                Log.d("ActivitiesViewModel", "Evento registrada exitosamente")
+                Log.d("ActivitiesViewModel", "Evento registrado exitosamente")
             } catch (e: Exception) {
                 Log.e("ActivitiesViewModel", "Error al registrar evento", e)
             }
         }
     }
 
-    fun receiveRodadaInfo(rodadaInfo: Informacion): Informacion {
-        return rodadaInfo
-    }
-
-    fun postActivityRodada() {
-
+    fun postActivityRodada(rodada: Rodada) {
+        viewModelScope.launch {
+            try {
+                Log.d("ActivitiesViewModel", "Registrando rodada: $rodada")
+                requirement.postActivityRodada(rodada)
+                Log.d("ActivitiesViewModel", "Rodada registrada exitosamente")
+            } catch (e: Exception) {
+                Log.e("ActivitiesViewModel", "Error al registrar rodada", e)
+            }
+        }
     }
 }

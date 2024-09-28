@@ -20,7 +20,9 @@ class AddActivityRouteFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var rutasAdapter: RutasAdapter
     private lateinit var rutasList: ArrayList<RutasBase>
+
     private var onRutaSelectedListener: OnRutaSelectedListener? = null
+    private var onRutaConfirmListener: OnRutaConfirmListener? = null
     private var lastSelectedRuta: RutasBase? = null
 
     private var _binding: FragmentActivityRouteBinding? = null
@@ -33,7 +35,7 @@ class AddActivityRouteFragment: Fragment() {
     * Llama a la función para recibir la información de la ruta
     * */
     interface OnRutaConfirmListener {
-
+        fun onRutaConfirmed(rutaID: String)
     }
 
     override fun onAttach(context: Context) {
@@ -90,11 +92,21 @@ class AddActivityRouteFragment: Fragment() {
             fragment.arguments = args
             return fragment
         }
+
+        fun newInstanceList(rutasList: List<RutasBase>): AddActivityRouteFragment {
+            val fragment = AddActivityRouteFragment()
+            val args = Bundle()
+            args.putParcelableArrayList("rutasList", ArrayList(rutasList))
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     private fun initializeListeners() {
         binding.btnNext.setOnClickListener {
-            // Lógica para agregar una nueva ruta
+            lastSelectedRuta?.let { ruta ->
+                onRutaConfirmListener?.onRutaConfirmed(ruta.id)
+            }
         }
     }
 

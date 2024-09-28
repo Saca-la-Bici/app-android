@@ -2,28 +2,37 @@ package com.kotlin.sacalabici.framework.views.activities
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Informacion
+import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.databinding.ActivityAddactivityBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment
+import com.kotlin.sacalabici.framework.views.fragments.RutasFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
 class AddActivityActivity: AppCompatActivity(),
-    AddActivityInfoFragment.OnFragmentInteractionListener
+    AddActivityInfoFragment.OnFragmentInteractionListener,
+        AddActivityRouteFragment.OnRutaConfirmListener
 {
     private lateinit var binding: ActivityAddactivityBinding
     private lateinit var viewModel: ActivitiesViewModel
+    private lateinit var viewModelRoute: MapViewModel
     private lateinit var type: String
+
+    private lateinit var rodadaInformation: Informacion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +40,13 @@ class AddActivityActivity: AppCompatActivity(),
 
         initializeBinding()
         viewModel = ViewModelProvider(this).get(ActivitiesViewModel::class.java)
+        viewModelRoute = ViewModelProvider(this).get(MapViewModel::class.java)
 
         // Guardar el tipo de actividad a crear
         type = intent.getStringExtra("type").toString()
+
+        // Observa los cambios en los LiveData del ViewModel
+        observeViewModel()
 
         if (savedInstanceState == null) {
             // Crea una instancia del fragmento
@@ -76,7 +89,7 @@ class AddActivityActivity: AppCompatActivity(),
 
         if (type == "Rodada") {
             val rodadaInfo = Informacion(title, dateAct, hourAct, ubi, description, duration, "", "Rodada")
-            viewModel.receiveRodadaInfo(rodadaInfo)
+            rodadaInformation = rodadaInfo
 
         } else if (type == "Taller") {
             val tallerInfo = Informacion(title, dateAct, hourAct, ubi, description, duration, "", "Taller")
@@ -91,16 +104,21 @@ class AddActivityActivity: AppCompatActivity(),
     }
 
     /*
+    * Función que llama la lista de rutas desde el viewModel
+    * */
+    private fun toggleRutasList() {
+        viewModelRoute.getRutasList()
+    }
+
+    /*
     * Función llamada desde AddActivityInfoFragment
     * Si es rodada, cambia al siguiente fragmento para elegir una ruta
     * */
     override fun onNextClicked(type: String) {
-        if (type === "Rodada") {
-            val routeFragment = AddActivityRouteFragment()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentAddActivity, routeFragment)
-                .addToBackStack(null) // Permite volver al fragmento anterior si presionas "atrás"
-                .commit()
+        Log.d("Tipo en onNextClicked: ", type)
+        if (type == "Rodada") {
+            toggleRutasList()
+
         } else {
             Toast.makeText(this, "Actividad completada", Toast.LENGTH_SHORT).show()
             setResult(Activity.RESULT_OK)
@@ -109,10 +127,38 @@ class AddActivityActivity: AppCompatActivity(),
     }
 
     /*
+    * Función que observa los cambios en los LiveData del ViewModel
+    * */
+    private fun observeViewModel() {
+        // Observa los LiveData del ViewModel
+        viewModelRoute.rutasListLiveData.observe(this, Observer { rutasList ->
+            rutasList?.let {
+                // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment
+                val routeFragment = AddActivityRouteFragment.newInstance(it, viewModelRoute.lastSelectedRuta)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.nav_host_fragment_content_main, routeFragment)
+                    .addToBackStack(null)
+                    .commit()
+            } ?: run {
+                showToast("Error al obtener la lista de rutas.")
+            }
+        })
+
+        viewModelRoute.toastMessageLiveData.observe(this, Observer { message ->
+            showToast(message)
+        })
+    }
+
+    /*
     * Función llamada desde AddActivityRouteFragment
     * Recibe la ruta seleccionada por el usuario
     * */
-    override fun receiveRuta() {
+    override fun onRutaConfirmed(rutaID: String) {
+        val rodada = Rodada(listOf(rodadaInformation), rutaID)
+        viewModel.postActivityRodada(rodada)
+    }
 
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

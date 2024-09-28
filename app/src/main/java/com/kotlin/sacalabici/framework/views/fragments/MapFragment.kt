@@ -72,6 +72,7 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
 
     private fun observeViewModel() {
         viewModel.rutasListLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
+            // Solo si rutasList NO es null
             rutasList?.let {
                 // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment
                 val rutasFragment = RutasFragment.newInstance(it, viewModel.lastSelectedRuta)

@@ -119,6 +119,7 @@ class AddActivityInfoFragment: Fragment() {
 
                 // Enviar información al ViewModel
                 listener.receiveInformation(title, date, hour, minutes, hourDur, minutesDur, ubi, description)
+                Log.d("Tipo: ", type.toString())
                 listener.onNextClicked(type.toString())
             }
         }

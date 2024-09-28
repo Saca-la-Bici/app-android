@@ -48,17 +48,22 @@ class RutasFragment : Fragment() {
         rutasAdapter.setSelectedRuta(selectedRuta)
     }
 
-    private fun onRutaSelected(ruta: RouteBase) {
-        onRutaSelectedListener?.onRutaSelected(ruta)
-    }
-
     interface OnRutaSelectedListener {
         fun onRutaSelected(ruta: RouteBase)
     }
 
+    private fun onRutaSelected(ruta: RouteBase) {
+        onRutaSelectedListener?.onRutaSelected(ruta)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        onRutaSelectedListener = context as? OnRutaSelectedListener
+        val parentFragment = requireParentFragment() // Cambiado aquí
+        if (parentFragment is OnRutaSelectedListener) {
+            onRutaSelectedListener = parentFragment
+        } else {
+            throw RuntimeException("$parentFragment must implement OnRutaSelectedListener")
+        }
     }
 
     override fun onDetach() {
@@ -77,3 +82,4 @@ class RutasFragment : Fragment() {
         }
     }
 }
+

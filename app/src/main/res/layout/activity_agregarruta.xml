@@ -7,156 +7,193 @@
     android:fillViewport="true"
     android:background="#FFFFFF">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
-        <!-- Título -->
-        <EditText
-            android:id="@+id/etTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Título"
-            android:textColorHint="#000000"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#F6CD0B" />
+        <!-- Botón de Back en la esquina superior izquierda -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/btn_back"
+            android:contentDescription="Back Button" />
 
-        <!-- Distancia -->
-        <EditText
-            android:id="@+id/etTiempo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#F6CD0B"
-            android:fontFamily="sans-serif"
-            android:hint="Tiempo (ej. 4h)"
-            android:padding="12dp"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
-            android:textSize="16sp" />
-
-        <!-- Punto Inicio -->
-        <EditText
-            android:id="@+id/etInicio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Punto de Inicio"
-            android:textColorHint="#000000"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#F6CD0B"
-            android:visibility="gone" />
-
-        <!-- Punto Descanso -->
-        <EditText
-            android:id="@+id/etDescanso"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Punto de Descanso"
-            android:textColorHint="#000000"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#F6CD0B"
-            android:visibility="gone" />
-
-        <!-- Punto Fin -->
-        <EditText
-            android:id="@+id/etFin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Punto de Fin"
-            android:textColorHint="#000000"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#F6CD0B"
-            android:visibility="gone" />
-
-        <!-- Tiempo -->
-
-        <!-- Nivel -->
-
-        <!-- MapView -->
-
-        <EditText
-            android:id="@+id/etDistancia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="#F6CD0B"
-            android:fontFamily="sans-serif"
-            android:hint="Distancia (Se calcula automáticamente)"
-            android:padding="12dp"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvNivel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:backgroundTint="#F6CD0B"
-            android:fontFamily="sans-serif"
-            android:hint="Selecciona el nivel"
-            android:padding="12dp"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
-            android:textSize="16sp" />
-
-        <com.mapbox.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="400dp" />
-
+        <!-- Contenido del layout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:padding="16dp"
+            android:layout_below="@id/btnBack">
 
-            <Button
-                android:id="@+id/btnSiguiente"
-                android:layout_width="wrap_content"
+            <!-- Título -->
+            <EditText
+                android:id="@+id/etTitulo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/yellow_disabled"
+                android:hint="Título"
+                android:textColorHint="#000000"
+                android:textColor="#000000"
+                android:textSize="16sp"
                 android:fontFamily="sans-serif"
                 android:padding="12dp"
-                android:text="Siguiente"
-                android:textColor="#FFFFFF"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#F6CD0B" />
+
+            <!-- Distancia -->
+            <EditText
+                android:id="@+id/etTiempo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#F6CD0B"
+                android:fontFamily="sans-serif"
+                android:hint="Tiempo (ej. 4h)"
+                android:padding="12dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                android:textSize="16sp" />
+
+            <!-- Punto Inicio -->
+            <EditText
+                android:id="@+id/etInicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Punto de Inicio"
+                android:textColorHint="#000000"
+                android:textColor="#000000"
                 android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#F6CD0B"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/btnEnviar"
-                android:layout_width="wrap_content"
+            <!-- Punto Descanso -->
+            <EditText
+                android:id="@+id/etDescanso"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/yellow_disabled"
+                android:hint="Punto de Descanso"
+                android:textColorHint="#000000"
+                android:textColor="#000000"
+                android:textSize="16sp"
                 android:fontFamily="sans-serif"
                 android:padding="12dp"
-                android:text="Registrar Ruta"
-                android:textColor="#FFFFFF"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#F6CD0B"
+                android:visibility="gone" />
+
+            <!-- Punto Fin -->
+            <EditText
+                android:id="@+id/etFin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Punto de Fin"
+                android:textColorHint="#000000"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#F6CD0B"
+                android:visibility="gone" />
+
+            <!-- Tiempo -->
+
+            <!-- Nivel -->
+
+            <!-- MapView -->
+
+            <EditText
+                android:id="@+id/etDistancia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#F6CD0B"
+                android:fontFamily="sans-serif"
+                android:hint="Distancia (Se calcula automáticamente)"
+                android:padding="12dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvNivel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:backgroundTint="#F6CD0B"
+                android:fontFamily="sans-serif"
+                android:hint="Selecciona el nivel"
+                android:padding="12dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="350dp">
+
+                <!-- MapView -->
+                <com.mapbox.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <!-- Botón Eliminar en la esquina superior derecha -->
+                <ImageButton
+                    android:id="@+id/btnEliminarRuta"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/erase_icon"
+                    android:background="@android:color/transparent"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/white"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/btnSiguiente"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/yellow_disabled"
+                    android:fontFamily="sans-serif"
+                    android:padding="12dp"
+                    android:text="Siguiente"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnEnviar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/yellow_disabled"
+                    android:fontFamily="sans-serif"
+                    android:padding="12dp"
+                    android:text="Registrar Ruta"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </ScrollView>
+
 
 
 

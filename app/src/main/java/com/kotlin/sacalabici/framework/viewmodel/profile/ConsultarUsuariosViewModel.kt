@@ -28,6 +28,12 @@ class ConsultarUsuariosViewModel : ViewModel() {
     private val pageSize = 7
     private var currentRoles: String = "Administrador,Usuario"
     private var isLastPage = false
+    var scrollPosition = 0
+
+    // Función para guardar la posición del scroll
+    fun updateScrollPosition(position: Int) {
+        scrollPosition = position
+    }
 
     // Bandera para saber si estamos en modo búsqueda
     private var isSearching = false

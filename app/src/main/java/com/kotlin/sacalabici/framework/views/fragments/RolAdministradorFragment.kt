@@ -48,6 +48,7 @@ class RolAdministradorFragment : Fragment() {
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
                 setUpRecyclerView(ArrayList(usuarios))
+                binding.RVViewUsers.scrollToPosition(viewModel.scrollPosition) // Restaurar posición aquí
             }
         })
 
@@ -55,14 +56,20 @@ class RolAdministradorFragment : Fragment() {
             Log.d("Error", message)
         })
 
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         // Cargar usuarios
         viewModel.getUsuarios(roles = "Administrador,Usuario", reset = true, firebaseUID = firebaseUID!!)
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
+            viewModel.scrollPosition = 0 // Reiniciar posición
             highlightCurrentFragment("Administradores")
         }
         binding.btnStaff.setOnClickListener {
+            viewModel.scrollPosition = 0 // Reiniciar posición
             highlightCurrentFragment("Staff")
         }
 
@@ -98,8 +105,11 @@ class RolAdministradorFragment : Fragment() {
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
+                // Guardar la posición del scroll
+                viewModel.updateScrollPosition(lastVisibleItem + 1)
+
                 if (totalItemCount <= (lastVisibleItem + 1)) {
-                    // Si se llega al final, cargar más usuarios
+                    viewModel.updateScrollPosition(layoutManager.findFirstVisibleItemPosition()) // Guardar posición aquí
                     viewModel.getUsuarios(firebaseUID = firebaseUID!!)
                 }
             }
@@ -156,3 +166,4 @@ class RolAdministradorFragment : Fragment() {
         _binding = null
     }
 }
+

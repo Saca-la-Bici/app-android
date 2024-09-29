@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kotlin.sacalabici.data.network.preguntasFrecuentes.PreguntaFrecuenteProvider
 import com.kotlin.sacalabici.databinding.FragmentFaqsBinding
+import com.kotlin.sacalabici.framework.PreguntaFrecuenteAdapter
 
 class FAQsFragment : Fragment() {
     private var _binding: FragmentFaqsBinding? = null
@@ -16,26 +19,20 @@ class FAQsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflar el layout y obtener el binding
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
 
         // Inicializar el RecyclerView
-        // initRecyclerView()
+        initRecyclerView()
 
-        // Retorna la vista raíz del binding
         return binding.root
     }
-    /*
-    // Método para inicializar el RecyclerView
+
     private fun initRecyclerView() {
         val manager = LinearLayoutManager(context)
         binding.recyclerFAQ.layoutManager = manager
-        binding.recyclerFAQ.adapter =
-            FAQAdapter(FAQProvider.FAQList) { FAQ ->
-                onItemSelected(FAQ)
-            }
+        binding.recyclerFAQ.adapter = PreguntaFrecuenteAdapter(PreguntaFrecuenteProvider.preguntaFrecuenteList)
     }
-*/
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

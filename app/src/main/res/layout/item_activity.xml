@@ -66,12 +66,16 @@
                 android:id="@+id/tvActivityLevel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/green"
-                android:padding="0dp"
-                android:text=" Nivel: 1"
+                android:background="@drawable/background_level"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/activity_level_list"
                 android:textColor="@color/white"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@id/tvActivityTitle"
+                app:layout_constraintTop_toBottomOf="@id/tvPeopleEnrolled"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView

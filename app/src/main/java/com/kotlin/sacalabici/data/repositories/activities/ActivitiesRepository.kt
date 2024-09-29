@@ -17,7 +17,11 @@ class ActivitiesRepository {
         val rodadasBase: RodadasBase? = apiActivities.getRodadas()
         val listRodadas = mutableListOf<Activity>()
         rodadasBase?.rodadas?.forEach { itemActivity ->
-            listRodadas.addAll(itemActivity.activities)
+            val nivel = itemActivity.route?.nivel
+            itemActivity.activities.forEach{ activity ->
+                val updatedActivity = activity.copy(nivel = nivel)
+                listRodadas.add(updatedActivity)
+            }
         }
         return listRodadas
     }

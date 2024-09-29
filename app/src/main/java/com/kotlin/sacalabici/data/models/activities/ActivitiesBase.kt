@@ -42,5 +42,6 @@ data class Activity(
     @SerializedName("tipo") val type: String,
     @SerializedName("personasInscritas") val peopleEnrolled: Int,
     @SerializedName("estado") val state: Boolean,
-    @SerializedName("comentarios") val comments: String? = null
+    @SerializedName("comentarios") val comments: String? = null,
+    @SerializedName("nivel") val nivel: String? = null
 )

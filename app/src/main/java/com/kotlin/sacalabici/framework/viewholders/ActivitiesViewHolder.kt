@@ -42,6 +42,7 @@ class ActivitiesViewHolder(
 
         if (item.type == "Rodada"){
             binding.tvActivityLevel.visibility = View.VISIBLE
+            binding.tvActivityLevel.text = item.nivel
         } else {
             binding.tvActivityLevel.visibility = View.GONE
         }

@@ -17,6 +17,11 @@ class ActivitiesViewModel: ViewModel() {
     val eventosLiveData = MutableLiveData<List<Activity>>()
     val talleresLiveData = MutableLiveData<List<Activity>>()
 
+    // LiveData para mensajes de error
+    val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos
+    val emptyListActs = "Aún no hay datos para mostrar"
+    val errorDB = "Error al obtener los datos"
+
     // Requisitos para obtener los datos
     private val getRodadasRequirement = GetRodadasRequirement()
     private val getEventosRequirement = GetEventosRequirement()
@@ -27,10 +32,14 @@ class ActivitiesViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getRodadasRequirement()
-                Log.d("ActivitiesViewModel", "Rodadas result: $result")
+                if (result.isEmpty()) {
+                    errorMessageLiveData.postValue(emptyListActs)
+                } else {
+                    errorMessageLiveData.postValue(null) // Limpiar mensaje de error
+                }
                 rodadasLiveData.postValue(result)
             } catch (e: Exception) {
-                Log.e("ActivitiesViewModel", "Error obteniendo rodadas", e)
+                errorMessageLiveData.postValue(errorDB)
                 rodadasLiveData.postValue(emptyList())
             }
         }
@@ -42,9 +51,15 @@ class ActivitiesViewModel: ViewModel() {
             try {
                 val result = getEventosRequirement()
                 Log.d("ActivitiesViewModel", "Eventos result: $result")
+                if (result.isEmpty()) {
+                    errorMessageLiveData.postValue(emptyListActs)
+                }
+                else {
+                    errorMessageLiveData.postValue(null) // Limpiar mensaje de error
+                }
                 eventosLiveData.postValue(result)
             } catch (e: Exception) {
-                Log.e("ActivitiesViewModel", "Error obteniendo eventos", e)
+                errorMessageLiveData.postValue(errorDB)
                 eventosLiveData.postValue(emptyList())
             }
         }
@@ -55,10 +70,14 @@ class ActivitiesViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getTalleresRequirement()
-                Log.d("ActivitiesViewModel", "Talleres result: $result")
+                if (result.isEmpty()) {
+                    errorMessageLiveData.postValue(emptyListActs)
+                } else {
+                    errorMessageLiveData.postValue(null) // Limpiar mensaje de error
+                }
                 talleresLiveData.postValue(result)
             } catch (e: Exception) {
-                Log.e("ActivitiesViewModel", "Error obteniendo talleres", e)
+                errorMessageLiveData.postValue(errorDB)
                 talleresLiveData.postValue(emptyList())
             }
         }

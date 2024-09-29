@@ -10,7 +10,6 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FerxX_123"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,11 +81,10 @@
         app:layout_constraintTop_toTopOf="@id/profile_image" />
 
     <TextView
-        android:id="@+id/profile_blood"
+        android:id="@+id/profileBlood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="O+"
         android:textColor="@color/black"
         android:textSize="13sp"
         android:textStyle="bold"
@@ -97,11 +95,10 @@
         app:layout_constraintTop_toTopOf="@id/blood_icon" />
 
     <TextView
-        android:id="@+id/profile_name"
+        android:id="@+id/profileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Fernando Pérez López"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="normal"
@@ -118,17 +115,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_name"
+        app:layout_constraintTop_toBottomOf="@id/profileName"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/text_rodadas"
+        android:id="@+id/textRodadas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
         android:textSize="16sp"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@id/text_kilometros"
+        app:layout_constraintEnd_toStartOf="@id/textKilometros"
         app:layout_constraintStart_toStartOf="@id/vUserinformation"
         app:layout_constraintTop_toTopOf="@id/vUserinformation"
         app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
@@ -144,13 +140,13 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
-        app:layout_constraintEnd_toEndOf="@id/text_rodadas"
-        app:layout_constraintStart_toStartOf="@id/text_rodadas"
-        app:layout_constraintTop_toBottomOf="@id/text_rodadas"
+        app:layout_constraintEnd_toEndOf="@id/textRodadas"
+        app:layout_constraintStart_toStartOf="@id/textRodadas"
+        app:layout_constraintTop_toBottomOf="@id/textRodadas"
         app:layout_constraintVertical_bias="0.444" />
 
     <TextView
-        android:id="@+id/text_kilometros"
+        android:id="@+id/textKilometros"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -159,7 +155,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
         app:layout_constraintEnd_toStartOf="@id/text_amigos"
-        app:layout_constraintStart_toEndOf="@id/text_rodadas"
+        app:layout_constraintStart_toEndOf="@id/textRodadas"
         app:layout_constraintTop_toTopOf="@id/vUserinformation" />
 
     <TextView
@@ -172,10 +168,10 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
-        app:layout_constraintEnd_toEndOf="@id/text_kilometros"
+        app:layout_constraintEnd_toEndOf="@id/textKilometros"
         app:layout_constraintHorizontal_bias="0.545"
-        app:layout_constraintStart_toStartOf="@id/text_kilometros"
-        app:layout_constraintTop_toBottomOf="@id/text_kilometros"
+        app:layout_constraintStart_toStartOf="@id/textKilometros"
+        app:layout_constraintTop_toBottomOf="@id/textKilometros"
         app:layout_constraintVertical_bias="0.4" />
 
     <TextView
@@ -186,7 +182,7 @@
         android:textSize="16sp"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/vUserinformation"
-        app:layout_constraintStart_toEndOf="@id/text_kilometros"
+        app:layout_constraintStart_toEndOf="@id/textKilometros"
         app:layout_constraintTop_toTopOf="@id/vUserinformation"
         app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
         android:gravity="center"/>
@@ -229,7 +225,7 @@
             android:layout_marginEnd="8dp">
 
             <ImageButton
-                android:id="@+id/btn_edit_profile"
+                android:id="@+id/btnEditProfile"
                 android:layout_width="110dp"
                 android:layout_height="35dp"
                 android:background="@drawable/rounded_button" />

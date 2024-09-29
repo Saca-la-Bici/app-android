@@ -49,6 +49,7 @@ class RolStaffFragment : Fragment() {
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
                 setUpRecyclerView(ArrayList(usuarios))
+                binding.RVViewUsers.scrollToPosition(viewModel.scrollPosition) // Restaurar posición aquí
             }
         })
 
@@ -56,14 +57,20 @@ class RolStaffFragment : Fragment() {
             Log.d("Error", message)
         })
 
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         // Cargar usuarios
         viewModel.getUsuarios(roles = "Staff,Usuario", reset = true, firebaseUID = firebaseUID!!)
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
+            viewModel.scrollPosition = 0 // Reiniciar posición
             highlightCurrentFragment("Administradores")
         }
         binding.btnStaff.setOnClickListener {
+            viewModel.scrollPosition = 0 // Reiniciar posición
             highlightCurrentFragment("Staff")
         }
 
@@ -84,7 +91,7 @@ class RolStaffFragment : Fragment() {
                     delay(500) // Delay of 500 milliseconds (adjust as needed)
                     if (newText != null) {
                         viewModel.searchUser(newText, firebaseUID!!)
-                    } // Or appropriate ViewModel function
+                    }
                 }
                 return true
             }
@@ -99,7 +106,11 @@ class RolStaffFragment : Fragment() {
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
+                // Guardar la posición del scroll
+                viewModel.updateScrollPosition(lastVisibleItem + 1)
+
                 if (totalItemCount <= (lastVisibleItem + 1)) {
+                    viewModel.updateScrollPosition(layoutManager.findFirstVisibleItemPosition()) // Guardar posición aquí
                     // Si se llega al final, cargar más usuarios
                     viewModel.getUsuarios(firebaseUID = firebaseUID!!)
                 }
@@ -128,7 +139,6 @@ class RolStaffFragment : Fragment() {
         when (currentFragment) {
             "Administradores" -> {
                 binding.btnAdministradores.setTextColor(Color.YELLOW)
-
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.nav_host_fragment_content_main, RolAdministradorFragment())
                     .addToBackStack(null)

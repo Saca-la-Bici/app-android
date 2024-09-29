@@ -110,6 +110,7 @@ class RolAdministradorFragment : Fragment() {
 
                 if (totalItemCount <= (lastVisibleItem + 1)) {
                     viewModel.updateScrollPosition(layoutManager.findFirstVisibleItemPosition()) // Guardar posición aquí
+                    // Si se llega al final, cargar más usuarios
                     viewModel.getUsuarios(firebaseUID = firebaseUID!!)
                 }
             }

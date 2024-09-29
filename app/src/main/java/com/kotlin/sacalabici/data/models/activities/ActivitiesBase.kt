@@ -6,17 +6,17 @@ import java.util.Date
 
 data class RodadasBase(
     @SerializedName("rodadas") val rodadas: List<RodadaActivity>,
-    @SerializedName("rol") val role: String
+    @SerializedName("permisos") val permisos: List<String>? = null
 )
 
 data class EventosBase(
     @SerializedName("eventos") val eventos: List<DefaultActivity>,
-    @SerializedName("rol") val role: String
+    @SerializedName("permisos") val permisos: List<String>? = null
 )
 
 data class TalleresBase(
     @SerializedName("talleres") val talleres: List<DefaultActivity>,
-    @SerializedName("rol") val role: String
+    @SerializedName("permisos") val permisos: List<String>? = null
 )
 
 data class RodadaActivity(

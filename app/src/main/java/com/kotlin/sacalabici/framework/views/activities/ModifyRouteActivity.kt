@@ -200,6 +200,11 @@ class ModifyRouteActivity : AppCompatActivity() {
             val announcement = Route(titulo,distancia,tiempo,nivel,coordenadas)
             viewModel.putRoute(id, announcement)
             setResult(Activity.RESULT_OK)
+            Toast.makeText(
+                this,
+                "Se ha modificado la ruta con éxito",
+                Toast.LENGTH_SHORT
+            ).show()
             finish()
         }
 

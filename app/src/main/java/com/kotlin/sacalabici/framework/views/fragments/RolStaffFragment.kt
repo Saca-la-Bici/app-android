@@ -62,7 +62,7 @@ class RolStaffFragment : Fragment() {
         }
 
         // Cargar usuarios
-        viewModel.getUsuarios(roles = "Staff,Usuario", reset = true, firebaseUID = firebaseUID!!)
+        viewModel.getUsuarios(roles = "Staff,Usuario", reset = true)
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
@@ -80,7 +80,7 @@ class RolStaffFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchJob?.cancel()
                 if (query != null) {
-                    viewModel.searchUser(query, firebaseUID!!)
+                    viewModel.searchUser(query)
                 } // Or appropriate ViewModel function
                 return true
             }
@@ -90,7 +90,7 @@ class RolStaffFragment : Fragment() {
                 searchJob = coroutineScope.launch {
                     delay(500) // Delay of 500 milliseconds (adjust as needed)
                     if (newText != null) {
-                        viewModel.searchUser(newText, firebaseUID!!)
+                        viewModel.searchUser(newText)
                     }
                 }
                 return true
@@ -112,7 +112,7 @@ class RolStaffFragment : Fragment() {
                 if (totalItemCount <= (lastVisibleItem + 1)) {
                     viewModel.updateScrollPosition(layoutManager.findFirstVisibleItemPosition()) // Guardar posición aquí
                     // Si se llega al final, cargar más usuarios
-                    viewModel.getUsuarios(firebaseUID = firebaseUID!!)
+                    viewModel.getUsuarios()
                 }
             }
         })

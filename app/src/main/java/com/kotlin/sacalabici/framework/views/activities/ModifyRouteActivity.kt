@@ -82,6 +82,7 @@ class ModifyRouteActivity : AppCompatActivity() {
         tvNivel = findViewById(R.id.tvNivel) // Inicializa el TextView del nivel
         btnEliminarRuta = findViewById(R.id.btnEliminarRuta) // Usa la variable de clase
         btnEnviar = findViewById(R.id.btnEnviar)
+        val btnBack: ImageButton = findViewById(R.id.btnBack)
 
         // Inicializa la clase MapHelper para manejar el mapa y los puntos de ruta
         var mapHelper = MapHelper(this)
@@ -123,6 +124,10 @@ class ModifyRouteActivity : AppCompatActivity() {
             }
 
             verifyInputs()
+        }
+
+        btnBack.setOnClickListener{
+            finish()
         }
 
 

@@ -48,17 +48,17 @@ class RutasFragment : Fragment() {
         rutasAdapter.setSelectedRuta(selectedRuta)
     }
 
-    private fun onRutaSelected(ruta: RouteBase) {
-        onRutaSelectedListener?.onRutaSelected(ruta)
-    }
-
     interface OnRutaSelectedListener {
         fun onRutaSelected(ruta: RouteBase)
     }
 
+    private fun onRutaSelected(ruta: RouteBase) {
+        onRutaSelectedListener?.onRutaSelected(ruta)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val parentFragment = MapFragment()
+        val parentFragment = requireParentFragment() // Cambiado aquí
         if (parentFragment is OnRutaSelectedListener) {
             onRutaSelectedListener = parentFragment
         } else {
@@ -82,3 +82,4 @@ class RutasFragment : Fragment() {
         }
     }
 }
+

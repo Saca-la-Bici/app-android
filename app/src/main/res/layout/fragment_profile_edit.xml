@@ -86,6 +86,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Fernando Pérez López"
@@ -106,7 +107,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/usernamePEdit"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="FerxX_123"
@@ -167,13 +168,14 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emergencyNumberLabel"
+            android:id="@+id/emergencyNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="4428247612"
             android:padding="24dp"
             />
     </com.google.android.material.textfield.TextInputLayout>
+
 
 
 

@@ -44,10 +44,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".framework.adapters.views.activities.ProfileEditActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".framework.adapters.views.activities.ModifyAnnouncementActivity"
             android:exported="false"

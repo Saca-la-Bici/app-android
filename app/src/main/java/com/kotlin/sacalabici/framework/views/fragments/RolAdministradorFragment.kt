@@ -17,7 +17,6 @@ import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolAdministradorBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
 import com.kotlin.sacalabici.framework.viewmodel.profile.ConsultarUsuariosViewModel
-import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,7 +30,6 @@ class RolAdministradorFragment : Fragment() {
     private val binding get() = _binding!!
     private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
     private val viewModel: ConsultarUsuariosViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreateView(

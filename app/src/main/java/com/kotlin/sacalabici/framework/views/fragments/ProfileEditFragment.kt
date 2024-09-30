@@ -42,13 +42,37 @@ class ProfileEditFragment: Fragment() {
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK){
-                viewModel.getProfile("jFHBpEGFyYXEohyBBCYhZju3ltm1")
+                viewModel.getProfile()
             }
         }
 
         return root
     }
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
+            println("cacaaaaaaaaaaaaaa")
+            println(profile)
+//            if (profile.user != null) {
+//                binding.username.text = profile.user
+//            }
+//            if (profile != null) {
+//                binding.name.text = profile.name
+//            }
+//            if (profile != null) {
+//                binding.bloodDropDown.text = profile.bloodtype
+//            }
+//            if (profile != null) {
+//                binding.genderDropDown.text = profile.activitiesCompleted.toString()
+//            }
+//            if (profile != null) {
+//                binding.emergencyNumber.text = "${profile.KmCompleted}km"
+//            }
+        }
+    }
 
     private fun initializeFragment(fragment: Fragment) {
         childFragmentManager.beginTransaction()
@@ -86,30 +110,6 @@ class ProfileEditFragment: Fragment() {
 //        }
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.getProfile("6sBuJ2qhCvfHzDFFwERHxQTgWeU2").observe(viewLifecycleOwner) { profile ->
-            println("cacaaaaaaaaaaaaaa")
-            println(profile)
-//            if (profile.user != null) {
-//                binding.username.text = profile.user
-//            }
-//            if (profile != null) {
-//                binding.name.text = profile.name
-//            }
-//            if (profile != null) {
-//                binding.bloodDropDown.text = profile.bloodtype
-//            }
-//            if (profile != null) {
-//                binding.genderDropDown.text = profile.activitiesCompleted.toString()
-//            }
-//            if (profile != null) {
-//                binding.emergencyNumber.text = "${profile.KmCompleted}km"
-//            }
-        }
-    }
 
     private fun setupBackButton() {
         val backButton = binding.btnBack

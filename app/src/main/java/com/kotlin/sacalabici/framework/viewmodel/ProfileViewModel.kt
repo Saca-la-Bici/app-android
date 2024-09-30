@@ -1,11 +1,9 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.network.model.ProfileBase
+import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.domain.GetProfileRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,10 +14,10 @@ class ProfileViewModel : ViewModel() {
 
     private val getProfileRequirement = GetProfileRequirement()
 
-    fun getProfile(userid: String): MutableLiveData<ProfileBase?> {
+    fun getProfile(): MutableLiveData<ProfileBase?> {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result: ProfileBase? = getProfileRequirement(userid)
+                val result: ProfileBase? = getProfileRequirement()
                 if (result != null) {
                     _profileObjectLiveData.postValue(result)
                 } else {
@@ -27,7 +25,7 @@ class ProfileViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 // Manejo de excepciones de red
-                postErrorProfile("pilin")
+                postErrorProfile("error")
             }
         }
         return profileObjectLiveData

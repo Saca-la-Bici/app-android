@@ -1,7 +1,6 @@
-package com.kotlin.sacalabici.data.network.model
+package com.kotlin.sacalabici.data.models.profile
 
 import com.google.gson.annotations.SerializedName
-import java.sql.Date
 
 data class ProfileBase(
     @SerializedName("_id") val id: String,

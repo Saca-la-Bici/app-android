@@ -64,7 +64,7 @@
         android:textSize="18sp"
         android:textColor="@color/black"
         android:padding="16dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintTop_toBottomOf="@+id/tituloAnadirPregunta"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -76,10 +76,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/TuSeguridad"
+        android:text="@string/Categoria1FAQ"
         android:textSize="15sp"
         android:textColor="@color/black"
-        android:padding="16dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoria_subtitulo"
         />
@@ -103,10 +103,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/AcercaBici"
+        android:text="@string/Categoria2FAQ"
         android:textSize="15sp"
         android:textColor="@color/black"
-        android:padding="16dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoria1"
         />
@@ -130,14 +130,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/InfoGeneral"
+        android:text="@string/Categoria3FAQ"
         android:textSize="15sp"
         android:textColor="@color/black"
-        android:padding="16dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categoria2"
         />
-
 
     <ImageButton
         android:id="@+id/circle_categoria3"
@@ -150,7 +149,55 @@
         android:layout_marginEnd="20dp"
         android:background="@null"/>
 
+    <!-- Categoria 4 -->
+    <TextView
+        android:id="@+id/categoria4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/Categoria4FAQ"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoria3"
+        />
 
+    <ImageButton
+        android:id="@+id/circle_categoria4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_radio_button_unchecked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/categoria4"
+        app:layout_constraintBottom_toBottomOf="@+id/categoria4"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
+
+    <!-- Categoria 5 -->
+    <TextView
+        android:id="@+id/categoria5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/Categoria5FAQ"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoria4"
+        />
+
+    <ImageButton
+        android:id="@+id/circle_categoria5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_radio_button_unchecked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/categoria5"
+        app:layout_constraintBottom_toBottomOf="@+id/categoria5"
+        android:layout_marginEnd="20dp"
+        android:background="@null"/>
 
 
     <!-- Título -->
@@ -162,8 +209,8 @@
         android:textSize="18sp"
         android:textColor="@color/black"
         android:padding="16dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@+id/categoria3"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/categoria5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -192,7 +239,7 @@
         android:textSize="18sp"
         android:textColor="@color/black"
         android:padding="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@+id/titulo_pregunta_cuadro"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

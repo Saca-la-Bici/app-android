@@ -8,9 +8,9 @@ import com.kotlin.sacalabici.data.network.consultarUsuarios.ConsultarUsuariosAPI
 import com.kotlin.sacalabici.data.network.consultarUsuarios.ConsultarUsuariosModuleDI
 import com.kotlin.sacalabici.data.network.session.SessionAPIClient
 
-class ConsultarUsuariosRepository {
+class ConsultarUsuariosRepository(private val idToken: String?) {
 
-    private val apiConsultarUsuarios = ConsultarUsuariosAPIClient()
+    private val apiConsultarUsuarios = ConsultarUsuariosAPIClient(idToken)
 
     suspend fun getUsuarios(page: Int, limit: Int): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.getUsuarios(page, limit)
 

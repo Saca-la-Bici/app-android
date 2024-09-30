@@ -3,11 +3,11 @@ package com.kotlin.sacalabici.data.network.consultarUsuarios
 import android.util.Log
 import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 
-class ConsultarUsuariosAPIClient {
+class ConsultarUsuariosAPIClient(private val idToken: String?) {
     private lateinit var api: ConsultarUsuariosAPIService
 
     suspend fun getUsuarios(page: Int, limit: Int): List<ConsultarUsuariosBase>? {
-        api = ConsultarUsuariosModuleDI() // Asegúrate de obtener la instancia correctamente
+        api = ConsultarUsuariosModuleDI(idToken) // Asegúrate de obtener la instancia correctamente
         return try {
             val response = api.getUsuarios(page, limit)
             response.usuarios // Devuelve la lista de usuarios
@@ -19,7 +19,7 @@ class ConsultarUsuariosAPIClient {
     }
 
     suspend fun searchUser(username: String): List<ConsultarUsuariosBase>? {
-        api = ConsultarUsuariosModuleDI() // Asegúrate de obtener la instancia correctamente
+        api = ConsultarUsuariosModuleDI(idToken) // Asegúrate de obtener la instancia correctamente
         return try {
             val response = api.searchUser(username)
             response.usuarios // Devuelve la lista de usuarios

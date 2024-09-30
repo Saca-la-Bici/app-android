@@ -41,10 +41,6 @@ class RolStaffFragment : Fragment() {
     ): View {
         _binding = FragmentRolStaffBinding.inflate(inflater, container, false)
 
-        // Obtener el firebaseUID
-        val firebaseUID = authViewModel.getCurrentUserId()
-        Log.d("UID", "Firebase UID: $firebaseUID")
-
         // Observamos los cambios en el ViewModel
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {

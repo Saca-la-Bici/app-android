@@ -57,6 +57,15 @@ class ProfileEditActivity: AppCompatActivity() {
 //        }
     }
 
+    private fun setupBackButton() {
+        val backButton = findViewById<ImageButton>(R.id.btn_back)
+        backButton.setOnClickListener {
+            val intent = Intent(fragment, ProfileEditActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+    }
+
 
 }
 

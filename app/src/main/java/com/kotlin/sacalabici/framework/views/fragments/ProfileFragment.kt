@@ -51,6 +51,8 @@ class ProfileFragment : Fragment() {
         }
 
         setupEditButton()
+        setupSettingsButton()
+
         editProfileLauncher=registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -99,6 +101,16 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun setupSettingsButton() {
+        val btnSettings = binding.btnSettings
+        btnSettings.setOnClickListener {
+            val settingsAdminFragment = SettingsAdminFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
 
     private fun passToEditActivity(context: Context) {
         val intent = Intent(context, ProfileEditActivity::class.java)

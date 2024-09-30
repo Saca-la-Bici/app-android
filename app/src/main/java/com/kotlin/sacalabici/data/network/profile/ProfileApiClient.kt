@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.network.profile
 
+import android.util.Log
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 
@@ -10,13 +11,12 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
 
     suspend fun getUsuario(): ProfileBase? {
         val token = firebaseTokenManager.getTokenSynchronously()
-
         return if (token != null) {
             api = ProfileNetworkModuleDI(token)
 
             try {
                 // Llamada al API para obtener el usuario
-                api.getUsuario(token)
+                api.getUsuario()
             } catch (e: Exception) {
                 e.printStackTrace()
                 null

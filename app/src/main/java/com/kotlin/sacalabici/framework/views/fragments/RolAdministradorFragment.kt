@@ -40,10 +40,6 @@ class RolAdministradorFragment : Fragment() {
     ): View {
         _binding = FragmentRolAdministradorBinding.inflate(inflater, container, false)
 
-        // Obtener el firebaseUID
-        val firebaseUID = authViewModel.getCurrentUserId()
-        Log.d("UID", "Firebase UID: $firebaseUID")
-
         // Observamos los cambios en el ViewModel
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
@@ -61,7 +57,7 @@ class RolAdministradorFragment : Fragment() {
         }
 
         // Cargar usuarios
-        viewModel.getUsuarios(roles = "Administrador,Usuario", reset = true, firebaseUID = firebaseUID!!)
+        viewModel.getUsuarios(roles = "Administrador,Usuario", reset = true)
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
@@ -79,7 +75,7 @@ class RolAdministradorFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchJob?.cancel()
                 if (query != null) {
-                    viewModel.searchUser(query, firebaseUID!!)
+                    viewModel.searchUser(query)
                 }
                 return true
             }
@@ -89,7 +85,7 @@ class RolAdministradorFragment : Fragment() {
                 searchJob = coroutineScope.launch {
                     delay(500)
                     if (newText != null) {
-                        viewModel.searchUser(newText, firebaseUID!!)
+                        viewModel.searchUser(newText)
                     }
                 }
                 return true
@@ -111,7 +107,7 @@ class RolAdministradorFragment : Fragment() {
                 if (totalItemCount <= (lastVisibleItem + 1)) {
                     viewModel.updateScrollPosition(layoutManager.findFirstVisibleItemPosition()) // Guardar posición aquí
                     // Si se llega al final, cargar más usuarios
-                    viewModel.getUsuarios(firebaseUID = firebaseUID!!)
+                    viewModel.getUsuarios()
                 }
             }
         })

@@ -44,11 +44,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
     }
 
     // Función para obtener usuarios con paginación
-    fun getUsuarios(roles: String? = null, firebaseUID: String, reset: Boolean = false) {
-        if (firebaseUID.isBlank()) {
-            _errorMessage.value = "Firebase UID no puede estar vacío."
-            return
-        }
+    fun getUsuarios(roles: String? = null, reset: Boolean = false) {
 
         val rolesToUse = roles ?: currentRoles
 
@@ -72,7 +68,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
                 val idToken = getFirebaseIdToken(firebaseAuth)
                 if (idToken != null) {
                     val consultarUsuariosRequirement = ConsultarUsuariosRequirement(idToken)
-                    val usuarios = consultarUsuariosRequirement(page = currentPage, limit = pageSize, roles = rolesToUse, firebaseUID)
+                    val usuarios = consultarUsuariosRequirement(page = currentPage, limit = pageSize, roles = rolesToUse)
                     withContext(Dispatchers.Main) {
                         if (!usuarios.isNullOrEmpty()) {
                             val currentList = _usuarios.value?.toMutableList() ?: mutableListOf()
@@ -97,11 +93,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
     }
 
     // Función para buscar usuarios
-    fun searchUser(username: String, firebaseUID: String) {
-        if (firebaseUID.isBlank()) {
-            _errorMessage.value = "Firebase UID no puede estar vacío."
-            return
-        }
+    fun searchUser(username: String) {
 
         _isLoading.value = true
         isSearching = true  // Cambiamos el estado a búsqueda
@@ -111,7 +103,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
                 val idToken = getFirebaseIdToken(firebaseAuth)
                 if (idToken != null) {
                     val buscarUsuariosRequirement = BuscarUsuariosRequirement(idToken)
-                    val usuarios = buscarUsuariosRequirement(username, firebaseUID)
+                    val usuarios = buscarUsuariosRequirement(username)
                     withContext(Dispatchers.Main) {
                         if (!usuarios.isNullOrEmpty()) {
                             _usuarios.value = usuarios!!

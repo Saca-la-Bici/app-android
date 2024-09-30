@@ -80,6 +80,16 @@
         app:layout_constraintStart_toEndOf="@id/profile_image"
         app:layout_constraintTop_toTopOf="@id/profile_image" />
 
+    <!-- Borrar después -> Botón para ir a registrar FAQ -->
+    <Button
+        android:id="@+id/btn_register_FAQ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrar FAQ"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
         android:id="@+id/profileBlood"
         android:layout_width="wrap_content"

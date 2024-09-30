@@ -31,6 +31,7 @@ class AddActivityActivity: AppCompatActivity(),
     private lateinit var viewModel: ActivitiesViewModel
     private lateinit var viewModelRoute: MapViewModel
     private lateinit var type: String
+    private var isAddActivityRouteFragmentVisible = false
 
     private lateinit var rodadaInformation: Informacion
 
@@ -107,7 +108,27 @@ class AddActivityActivity: AppCompatActivity(),
     * Función que llama la lista de rutas desde el viewModel
     * */
     private fun toggleRutasList() {
-        viewModelRoute.getRouteList()
+        val fragmentManager = supportFragmentManager
+        val addActivityRouteFragment = fragmentManager.findFragmentById(R.id.fragmentAddActivity)
+
+        Log.d("ToggleAddActivityRoute", addActivityRouteFragment.toString())
+
+        if (isAddActivityRouteFragmentVisible) {
+            // Si el fragmento ya está visible, lo eliminamos
+            if (addActivityRouteFragment != null) {
+                fragmentManager.beginTransaction()
+                    .remove(addActivityRouteFragment)
+                    .addToBackStack(null)
+                    .commit()
+                Log.d(              "ToggleAddActivityRoute", "Fragmento AddActivityRouteFragment eliminado")
+            }
+            isAddActivityRouteFragmentVisible = false
+        } else {
+            // Si el fragmento no está visible, lo añadimos
+            viewModelRoute.getRouteList() // Esto activará la observación y añadirá el fragmento
+            isAddActivityRouteFragmentVisible = true
+            Log.d("ToggleAddActivityRoute", "Fragmento AddActivityRouteFragment añadido")
+        }
     }
 
     /*
@@ -120,7 +141,7 @@ class AddActivityActivity: AppCompatActivity(),
             toggleRutasList()
 
         } else {
-            Toast.makeText(this, "Actividad completada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Actividad registrada", Toast.LENGTH_SHORT).show()
             setResult(Activity.RESULT_OK)
             finish()
         }
@@ -136,7 +157,7 @@ class AddActivityActivity: AppCompatActivity(),
                 // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment
                 val routeFragment = AddActivityRouteFragment.newInstance(it, viewModelRoute.lastSelectedRuta)
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment_content_main, routeFragment)
+                    .replace(R.id.fragmentAddActivity, routeFragment)
                     .addToBackStack(null)
                     .commit()
             } ?: run {
@@ -156,6 +177,9 @@ class AddActivityActivity: AppCompatActivity(),
     override fun onRutaConfirmed(rutaID: String) {
         val rodada = Rodada(listOf(rodadaInformation), rutaID)
         viewModel.postActivityRodada(rodada)
+        Toast.makeText(this, "Actividad registrada", Toast.LENGTH_SHORT).show()
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
     private fun showToast(message: String) {

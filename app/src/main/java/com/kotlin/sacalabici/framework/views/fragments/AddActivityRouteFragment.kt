@@ -40,7 +40,7 @@ class AddActivityRouteFragment: Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        onRutaSelectedListener = context as? OnRutaSelectedListener
+        onRutaConfirmListener = context as? OnRutaConfirmListener
     }
 
     override fun onCreateView(
@@ -84,19 +84,11 @@ class AddActivityRouteFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance(rutasList: List<RouteBase>?, selectedRuta: RouteBase?): RutasFragment {
-            val fragment = RutasFragment()
+        fun newInstance(rutasList: List<RouteBase>?, selectedRuta: RouteBase?): AddActivityRouteFragment {
+            val fragment = AddActivityRouteFragment()
             val args = Bundle()
             args.putParcelableArrayList("rutasList", rutasList?.let { ArrayList(it) })
             args.putParcelable("selectedRuta", selectedRuta)
-            fragment.arguments = args
-            return fragment
-        }
-
-        fun newInstanceList(rutasList: List<RouteBase>): AddActivityRouteFragment {
-            val fragment = AddActivityRouteFragment()
-            val args = Bundle()
-            args.putParcelableArrayList("rutasList", ArrayList(rutasList))
             fragment.arguments = args
             return fragment
         }

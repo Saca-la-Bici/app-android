@@ -12,22 +12,24 @@ import com.google.firebase.auth.auth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentSettingsAdminBinding
 import com.kotlin.sacalabici.framework.adapters.views.activities.Session.SessionActivity
-
+import com.kotlin.sacalabici.framework.views.fragments.FAQFragment
 
 class SettingsAdminFragment : Fragment() {
     private var _binding: FragmentSettingsAdminBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentSettingsAdminBinding.inflate(inflater, container, false)
 
         binding.btnRoles.setOnClickListener {
             val rolAdministradorFragment = RolAdministradorFragment()
             // Reemplazar el fragmento actual por SettingsFragment
-            parentFragmentManager.beginTransaction()
+            parentFragmentManager
+                .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, rolAdministradorFragment) // Asegúrate de que este ID coincida con el contenedor de fragmentos en tu layout
                 .addToBackStack(null) // Para permitir volver al fragmento anterior
                 .commit()
@@ -35,7 +37,8 @@ class SettingsAdminFragment : Fragment() {
 
         binding.BBack.setOnClickListener {
             val profileFragment = ProfileFragment()
-            parentFragmentManager.beginTransaction()
+            parentFragmentManager
+                .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, profileFragment)
                 .addToBackStack(null)
                 .commit()
@@ -57,8 +60,23 @@ class SettingsAdminFragment : Fragment() {
             }
         }
 
+        // Botón para abrir FAQFragment
+        setupFAQsButton()
 
         return binding.root
+    }
+
+    // Función para que el botón de FAQs de lleve a FAQFragment
+    private fun setupFAQsButton() {
+        val btnFAQs = binding.BHelp
+        btnFAQs.setOnClickListener {
+            // Navegar a FAQFragment y reemplazar el contenido en el contenedor principal de MainActivity
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, FAQFragment())
+                .addToBackStack(null) // Para permitir navegar hacia atrás
+                .commit()
+        }
     }
 
     override fun onDestroyView() {

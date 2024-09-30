@@ -6,29 +6,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObject
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.ConsultFAQListRequirement
-import kotlinx.coroutines.CoroutineScope
+import com.kotlin.sacalabici.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FAQViewModel : ViewModel() {
-    val FAQObjectLiveData = MutableLiveData<FAQObject>()
+    val faqObjectLiveData = MutableLiveData<FAQObject>()
     private val consultFAQListRequirement = ConsultFAQListRequirement()
 
     // Usar viewModelScope para ejecutar en un hilo de fondo
     fun getFAQList() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val result: FAQObject? = consultFAQListRequirement()
-                withContext(Dispatchers.Main) {
-                    result?.let {
-                        FAQObjectLiveData.postValue(it)
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+            // Obtiene la lista de FAQ de forma asíncrona.
+            val result: FAQObject? = consultFAQListRequirement(Constants.MAX_FAQ_NUMBER)
+
+            // Verifica si el resultado no es nulo antes de postearlo
+            result?.let {
+                Log.d("Salida", it.count.toString())
+                // Actualiza el LiveData en el hilo principal
+                faqObjectLiveData.postValue(it)
+            } ?: run {
+                // Maneja el caso donde result es null (opcional)
+                Log.e("Error", "No se pudo obtener la lista de FAQ")
             }
         }
     }
 }
-

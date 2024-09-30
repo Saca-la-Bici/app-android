@@ -6,21 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
-import com.kotlin.sacalabici.data.network.preguntasFrecuentes.PreguntaFrecuenteProvider
 import com.kotlin.sacalabici.databinding.FragmentFaqsBinding
 import com.kotlin.sacalabici.framework.FAQAdapter
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 
-class FAQFragment: Fragment() {
+class FAQFragment : Fragment() {
     private var _binding: FragmentFaqsBinding? = null
-
-    // Propiedad para acceder al binding de manera segura solo entre onCreateView y onDestroyView
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     private lateinit var viewModel: FAQViewModel
     private lateinit var recyclerView: RecyclerView
@@ -30,7 +26,7 @@ class FAQFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         viewModel = ViewModelProvider(this)[FAQViewModel::class.java]
 
@@ -59,20 +55,21 @@ class FAQFragment: Fragment() {
 
     // Método para inicializar los observadores de LiveData en el ViewModel
     private fun initializeObservers() {
-        viewModel.FAQObjectLiveData.observe(viewLifecycleOwner) { pokedexObject ->
+        viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { pokedexObject ->
             setUpRecyclerView(pokedexObject.results)
         }
     }
 
     // Método para configurar el RecyclerView
     private fun setUpRecyclerView(dataForList: ArrayList<FAQBase>) {
-        recyclerView.setHasFixedSize(true)
+        recyclerView.setHasFixedSize(true) // Fija el tamaño del RecyclerView para optimización
 
-        val linearLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
+        val linearLayoutManager =
+            LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false,
+            )
         recyclerView.layoutManager = linearLayoutManager
 
         // Configura el adapter para gestionar los datos

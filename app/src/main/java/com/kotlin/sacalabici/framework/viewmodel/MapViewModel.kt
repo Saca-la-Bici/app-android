@@ -37,23 +37,11 @@ class MapViewModel : ViewModel() {
 
     val roleLiveData = MutableLiveData<String>()
     val routeObjectLiveData = MutableLiveData<List<RouteBase>?>()
-    val routeSegmentsLiveData = MutableLiveData<Pair<List<Point>, List<Point>>>()
     val toastMessageLiveData = MutableLiveData<String>()
     var lastSelectedRuta: RouteBase? = null
     private val routeListRequirement = RouteListRequirement()
     private val postRouteRequirement = PostRouteRequirement()
     private val patchRouteRequirement = PutRouteRequirement()
-
-    private lateinit var mapView: MapView
-
-    // Para almacenar las fuentes y capas de rutas
-    private val routeSources = mutableListOf<String>()
-    private val routeLayers = mutableListOf<String>()
-
-    // Para almacenar las fuentes y capas de pines
-    private val pinSources = mutableListOf<String>()
-    private val pinLayers = mutableListOf<String>()
-
 
     fun getRouteList() {
         viewModelScope.launch(Dispatchers.IO) {

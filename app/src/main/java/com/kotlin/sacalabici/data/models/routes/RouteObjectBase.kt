@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 data class RouteObjectBase(
-    @SerializedName("ruta") val routes: List<RouteBase>,
+    @SerializedName("rutas") val routes: List<RouteBase>,
     @SerializedName("permisos") val role: List<String>
 )

@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.network.routes
 
+import android.util.Log
 import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteBase

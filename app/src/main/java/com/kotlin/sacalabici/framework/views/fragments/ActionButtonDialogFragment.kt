@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +28,7 @@ class ActionButtonDialogFragment : DialogFragment() {
 
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var announcement: AnnouncementBase
+    private var permissions: List<String> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,7 @@ class ActionButtonDialogFragment : DialogFragment() {
             val title = it.getString("title") ?: throw IllegalArgumentException("Title is required")
             val content = it.getString("content") ?: throw IllegalArgumentException("Content is required")
             val url = it.getString("url") // url can be null
+            permissions = it.getStringArrayList("permissions") ?: emptyList()
             announcement = AnnouncementBase(id, title, content, url ?: "")
         } ?: throw IllegalArgumentException("Arguments are required")
     }
@@ -66,6 +69,15 @@ class ActionButtonDialogFragment : DialogFragment() {
 
         val tvDelete: TextView = view.findViewById(R.id.TVDelete)
         val tvModify: TextView = view.findViewById(R.id.TVModify)
+        Log.d("ActionButtonDialogFragment", "onViewCreated: $permissions")
+
+        if (!permissions.contains("Eliminar anuncio")) {
+            tvDelete.visibility = View.GONE
+        }
+
+        if (!permissions.contains("Modificar anuncio")) {
+            tvModify.visibility = View.GONE
+        }
 
         tvDelete.setOnClickListener {
             // Inflate the custom layout
@@ -114,13 +126,14 @@ class ActionButtonDialogFragment : DialogFragment() {
 
     companion object {
         const val TAG = "ActionButtonDialogFragment"
-        fun newInstance(id: String, title: String, content: String, url: String?): ActionButtonDialogFragment {
+        fun newInstance(id: String, title: String, content: String, url: String?, permissions: List<String>): ActionButtonDialogFragment {
             val fragment = ActionButtonDialogFragment()
             val args = Bundle()
             args.putString("id", id)
             args.putString("title", title)
             args.putString("content", content)
             args.putString("url", url)
+            args.putStringArrayList("permissions", ArrayList(permissions))
             fragment.arguments = args
             return fragment
         }

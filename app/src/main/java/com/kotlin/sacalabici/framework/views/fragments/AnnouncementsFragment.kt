@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,6 +45,7 @@ class AnnouncementsFragment: Fragment() {
     private lateinit var addAnnouncementLauncher: ActivityResultLauncher<Intent>
     private lateinit var modifyAnnouncementLauncher: ActivityResultLauncher<Intent>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private var permissions: List<String> = emptyList()
 
     private val binding get() = _binding!!
 
@@ -119,10 +121,9 @@ class AnnouncementsFragment: Fragment() {
     }
 
     private fun initializeObservers() {
-        viewModel.roleLiveData.observe(viewLifecycleOwner) { role ->
-            if (role == "Administrador") {
-                binding.fabAddAnouncement.visibility = View.VISIBLE
-            } else {
+        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            this.permissions = permissions
+            if (!permissions.contains("Registrar anuncio")) {
                 binding.fabAddAnouncement.visibility = View.GONE
             }
         }
@@ -163,12 +164,15 @@ class AnnouncementsFragment: Fragment() {
     }
 
     private fun showDialog(announcement: AnnouncementBase) {
-        val dialogFragment = ActionButtonDialogFragment.newInstance(
-            announcement.id,
-            announcement.title,
-            announcement.content,
-            announcement.url
-        )
-        dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
+        if (permissions.contains("Modificar anuncio") || permissions.contains("Eliminar anuncio")) {
+            val dialogFragment = ActionButtonDialogFragment.newInstance(
+                announcement.id,
+                announcement.title,
+                announcement.content,
+                announcement.url,
+                permissions
+            )
+            dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
+        }
     }
 }

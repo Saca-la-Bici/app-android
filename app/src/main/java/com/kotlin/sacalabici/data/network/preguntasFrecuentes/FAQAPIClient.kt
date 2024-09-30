@@ -1,20 +1,24 @@
 package com.kotlin.sacalabici.data.network.preguntasFrecuentes
 
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObject
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.PreguntaFrecuente
 
-class PreguntasFrecuentesAPIClient {
+class FAQAPIClient {
 
-    private val api: PreguntasFrecuentesAPIService = PreguntasFrecuentesModuleDI()
-    suspend fun consultarPreguntasFrecuentesList(): List<PreguntaFrecuente>? {
+    private val api: FAQAPIService = FAQModuleDI()
+
+    // Obtener la lista de preguntas frecuentes
+    suspend fun consultFAQList(): FAQObject? {
         return try {
-            api.consultarPreguntasFrecuentes()
+            api.consultFAQ()
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
 
-    suspend fun registrarPreguntaFrecuente(preguntaFrecuente: PreguntaFrecuente):PreguntaFrecuente? {
+    // Registrar una nueva pregunta frecuente
+    suspend fun registrarPreguntaFrecuente(preguntaFrecuente: PreguntaFrecuente): PreguntaFrecuente? {
         return try {
             api.registrarPreguntaFrecuente(preguntaFrecuente)
         } catch (e: Exception) {
@@ -23,3 +27,4 @@ class PreguntasFrecuentesAPIClient {
         }
     }
 }
+

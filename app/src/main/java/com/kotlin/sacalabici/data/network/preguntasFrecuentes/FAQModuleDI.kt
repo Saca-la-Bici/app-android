@@ -5,16 +5,16 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object PreguntasFrecuentesModuleDI {
+object FAQModuleDI {
     private val gsonFactory: GsonConverterFactory = GsonConverterFactory.create()
     private val okHttpClient: OkHttpClient = OkHttpClient()
 
-    operator fun invoke():  PreguntasFrecuentesAPIService {
+    operator fun invoke():  FAQAPIService {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonFactory)
             .build()
-            .create(PreguntasFrecuentesAPIService::class.java)
+            .create(FAQAPIService::class.java)
     }
 }

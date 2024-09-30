@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
-import com.kotlin.sacalabici.framework.views.fragments.RegisterFAQFragment
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -39,9 +38,6 @@ class ProfileFragment : Fragment() {
         btnGlobal.setOnClickListener {
             highlightCurrentFragment("Global", btnEventos, btnAsistencia, btnGlobal)
         }
-
-        // Borrar después -> Botón para abrir FAQsFragment
-        setupRegisterFAQsButton()
 
         setupConfiguracionButton()
         setupEditarButton()
@@ -117,19 +113,6 @@ class ProfileFragment : Fragment() {
         btnEventos.setImageResource(R.drawable.ic_event)
         btnAsistencia.setImageResource(R.drawable.ic_check)
         btnGlobal.setImageResource(R.drawable.ic_global)
-    }
-
-    // Borrar después -> Para que el botón de FAQs de lleve a FAQsFragment
-    private fun setupRegisterFAQsButton() {
-        val btnFAQs = binding.btnRegisterFAQ
-        btnFAQs.setOnClickListener {
-            // Navegar a RegisterFAQsFragment y reemplazar el contenido en el contenedor principal de MainActivity
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, RegisterFAQFragment())
-                .addToBackStack(null) // Para permitir navegar hacia atrás
-                .commit()
-        }
     }
 
     override fun onDestroyView() {

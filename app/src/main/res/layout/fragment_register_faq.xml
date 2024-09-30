@@ -9,7 +9,7 @@
 
     <!-- Flecha de cerrar -->
     <ImageButton
-        android:id="@+id/icon_cerrar"
+        android:id="@+id/BCerrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -227,9 +227,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintVertical_bias="0.9"/>
+        app:layout_constraintTop_toBottomOf="@+id/descripcion_pregunta_cuadro"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintVertical_bias="0.1"/>
 
 
     <!-- Icono de agregar preguntas -->

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.registerForActivityResult
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
@@ -55,7 +56,7 @@ class ProfileFragment : Fragment() {
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK){
-                viewModel.getProfile("jFHBpEGFyYXEohyBBCYhZju3ltm1")
+                viewModel.getProfile()
             }
         }
 
@@ -65,7 +66,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getProfile("6sBuJ2qhCvfHzDFFwERHxQTgWeU2").observe(viewLifecycleOwner) { profile ->
+        viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
             if (profile != null) {
                 binding.username.text = profile.user
             }
@@ -90,20 +91,8 @@ class ProfileFragment : Fragment() {
             .commit()
     }
 
-//    private fun setupEditButton() {
-//        val btnEditProfile = binding.btnEditProfile
-//        btnEditProfile.setOnClickListener {
-//            val intent = Intent(requireContext(), ProfileEditFragment::class.java)
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//            startActivity(intent)
-//        }
-//    }
-
     private fun setupEditButton() {
         binding.btnEditProfile.setOnClickListener {
-//            var profileEditFragment = getFragmentManager()?.beginTransaction()
-//            profileEditFragment?.replace(R.id.nav_host_fragment_content_main, ProfileEditFragment())
-//            profileEditFragment?.commit()
             val profileEditFragment = ProfileEditFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, profileEditFragment)
@@ -112,10 +101,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-//    private fun passToEditActivity(context: Context) {
-//        val intent = Intent(context, ProfileEditFragment::class.java)
-//        editProfileLauncher.launch(intent)
-//    }
 
     private fun highlightCurrentFragment(
         currentFragment: String,

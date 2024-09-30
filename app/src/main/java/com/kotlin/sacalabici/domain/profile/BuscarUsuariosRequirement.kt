@@ -6,5 +6,5 @@ import com.kotlin.sacalabici.data.repositories.ConsultarUsuariosRepository
 class BuscarUsuariosRequirement(private val idToken: String?) {
     private val repository = ConsultarUsuariosRepository(idToken)
 
-    suspend operator fun invoke(username: String): List<ConsultarUsuariosBase>? = repository.searchUser(username)
+    suspend operator fun invoke(username: String, firebaseUID: String): List<ConsultarUsuariosBase>? = repository.searchUser(username, firebaseUID)
 }

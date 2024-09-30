@@ -16,7 +16,8 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolAdministradorBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosViewModel
+import com.kotlin.sacalabici.framework.viewmodel.profile.ConsultarUsuariosViewModel
+import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -30,6 +31,7 @@ class RolAdministradorFragment : Fragment() {
     private val binding get() = _binding!!
     private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
     private val viewModel: ConsultarUsuariosViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreateView(
@@ -38,10 +40,15 @@ class RolAdministradorFragment : Fragment() {
     ): View {
         _binding = FragmentRolAdministradorBinding.inflate(inflater, container, false)
 
+        // Obtener el firebaseUID
+        val firebaseUID = authViewModel.getCurrentUserId()
+        Log.d("UID", "Firebase UID: $firebaseUID")
+
         // Observamos los cambios en el ViewModel
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
-                mostrarUsuariosAdministradoresYUsuarios(ArrayList(usuarios))
+                setUpRecyclerView(ArrayList(usuarios))
+                binding.RVViewUsers.scrollToPosition(viewModel.scrollPosition) // Restaurar posición aquí
             }
         })
 
@@ -49,14 +56,20 @@ class RolAdministradorFragment : Fragment() {
             Log.d("Error", message)
         })
 
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
         // Cargar usuarios
-        viewModel.getUsuarios()
+        viewModel.getUsuarios(roles = "Administrador,Usuario", reset = true, firebaseUID = firebaseUID!!)
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
+            viewModel.scrollPosition = 0 // Reiniciar posición
             highlightCurrentFragment("Administradores")
         }
         binding.btnStaff.setOnClickListener {
+            viewModel.scrollPosition = 0 // Reiniciar posición
             highlightCurrentFragment("Staff")
         }
 
@@ -66,7 +79,7 @@ class RolAdministradorFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchJob?.cancel()
                 if (query != null) {
-                    viewModel.searchUser(query)
+                    viewModel.searchUser(query, firebaseUID!!)
                 }
                 return true
             }
@@ -76,7 +89,7 @@ class RolAdministradorFragment : Fragment() {
                 searchJob = coroutineScope.launch {
                     delay(500)
                     if (newText != null) {
-                        viewModel.searchUser(newText)
+                        viewModel.searchUser(newText, firebaseUID!!)
                     }
                 }
                 return true
@@ -92,9 +105,13 @@ class RolAdministradorFragment : Fragment() {
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
+                // Guardar la posición del scroll
+                viewModel.updateScrollPosition(lastVisibleItem + 1)
+
                 if (totalItemCount <= (lastVisibleItem + 1)) {
+                    viewModel.updateScrollPosition(layoutManager.findFirstVisibleItemPosition()) // Guardar posición aquí
                     // Si se llega al final, cargar más usuarios
-                    viewModel.getUsuarios()
+                    viewModel.getUsuarios(firebaseUID = firebaseUID!!)
                 }
             }
         })
@@ -116,15 +133,7 @@ class RolAdministradorFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.RVViewUsers.layoutManager = linearLayoutManager
         binding.RVViewUsers.adapter = adapter
-    }
-
-    private fun mostrarUsuariosAdministradoresYUsuarios(data: ArrayList<ConsultarUsuariosBase>) {
-        val usuariosFiltrados = data.filter {
-            it.rol.nombreRol == "Administrador" || it.rol.nombreRol == "Usuario"
-        }
-        adapter.updateData(ArrayList(usuariosFiltrados))
-
-        setUpRecyclerView(ArrayList(usuariosFiltrados))
+        adapter.updateData(dataForList)
     }
 
     private fun highlightCurrentFragment(currentFragment: String) {
@@ -158,3 +167,4 @@ class RolAdministradorFragment : Fragment() {
         _binding = null
     }
 }
+

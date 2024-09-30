@@ -12,6 +12,8 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.FragmentFaqsBinding
 import com.kotlin.sacalabici.framework.FAQAdapter
+import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsAdminFragment
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 
 class FAQFragment : Fragment() {
@@ -32,6 +34,15 @@ class FAQFragment : Fragment() {
 
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        // Función para regresar a SettingsFragment
+        binding.BRegresar.setOnClickListener {
+            val profileFragment = ProfileFragment()
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, SettingsAdminFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         data = ArrayList()
 

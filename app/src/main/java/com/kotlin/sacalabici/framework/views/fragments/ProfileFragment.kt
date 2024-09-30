@@ -10,16 +10,15 @@ import androidx.fragment.app.Fragment
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
-import com.kotlin.sacalabici.framework.views.fragments.FAQFragment
 
-class ProfileFragment: Fragment() {
+class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -40,9 +39,6 @@ class ProfileFragment: Fragment() {
             highlightCurrentFragment("Global", btnEventos, btnAsistencia, btnGlobal)
         }
 
-        // Borrar después -> Botón para abrir FAQFragment
-        setupFAQsButton()
-
         setupConfiguracionButton()
         setupEditarButton()
 
@@ -50,7 +46,8 @@ class ProfileFragment: Fragment() {
     }
 
     private fun initializeFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
+        childFragmentManager
+            .beginTransaction()
             .replace(R.id.vFragment, fragment)
             .commit()
     }
@@ -60,13 +57,13 @@ class ProfileFragment: Fragment() {
         btnConfiguration.setOnClickListener {
             val settingsAdminFragment = SettingsAdminFragment()
             // Reemplazar el fragmento actual por SettingsFragment
-            parentFragmentManager.beginTransaction()
+            parentFragmentManager
+                .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment) // Asegúrate de que este ID coincida con el contenedor de fragmentos en tu layout
                 .addToBackStack(null) // Para permitir volver al fragmento anterior
                 .commit()
         }
     }
-
 
     private fun setupEditarButton() {
         val btnEditProfile = binding.btnEditProfile
@@ -81,7 +78,7 @@ class ProfileFragment: Fragment() {
         currentFragment: String,
         btnEventos: ImageButton,
         btnAsistencia: ImageButton,
-        btnGlobal: ImageButton
+        btnGlobal: ImageButton,
     ) {
         resetButtonStyles(btnEventos, btnAsistencia, btnGlobal)
 
@@ -102,7 +99,8 @@ class ProfileFragment: Fragment() {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
+        childFragmentManager
+            .beginTransaction()
             .replace(R.id.vFragment, fragment)
             .commit()
     }
@@ -110,25 +108,12 @@ class ProfileFragment: Fragment() {
     private fun resetButtonStyles(
         btnEventos: ImageButton,
         btnAsistencia: ImageButton,
-        btnGlobal: ImageButton
+        btnGlobal: ImageButton,
     ) {
         btnEventos.setImageResource(R.drawable.ic_event)
         btnAsistencia.setImageResource(R.drawable.ic_check)
         btnGlobal.setImageResource(R.drawable.ic_global)
     }
-
-    // Borrar después -> Para que el botón de FAQs de lleve a FAQFragment
-    private fun setupFAQsButton() {
-        val btnFAQs = binding.btnFAQs
-        btnFAQs.setOnClickListener {
-            // Navegar a FAQFragment y reemplazar el contenido en el contenedor principal de MainActivity
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, FAQFragment())
-                .addToBackStack(null)  // Para permitir navegar hacia atrás
-                .commit()
-        }
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

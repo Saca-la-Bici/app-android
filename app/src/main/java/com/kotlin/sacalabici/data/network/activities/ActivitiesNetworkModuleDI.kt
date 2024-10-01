@@ -1,13 +1,13 @@
-package com.kotlin.sacalabici.data.network
+package com.kotlin.sacalabici.data.network.activities
 
+import com.kotlin.sacalabici.data.network.AuthInterceptor
 import com.kotlin.sacalabici.utils.Constants
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ActivitiesNetworkModuleDI {
+object ActivitiesNetworkModuleDI{
     private val gsonFactory: GsonConverterFactory = GsonConverterFactory.create()
-    private val okHttpClient: OkHttpClient = OkHttpClient()
 
     private fun createOkHttpClient(token: String?): OkHttpClient {
         return OkHttpClient.Builder()
@@ -17,7 +17,7 @@ class ActivitiesNetworkModuleDI {
 
     operator fun invoke(token: String?): ActivitiesApiService {
         return Retrofit.Builder()
-            .baseUrl(Constants.ANNOUNCEMENT_BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(createOkHttpClient(token))
             .addConverterFactory(gsonFactory)
             .build()

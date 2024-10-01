@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
+import android.util.Log
 import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.domain.routes.PostRouteRequirement
@@ -33,30 +35,37 @@ import kotlin.math.sqrt
 
 class MapViewModel : ViewModel() {
 
+    val roleLiveData = MutableLiveData<String>()
     val routeObjectLiveData = MutableLiveData<List<RouteBase>?>()
-    val routeSegmentsLiveData = MutableLiveData<Pair<List<Point>, List<Point>>>()
     val toastMessageLiveData = MutableLiveData<String>()
     var lastSelectedRuta: RouteBase? = null
     private val routeListRequirement = RouteListRequirement()
     private val postRouteRequirement = PostRouteRequirement()
     private val patchRouteRequirement = PutRouteRequirement()
 
-    private lateinit var mapView: MapView
-
-    // Para almacenar las fuentes y capas de rutas
-    private val routeSources = mutableListOf<String>()
-    private val routeLayers = mutableListOf<String>()
-
-    // Para almacenar las fuentes y capas de pines
-    private val pinSources = mutableListOf<String>()
-    private val pinLayers = mutableListOf<String>()
-
     fun getRouteList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result: List<RouteBase> = routeListRequirement()
-                val reversedResult = result.reversed()
-                this@MapViewModel.routeObjectLiveData.postValue(reversedResult)
+                // Obtener el objeto RouteObjectBase en lugar de solo la lista de rutas
+                val result: RouteObjectBase? = routeListRequirement()
+
+                // Publicar las rutas en LiveData
+                val reversedRoutes = result!!.routes.reversed()
+                this@MapViewModel.routeObjectLiveData.postValue(reversedRoutes)
+
+                // Publicar el rol en LiveData
+                this@MapViewModel.roleLiveData.postValue(result.role.toString())
+
+                val permissions = result.role
+                // Por ejemplo, verificar si el usuario tiene permisos de "Administrador"
+
+                for (permission in result.role) {
+                    Log.d("Permisos", "Permiso encontrado: $permission")
+                }
+
+                this@MapViewModel.roleLiveData.postValue(permissions.toString())  // Publicar los permisos en LiveData
+                // Iterar sobre la lista de permisos y mostrar cada uno en Logcat
+
             } catch (e: Exception) {
                 this@MapViewModel.routeObjectLiveData.postValue(emptyList())
             }

@@ -18,6 +18,7 @@ import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.activities.AddRouteActivity
@@ -115,6 +116,7 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     }
 
     private fun observeViewModel() {
+
         viewModel.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
             rutasList?.let {
                 // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment

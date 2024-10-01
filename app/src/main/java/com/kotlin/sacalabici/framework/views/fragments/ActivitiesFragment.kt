@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.databinding.FragmentActivitiesBinding
 import com.kotlin.sacalabici.framework.views.activities.AddActivityActivity
+import com.kotlin.sacalabici.framework.adapters.ActivitiesPagerAdapter
 
 class ActivitiesFragment: Fragment() {
     private var _binding: FragmentActivitiesBinding? = null
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -23,7 +24,22 @@ class ActivitiesFragment: Fragment() {
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        // Función listener para agregar actividad
         addActivity()
+
+        // Consigurar el ViewPager2 con el adaptador
+        val pagerAdapter = ActivitiesPagerAdapter(this)
+        binding.viewPager.adapter = pagerAdapter
+
+        // Configura el TabLayout con el ViewPager2
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> "Rodadas"
+                1 -> "Eventos"
+                2 -> "Talleres"
+                else -> null
+            }
+        }.attach()
         return root
     }
 

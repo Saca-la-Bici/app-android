@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.data.network.model
+package com.kotlin.sacalabici.data.models.activities
 import com.google.gson.annotations.SerializedName
 
 data class ActivityBase(

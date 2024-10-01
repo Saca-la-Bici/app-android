@@ -49,6 +49,7 @@ class ProfileFragment : Fragment() {
 
         // Configura el botón de edición
         setupEditButton()
+        setupSettingsButton()
 
         // Inicializa el launcher para recibir el resultado de la edición de perfil
         editProfileLauncher = registerForActivityResult(
@@ -84,6 +85,17 @@ class ProfileFragment : Fragment() {
             val intent = Intent(activity, ProfileEditActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             editProfileLauncher.launch(intent)
+        }
+    }
+
+    private fun setupSettingsButton() {
+        val btnSettings = binding.btnSettings
+        btnSettings.setOnClickListener {
+            val settingsAdminFragment = SettingsAdminFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 

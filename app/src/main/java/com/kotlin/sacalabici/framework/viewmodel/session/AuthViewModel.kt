@@ -44,6 +44,11 @@ class AuthViewModel : ViewModel() {
 
     private lateinit var authStateListener: FirebaseAuth.AuthStateListener
 
+    // Inicializar Firebase Auth cuando el ViewModel es creado
+    init {
+        firebaseAuth = FirebaseAuth.getInstance()
+    }
+
     fun initialize(firebaseAuthInstance: FirebaseAuth, googleOptions: GoogleSignInOptions, activity: AppCompatActivity) {
         firebaseAuth = firebaseAuthInstance
         googleSignInClient = GoogleSignIn.getClient(activity, googleOptions)
@@ -186,6 +191,12 @@ class AuthViewModel : ViewModel() {
             _authState.postValue(AuthState.Error("Por favor, ingrese un correo electrónico y una contraseña"))
         }
     }
+
+    fun getCurrentUserId(): String? {
+        val currentUser = firebaseAuth.currentUser
+        return currentUser?.uid
+    }
+
 
     private fun registerUser(currentUser: FirebaseUser) {
         viewModelScope.launch {

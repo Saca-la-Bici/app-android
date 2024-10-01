@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.framework.adapters.views.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.widget.Button
@@ -22,7 +23,14 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.FusedLocationProviderClient
 import android.util.Log
 import android.view.View
+import com.mapbox.maps.plugin.annotation.annotations
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import com.mapbox.maps.plugin.annotation.generated.*
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+
 
 
 
@@ -31,6 +39,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var mapView: MapView
     private lateinit var startButton: Button
     private lateinit var ocultarButton: Button
+    private lateinit var pointAnnotationManager: PointAnnotationManager // Declaración
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val client = OkHttpClient()
@@ -48,6 +57,10 @@ class DetailActivity : AppCompatActivity() {
 
         // Inicializa el MapView
         mapView = findViewById(R.id.mapView)
+
+        pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
+
+
         val btnRuta: Button = findViewById(R.id.btnRuta)
         ocultarButton = findViewById(R.id.btnOcultarRuta) // Inicializa el botón para ocultar el mapa
 
@@ -102,12 +115,36 @@ class DetailActivity : AppCompatActivity() {
                 Log.d("UbicacionActual", "Latitud: $latitud, Longitud: $longitud")
 
                 enviarUbicacion(latitud, longitud) // Envía la ubicación al backend
+
+                colocarMarcadorEnMapa(latitud, longitud)
             } else {
                 // Manejar el caso donde la ubicación es nula
                 Log.d("Ubicacion", "La ubicación es nula")
             }
         }
     }
+
+    private fun colocarMarcadorEnMapa(latitud: Double, longitud: Double) {
+        // Decodifica la imagen del icono que deseas mostrar
+        val iconImage = BitmapFactory.decodeResource(resources, R.drawable.start_icon)
+
+        // Añade la imagen al mapa con un ID único
+        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
+            mapView.getMapboxMap().getStyle { style ->
+                style.addImage("iconImage", iconImage) // Asegúrate de que el ID sea el mismo que usas en el siguiente código
+            }
+        }
+
+        // Crear una nueva anotación con las coordenadas
+        val annotationOptions = PointAnnotationOptions()
+            .withPoint(Point.fromLngLat(longitud, latitud)) // Longitud, Latitud
+            .withIconImage("iconImage") // Asegúrate de usar el mismo ID que usaste en addImage
+
+        // Añadir la anotación al mapa
+        pointAnnotationManager.create(annotationOptions)
+    }
+
+
 
     private fun enviarUbicacion(latitud: Double, longitud: Double) {
         val url = "http://18.220.205.53:8080/rodadas/iniciarRodada/:idRodada" // Cambia a la URL de tu backend
@@ -144,4 +181,6 @@ class DetailActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

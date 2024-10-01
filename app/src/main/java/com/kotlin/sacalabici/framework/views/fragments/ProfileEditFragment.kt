@@ -49,35 +49,28 @@ class ProfileEditFragment: Fragment() {
         return root
     }
 
+//    fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
-            println("cacaaaaaaaaaaaaaa")
-            println(profile)
-//            if (profile.user != null) {
-//                binding.username.text = profile.user
-//            }
+            if (profile != null) {
+                binding.username.setText(profile.user)
+            }
+            if (profile != null) {
+                binding.name.setText(profile.name)
+            }
 //            if (profile != null) {
-//                binding.name.text = profile.name
+//                binding.genderDropDown.setText(profile.activitiesCompleted)
 //            }
-//            if (profile != null) {
-//                binding.bloodDropDown.text = profile.bloodtype
-//            }
-//            if (profile != null) {
-//                binding.genderDropDown.text = profile.activitiesCompleted.toString()
-//            }
-//            if (profile != null) {
-//                binding.emergencyNumber.text = "${profile.KmCompleted}km"
-//            }
+            if (profile != null) {
+                binding.bloodDropDown.setText(profile.bloodtype)
+            }
+            if (profile != null) {
+                binding.emergencyNumber.setText(profile.emergencyNumber)
+            }
         }
-    }
-
-    private fun initializeFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.vFragment, fragment)
-            .commit()
     }
 
     private fun setupGenderDropdown() {
@@ -101,7 +94,7 @@ class ProfileEditFragment: Fragment() {
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, bloodTypes)
         bloodDropdownConfig.setAdapter(arrayAdapter)
 
-        val defaultValue = "O+"
+        val defaultValue = "A-"
         bloodDropdownConfig.setText(defaultValue, false)
 
 //        val index = arrayAdapter.getPosition(defaultValue)

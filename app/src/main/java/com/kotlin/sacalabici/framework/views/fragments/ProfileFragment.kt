@@ -51,6 +51,7 @@ class ProfileFragment : Fragment() {
             highlightCurrentFragment("Global", btnEventos, btnAsistencia, btnGlobal)
         }
 
+        setupConfigButton()
         setupEditButton()
         editProfileLauncher=registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -96,6 +97,16 @@ class ProfileFragment : Fragment() {
             val profileEditFragment = ProfileEditFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, profileEditFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    private fun setupConfigButton() {
+        binding.btnConfiguration.setOnClickListener {
+            val settingsAdminFragment = SettingsAdminFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment)
                 .addToBackStack(null)
                 .commit()
         }

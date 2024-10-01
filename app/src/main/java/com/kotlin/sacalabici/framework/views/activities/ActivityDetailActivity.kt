@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.framework.adapters.views.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
@@ -117,6 +118,13 @@ class DetailActivity : AppCompatActivity() {
                 enviarUbicacion(latitud, longitud) // Envía la ubicación al backend
 
                 colocarMarcadorEnMapa(latitud, longitud)
+
+                val cameraOptions = CameraOptions.Builder()
+                    .center(Point.fromLngLat(longitud, latitud)) // Longitud, Latitud
+                    .zoom(15.0) // Ajusta el nivel de zoom según tus preferencias
+                    .build()
+
+                mapView.getMapboxMap().setCamera(cameraOptions)
             } else {
                 // Manejar el caso donde la ubicación es nula
                 Log.d("Ubicacion", "La ubicación es nula")
@@ -125,24 +133,28 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun colocarMarcadorEnMapa(latitud: Double, longitud: Double) {
-        // Decodifica la imagen del icono que deseas mostrar
-        val iconImage = BitmapFactory.decodeResource(resources, R.drawable.start_icon)
+        // Carga la imagen del icono
+        val originalIconImage = BitmapFactory.decodeResource(resources, R.drawable.start_icon)
+
+        // Redimensiona el icono a un tamaño fijo, por ejemplo, 50x50 píxeles
+        val resizedIconImage = Bitmap.createScaledBitmap(originalIconImage, 50, 50, false)
 
         // Añade la imagen al mapa con un ID único
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
             mapView.getMapboxMap().getStyle { style ->
-                style.addImage("iconImage", iconImage) // Asegúrate de que el ID sea el mismo que usas en el siguiente código
+                style.addImage("iconImage", resizedIconImage) // Usa el icono redimensionado
             }
         }
 
         // Crear una nueva anotación con las coordenadas
         val annotationOptions = PointAnnotationOptions()
             .withPoint(Point.fromLngLat(longitud, latitud)) // Longitud, Latitud
-            .withIconImage("iconImage") // Asegúrate de usar el mismo ID que usaste en addImage
+            .withIconImage("iconImage") // Usa el mismo ID que usaste en addImage
 
         // Añadir la anotación al mapa
         pointAnnotationManager.create(annotationOptions)
     }
+
 
 
 

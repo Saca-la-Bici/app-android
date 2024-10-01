@@ -1,32 +1,34 @@
-package com.kotlin.sacalabici.framework.adapters.views.activities.Session
+@file:Suppress("DEPRECATION")
+
+package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.session.AuthState
-import com.kotlin.sacalabici.databinding.ActivitySessionBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.session.AuthViewModel
+import com.kotlin.sacalabici.databinding.ActivityLoginBinding
+import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
+import com.kotlin.sacalabici.framework.views.activities.Session.RecoverPasswordActivity
 import com.kotlin.sacalabici.utils.Constants
 
-class SessionActivity() : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySessionBinding
-    private lateinit var authViewModel: AuthViewModel
+    private lateinit var binding: ActivityLoginBinding
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
 
-        authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
-
-        // Inicializa el ViewModel con Firebase y GoogleSignInOptions
+        // Initialize ViewModel
         authViewModel.initialize(
             FirebaseAuth.getInstance(),
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -40,8 +42,6 @@ class SessionActivity() : AppCompatActivity() {
         authViewModel.authState.observe(this) { authState ->
             when (authState) {
                 is AuthState.Success -> {
-                    // Registration successful
-                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
@@ -53,6 +53,7 @@ class SessionActivity() : AppCompatActivity() {
                 }
                 is AuthState.IncompleteProfile -> {
                     val intent = Intent(this, LoginFinishActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                     finish()
                 }
@@ -64,7 +65,9 @@ class SessionActivity() : AppCompatActivity() {
                     finish()
                 }
                 is AuthState.Unauthenticated -> {
-                    Log.d("SessionActivity", "Usuario no autenticado")
+                    val intent = Intent(this, SessionActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
 
                 AuthState.Cancel -> TODO()
@@ -73,6 +76,35 @@ class SessionActivity() : AppCompatActivity() {
         }
 
         // Listeners para los botones
+
+        binding.TVForgotPassword.setOnClickListener{
+            val intent=Intent(this, RecoverPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.BSession.setOnClickListener {
+            val email = binding.TILEmail.editText?.text.toString()
+            val password = binding.TILPassword.editText?.text.toString()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                binding.BSession.isEnabled = true
+            }, 5000)
+
+            if (!isValidEmail(email)) {
+                binding.BSession.isEnabled = false
+                binding.TILEmail.error = "Por favor ingresa un correo electrónico válido"
+                return@setOnClickListener
+            }
+
+            if (password.isEmpty()) {
+                binding.BSession.isEnabled = false
+                binding.TILPassword.error = "Por favor ingresa una contraseña"
+                return@setOnClickListener
+            }
+
+            authViewModel.signInWithEmailAndPassword(email, password)
+        }
+
         binding.BGoogle.setOnClickListener {
             authViewModel.signInWithGoogle(this)
         }
@@ -81,20 +113,20 @@ class SessionActivity() : AppCompatActivity() {
             authViewModel.signInWithFacebook(this)
         }
 
-        binding.BLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+        binding.BBack.setOnClickListener {
+            val intent = Intent(this, SessionActivity::class.java)
             startActivity(intent)
-        }
-
-        binding.BRegister.setOnClickListener {
-            val intent = Intent(this, RegisterUserActivity::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 
     private fun initializeBinding() {
-        binding = ActivitySessionBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     @Deprecated("Deprecated in Java")
@@ -107,10 +139,4 @@ class SessionActivity() : AppCompatActivity() {
             authViewModel.handleGoogleSignInResult(task)
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        authViewModel.startAuthStateListener()
-    }
 }
-

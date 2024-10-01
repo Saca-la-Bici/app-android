@@ -1,17 +1,30 @@
 package com.kotlin.sacalabici.data.network.profile
 
-import com.kotlin.sacalabici.data.network.model.ProfileBase
+import android.util.Log
+import com.kotlin.sacalabici.data.models.profile.ProfileBase
+import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 
-class ProfileApiClient {
-    private val api: ProfileApiService = ProfileNetworkModuleDI()
+class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
 
-    suspend fun getUsuario(userId: String): ProfileBase? {
-        return try {
-            api.getUsuario(userId)
-        } catch (e: Exception) {
-            e.printStackTrace()
+    // Inicializar el cliente Retrofit con el token
+    private lateinit var api: ProfileApiService
+
+    suspend fun getUsuario(): ProfileBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        return if (token != null) {
+            api = ProfileNetworkModuleDI(token)
+
+            try {
+                // Llamada al API para obtener el usuario
+                api.getUsuario()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            // Si no se pudo obtener el token, retornar null o manejar el error de alguna otra forma
+            println("Error: No se pudo obtener el token de Firebase.")
             null
         }
     }
 }
-

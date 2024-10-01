@@ -31,7 +31,7 @@
         app:layout_constraintVertical_bias="0.036" />
 
     <ImageButton
-        android:id="@+id/btn_configuration"
+        android:id="@+id/btnSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -149,7 +149,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="8.2 km"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
@@ -276,7 +275,14 @@
                 android:src="@drawable/ic_add_friend" />
         </FrameLayout>
     </LinearLayout>
-
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabProfile"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        app:tabIndicatorColor="@color/yellow"
+        app:tabSelectedTextColor="#00FFFFFF"
+        app:tabTextColor="#00FFFFFF"
+        app:layout_constraintTop_toTopOf="@id/vIcons" />
     <View
         android:id="@+id/vIcons"
         android:layout_width="match_parent"
@@ -288,32 +294,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.454"></View>
 
-    <ImageButton
-        android:id="@+id/btnEventos"
+    <ImageView
+        android:id="@+id/Eventos"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_event"
         android:background="@null"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@id/vIcons"
         app:layout_constraintTop_toTopOf="@id/vIcons"
         app:layout_constraintStart_toStartOf="@id/vIcons"
-        app:layout_constraintEnd_toStartOf="@id/btnAsistencia"
+        app:layout_constraintEnd_toStartOf="@id/Asistencia"
         app:layout_constraintVertical_bias="0.2"/>
 
-    <ImageButton
-        android:id="@+id/btnAsistencia"
+    <ImageView
+        android:id="@+id/Asistencia"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_check"
         android:background="@null"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@id/vIcons"
         app:layout_constraintTop_toTopOf="@id/vIcons"
-        app:layout_constraintStart_toEndOf="@id/btnEventos"
-        app:layout_constraintEnd_toStartOf="@id/btnGlobal"
+        app:layout_constraintStart_toEndOf="@id/Eventos"
+        app:layout_constraintEnd_toStartOf="@id/Global"
         app:layout_constraintVertical_bias="0.2"/>
 
-    <ImageButton
-        android:id="@+id/btnGlobal"
+    <ImageView
+        android:id="@+id/Global"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_global"
@@ -321,34 +329,34 @@
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@id/vIcons"
         app:layout_constraintTop_toTopOf="@id/vIcons"
-        app:layout_constraintStart_toEndOf="@id/btnAsistencia"
+        app:layout_constraintStart_toEndOf="@id/Asistencia"
         app:layout_constraintEnd_toEndOf="@id/vIcons"
         app:layout_constraintVertical_bias="0.2"/>
 
-    <FrameLayout
+
+
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vFragment"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="295dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/vIcons"
-        app:layout_constraintVertical_bias="0.256" >
+        app:layout_constraintVertical_bias="0.291" />
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_faq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_faq"
-            app:backgroundTint="@color/yellow"
-            app:fabSize="mini"
-            android:layout_gravity="bottom|end"
-            />
-
-    </FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_faq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_faq"
+        app:backgroundTint="@color/yellow"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@id/vFragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 
     <include layout="@layout/main_navbar"/>

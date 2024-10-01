@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.viewmodel.session
+package com.kotlin.sacalabici.framework.viewmodel.session
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
-import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.data.models.session.UserClient
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,6 @@ import java.util.regex.Pattern
 class RegisterFinishViewModel : ViewModel() {
 
     // Lista de tipos de sangre válidos
-    private val phoneNumberUtil = PhoneNumberUtil.getInstance()
     private val validBloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
     private val _authState = MutableLiveData<AuthState>()
     private val userClient = UserClient()
@@ -64,7 +62,7 @@ class RegisterFinishViewModel : ViewModel() {
             if (birthdate.isEmpty() || bloodType.isEmpty() || phoneNumber.isEmpty()) {
                 "Por favor, complete todos los campos"
             }
-            else if (birthdate.isEmpty()) {
+            else if (birthdate.isEmpty() || birthdate == "Año-Mes-Día") {
                 "Por favor, ingrese una fecha válida"
             }
             else if (!isValidPhoneNumber(phoneNumber)) {

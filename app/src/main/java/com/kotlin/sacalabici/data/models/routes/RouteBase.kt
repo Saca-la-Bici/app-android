@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.data.models.routes
 
 import android.os.Parcelable
+import androidx.compose.ui.semantics.Role
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -11,5 +12,5 @@ data class RouteBase (
     @SerializedName("distancia") var distancia: String,
     @SerializedName("tiempo") var tiempo: String,
     @SerializedName("nivel") var nivel: String,
-    @SerializedName("coordenadas") var coordenadas: ArrayList<CoordenatesBase>,
+    @SerializedName("coordenadas") var coordenadas: ArrayList<CoordenatesBase>
 ) : Parcelable

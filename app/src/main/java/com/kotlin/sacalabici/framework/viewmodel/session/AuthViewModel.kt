@@ -1,4 +1,6 @@
-package com.kotlin.sacalabici.framework.adapters.viewmodel.session
+@file:Suppress("DEPRECATION")
+
+package com.kotlin.sacalabici.framework.viewmodel.session
 
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +22,8 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.kotlin.sacalabici.data.models.session.AuthState
@@ -39,6 +43,11 @@ class AuthViewModel : ViewModel() {
 
 
     private lateinit var authStateListener: FirebaseAuth.AuthStateListener
+
+    // Inicializar Firebase Auth cuando el ViewModel es creado
+    init {
+        firebaseAuth = FirebaseAuth.getInstance()
+    }
 
     fun initialize(firebaseAuthInstance: FirebaseAuth, googleOptions: GoogleSignInOptions, activity: AppCompatActivity) {
         firebaseAuth = firebaseAuthInstance
@@ -99,8 +108,8 @@ class AuthViewModel : ViewModel() {
         LoginManager.getInstance().logInWithReadPermissions(activity, listOf("email", "public_profile"))
         LoginManager.getInstance().registerCallback(callbackManager, object :
             FacebookCallback<LoginResult> {
-            override fun onSuccess(loginResult: LoginResult) {
-                handleFacebookAccessToken(loginResult.accessToken)
+            override fun onSuccess(result: LoginResult) {
+                handleFacebookAccessToken(result.accessToken)
             }
 
             override fun onCancel() {
@@ -152,12 +161,12 @@ class AuthViewModel : ViewModel() {
                     _authState.postValue(AuthState.Error("Usuario actual no disponible"))
                 }
             } else {
-                _authState.postValue(AuthState.Error("Autenticación fallida con Google"))
+                _authState.postValue(AuthState.Error("Autenticación fallida o cancelada con Google"))
             }
         }
     }
 
-    // Autenticación por correo y contraseña
+    // Autenticación por correoy contraseña
     fun signInWithEmailAndPassword(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -170,13 +179,24 @@ class AuthViewModel : ViewModel() {
                             _authState.postValue(AuthState.Error("Usuario actual no disponible"))
                         }
                     } else {
-                        _authState.postValue(AuthState.Error("Error al iniciar sesión con correo y contraseña"))
+                        val errorMessage = when (val exception = task.exception) {
+                            is FirebaseAuthInvalidUserException -> "La cuenta de usuario no existe o ha sido deshabilitada."
+                            is FirebaseAuthInvalidCredentialsException -> "Contraseña incorrecta."
+                            else -> exception?.message ?: "Error al iniciar sesión con correo y contraseña"
+                        }
+                        _authState.postValue(AuthState.Error(errorMessage))
                     }
                 }
         } else {
-            _authState.postValue(AuthState.Error("Por favor, completa todos los campos"))
+            _authState.postValue(AuthState.Error("Por favor, ingrese un correo electrónico y una contraseña"))
         }
     }
+
+    fun getCurrentUserId(): String? {
+        val currentUser = firebaseAuth.currentUser
+        return currentUser?.uid
+    }
+
 
     private fun registerUser(currentUser: FirebaseUser) {
         viewModelScope.launch {

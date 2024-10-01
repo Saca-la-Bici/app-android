@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.viewmodel.session
+package com.kotlin.sacalabici.framework.viewmodel.session
 
 import androidx.lifecycle.ViewModel
 

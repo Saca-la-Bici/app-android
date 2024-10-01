@@ -17,7 +17,7 @@ object RouteNetworkModuleDI {
 
     operator fun invoke(token: String?): RouteApiService {
         return Retrofit.Builder()
-            .baseUrl(Constants.ANNOUNCEMENT_BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(createOkHttpClient(token))
             .addConverterFactory(gsonFactory)
             .build()

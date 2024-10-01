@@ -110,7 +110,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun enviarUbicacion(latitud: Double, longitud: Double) {
-        val url = "http://ec2-18-220-205-53.us-east-2.compute.amazonaws.com:28222/rodadas/iniciarRodada/:idRodada" // Cambia a la URL de tu backend
+        val url = "http://18.220.205.53:8080/rodadas/iniciarRodada/:idRodada" // Cambia a la URL de tu backend
         val requestBody = RequestBody.create(
             "application/json".toMediaTypeOrNull(),
             JSONObject().apply {

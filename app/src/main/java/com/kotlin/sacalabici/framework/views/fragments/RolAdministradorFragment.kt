@@ -120,7 +120,7 @@ class RolAdministradorFragment : Fragment() {
 
         // Reemplazo explícito del fragmento con SettingsAdminFragment
         binding.btnBack.setOnClickListener {
-            val settingsAdminFragment = SettingsAdminFragment()
+            val settingsAdminFragment = SettingsFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment)
                 .addToBackStack(null)

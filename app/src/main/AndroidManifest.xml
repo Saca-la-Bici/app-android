@@ -49,7 +49,7 @@
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
         <activity
-            android:name=".framework.adapters.views.activities.ModifyAnnouncementActivity"
+            android:name=".framework.views.activities.announcement.ModifyAnnouncementActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

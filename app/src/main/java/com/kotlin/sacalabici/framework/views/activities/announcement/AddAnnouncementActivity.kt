@@ -42,7 +42,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
-        binding.ibAddImage.setOnClickListener {
+        binding.ibAddImage.setOnClickListener { // Llamar al botón que abre la galería de imágenes
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
         }
@@ -57,7 +57,6 @@ class AddAnnouncementActivity: AppCompatActivity() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
-                Log.d("uri", "Selected image URI: $selectedImageUri")
                 binding.ibAddImage.setImageURI(selectedImageUri)
             }
         }
@@ -69,7 +68,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
     }
 
     private fun cleanTemporaryFiles() {
-        val tempFile = File(cacheDir, "tempFile") // Usa el mismo nombre que usaste al crear el archivo
+        val tempFile = File(cacheDir, "tempFile")
         if (tempFile.exists()) {
             tempFile.delete()
         }

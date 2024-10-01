@@ -9,7 +9,9 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityModifyAnnouncementBinding
@@ -41,6 +43,11 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
     private fun populateUI(id: String?, title: String?, content: String?, url: String?) {
         binding.etModifyAnnouncementTitle.setText(title)
         binding.etModifyAnnouncementDescription.setText(content)
+        if (url != null && url.isNotEmpty()) {
+            Glide.with(this)
+                .load(url)
+                .into(binding.ibAddImage)
+        }
     }
 
     private fun initializeListeners() {
@@ -54,7 +61,7 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
             val description = binding.etModifyAnnouncementDescription.text.toString()
             val image = selectedImageUri
             val announcement = Announcement(title, description, image)
-            viewModel.putAnnouncement(id, announcement)
+            viewModel.patchAnnouncement(id, announcement)
             setResult(Activity.RESULT_OK)
             finish()
         }
@@ -73,7 +80,6 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
-                Log.d("ImagePicker", "Selected image URI: $selectedImageUri")
                 binding.ibAddImage.setImageURI(selectedImageUri)
             }
         }

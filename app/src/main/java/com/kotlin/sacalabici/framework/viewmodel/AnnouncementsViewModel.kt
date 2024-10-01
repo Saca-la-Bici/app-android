@@ -55,7 +55,7 @@ class AnnouncementsViewModel: ViewModel() {
         }
     }
 
-    fun putAnnouncement(id: String, announcement: Announcement) {
+    fun patchAnnouncement(id: String, announcement: Announcement) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 patchAnnouncementRequirement(id, announcement)

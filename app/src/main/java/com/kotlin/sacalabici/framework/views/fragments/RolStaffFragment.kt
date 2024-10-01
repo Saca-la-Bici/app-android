@@ -74,17 +74,25 @@ class RolStaffFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchJob?.cancel()
                 if (query != null) {
-                    viewModel.searchUser(query)
-                } // Or appropriate ViewModel function
+                    viewModel.isSearching = true  // Entrar en modo de búsqueda
+                    viewModel.searchUser(query, roles = "Staff,Usuario")  // Limitar la búsqueda solo a Staff y Usuario
+                }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 searchJob?.cancel()
                 searchJob = coroutineScope.launch {
-                    delay(500) // Delay of 500 milliseconds (adjust as needed)
-                    if (newText != null) {
-                        viewModel.searchUser(newText)
+                    delay(500)
+                    if (!newText.isNullOrEmpty()) {
+                        // Si hay texto en el buscador, ejecuta la búsqueda
+                        viewModel.searchUser(newText, roles = "Staff,Usuario")  // Limitar la búsqueda solo a Staff y Usuario
+                    } else {// Si el texto está vacío, vuelve al estado paginado
+                        viewModel.isSearching = false  // Salir del modo de búsqueda
+                        viewModel.getUsuarios(
+                            roles = "Staff,Usuario",
+                            reset = true
+                        ) // Recargar la lista original
                     }
                 }
                 return true

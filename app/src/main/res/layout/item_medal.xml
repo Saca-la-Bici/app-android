@@ -41,8 +41,8 @@
                 android:gravity="center"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Description"
-                android:id="@+id/TVMedalDescription"
+                android:text="Name"
+                android:id="@+id/TVMedalName"
                 android:textStyle="bold"
                 />
         </LinearLayout>

@@ -80,11 +80,12 @@ class DetailActivity : AppCompatActivity() {
 
         startButton = findViewById(R.id.btnStart)
         startButton.setOnClickListener{
-            obtenerUbicacionActual()
+            val idRodada = "idDeLaRodadaPrueba"
+            obtenerUbicacionActual(idRodada)
         }
     }
 
-    fun obtenerUbicacionActual() {
+    fun obtenerUbicacionActual(idRodada: String) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Solicitar permisos de ubicación
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
@@ -103,18 +104,18 @@ class DetailActivity : AppCompatActivity() {
                 enviarUbicacion(latitud, longitud) // Envía la ubicación al backend
             } else {
                 // Manejar el caso donde la ubicación es nula
+                Log.d("Ubicacion", "La ubicación es nula")
             }
         }
     }
 
     private fun enviarUbicacion(latitud: Double, longitud: Double) {
-        val url = "http://tu-backend-url/rodadas/iniciar/ubicacion" // Cambia a la URL de tu backend
+        val url = "http://ec2-18-220-205-53.us-east-2.compute.amazonaws.com:28222/rodadas/iniciarRodada/:idRodada" // Cambia a la URL de tu backend
         val requestBody = RequestBody.create(
             "application/json".toMediaTypeOrNull(),
             JSONObject().apply {
                 put("latitud", latitud)
                 put("longitud", longitud)
-                put("adminId", "tuAdminId") // Asegúrate de proporcionar un adminId válido
             }.toString()
         )
 
@@ -129,9 +130,16 @@ class DetailActivity : AppCompatActivity() {
             launch(Dispatchers.IO) {
                 try {
                     val response: Response = client.newCall(request).execute()
-                    // Manejar la respuesta aquí
+                    if (response.isSuccessful) {
+                        // Maneja la respuesta de éxito
+                        Log.d("Ubicacion", "Ubicación actualizada exitosamente")
+                    } else {
+                        // Maneja la respuesta de error del servidor
+                        Log.e("Ubicacion", "Error al actualizar ubicación: ${response.message}")
+                    }
                 } catch (e: Exception) {
-                    // Manejar el error aquí
+                    // Manejar errores de la llamada
+                    Log.e("Ubicacion", "Error al realizar la solicitud: ${e.message}")
                 }
             }
         }

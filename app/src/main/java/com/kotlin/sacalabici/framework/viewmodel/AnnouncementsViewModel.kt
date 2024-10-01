@@ -1,20 +1,22 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
-import com.kotlin.sacalabici.domain.AnnouncementListRequirement
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementObjectBase
+import com.kotlin.sacalabici.domain.announcement.AnnouncementListRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
-import com.kotlin.sacalabici.domain.DeleteAnnouncementRequirement
-import com.kotlin.sacalabici.domain.PostAnnouncementRequirement
-import com.kotlin.sacalabici.domain.PatchAnnouncementRequirement
+import com.kotlin.sacalabici.domain.announcement.DeleteAnnouncementRequirement
+import com.kotlin.sacalabici.domain.announcement.PostAnnouncementRequirement
+import com.kotlin.sacalabici.domain.announcement.PatchAnnouncementRequirement
 
 class AnnouncementsViewModel: ViewModel() {
     val announcementObjectLiveData = MutableLiveData<List<AnnouncementBase>>()
+    val permissionsLiveData = MutableLiveData<List<String>>()
     private val announcementListRequirement = AnnouncementListRequirement()
     private val postAnnouncementRequirement = PostAnnouncementRequirement()
     private val deleteAnnouncementRequirement = DeleteAnnouncementRequirement()
@@ -23,9 +25,10 @@ class AnnouncementsViewModel: ViewModel() {
     fun getAnnouncementList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result: List<AnnouncementBase> = announcementListRequirement()
-                val reversedResult = result.reversed()
+                val result: AnnouncementObjectBase? = announcementListRequirement()
+                val reversedResult = result!!.announcements.reversed()
                 announcementObjectLiveData.postValue(reversedResult)
+                permissionsLiveData.postValue(result.permissions)
             } catch (e: Exception) {
                 announcementObjectLiveData.postValue(emptyList())
             }
@@ -42,10 +45,10 @@ class AnnouncementsViewModel: ViewModel() {
         }
     }
 
-    fun postAnnouncement(announcement: Announcement) {
+    fun postAnnouncement(announcement: Announcement, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                postAnnouncementRequirement(announcement)
+                postAnnouncementRequirement(announcement, context)
             } catch (e: Exception) {
                 throw e
             }

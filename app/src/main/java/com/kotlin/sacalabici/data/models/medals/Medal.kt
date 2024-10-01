@@ -1,0 +1,10 @@
+package com.kotlin.sacalabici.data.models.medals
+
+import com.google.gson.annotations.SerializedName
+
+data class Medal(
+    @SerializedName("idMedalla") val idMedal: Int,
+    @SerializedName("nombre") val name: String,
+    @SerializedName("imagen") val image: String,
+    @SerializedName("estado") val state: Boolean
+)

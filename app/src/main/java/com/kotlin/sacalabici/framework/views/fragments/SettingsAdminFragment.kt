@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +12,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentSettingsAdminBinding
-import com.kotlin.sacalabici.framework.adapters.views.activities.Session.SessionActivity
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 
 
 class SettingsAdminFragment : Fragment() {
@@ -23,6 +24,13 @@ class SettingsAdminFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSettingsAdminBinding.inflate(inflater, container, false)
+
+        val sharedPreferences = requireContext().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
+
+        if (storedPermissions?.contains("el permiso que necesitas") != true) {
+            binding.btnRoles.visibility = View.GONE
+        }
 
         binding.btnRoles.setOnClickListener {
             val rolAdministradorFragment = RolAdministradorFragment()

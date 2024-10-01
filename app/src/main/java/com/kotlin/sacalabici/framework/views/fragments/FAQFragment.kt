@@ -12,7 +12,6 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.FragmentFaqsBinding
 import com.kotlin.sacalabici.framework.FAQAdapter
-import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsAdminFragment
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 
@@ -34,15 +33,9 @@ class FAQFragment : Fragment() {
 
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
         // Función para regresar a SettingsFragment
-        binding.BRegresar.setOnClickListener {
-            val profileFragment = ProfileFragment()
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, SettingsAdminFragment())
-                .addToBackStack(null)
-                .commit()
-        }
+        setupRegresarButton()
 
         data = ArrayList()
 
@@ -86,5 +79,18 @@ class FAQFragment : Fragment() {
         // Configura el adapter para gestionar los datos
         adapter.FAQAdapter(dataForList, requireContext())
         recyclerView.adapter = adapter
+    }
+
+    // Función para que el botón de Regresar de lleve a SettingsFragment
+    private fun setupRegresarButton() {
+        val btnFAQs = binding.BRegresar
+        btnFAQs.setOnClickListener {
+            // Navegar a SettingFragment y reemplazar el contenido en el contenedor principal de MainActivity
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, SettingsAdminFragment())
+                .addToBackStack(null) // Para permitir navegar hacia atrás
+                .commit()
+        }
     }
 }

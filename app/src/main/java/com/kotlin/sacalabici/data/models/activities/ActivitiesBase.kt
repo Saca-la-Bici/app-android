@@ -6,23 +6,24 @@ import java.util.Date
 
 data class RodadasBase(
     @SerializedName("rodadas") val rodadas: List<RodadaActivity>,
-    @SerializedName("permisos") val permisos: List<String>? = null
+    @SerializedName("permisos") val permisos: List<String>
 )
 
 data class EventosBase(
     @SerializedName("eventos") val eventos: List<DefaultActivity>,
-    @SerializedName("permisos") val permisos: List<String>? = null
+    @SerializedName("permisos") val permisos: List<String>
 )
 
 data class TalleresBase(
     @SerializedName("talleres") val talleres: List<DefaultActivity>,
-    @SerializedName("permisos") val permisos: List<String>? = null
+    @SerializedName("permisos") val permisos: List<String>
 )
 
 data class RodadaActivity(
     @SerializedName("_id") val id: String,
     @SerializedName("informacion") val activities: List<Activity>,
-    @SerializedName("ruta") val route: Route? = null
+    @SerializedName("ruta") val route: Route? = null,
+    @SerializedName("ubicacion") val liveLocation: List<Location>
 )
 
 data class DefaultActivity(
@@ -44,4 +45,9 @@ data class Activity(
     @SerializedName("estado") val state: Boolean,
     @SerializedName("comentarios") val comments: String? = null,
     @SerializedName("nivel") val nivel: String? = null
+)
+
+data class Location(
+    @SerializedName("latitud") val latitude: Double,
+    @SerializedName("longitud") val longitude: Double
 )

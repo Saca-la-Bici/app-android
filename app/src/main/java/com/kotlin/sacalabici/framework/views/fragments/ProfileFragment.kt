@@ -7,14 +7,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
+import com.kotlin.sacalabici.framework.adapters.ProfileAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
 
@@ -26,78 +26,65 @@ class ProfileFragment : Fragment() {
     private lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java) // Inicializa ViewModel
-        val root: View = binding.root
-        initializeFragment(EventFragment())
 
-        val btnEventos = binding.btnEventos
-        val btnAsistencia = binding.btnAsistencia
-        val btnGlobal = binding.btnGlobal
+        // Configura el adaptador para ViewPager2
+        val pagerAdapter = ProfileAdapter(this)
+        binding.vFragment.adapter = pagerAdapter
 
-        btnEventos.setOnClickListener {
-            highlightCurrentFragment("Eventos", btnEventos, btnAsistencia, btnGlobal)
-        }
-        btnAsistencia.setOnClickListener {
-            highlightCurrentFragment("Asistencia", btnEventos, btnAsistencia, btnGlobal)
-        }
-        btnGlobal.setOnClickListener {
-            highlightCurrentFragment("Global", btnEventos, btnAsistencia, btnGlobal)
-        }
+        // Configura el TabLayout con ViewPager2
+        TabLayoutMediator(binding.tabProfile, binding.vFragment) { tab, position ->
+            tab.text = when (position) {
+                0 -> "____________"
+                1 -> "____________"
+                2 -> "____________"
+                else -> null
+            }
+        }.attach()
 
+        // Configura el botón de edición
         setupEditButton()
         setupSettingsButton()
 
-        editProfileLauncher=registerForActivityResult(
+        // Inicializa el launcher para recibir el resultado de la edición de perfil
+        editProfileLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
-            if (result.resultCode == RESULT_OK){
+            if (result.resultCode == RESULT_OK) {
+                // Actualiza los datos del perfil al regresar de ProfileEditActivity
                 viewModel.getProfile()
             }
         }
 
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Observa los cambios en el perfil y actualiza la interfaz
         viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
-            if (profile != null) {
-                binding.username.text = profile.user
-            }
-            if (profile != null) {
-                binding.profileName.text = profile.name
-            }
-            if (profile != null) {
-                binding.profileBlood.text = profile.bloodtype
-            }
-            if (profile != null) {
-                binding.textRodadas.text = profile.activitiesCompleted.toString()
-            }
-            if (profile != null) {
-                binding.textKilometros.text = "${profile.KmCompleted}km"
+            profile?.let {
+                binding.username.text = it.user
+                binding.profileName.text = it.name
+                binding.profileBlood.text = it.bloodtype
+                binding.textRodadas.text = it.activitiesCompleted.toString()
+                binding.textKilometros.text = "${it.KmCompleted}km"
             }
         }
     }
 
-    private fun initializeFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.vFragment, fragment)
-            .commit()
-    }
-
+    // Configura el botón para editar el perfil
     private fun setupEditButton() {
-        val btnEditProfile = binding.btnEditProfile
-        btnEditProfile.setOnClickListener {
+        binding.btnEditProfile.setOnClickListener {
             val intent = Intent(activity, ProfileEditActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
+            editProfileLauncher.launch(intent)
         }
     }
 
@@ -110,51 +97,6 @@ class ProfileFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-    }
-
-    private fun passToEditActivity(context: Context) {
-        val intent = Intent(context, ProfileEditActivity::class.java)
-        editProfileLauncher.launch(intent)
-    }
-
-    private fun highlightCurrentFragment(
-        currentFragment: String,
-        btnEventos: ImageButton,
-        btnAsistencia: ImageButton,
-        btnGlobal: ImageButton
-    ) {
-        resetButtonStyles(btnEventos, btnAsistencia, btnGlobal)
-
-        when (currentFragment) {
-            "Eventos" -> {
-                btnEventos.setImageResource(R.drawable.ic_event_selected)
-                replaceFragment(EventFragment())
-            }
-            "Asistencia" -> {
-                btnAsistencia.setImageResource(R.drawable.ic_check_selected)
-                replaceFragment(MedalsFragment())
-            }
-            "Global" -> {
-                btnGlobal.setImageResource(R.drawable.ic_global_selected)
-                replaceFragment(GlobalFragment())
-            }
-        }
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.vFragment, fragment)
-            .commit()
-    }
-
-    private fun resetButtonStyles(
-        btnEventos: ImageButton,
-        btnAsistencia: ImageButton,
-        btnGlobal: ImageButton
-    ) {
-        btnEventos.setImageResource(R.drawable.ic_event)
-        btnAsistencia.setImageResource(R.drawable.ic_check)
-        btnGlobal.setImageResource(R.drawable.ic_global)
     }
 
     override fun onDestroyView() {

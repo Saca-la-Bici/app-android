@@ -1,6 +1,5 @@
-package com.kotlin.sacalabici.framework
+package com.kotlin.sacalabici.framework.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,16 +7,13 @@ import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.ItemFaqBinding
 import com.kotlin.sacalabici.framework.viewholders.FAQViewHolder
 
-class FAQAdapter : RecyclerView.Adapter<FAQViewHolder>() {
-    var data: ArrayList<FAQBase> = ArrayList()
-    lateinit var context: Context
-
-    fun FAQAdapter(
-        basicData: ArrayList<FAQBase>,
-        context: Context,
-    ) {
-        this.data = basicData
-        this.context = context
+class FAQAdapter(
+    private var data: List<FAQBase>,
+    private val longClickListener: (FAQBase) -> Boolean,
+) : RecyclerView.Adapter<FAQViewHolder>() {
+    fun updateData(newData: List<FAQBase>) {
+        data = newData
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(
@@ -33,7 +29,7 @@ class FAQAdapter : RecyclerView.Adapter<FAQViewHolder>() {
         viewType: Int,
     ): FAQViewHolder {
         val binding = ItemFaqBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return FAQViewHolder(binding)
+        return FAQViewHolder(binding, longClickListener)
     }
 
     override fun getItemCount(): Int = data.size

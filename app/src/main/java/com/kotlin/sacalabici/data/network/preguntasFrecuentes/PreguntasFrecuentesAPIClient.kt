@@ -22,4 +22,13 @@ class PreguntasFrecuentesAPIClient {
             null
         }
     }
+
+    suspend fun consultarPreguntaFrecuenteInd(IdPregunta:Int): PreguntaFrecuente?{
+        return try{
+            api.consultarPreguntaFrecuenteInd(IdPregunta)
+        } catch(err: Exception){
+            err.printStackTrace()
+            null
+        }
+    }
 }

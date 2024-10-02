@@ -13,4 +13,9 @@ class PreguntasFrecuentesRepository {
     suspend fun registrarPreguntaFrecuente(preguntaFrecuente: PreguntaFrecuente): PreguntaFrecuente? {
         return apiPreguntasFrecuentes.registrarPreguntaFrecuente(preguntaFrecuente)
     }
+
+    suspend fun consultarPreguntaFrecuenteInd(IdPregunta:Int): PreguntaFrecuente?{
+        return apiPreguntasFrecuentes.consultarPreguntaFrecuenteInd(IdPregunta)
+    }
+
 }

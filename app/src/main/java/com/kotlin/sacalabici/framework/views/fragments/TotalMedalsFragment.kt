@@ -1,11 +1,13 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
 import TotalMedalsViewModel
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,6 +37,12 @@ class TotalMedalsFragment : Fragment() {
         val root: View = binding.root
 
         initializeComponents(root)
+        setFragmentResultListener("actionButtonDialogResult") { _, bundle ->
+            val resultCode = bundle.getInt("resultCode")
+            if (resultCode == Activity.RESULT_OK) {
+                viewModel.getMedalsList()
+            }
+        }
         initializeObservers()
         setupRegresarButton()
 

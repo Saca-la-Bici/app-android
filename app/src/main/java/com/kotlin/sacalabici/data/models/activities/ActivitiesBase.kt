@@ -45,3 +45,8 @@ data class Activity(
     @SerializedName("comentarios") val comments: String? = null,
     @SerializedName("nivel") val nivel: String? = null
 )
+
+data class JoinActivityRequest(
+    val actividadId: String,
+    val tipo: String
+)

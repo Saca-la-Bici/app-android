@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.repositories.activities
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
@@ -41,4 +42,10 @@ class ActivitiesRepository {
         }
         return listTalleres
     }
+
+    suspend fun PostJoinActivity(actividadId: String, tipo: String) {
+        Log.d("ActivitiesRepository", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
+        apiActivities.PostJoinActivity(actividadId, tipo)
+    }
+
 }

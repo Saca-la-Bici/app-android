@@ -8,6 +8,7 @@ import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
+import com.kotlin.sacalabici.domain.activities.PostJoinActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -21,6 +22,8 @@ class ActivitiesViewModel: ViewModel() {
     private val getRodadasRequirement = GetRodadasRequirement()
     private val getEventosRequirement = GetEventosRequirement()
     private val getTalleresRequirement = GetTalleresRequirement()
+
+    private val postJoinActivity = PostJoinActivity()
 
     // Función para cargar rodadas
     fun getRodadas() {
@@ -63,4 +66,23 @@ class ActivitiesViewModel: ViewModel() {
             }
         }
     }
+
+
+    // Función para inscribir al usuario en una actividad
+    fun postInscribirActividad(actividadId: String, tipo: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try{
+                Log.d("ActivitiesViewModel", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
+                postJoinActivity(actividadId, tipo)
+                Log.d("postInscribirActivityviewModel", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
+            }
+            catch (e: Exception){
+                Log.e("postInscribirActivityviewModel", "Error al inscribir actividad", e)
+            }
+
+        }
+    }
+
+
 }

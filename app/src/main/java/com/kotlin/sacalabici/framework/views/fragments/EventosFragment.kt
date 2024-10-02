@@ -2,9 +2,11 @@ package com.kotlin.sacalabici.framework.views.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,9 +35,10 @@ class EventosFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // Inicializar adapter aquí, donde el fragmento ya está adjunto a su contexto
-        adapter = ActivitiesAdapter(ArrayList()) { evento ->
+        adapter = ActivitiesAdapter(ArrayList(), viewModel = activitiesViewModel) { evento ->
             true
         }
+
         recyclerView.adapter = adapter
 
         // Inicializar SwipeRefreshLayout
@@ -50,9 +53,28 @@ class EventosFragment : Fragment() {
             swipeRefreshLayout.isRefreshing = false  // Detener la animación
         }
 
+
+        // Observar cambios en eventos
+        //activitiesViewModel.eventosLiveData.observe(viewLifecycleOwner) { eventos ->
+            //adapter.updateData(eventos)  // Actualizar los datos del adapter
+            //swipeRefreshLayout.isRefreshing = false  // Detener la animación de carga
+        //}
+
         // Cargar los datos iniciales
         activitiesViewModel.getEventos()
 
         return view
     }
+
+
+
+    private fun setupClickListeners(view: View) {
+        val btnJoin = view.findViewById<Button>(R.id.btnJoin)
+        btnJoin?.setOnClickListener {
+            // Aquí colocas la acción que deseas al presionar el botón
+            Log.d("EventosFragment", "Botón Join presionado")
+
+        }
+    }
+
 }

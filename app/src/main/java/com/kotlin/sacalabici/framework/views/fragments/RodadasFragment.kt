@@ -32,8 +32,9 @@ class RodadasFragment: Fragment() {
         recyclerView = view.findViewById(R.id.recyclerViewRodadas)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        
         // Inicializar adapter aquí, donde el fragmento ya está adjunto a su contexto
-        adapter = ActivitiesAdapter(ArrayList()) { rodada ->
+        adapter = ActivitiesAdapter(ArrayList(), viewModel = activitiesViewModel) { rodada ->
             true
         }
         recyclerView.adapter = adapter

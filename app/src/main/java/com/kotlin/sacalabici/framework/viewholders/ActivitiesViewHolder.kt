@@ -1,6 +1,6 @@
 package com.kotlin.sacalabici.framework.viewholders
 
-import android.content.Context
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,13 +11,17 @@ import com.bumptech.glide.request.RequestOptions
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ItemActivityBinding
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ActivitiesViewHolder(
     private val binding: ItemActivityBinding,
-    private val longClickListener: (Activity) -> Boolean
+    private val longClickListener: (Activity) -> Boolean,
+    private val viewModel: ActivitiesViewModel
 ): RecyclerView.ViewHolder(binding.root){
+
+
 
     fun bind(item: Activity) {
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(item.date)
@@ -47,6 +51,16 @@ class ActivitiesViewHolder(
             binding.tvActivityLevel.visibility = View.GONE
         }
 
+        binding.btnJoin.setOnClickListener(){
+            Log.d("ITEM", "$item")
+            //Falta el id del usuario
+            val actividadId = item.id // Este 'item' es tu objeto 'Activity'
+            val tipo = item.type // Este 'type' ya está en tu clase 'Activity'
+            // Llamar al ViewModel para inscribir la actividad
+            Log.d("ActivitiesViewHolder", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
+            viewModel.postInscribirActividad(actividadId, tipo)
+        }
+
     }
 
     private fun getActivityImage(url: String, imageView: ImageView) {
@@ -61,6 +75,8 @@ class ActivitiesViewHolder(
             .apply(requestOptions)
             .into(imageView)
     }
+
+
 
 
 }

@@ -33,7 +33,7 @@ class TalleresFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // Inicializar adapter aquí, donde el fragmento ya está adjunto a su contexto
-        adapter = ActivitiesAdapter(ArrayList()) { taller ->
+        adapter = ActivitiesAdapter(ArrayList(), viewModel = activitiesViewModel) { taller ->
             true
         }
         recyclerView.adapter = adapter

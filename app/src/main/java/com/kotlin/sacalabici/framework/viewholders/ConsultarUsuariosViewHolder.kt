@@ -41,12 +41,15 @@ class ConsultarUsuariosViewHolder(
                 } else {
                     // Cambiar a "Usuario"
                     Log.d("ConsultarUsuariosViewHolder", "Cambiando rol a: Usuario")
-                    "Usuario"
+                    "66e882740f14ea86304fa973"
                 }
 
             // Llamar al ViewModel para cambiar el rol del usuario
             modifyRoleViewModel.patchRole(item.usuario, nuevoRol)
 
+            // Deshabilitar el botón y cambiar su apariencia
+            binding.btnChangerol.isEnabled = false
+            binding.btnChangerol.setBackgroundColor(itemView.context.getColor(R.color.gray))
             Toast.makeText(itemView.context, "Rol cambiado exitosamente", Toast.LENGTH_SHORT).show()
         }
 

@@ -43,6 +43,7 @@ class RolStaffFragment : Fragment() {
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
                 setUpRecyclerView(ArrayList(usuarios))
+                Log.d("Usuarios", usuarios.toString())
                 binding.RVViewUsers.scrollToPosition(viewModel.scrollPosition) // Restaurar posición aquí
             }
         })

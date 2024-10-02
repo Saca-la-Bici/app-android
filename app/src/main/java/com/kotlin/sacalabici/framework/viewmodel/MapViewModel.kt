@@ -76,7 +76,9 @@ class MapViewModel : ViewModel() {
                 this@MapViewModel.routeObjectLiveData.postValue(reversedRoutes)
 
             } catch (e: Exception) {
-                this@MapViewModel.routeObjectLiveData.postValue(emptyList())
+                withContext(Dispatchers.Main) {
+                    toastMessageLiveData.postValue("Error al cargar la lista de rutas")
+                }
             }
         }
     }

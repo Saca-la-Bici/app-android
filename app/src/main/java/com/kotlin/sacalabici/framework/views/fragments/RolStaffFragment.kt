@@ -17,7 +17,6 @@ import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolStaffBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
 import com.kotlin.sacalabici.framework.viewmodel.profile.ConsultarUsuariosViewModel
-import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -32,7 +31,6 @@ class RolStaffFragment : Fragment() {
     private val binding get() = _binding!!
     private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
     private val viewModel: ConsultarUsuariosViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreateView(
@@ -41,15 +39,14 @@ class RolStaffFragment : Fragment() {
     ): View {
         _binding = FragmentRolStaffBinding.inflate(inflater, container, false)
 
-        // Obtener el firebaseUID
-        val firebaseUID = authViewModel.getCurrentUserId()
-        Log.d("UID", "Firebase UID: $firebaseUID")
-
         // Observamos los cambios en el ViewModel
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
+                // Si hay usuarios, se configura el RecyclerView y se oculta el mensaje
                 setUpRecyclerView(ArrayList(usuarios))
+                Log.d("Usuarios", usuarios.toString())
                 binding.RVViewUsers.scrollToPosition(viewModel.scrollPosition) // Restaurar posición aquí
+                binding.TVNoUsers.visibility = View.GONE
             }
         })
 
@@ -59,6 +56,7 @@ class RolStaffFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if(!isLoading && viewModel.usuarios.value.isNullOrEmpty()) binding.TVNoUsers.visibility = View.VISIBLE
         }
 
         // Cargar usuarios
@@ -80,17 +78,25 @@ class RolStaffFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchJob?.cancel()
                 if (query != null) {
-                    viewModel.searchUser(query)
-                } // Or appropriate ViewModel function
+                    viewModel.isSearching = true  // Entrar en modo de búsqueda
+                    viewModel.searchUser(query, roles = "Staff,Usuario")  // Limitar la búsqueda solo a Staff y Usuario
+                }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 searchJob?.cancel()
                 searchJob = coroutineScope.launch {
-                    delay(500) // Delay of 500 milliseconds (adjust as needed)
-                    if (newText != null) {
-                        viewModel.searchUser(newText)
+                    delay(500)
+                    if (!newText.isNullOrEmpty()) {
+                        // Si hay texto en el buscador, ejecuta la búsqueda
+                        viewModel.searchUser(newText, roles = "Staff,Usuario")  // Limitar la búsqueda solo a Staff y Usuario
+                    } else {// Si el texto está vacío, vuelve al estado paginado
+                        viewModel.isSearching = false  // Salir del modo de búsqueda
+                        viewModel.getUsuarios(
+                            roles = "Staff,Usuario",
+                            reset = true
+                        ) // Recargar la lista original
                     }
                 }
                 return true

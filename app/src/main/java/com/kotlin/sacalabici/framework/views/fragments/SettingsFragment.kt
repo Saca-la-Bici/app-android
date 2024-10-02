@@ -11,25 +11,25 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.databinding.FragmentSettingsAdminBinding
+import com.kotlin.sacalabici.databinding.FragmentSettingsBinding
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import com.kotlin.sacalabici.framework.views.fragments.ProfileFragment
 
 
-class SettingsAdminFragment : Fragment() {
-    private var _binding: FragmentSettingsAdminBinding? = null
+class SettingsFragment : Fragment() {
+    private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSettingsAdminBinding.inflate(inflater, container, false)
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
         val sharedPreferences = requireContext().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
 
-        if (storedPermissions?.contains("el permiso que necesitas") != true) {
+        if (storedPermissions?.contains("Modificar rol") != true) {
             binding.btnRoles.visibility = View.GONE
         }
 

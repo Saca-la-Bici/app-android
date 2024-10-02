@@ -253,8 +253,8 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                     val distance = route.getDouble("distance") / 1000.0
 
                     // Divide los puntos en tramos según la separación deseada
-                    val tramo1 = decodedPoints.takeWhile { it.latitude() <= stopoverPoint!!.latitude() }
-                    val tramo2 = decodedPoints.dropWhile { it.latitude() <= stopoverPoint!!.latitude() }
+                    val tramo1 = decodedPoints.takeWhile { it.latitude() <= points[2].latitude() }
+                    val tramo2 = decodedPoints.dropWhile { it.latitude() <= points[2].latitude() }
 
                     withContext(Dispatchers.Main) {
                         // Muestra la distancia en el campo de texto

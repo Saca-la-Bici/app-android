@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.registerForActivityResult
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
@@ -16,7 +18,6 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.adapters.ProfileAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
-import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
 
 class ProfileFragment : Fragment() {
 
@@ -82,9 +83,11 @@ class ProfileFragment : Fragment() {
     // Configura el botón para editar el perfil
     private fun setupEditButton() {
         binding.btnEditProfile.setOnClickListener {
-            val intent = Intent(activity, ProfileEditActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            editProfileLauncher.launch(intent)
+            val profileEditFragment = ProfileEditFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, profileEditFragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 

@@ -8,24 +8,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.medals.MedalBase
 import com.kotlin.sacalabici.databinding.FragmentTotalMedalsBinding
 import com.kotlin.sacalabici.framework.adapters.TotalMedalsAdapter
+import com.kotlin.sacalabici.framework.viewholders.TotalMedalsViewHolder
 import kotlinx.coroutines.launch
 
 class TotalMedalsFragment : Fragment() {
     private var _binding: FragmentTotalMedalsBinding? = null
-
-    private val binding get() = _binding!!
-
+    private lateinit var recyclerView: RecyclerView
+    private val adapter: TotalMedalsAdapter = TotalMedalsAdapter()
     private lateinit var viewModel: TotalMedalsViewModel
 
-    private lateinit var recyclerView: RecyclerView
-
-    private val adapter: TotalMedalsAdapter = TotalMedalsAdapter()
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +46,10 @@ class TotalMedalsFragment : Fragment() {
         _binding = null
     }
 
-    // CAMBIAR
     private fun initializeObservers() {
-        viewModel.medalsObjectLiveData.observe(viewLifecycleOwner) { ? ->
+        viewModel.medalsObjectLiveData.observe(viewLifecycleOwner) { medalsList ->
             lifecycleScope.launch {
-                setUpRecyclerView(ArrayList(?))
+                setUpRecyclerView(ArrayList(medalsList))
             }
         }
     }
@@ -61,16 +59,20 @@ class TotalMedalsFragment : Fragment() {
 
     }
 
-
     private fun setUpRecyclerView(dataForList: ArrayList<MedalBase>) {
         recyclerView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(
+
+        val gridLayoutManager = GridLayoutManager(
             requireContext(),
-            LinearLayoutManager.VERTICAL,
+            3,  // 3 columnas
+            GridLayoutManager.VERTICAL,  // Disposición vertical
             false
         )
-        recyclerView.layoutManager = linearLayoutManager
+
+        recyclerView.layoutManager = gridLayoutManager
+
         adapter.TotalMedalsAdapter(dataForList, requireContext())
+
         recyclerView.adapter = adapter
     }
 

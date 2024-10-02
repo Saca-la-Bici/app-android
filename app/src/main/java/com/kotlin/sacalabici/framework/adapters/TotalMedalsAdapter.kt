@@ -5,15 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.data.models.medals.MedalBase
-import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.ItemMedalBinding
 import com.kotlin.sacalabici.framework.viewholders.TotalMedalsViewHolder
 
 class TotalMedalsAdapter() : RecyclerView.Adapter<TotalMedalsViewHolder>() {
-    var data: ArrayList<AnnouncementBase> = ArrayList()
+    var data: ArrayList<MedalBase> = ArrayList()
     lateinit var context: Context
 
-    fun TotalMedalsAdapter(basicData: ArrayList<AnnouncementBase>, context: Context) {
+    fun TotalMedalsAdapter(basicData: ArrayList<MedalBase>, context: Context) {
         this.data = basicData
         this.context = context
     }

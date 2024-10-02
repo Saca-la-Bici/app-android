@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TotalMedalsViewHolder(
-    private val binding: ItemMedalBinding,
+    private val binding: ItemMedalBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     // Método bind para vincular los datos del modelo con la UI

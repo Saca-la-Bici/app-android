@@ -17,7 +17,6 @@ import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolAdministradorBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
 import com.kotlin.sacalabici.framework.viewmodel.profile.ConsultarUsuariosViewModel
-import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,7 +30,6 @@ class RolAdministradorFragment : Fragment() {
     private val binding get() = _binding!!
     private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
     private val viewModel: ConsultarUsuariosViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreateView(
@@ -43,8 +41,11 @@ class RolAdministradorFragment : Fragment() {
         // Observamos los cambios en el ViewModel
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
+                // Si hay usuarios, se configura el RecyclerView y se oculta el mensaje
                 setUpRecyclerView(ArrayList(usuarios))
+                Log.d("Usuarios", usuarios.toString())
                 binding.RVViewUsers.scrollToPosition(viewModel.scrollPosition) // Restaurar posición aquí
+                binding.TVNoUsers.visibility = View.GONE
             }
         })
 
@@ -54,6 +55,7 @@ class RolAdministradorFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if(!isLoading && viewModel.usuarios.value.isNullOrEmpty()) binding.TVNoUsers.visibility = View.VISIBLE
         }
 
         // Cargar usuarios
@@ -75,7 +77,8 @@ class RolAdministradorFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchJob?.cancel()
                 if (query != null) {
-                    viewModel.searchUser(query)
+                    viewModel.isSearching = true  // Entrar en modo de búsqueda
+                    viewModel.searchUser(query, roles = "Administrador,Usuario")  // Limitar la búsqueda solo a Staff y Usuario
                 }
                 return true
             }
@@ -84,8 +87,15 @@ class RolAdministradorFragment : Fragment() {
                 searchJob?.cancel()
                 searchJob = coroutineScope.launch {
                     delay(500)
-                    if (newText != null) {
-                        viewModel.searchUser(newText)
+                    if (!newText.isNullOrEmpty()) {
+                        // Si hay texto en el buscador, ejecuta la búsqueda
+                        viewModel.searchUser(newText, roles = "Administrador,Usuario")  // Limitar la búsqueda solo a Staff y Usuario
+                    } else { // Si el texto está vacío, vuelve al estado paginado
+                        viewModel.isSearching = false  // Salir del modo de búsqueda
+                        viewModel.getUsuarios(
+                            roles = "Administrador,Usuario",
+                            reset = true
+                        )  // Recargar la lista original
                     }
                 }
                 return true
@@ -114,7 +124,7 @@ class RolAdministradorFragment : Fragment() {
 
         // Reemplazo explícito del fragmento con SettingsAdminFragment
         binding.btnBack.setOnClickListener {
-            val settingsAdminFragment = SettingsAdminFragment()
+            val settingsAdminFragment = SettingsFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment)
                 .addToBackStack(null)

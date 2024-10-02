@@ -1,7 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -94,9 +93,9 @@ class ProfileFragment : Fragment() {
     private fun setupSettingsButton() {
         val btnSettings = binding.btnSettings
         btnSettings.setOnClickListener {
-            val settingsAdminFragment = SettingsAdminFragment()
+            val settingsFragment = SettingsFragment()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment)
+                .replace(R.id.nav_host_fragment_content_main, settingsFragment)
                 .addToBackStack(null)
                 .commit()
         }

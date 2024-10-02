@@ -1,6 +1,7 @@
 //package com.kotlin.sacalabici.framework.views.fragments
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
@@ -15,6 +16,7 @@ import com.kotlin.sacalabici.databinding.FragmentProfileEditBinding
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
 
 
@@ -31,7 +33,7 @@ class ProfileEditFragment: Fragment() {
     ): View {
 
         _binding = FragmentProfileEditBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         val root: View = binding.root
 
         setupGenderDropdown()
@@ -55,19 +57,11 @@ class ProfileEditFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
-            if (profile != null) {
+            profile?.let {
                 binding.username.setText(profile.user)
-            }
-            if (profile != null) {
                 binding.name.setText(profile.name)
-            }
-//            if (profile != null) {
-//                binding.genderDropDown.setText(profile.activitiesCompleted)
-//            }
-            if (profile != null) {
-                binding.bloodDropDown.setText(profile.bloodtype)
-            }
-            if (profile != null) {
+//                binding.genderDropDown.setText(profile.activitiesCompleted, false)
+                binding.bloodDropDown.setText(profile.bloodtype, false)
                 binding.emergencyNumber.setText(profile.emergencyNumber)
             }
         }
@@ -94,8 +88,8 @@ class ProfileEditFragment: Fragment() {
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, bloodTypes)
         bloodDropdownConfig.setAdapter(arrayAdapter)
 
-        val defaultValue = "A-"
-        bloodDropdownConfig.setText(defaultValue, false)
+//        val defaultValue = "A-"
+//        bloodDropdownConfig.setText(defaultValue, false)
 
 //        val index = arrayAdapter.getPosition(defaultValue)
 //        if (index >= 0) {
@@ -115,6 +109,18 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
+//    private fun setupUploadButton() {
+//        binding.btnSave.setOnClickListener {
+//            val emptystring = ""
+//            val id = intent.getStringExtra("id") ?: emptystring
+//            val title = binding.etModifyAnnouncementTitle.text.toString()
+//            val description = binding.etModifyAnnouncementDescription.text.toString()
+//            val announcement = Announcement(title, description, image)
+//            viewModel.patchAnnouncement(id, announcement)
+//            setResult(Activity.RESULT_OK)
+//            finish()
+//        }
+//    }
 
 }
 

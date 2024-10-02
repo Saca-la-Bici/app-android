@@ -16,6 +16,7 @@ class FirebaseTokenManager(private val firebaseAuth: FirebaseAuth) {
         firebaseAuth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 _token.value = task.result?.token
+                Log.d("Token: ", _token.value.toString())
             } else {
                 Log.e("token", "Error al obtener el token", task.exception)
                 _token.value = null

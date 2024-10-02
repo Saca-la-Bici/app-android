@@ -49,8 +49,8 @@
     <!-- Botón de regreso -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/btnBack"
-        android:layout_width="25dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
         android:src="@drawable/back_button"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -143,6 +143,18 @@
         app:layout_constraintStart_toStartOf="@id/VContainer"
         app:layout_constraintEnd_toEndOf="@id/VContainer"
         app:layout_constraintBottom_toBottomOf="@+id/VContainer"/>
+
+    <TextView
+        android:id="@+id/TVNoUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/TNoUsers"
+        style="@style/TextAppearance.TitleMedium"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/RVView_users"
+        app:layout_constraintBottom_toBottomOf="@id/RVView_users"
+        app:layout_constraintStart_toStartOf="@id/VContainer"
+        app:layout_constraintEnd_toEndOf="@id/VContainer" />
 
     <View
         android:id="@+id/vNavBar"

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.network.model.ActivityInfo
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Informacion
 import com.kotlin.sacalabici.data.network.model.Rodada
@@ -82,6 +83,10 @@ class AddActivityActivity: AppCompatActivity(),
         ubi: String,
         description: String
     ) {
+        // Almacenamiento de datos escritos
+        val info = ActivityInfo(title, date, hour, minutes, hourDur, minutesDur, ubi, description)
+        viewModel.activityInfo.value = info
+
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val dateAct: Date = dateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
 
@@ -133,6 +138,14 @@ class AddActivityActivity: AppCompatActivity(),
 
     /*
     * Función llamada desde AddActivityInfoFragment
+    * Termina la actividad
+    * */
+    override fun onCloseClicked() {
+        finish()
+    }
+
+    /*
+    * Función llamada desde AddActivityInfoFragment
     * Si es rodada, cambia al siguiente fragmento para elegir una ruta
     * */
     override fun onNextClicked(type: String) {
@@ -177,7 +190,7 @@ class AddActivityActivity: AppCompatActivity(),
     override fun onRutaConfirmed(rutaID: String) {
         val rodada = Rodada(listOf(rodadaInformation), rutaID)
         viewModel.postActivityRodada(rodada)
-        Toast.makeText(this, "Actividad registrada", Toast.LENGTH_SHORT).show()
+        showToast("Actividad registrada")
         setResult(Activity.RESULT_OK)
         finish()
     }

@@ -16,6 +16,7 @@ import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
+import com.kotlin.sacalabici.framework.views.fragments.ProfileFragment
 
 
 class ProfileEditFragment: Fragment() {

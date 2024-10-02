@@ -30,6 +30,7 @@ class AddActivityInfoFragment: Fragment() {
     * Llama a la función para recibir la información del formulario
     * */
     interface OnFragmentInteractionListener {
+        fun onCloseClicked()
         fun onNextClicked(type: String)
         fun receiveInformation(title: String,
                                date: String,
@@ -74,6 +75,18 @@ class AddActivityInfoFragment: Fragment() {
         _binding = FragmentActivityInfoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        // En caso de que se haya retrocedido, recuperar información
+        viewModel.activityInfo.value?.let { info ->
+            binding.etAddActivityTitle.setText(info.title)
+            binding.BDate.text = info.date
+            binding.hourSpinner.setSelection(info.hour.toInt())
+            binding.minutesSpinner.setSelection(info.minutes.toInt())
+            binding.hourSpinnerDur.setSelection(info.hourDur.toInt())
+            binding.minutesSpinnerDur.setSelection(info.minutesDur.toInt())
+            binding.etAddActivityUbi.setText(info.ubi)
+            binding.etAddActivityDescription.setText(info.description)
+        }
+
         initializeListeners()
 
         return root
@@ -98,6 +111,10 @@ class AddActivityInfoFragment: Fragment() {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             ).show()
+        }
+
+        binding.ibClose.setOnClickListener {
+            listener.onCloseClicked()
         }
 
         /*

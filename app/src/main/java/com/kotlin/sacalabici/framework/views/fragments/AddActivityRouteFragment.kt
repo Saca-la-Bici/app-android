@@ -100,6 +100,11 @@ class AddActivityRouteFragment: Fragment() {
                 onRutaConfirmListener?.onRutaConfirmed(ruta.id)
             }
         }
+
+        // Regresar al fragmento anterior
+        binding.ibBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 
     override fun onDetach() {

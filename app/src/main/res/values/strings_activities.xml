@@ -3,6 +3,7 @@
     <string name="add_rodada"> Añadir rodada </string>
     <string name="add_evento"> Añadir evento </string>
     <string name="add_taller"> Añadir taller </string>
+    <string name="add_actRoute"> Escoge una ruta </string>
     <string name="activity_title"> Título </string>
     <string name="activity_date"> Fecha </string>
     <string name="activity_hour"> Hora </string>

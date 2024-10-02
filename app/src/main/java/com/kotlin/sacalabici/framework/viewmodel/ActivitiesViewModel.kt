@@ -9,6 +9,8 @@ import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
 import com.kotlin.sacalabici.data.models.activities.Activity
+import com.kotlin.sacalabici.data.network.model.ActivityInfo
+import com.kotlin.sacalabici.data.network.model.Informacion
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
@@ -23,6 +25,7 @@ class ActivitiesViewModel(): ViewModel() {
     val talleresLiveData = MutableLiveData<List<Activity>>()
     private val _permissionsLiveData = MutableLiveData<List<String>>()
     val permissionsLiveData: LiveData<List<String>> = _permissionsLiveData
+    val activityInfo = MutableLiveData<ActivityInfo>()
 
     // LiveData para mensajes de error
     val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos

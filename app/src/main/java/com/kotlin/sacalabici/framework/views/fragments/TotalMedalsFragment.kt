@@ -9,13 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.medals.MedalBase
 import com.kotlin.sacalabici.databinding.FragmentTotalMedalsBinding
 import com.kotlin.sacalabici.framework.adapters.TotalMedalsAdapter
-import com.kotlin.sacalabici.framework.viewholders.TotalMedalsViewHolder
+import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
 import kotlinx.coroutines.launch
 
 class TotalMedalsFragment : Fragment() {
@@ -37,6 +36,7 @@ class TotalMedalsFragment : Fragment() {
 
         initializeComponents(root)
         initializeObservers()
+        setupRegresarButton()
 
         return root
     }
@@ -74,6 +74,19 @@ class TotalMedalsFragment : Fragment() {
         adapter.TotalMedalsAdapter(dataForList, requireContext())
 
         recyclerView.adapter = adapter
+    }
+
+    //Función para que el botón de Regresar de lleve a SettingsFragment
+    private fun setupRegresarButton() {
+        val btnFAQs = binding.BRegresar
+        btnFAQs.setOnClickListener {
+            // Navegar a SettingFragment y reemplazar el contenido en el contenedor principal de MainActivity
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, ProfileFragment())
+                .addToBackStack(null) // Para permitir navegar hacia atrás
+                .commit()
+        }
     }
 
 }

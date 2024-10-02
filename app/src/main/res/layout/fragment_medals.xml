@@ -97,7 +97,7 @@
 
             <!-- Botón de siguiente -->
             <ImageButton
-                android:id="@+id/btnNext"
+                android:id="@+id/BNext"
                 android:layout_width="40dp"
                 android:layout_height="47dp"
                 android:layout_marginStart="8dp"

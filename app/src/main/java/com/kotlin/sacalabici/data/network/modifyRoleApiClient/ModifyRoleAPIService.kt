@@ -10,6 +10,6 @@ interface ModifyRoleAPIService {
     @PATCH("perfil/modificarRol/{id}")
     suspend fun patchUserRole(
         @Path("id") id: String,
-        @Body body: Map<String, Any>,
+        @Body body: Map<String, String>,
     ): Response<Unit>
 }

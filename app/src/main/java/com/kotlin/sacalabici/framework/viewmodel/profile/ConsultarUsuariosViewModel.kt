@@ -25,7 +25,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
 
     // Variables para la paginación
     private var currentPage = 1
-    private val pageSize = 7
+    private val pageSize = 12
     private var currentRoles: String = "Administrador,Usuario"
     private var isLastPage = false
     var scrollPosition = 0

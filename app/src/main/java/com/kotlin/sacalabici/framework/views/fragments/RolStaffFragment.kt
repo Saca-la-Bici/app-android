@@ -42,9 +42,11 @@ class RolStaffFragment : Fragment() {
         // Observamos los cambios en el ViewModel
         viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
             if (!usuarios.isNullOrEmpty()) {
+                // Si hay usuarios, se configura el RecyclerView y se oculta el mensaje
                 setUpRecyclerView(ArrayList(usuarios))
                 Log.d("Usuarios", usuarios.toString())
                 binding.RVViewUsers.scrollToPosition(viewModel.scrollPosition) // Restaurar posición aquí
+                binding.TVNoUsers.visibility = View.GONE
             }
         })
 
@@ -54,6 +56,7 @@ class RolStaffFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if(!isLoading && viewModel.usuarios.value.isNullOrEmpty()) binding.TVNoUsers.visibility = View.VISIBLE
         }
 
         // Cargar usuarios

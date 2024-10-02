@@ -25,7 +25,7 @@ class ConsultarUsuariosViewHolder(val binding: ItemUserBinding) : RecyclerView.V
         }
 
         // Cargar imagen de perfil usando Glide
-        val profileImageUrl = item.imagenPerfil
+        val profileImageUrl = item.usuario.imagenPerfil
 
         // Si la URL de la imagen no es nula ni vacía, cargarla con Glide
         if (!profileImageUrl.isNullOrEmpty()) {

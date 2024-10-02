@@ -1,24 +1,28 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
-import kotlinx.coroutines.launch
 import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
-import androidx.lifecycle.MutableLiveData
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
+import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class ActivitiesViewModel: ViewModel() {
+class ActivitiesViewModel(): ViewModel() {
     // LiveData para observar los datos de la UI
     val rodadasLiveData = MutableLiveData<List<Activity>>()
     val eventosLiveData = MutableLiveData<List<Activity>>()
     val talleresLiveData = MutableLiveData<List<Activity>>()
+    private val _permissionsLiveData = MutableLiveData<List<String>>()
+    val permissionsLiveData: LiveData<List<String>> = _permissionsLiveData
 
     // LiveData para mensajes de error
     val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos
@@ -30,6 +34,11 @@ class ActivitiesViewModel: ViewModel() {
     private val getEventosRequirement = GetEventosRequirement()
     private val getTalleresRequirement = GetTalleresRequirement()
     private val requirement = PostActivityRequirement()
+    private val permissionsRequirement = PermissionsRequirement()
+
+    init {
+        getPermissions()
+    }
 
     // Función para cargar rodadas
     fun getRodadas() {
@@ -122,6 +131,21 @@ class ActivitiesViewModel: ViewModel() {
                 Log.d("ActivitiesViewModel", "Taller registrada exitosamente")
             } catch (e: Exception) {
                 Log.e("ActivitiesViewModel", "Error al registrar taller", e)
+            }
+        }
+    }
+
+    fun getPermissions() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = permissionsRequirement.getPermissions()
+                if (result.isEmpty()) {
+                    errorMessageLiveData.postValue(emptyListActs)
+                } else {
+                    _permissionsLiveData.postValue(result)
+                }
+            } catch (e: Exception) {
+                errorMessageLiveData.postValue(errorDB)
             }
         }
     }

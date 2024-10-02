@@ -6,6 +6,7 @@ import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import retrofit2.http.Body
+import com.kotlin.sacalabici.data.models.profile.PermissionsObject
 import retrofit2.http.GET
 import retrofit2.http.POST
 
@@ -27,4 +28,7 @@ interface ActivitiesApiService {
 
     @POST("actividades/registrar/rodada")
     suspend fun postActivityRodada(@Body rodada: Rodada): Rodada
+    
+    @GET("getPermissions")
+    suspend fun getPermissions(): PermissionsObject
 }

@@ -25,6 +25,7 @@ class ActivitiesRepository {
         }
         return listRodadas
     }
+
     suspend fun getEventos(): List<Activity> {
         val eventosBase: EventosBase? =  apiActivities.getEventos()
         val listEventos = mutableListOf<Activity>()
@@ -33,6 +34,7 @@ class ActivitiesRepository {
         }
         return listEventos
     }
+
     suspend fun getTalleres(): List<Activity> {
         val talleresBase: TalleresBase? = apiActivities.getTalleres()
         val listTalleres = mutableListOf<Activity>()
@@ -40,5 +42,10 @@ class ActivitiesRepository {
             listTalleres.addAll(itemActivity.activities)
         }
         return listTalleres
+    }
+
+    suspend fun getPermissions(): List<String> {
+        val permissionsObject = apiActivities.getPermissions()
+        return permissionsObject?.permisos ?: emptyList()
     }
 }

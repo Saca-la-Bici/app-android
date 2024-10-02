@@ -1,7 +1,8 @@
-package com.kotlin.sacalabici.framework.views.activities
+package com.kotlin.sacalabici.framework.views.activities.announcement
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -12,11 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityRegisterannouncementBinding
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
+import java.io.File
 
 class AddAnnouncementActivity: AppCompatActivity() {
     private lateinit var binding: ActivityRegisterannouncementBinding
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private var selectedImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,16 +34,15 @@ class AddAnnouncementActivity: AppCompatActivity() {
             finish()
         }
         binding.ibCheck.setOnClickListener {
-            val emptystring = ""
             val title = binding.etAddAnnouncementTitle.text.toString()
             val description = binding.etAddAnnouncementDescription.text.toString()
-            val image = emptystring.takeIf { it.isNotEmpty() }
+            val image = selectedImageUri
             val annnouncement = Announcement(title, description, image)
-            viewModel.postAnnouncement(annnouncement)
+            viewModel.postAnnouncement(annnouncement, this)
             setResult(Activity.RESULT_OK)
             finish()
         }
-        binding.ibAddImage.setOnClickListener {
+        binding.ibAddImage.setOnClickListener { // Llamar al botón que abre la galería de imágenes
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
         }
@@ -54,11 +56,21 @@ class AddAnnouncementActivity: AppCompatActivity() {
     private fun registerImagePicker() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val selectedImageUri = result.data?.data
-                Log.d("ImagePicker", "Selected image URI: $selectedImageUri")
-                /*TODO: Implement image upload*/
+                selectedImageUri = result.data?.data
+                binding.ibAddImage.setImageURI(selectedImageUri)
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cleanTemporaryFiles()
+    }
+
+    private fun cleanTemporaryFiles() {
+        val tempFile = File(cacheDir, "tempFile")
+        if (tempFile.exists()) {
+            tempFile.delete()
+        }
+    }
 }

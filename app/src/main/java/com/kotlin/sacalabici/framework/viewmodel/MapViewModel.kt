@@ -43,6 +43,23 @@ class MapViewModel : ViewModel() {
     private val postRouteRequirement = PostRouteRequirement()
     private val patchRouteRequirement = PutRouteRequirement()
 
+    suspend fun processPermissions() {
+
+        val result: RouteObjectBase? = routeListRequirement()
+
+        // Publicar el rol en LiveData
+        if (result != null) {
+            this@MapViewModel.roleLiveData.postValue(result.permission.toString())
+        }  // Publicar los permisos en LiveData
+
+        // Iterar sobre la lista de permisos y mostrar cada uno en Logcat
+        if (result != null) {
+            for (permission in result.permission) {
+                Log.d("Permisos", "Permiso encontrado: $permission")
+            }
+        }
+    }
+
     fun getRouteList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -52,19 +69,6 @@ class MapViewModel : ViewModel() {
                 // Publicar las rutas en LiveData
                 val reversedRoutes = result!!.routes.reversed()
                 this@MapViewModel.routeObjectLiveData.postValue(reversedRoutes)
-
-                // Publicar el rol en LiveData
-                this@MapViewModel.roleLiveData.postValue(result.role.toString())
-
-                val permissions = result.role
-                // Por ejemplo, verificar si el usuario tiene permisos de "Administrador"
-
-                for (permission in result.role) {
-                    Log.d("Permisos", "Permiso encontrado: $permission")
-                }
-
-                this@MapViewModel.roleLiveData.postValue(permissions.toString())  // Publicar los permisos en LiveData
-                // Iterar sobre la lista de permisos y mostrar cada uno en Logcat
 
             } catch (e: Exception) {
                 this@MapViewModel.routeObjectLiveData.postValue(emptyList())

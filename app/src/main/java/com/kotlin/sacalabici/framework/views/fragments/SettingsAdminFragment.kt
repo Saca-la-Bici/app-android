@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,6 +25,13 @@ class SettingsAdminFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSettingsAdminBinding.inflate(inflater, container, false)
+
+        val sharedPreferences = requireContext().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
+
+        if (storedPermissions?.contains("el permiso que necesitas") != true) {
+            binding.btnRoles.visibility = View.GONE
+        }
 
         binding.btnRoles.setOnClickListener {
             val rolAdministradorFragment = RolAdministradorFragment()

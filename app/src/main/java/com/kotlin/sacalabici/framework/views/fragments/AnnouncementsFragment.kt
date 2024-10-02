@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +21,9 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
 import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
-import com.kotlin.sacalabici.framework.views.activities.AddAnnouncementActivity
+import com.kotlin.sacalabici.framework.views.activities.announcement.AddAnnouncementActivity
 import kotlinx.coroutines.delay
-import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
+import com.kotlin.sacalabici.framework.views.activities.announcement.ModifyAnnouncementActivity
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,7 @@ class AnnouncementsFragment: Fragment() {
     private lateinit var addAnnouncementLauncher: ActivityResultLauncher<Intent>
     private lateinit var modifyAnnouncementLauncher: ActivityResultLauncher<Intent>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private var permissions: List<String> = emptyList()
 
     private val binding get() = _binding!!
 
@@ -119,6 +121,12 @@ class AnnouncementsFragment: Fragment() {
     }
 
     private fun initializeObservers() {
+        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            this.permissions = permissions
+            if (!permissions.contains("Registrar anuncio")) {
+                binding.fabAddAnouncement.visibility = View.GONE
+            }
+        }
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->
             lifecycleScope.launch {
                 delay(50)
@@ -156,12 +164,15 @@ class AnnouncementsFragment: Fragment() {
     }
 
     private fun showDialog(announcement: AnnouncementBase) {
-        val dialogFragment = ActionButtonDialogFragment.newInstance(
-            announcement.id,
-            announcement.title,
-            announcement.content,
-            announcement.url
-        )
-        dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
+        if (permissions.contains("Modificar anuncio") || permissions.contains("Eliminar anuncio")) {
+            val dialogFragment = ActionButtonDialogFragment.newInstance(
+                announcement.id,
+                announcement.title,
+                announcement.content,
+                announcement.url,
+                permissions
+            )
+            dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
+        }
     }
 }

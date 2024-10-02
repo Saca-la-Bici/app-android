@@ -1,16 +1,18 @@
 package com.kotlin.sacalabici.data.repositories
 
-import com.kotlin.sacalabici.data.models.preguntasFrecuentes.PreguntaFrecuente
+import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQ
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
+import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.preguntasFrecuentes.FAQAPIClient
 
 // Intermediario entre el Requirement y API
 class FAQRepository {
-    private val apiFAQ = FAQAPIClient()
+    val firebaseAuth = FirebaseAuth.getInstance()
+    val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
+    private val apiFAQ = FAQAPIClient(firebaseTokenManager)
 
-    // Delegar la solicitud a la API y devolver un FAQObject, o null.
-    suspend fun consultFAQList(limit: Int): com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObject? = apiFAQ.consultFAQList(limit)
+    suspend fun getFAQList(): List<FAQBase> = apiFAQ.getFAQList()
 
-    // Registrar una nueva pregunta frecuente
-    suspend fun registrarPreguntaFrecuente(preguntaFrecuente: PreguntaFrecuente): PreguntaFrecuente? =
-        apiFAQ.registrarPreguntaFrecuente(preguntaFrecuente)
+    suspend fun postFAQ(announcement: FAQ): FAQ? = apiFAQ.postFAQ(announcement)
 }

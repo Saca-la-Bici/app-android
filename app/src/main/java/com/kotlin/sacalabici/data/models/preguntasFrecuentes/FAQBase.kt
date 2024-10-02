@@ -8,5 +8,5 @@ data class FAQBase(
     @SerializedName("Pregunta") val Pregunta: String,
     @SerializedName("Respuesta") val Respuesta: String,
     @SerializedName("Tema") val Tema: String,
-    @SerializedName("Imagen") val Imagen: String
+    @SerializedName("Imagen") val Imagen: String?,
 )

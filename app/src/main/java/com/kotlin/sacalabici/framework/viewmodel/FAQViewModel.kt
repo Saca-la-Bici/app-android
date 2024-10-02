@@ -1,33 +1,38 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObject
-import com.kotlin.sacalabici.domain.preguntasFrecuentes.ConsultFAQListRequirement
-import com.kotlin.sacalabici.utils.Constants
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQ
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.FAQListRequirement
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.PostFAQRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FAQViewModel : ViewModel() {
-    val faqObjectLiveData = MutableLiveData<FAQObject>()
-    private val consultFAQListRequirement = ConsultFAQListRequirement()
+    val faqObjectLiveData = MutableLiveData<List<FAQBase>>()
+    private val faqListRequirement = FAQListRequirement()
+    private val postFAQRequirement = PostFAQRequirement()
 
-    // Usar viewModelScope para ejecutar en un hilo de fondo
     fun getFAQList() {
         viewModelScope.launch(Dispatchers.IO) {
-            // Obtiene la lista de FAQ de forma asíncrona.
-            val result: FAQObject? = consultFAQListRequirement(Constants.MAX_FAQ_NUMBER)
+            try {
+                val result: List<FAQBase> = faqListRequirement()
+                val reversedResult = result.reversed()
+                faqObjectLiveData.postValue(reversedResult)
+            } catch (e: Exception) {
+                faqObjectLiveData.postValue(emptyList())
+            }
+        }
+    }
 
-            // Verifica si el resultado no es nulo antes de postearlo
-            result?.let {
-                Log.d("Salida", it.count.toString())
-                // Actualiza el LiveData en el hilo principal
-                faqObjectLiveData.postValue(it)
-            } ?: run {
-                // Maneja el caso donde result es null (opcional)
-                Log.e("Error", "No se pudo obtener la lista de FAQ")
+    fun postFAQ(FAQ: FAQ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                postFAQRequirement(FAQ)
+            } catch (e: Exception) {
+                throw e
             }
         }
     }

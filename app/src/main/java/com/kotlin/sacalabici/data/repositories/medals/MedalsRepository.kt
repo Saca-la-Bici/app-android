@@ -3,6 +3,7 @@ package com.kotlin.sacalabici.data.repositories.medals
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.medals.MedalObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
+import com.kotlin.sacalabici.data.network.medals.MedalsApiClient
 
 class MedalsRepository {
 

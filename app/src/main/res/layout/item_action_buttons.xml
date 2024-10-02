@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginBottom="80dp"
+        android:backgroundTint="#F3F0EB"
         android:background="@drawable/rounded_corners"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="15dp"
+        android:visibility="visible"
         android:text="Eliminar anuncio"
         android:textColor="#FF0000"
         app:layout_constraintBottom_toBottomOf="@id/VActionButtons" />
@@ -34,6 +36,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="15dp"
+        android:visibility="visible"
         android:text="Modificar anuncio"
         android:textColor="#0000FF"
         app:layout_constraintBottom_toTopOf="@id/TVDelete" />

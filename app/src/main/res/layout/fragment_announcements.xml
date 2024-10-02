@@ -11,7 +11,6 @@
         android:layout_marginBottom="80dp">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -22,9 +21,7 @@
                 android:layout_height="match_parent"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"
@@ -62,6 +59,7 @@
         app:fabSize="normal"
         app:backgroundTint="@color/sacaLaBiciYellow"
         app:tint="@null"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/bottomGuideline"
         app:layout_constraintEnd_toStartOf="@+id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"

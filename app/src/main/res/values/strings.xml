@@ -59,6 +59,7 @@
     <string name="País">País\n</string>
     <string name="TPhoneNumber">Número de teléfono</string>
     <string name="TBloodType">Tipo de sangre</string>
+    <string name="TNoUsers">No se encontraron usuarios</string>
 
 
     <string-array name="genders">

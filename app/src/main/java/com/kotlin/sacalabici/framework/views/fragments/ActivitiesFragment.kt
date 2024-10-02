@@ -28,24 +28,28 @@ class ActivitiesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeComponents()
+        setupObservers()
+        loadInitialData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initializeComponents() {
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
-        Log.d("RodadasFragment", "Stored permissions: $storedPermissions")
+        Log.d("ActivitiesFragment", "Stored permissions: $storedPermissions")
 
-        activitiesViewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
-            Log.d("RodadasFragment", "New permissions: $permissions")
-            // Guardar los permisos en SharedPreferences
-            val editor = sharedPreferences.edit()
-            editor.putStringSet("permissions", permissions.toSet())
-            editor.apply()
-        }
+        val adapter = ActivitiesPagerAdapter(this)
+        binding.viewPager.adapter = adapter
 
-        // Consigurar el ViewPager2 con el adaptador
-        val pagerAdapter = ActivitiesPagerAdapter(this)
-        binding.viewPager.adapter = pagerAdapter
-
-        // Configura el TabLayout con el ViewPager2
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Rodadas"
@@ -54,11 +58,22 @@ class ActivitiesFragment: Fragment() {
                 else -> null
             }
         }.attach()
-        return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupObservers() {
+        activitiesViewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            Log.d("ActivitiesFragment", "New permissions: $permissions")
+            savePermissionsToSharedPreferences(permissions)
+        }
+    }
+
+    private fun loadInitialData() {
+        activitiesViewModel.getPermissions()
+    }
+
+    private fun savePermissionsToSharedPreferences(permissions: List<String>) {
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("permissions", permissions.toSet())
+        editor.apply()
     }
 }

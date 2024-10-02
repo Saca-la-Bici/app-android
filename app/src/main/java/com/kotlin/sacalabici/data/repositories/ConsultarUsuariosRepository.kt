@@ -9,6 +9,6 @@ class ConsultarUsuariosRepository(private val idToken: String?) {
 
     suspend fun getUsuarios(page: Int, limit: Int, roles: String): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.getUsuarios(page, limit, roles)
 
-    suspend fun searchUser(username: String): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.searchUser(username)
+    suspend fun searchUser(username: String, roles: String? = null): List<ConsultarUsuariosBase>? = apiConsultarUsuarios.searchUser(username, roles)
 
 }

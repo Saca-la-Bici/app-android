@@ -3,31 +3,35 @@ package com.kotlin.sacalabici.framework.views.fragments
 import RutasAdapter
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.databinding.FragmentActivityRouteBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment.OnFragmentInteractionListener
 
 class AddActivityRouteFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var rutasAdapter: RutasAdapter
-    private lateinit var rutasList: ArrayList<RouteBase>
 
     private var onRutaSelectedListener: OnRutaSelectedListener? = null
     private var onRutaConfirmListener: OnRutaConfirmListener? = null
     private var lastSelectedRuta: RouteBase? = null
 
+    private lateinit var viewModelRoute: MapViewModel
+
     private var _binding: FragmentActivityRouteBinding? = null
     private val binding get() = _binding!!
-    private lateinit var listener: OnRutaConfirmListener
 
     /*
     * Permite que el fragmento se comunique con la actividad
@@ -41,6 +45,7 @@ class AddActivityRouteFragment: Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         onRutaConfirmListener = context as? OnRutaConfirmListener
+        onRutaSelectedListener = context as? OnRutaSelectedListener
     }
 
     override fun onCreateView(
@@ -58,20 +63,50 @@ class AddActivityRouteFragment: Fragment() {
         }
         recyclerView.adapter = rutasAdapter
 
-        val rutasList = arguments?.getParcelableArrayList<RouteBase>("rutasList")
-        val selectedRuta = arguments?.getParcelable<RouteBase>("selectedRuta")
-        rutasList?.let {
-            updateRutasList(it, selectedRuta)
-        }
-
         initializeListeners()
 
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModelRoute = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
+
+        viewModelRoute.selectedRuta.observe(viewLifecycleOwner, Observer { ruta ->
+            ruta?.let {
+                Log.d("Ruta Seleccionada en Fragmento", it.titulo)
+            }
+        })
+
+        // Observa los LiveData del ViewModel
+        viewModelRoute.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
+            rutasList?.let {
+                val selectedRuta = viewModelRoute.lastSelectedRuta
+                updateRutasList(it, selectedRuta)
+            } ?: run {
+                Log.d("Error en fragmento", "Error al obtener la lista de rutas.")
+            }
+        })
+
+        viewModelRoute.toastMessageLiveData.observe(viewLifecycleOwner, Observer { message ->
+            Log.d("Toast en fragmento", message)
+        })
+
+        val rutasList = arguments?.getParcelableArrayList<RouteBase>("rutasList")
+        val selectedRuta = arguments?.getParcelable<RouteBase>("selectedRuta")
+        Log.d("rutasList", rutasList.toString())
+        Log.d("selectedRuta", selectedRuta.toString())
+
+        rutasList?.let {
+            updateRutasList(it, selectedRuta)
+        }
+    }
+
     fun updateRutasList(rutasList: List<RouteBase>, selectedRuta: RouteBase?) {
         rutasAdapter.updateRutas(rutasList)
         this.lastSelectedRuta = selectedRuta
+        Log.d("LastSelectedRuta: ", lastSelectedRuta.toString())
         rutasAdapter.setSelectedRuta(selectedRuta)
     }
 
@@ -96,7 +131,8 @@ class AddActivityRouteFragment: Fragment() {
 
     private fun initializeListeners() {
         binding.btnNext.setOnClickListener {
-            lastSelectedRuta?.let { ruta ->
+            val LastSelectedRuta = viewModelRoute.selectedRuta.value
+            LastSelectedRuta?.let { ruta ->
                 onRutaConfirmListener?.onRutaConfirmed(ruta.id)
             }
         }

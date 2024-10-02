@@ -141,6 +141,7 @@ class AddActivityActivity: AppCompatActivity(),
     * Termina la actividad
     * */
     override fun onCloseClicked() {
+        setResult(Activity.RESULT_OK)
         finish()
     }
 

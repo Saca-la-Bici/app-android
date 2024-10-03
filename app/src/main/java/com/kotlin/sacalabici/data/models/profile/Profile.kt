@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.data.network.model.profile
+package com.kotlin.sacalabici.data.models.profile
 
 data class Profile(
     val username: String,

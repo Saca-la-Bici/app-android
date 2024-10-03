@@ -19,28 +19,47 @@ class ActivitiesRepository {
         val listRodadas = mutableListOf<Activity>()
         rodadasBase?.rodadas?.forEach { itemActivity ->
             val nivel = itemActivity.route?.nivel
+            val rodadaId = itemActivity.id
             itemActivity.activities.forEach{ activity ->
-                val updatedActivity = activity.copy(nivel = nivel)
+                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel)
                 listRodadas.add(updatedActivity)
             }
         }
+        Log.d("ActivitiesRepository", "Rodadas filtradas: $listRodadas")
         return listRodadas
     }
+
     suspend fun getEventos(): List<Activity> {
         val eventosBase: EventosBase? =  apiActivities.getEventos()
         val listEventos = mutableListOf<Activity>()
         eventosBase?.eventos?.forEach { itemActivity ->
-            listEventos.addAll(itemActivity.activities)
+            val eventoId = itemActivity.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = eventoId)
+                listEventos.add(updatedActivity)
+            }
         }
+        Log.d("ActivitiesRepository", "Eventos filtrados: $listEventos")
         return listEventos
     }
+
     suspend fun getTalleres(): List<Activity> {
         val talleresBase: TalleresBase? = apiActivities.getTalleres()
         val listTalleres = mutableListOf<Activity>()
         talleresBase?.talleres?.forEach { itemActivity ->
-            listTalleres.addAll(itemActivity.activities)
+            val tallerId = itemActivity.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = tallerId)
+                listTalleres.add(updatedActivity)
+            }
         }
+        Log.d("ActivitiesRepository", "Talleres filtrados: $listTalleres")
         return listTalleres
+    }
+
+    suspend fun getPermissions(): List<String> {
+        val permissionsObject = apiActivities.getPermissions()
+        return permissionsObject?.permisos ?: emptyList()
     }
 
     suspend fun PostJoinActivity(actividadId: String, tipo: String) {

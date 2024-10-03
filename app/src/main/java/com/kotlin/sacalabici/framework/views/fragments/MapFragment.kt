@@ -18,6 +18,7 @@ import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.activities.AddRouteActivity
@@ -37,6 +38,7 @@ import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.getSourceAs
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -49,6 +51,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
+
     private var _binding: ActivityMapBinding? = null
     private val binding get() = _binding!!
 
@@ -67,6 +70,7 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     private var lastSelectedRuta: RouteBase? = null
 
     private var isRutasFragmentVisible = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,13 +91,38 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
         // Configura los listeners de los botones
         setupListeners()
 
+        lifecycleScope.launch {
+            // Procesar permisos en el ViewModel
+            viewModel.processPermissions()
+        }
+
+        //binding.btnAdd.visibility = View.GONE
+        //binding.btnDetails.visibility = View.GONE
+
+        // Observar los cambios en los permisos
+        viewModel.roleLiveData.observe(this) { permisos ->
+            Log.d("PermisosUsuario", "Permisos obtenidos: $permisos")
+
+            // Cambiar visibilidad del botón basado en los permisos obtenidos
+            if (permisos.contains("Registrar ruta")) {
+                binding?.btnAdd?.visibility = View.VISIBLE
+            } else {
+                binding?.btnAdd?.visibility = View.VISIBLE
+            }
+
+            if (permisos.contains("Consultar ruta")) {
+                binding?.btnDetails?.visibility = View.VISIBLE
+            } else {
+                binding?.btnDetails?.visibility = View.VISIBLE
+            }
+        }
+
         return root
     }
 
     companion object {
         private const val REQUEST_CODE_ADD_ROUTE = 1
     }
-
 
     private fun setupListeners() {
         binding.btnAdd.setOnClickListener {

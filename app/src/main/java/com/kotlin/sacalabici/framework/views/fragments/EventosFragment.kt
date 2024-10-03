@@ -9,71 +9,86 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.databinding.FragmentEventosBinding
 import com.kotlin.sacalabici.framework.adapters.ActivitiesAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class EventosFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
+    private var _binding: FragmentEventosBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var adapter: ActivitiesAdapter
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private val activitiesViewModel: ActivitiesViewModel by activityViewModels()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_eventos, container, false)
-
-        // Inicializar RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerViewEventos)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        // Inicializar adapter aquí, donde el fragmento ya está adjunto a su contexto
-        adapter = ActivitiesAdapter(ArrayList(), viewModel = activitiesViewModel) { evento ->
-            true
-        }
-
-        recyclerView.adapter = adapter
-
-        // Inicializar SwipeRefreshLayout
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout.setOnRefreshListener {
-            activitiesViewModel.getEventos()  // Obtener los datos más recientes
-        }
-
-        // Observar cambios en eventos
-        activitiesViewModel.eventosLiveData.observe(viewLifecycleOwner) { eventos ->
-            adapter.updateData(eventos)  // Método para actualizar los datos del adapter
-            swipeRefreshLayout.isRefreshing = false  // Detener la animación
-        }
-
-
-        // Observar cambios en eventos
-        //activitiesViewModel.eventosLiveData.observe(viewLifecycleOwner) { eventos ->
-            //adapter.updateData(eventos)  // Actualizar los datos del adapter
-            //swipeRefreshLayout.isRefreshing = false  // Detener la animación de carga
-        //}
-
-        // Cargar los datos iniciales
-        activitiesViewModel.getEventos()
-
-        return view
+    ): View {
+        _binding = FragmentEventosBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeComponents()
+        setupObservers()
+        setupSwipeRefreshLayout()
+        loadInitialData()
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-    private fun setupClickListeners(view: View) {
-        val btnJoin = view.findViewById<Button>(R.id.btnJoin)
-        btnJoin?.setOnClickListener {
-            // Aquí colocas la acción que deseas al presionar el botón
-            Log.d("EventosFragment", "Botón Join presionado")
+    private fun initializeComponents() {
+        binding.errorMessageEventos.visibility = View.GONE
+        binding.recyclerViewEventos.layoutManager = LinearLayoutManager(requireContext())
+        adapter = ActivitiesAdapter(mutableListOf(), activitiesViewModel) { evento ->
+            true
+        }
+        binding.recyclerViewEventos.adapter = adapter
+    }
 
+    private fun setupSwipeRefreshLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            fetchEventosWithDelay()
+        }
+    }
+
+    private fun setupObservers() {
+        activitiesViewModel.eventosLiveData.observe(viewLifecycleOwner) { eventos ->
+            adapter.updateData(eventos)
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+
+        activitiesViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage != null) {
+                binding.errorMessageEventos.text = errorMessage
+                binding.errorMessageEventos.visibility = View.VISIBLE
+            } else {
+                binding.errorMessageEventos.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun loadInitialData() {
+        activitiesViewModel.getEventos()
+    }
+
+    private fun fetchEventosWithDelay() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(50)
+            activitiesViewModel.getEventos()
         }
     }
 

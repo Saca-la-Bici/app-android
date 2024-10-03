@@ -4,6 +4,7 @@ import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
+import com.kotlin.sacalabici.data.models.profile.PermissionsObject
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -17,6 +18,9 @@ interface ActivitiesApiService {
 
     @GET("actividades/consultar/talleres")
     suspend fun getTalleres(): TalleresBase
+
+    @GET("getPermissions")
+    suspend fun getPermissions(): PermissionsObject
 
     @POST("actividades/inscripcion/inscribir")
     suspend fun PostJoinActivity(@Body request: JoinActivityRequest)

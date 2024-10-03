@@ -230,7 +230,7 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
         val points = listOf(startPoint!!, referencePoint1!!, stopoverPoint!!, referencePoint2!!, endPoint!!)
 
         // URL de la solicitud para la API de Mapbox
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points[0].longitude()},${points[0].latitude()};${points[1].longitude()},${points[1].latitude()};${points[2].longitude()},${points[2].latitude()};${points[3].longitude()},${points[3].latitude()};${points[4].longitude()},${points[4].latitude()}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
+        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points.joinToString(";") { "${it.longitude()},${it.latitude()}" }}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
 
         // Lanza una coroutine para realizar la solicitud de la ruta
         lifecycleScope.launch(Dispatchers.IO) {
@@ -252,9 +252,22 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                     val decodedPoints = decodePolyline(geometry) // Decodifica la polyline6 en coordenadas
                     val distance = route.getDouble("distance") / 1000.0
 
-                    // Divide los puntos en tramos según la separación deseada
-                    val tramo1 = decodedPoints.takeWhile { it.latitude() <= points[2].latitude() }
-                    val tramo2 = decodedPoints.dropWhile { it.latitude() <= points[2].latitude() }
+                    // Definimos la tolerancia para la comparación
+                    val tolerance = 150 // Ajusta este valor según sea necesario
+
+                    // Encuentra el índice del punto de descanso en los puntos decodificados
+                    val puntoDescansoIndex = decodedPoints.indexOfFirst {
+                        calculateDistance(it.latitude(), it.longitude(), stopoverPoint!!.latitude(), stopoverPoint!!.longitude()) < 50.0
+                    }
+
+                    // Divide los puntos en tramos según el índice del punto de descanso
+                    if (puntoDescansoIndex == -1) {
+                        Log.e("MapActivity", "El punto de descanso no se encontró en los puntos decodificados")
+                        return@launch
+                    }
+
+                    val tramo1 = decodedPoints.take(puntoDescansoIndex + 1)
+                    val tramo2 = decodedPoints.drop(puntoDescansoIndex)
 
                     withContext(Dispatchers.Main) {
                         // Muestra la distancia en el campo de texto
@@ -294,6 +307,8 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
             }
         }
     }
+
+
 
 
     // Función para decodificar polyline6 en una lista de puntos

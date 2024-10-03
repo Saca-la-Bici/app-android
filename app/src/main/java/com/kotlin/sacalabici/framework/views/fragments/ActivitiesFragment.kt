@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ class ActivitiesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
+        binding.fabAddActivity.visibility = View.GONE
         return binding.root
     }
     
@@ -38,9 +40,6 @@ class ActivitiesFragment: Fragment() {
         initializeComponents()
         setupObservers()
         loadInitialData()
-
-        // Función listener para agregar actividad
-        addActivity()
     }
 
     override fun onDestroyView() {
@@ -50,6 +49,15 @@ class ActivitiesFragment: Fragment() {
 
     private fun initializeComponents() {
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
+        Log.d("ActivitiesFragment", "Stored permissions: $storedPermissions")
+        // Verificación de permiso para agregar actividad
+        if (storedPermissions?.contains("Registrar actividad") == true) {
+            binding.fabAddActivity.visibility = View.VISIBLE
+            // Listener para agregar actividad
+            addActivity()
+        } else {
+            binding.fabAddActivity.visibility = View.GONE
+        }
 
         val adapter = ActivitiesPagerAdapter(this)
         binding.viewPager.adapter = adapter

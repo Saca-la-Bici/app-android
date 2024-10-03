@@ -1,13 +1,11 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +35,10 @@ class FAQFragment : Fragment() {
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[FAQViewModel::class.java]
         val root: View = binding.root
+
         setupBackButton()
+        setupRegisterFAQsButton()
+
         initializeComponents(root)
         initializeObservers()
         viewModel.getFAQList()
@@ -86,6 +87,19 @@ class FAQFragment : Fragment() {
             parentFragmentManager
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, SettingsFragment())
+                .addToBackStack(null) // Para permitir navegar hacia atrás
+                .commit()
+        }
+    }
+
+    // Función para que el botón de Agregar FAQ de lleve a RegisterFAQFragment
+    private fun setupRegisterFAQsButton() {
+        val btnFAQs = binding.BAgregarPregunta
+        btnFAQs.setOnClickListener {
+            // Navegar a RegisterFAQsFragment y reemplazar el contenido en el contenedor principal de MainActivity
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, RegisterFAQFragment())
                 .addToBackStack(null) // Para permitir navegar hacia atrás
                 .commit()
         }

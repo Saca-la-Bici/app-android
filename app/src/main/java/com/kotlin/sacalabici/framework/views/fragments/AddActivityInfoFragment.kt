@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
@@ -7,14 +8,19 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentActivityInfoBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import java.io.File
@@ -29,6 +35,16 @@ class AddActivityInfoFragment: Fragment() {
     private lateinit var viewModel: ActivitiesViewModel
     private var _binding: FragmentActivityInfoBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var etTitle: EditText
+    private lateinit var tvTitleWC: TextView
+    val maxTitle = 50
+    private lateinit var etUbi: EditText
+    private lateinit var tvUbiWC: TextView
+    val maxUbi = 150
+    private lateinit var etDesc: EditText
+    private lateinit var tvDescWC: TextView
+    val maxDesc = 450
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private var selectedImageUri: Uri? = null
@@ -96,7 +112,16 @@ class AddActivityInfoFragment: Fragment() {
             binding.etAddActivityDescription.setText(info.description)
         }
 
+        // Variables de edit texts para conteo de caracteres
+        etTitle = binding.etAddActivityTitle
+        tvTitleWC = binding.tvTitleWordCount
+        etUbi = binding.etAddActivityUbi
+        tvUbiWC = binding.tvUbiWordCount
+        etDesc = binding.etAddActivityDescription
+        tvDescWC = binding.tvDescWordCount
+
         initializeListeners()
+        initializeWordListeners()
 
         return root
     }
@@ -156,6 +181,86 @@ class AddActivityInfoFragment: Fragment() {
                 listener.onNextClicked(type.toString())
             }
         }
+    }
+
+    private fun initializeWordListeners() {
+        etTitle.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Contar los caracteres
+                val charCount = s?.length ?: 0
+
+                // Actualizar el contador en el TextView
+                tvTitleWC.text = getString(R.string.char_count, charCount, maxTitle)
+
+                // Validar si se excede el límite de caracteres
+                if (charCount > maxTitle) {
+                    etTitle.error = "Has excedido el límite de $maxTitle caracteres."
+                    // Prevenir que se sigan escribiendo caracteres
+                    etTitle.setText(s?.substring(0, maxTitle))
+                    etTitle.setSelection(maxTitle)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // No aplica, pero debe llamarse
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // No aplica, pero debe llamarse
+            }
+        })
+
+        etUbi.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Contar los caracteres
+                val charCount = s?.length ?: 0
+
+                // Actualizar el contador en el TextView
+                tvUbiWC.text = getString(R.string.char_count, charCount, maxUbi)
+
+                // Validar si se excede el límite de caracteres
+                if (charCount > maxUbi) {
+                    etUbi.error = "Has excedido el límite de $maxUbi caracteres."
+                    // Prevenir que se sigan escribiendo caracteres
+                    etUbi.setText(s?.substring(0, maxUbi))
+                    etUbi.setSelection(maxUbi)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // No aplica, pero debe llamarse
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // No aplica, pero debe llamarse
+            }
+        })
+
+        etDesc.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Contar los caracteres
+                val charCount = s?.length ?: 0
+
+                // Actualizar el contador en el TextView
+                tvDescWC.text = getString(R.string.char_count, charCount, maxDesc)
+
+                // Validar si se excede el límite de caracteres
+                if (charCount > maxDesc) {
+                    etDesc.error = "Has excedido el límite de $maxDesc caracteres."
+                    // Prevenir que se sigan escribiendo caracteres
+                    etDesc.setText(s?.substring(0, maxDesc))
+                    etDesc.setSelection(maxDesc) // Mover el cursor al final del texto permitido
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // No aplica, pero debe llamarse
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // No aplica, pero debe llamarse
+            }
+        })
     }
 
     private fun updateDate(calendar: Calendar) {

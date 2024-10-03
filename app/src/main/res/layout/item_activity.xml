@@ -26,7 +26,7 @@
                 android:id="@+id/tvActivityTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_title"
+                android:text="@string/add_activity_title"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"

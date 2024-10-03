@@ -108,7 +108,7 @@ class AddActivityActivity: AppCompatActivity(),
         println(formattedDate)  // Esto imprimirá: 2024-10-22
 
 
-        val hourAct = "$hour:$minutes"
+        val hourAct = "$hour horas $minutes minutos"
         val duration = "$hourDur:$minutesDur"
 
         if (type == "Rodada") {

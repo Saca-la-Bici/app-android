@@ -97,7 +97,7 @@
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".framework.adapters.views.fragments.SettingsAdminFragment"
+            android:name=".framework.views.fragments.SettingsAdminFragment"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
     </application>

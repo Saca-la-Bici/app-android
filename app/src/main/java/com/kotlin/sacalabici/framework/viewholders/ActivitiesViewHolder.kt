@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowLongClickListener
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ItemActivityBinding
@@ -16,7 +17,7 @@ import java.util.Locale
 
 class ActivitiesViewHolder(
     private val binding: ItemActivityBinding,
-    private val longClickListener: (Activity) -> Boolean
+    private val clickListener: (Activity) -> Unit
 ): RecyclerView.ViewHolder(binding.root){
 
     fun bind(item: Activity) {
@@ -28,10 +29,6 @@ class ActivitiesViewHolder(
         binding.tvActivityDuration.text = binding.root.context.getString(R.string.activity_duration_list, item.duration)
         binding.tvPeopleEnrolled.text = item.peopleEnrolled.toString()
         binding.tvActivityLocation.text = binding.root.context.getString(R.string.activity_location_list, item.location)
-
-        binding.root.setOnLongClickListener {
-            longClickListener(item)
-        }
 
         if (item.imageURL != null) {
             binding.ivActivityImage.visibility = View.VISIBLE
@@ -45,6 +42,11 @@ class ActivitiesViewHolder(
             binding.tvActivityLevel.text = item.nivel
         } else {
             binding.tvActivityLevel.visibility = View.GONE
+        }
+
+        // Configurar clic para desplegar detalles
+        binding.tvActivityDetails.setOnClickListener {
+            clickListener(item)
         }
 
     }

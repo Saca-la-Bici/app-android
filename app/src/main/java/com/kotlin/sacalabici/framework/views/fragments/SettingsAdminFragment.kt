@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -12,6 +12,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentSettingsAdminBinding
+import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.RolAdministradorFragment
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 
 

@@ -11,13 +11,20 @@
     <string name="activity_desc"> Descripción </string>
     <string name="activity_dateLabel">Año-Mes-Día</string>
     <string name="activity_ready"> Listo </string>
-    <integer name="activity_participants">0</integer>
+    <string name="activity_participants">0</string>
     <string name="activity_level_list">Nivel X</string>
     <string name="activity_date_list">Fecha: %1$s</string>
     <string name="activity_time_list">Hora: %1$s</string>
     <string name="activity_duration_list">Duración: %1$s</string>
     <string name="activity_location_list">Ubicación: %1$s</string>
+    <string name="activity_distance">Distancia: %1$s</string>
+    <string name="activity_materials">Materiales</string>
+    <string name="activity_rent">Renta de Bicicletas: %1$s</string>
+    <string name="activity_route">Ver ruta</string>
     <string name="activity_join">Unirse</string>
+    <string name="activity_start">Iniciar</string>
+    <string name="activity_details">Más detalles…</string>
+    <string name="activity_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
 
     <string-array name="hours">
         <item>00</item>

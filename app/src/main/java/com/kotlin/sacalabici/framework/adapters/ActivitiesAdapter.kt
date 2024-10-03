@@ -1,6 +1,5 @@
 package com.kotlin.sacalabici.framework.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,7 @@ import com.kotlin.sacalabici.framework.viewholders.ActivitiesViewHolder
 
 class ActivitiesAdapter(
     private var data: List<Activity>,
-    private val longClickListener: (Activity) -> Boolean
+    private val clickListener: (Activity) -> Unit
 ): RecyclerView.Adapter<ActivitiesViewHolder>(){
 
     fun updateData(newData: List<Activity>) {
@@ -25,7 +24,7 @@ class ActivitiesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivitiesViewHolder {
         val binding = ItemActivityBinding.inflate(LayoutInflater.from(parent.context), parent,false)
-        return ActivitiesViewHolder(binding, longClickListener)
+        return ActivitiesViewHolder(binding, clickListener)
     }
 
     override fun getItemCount(): Int {

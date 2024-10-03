@@ -43,8 +43,11 @@ data class Activity(
     @SerializedName("tipo") val type: String,
     @SerializedName("personasInscritas") val peopleEnrolled: Int,
     @SerializedName("estado") val state: Boolean,
-    @SerializedName("comentarios") val comments: String? = null,
-    @SerializedName("nivel") val nivel: String? = null
+    @SerializedName("foro") val foro: String? = null,
+    @SerializedName("usuariosInscritos") val register: List<String>? = null,
+    // Elementos para rodada de ruta
+    @SerializedName("nivel") val nivel: String? = null,
+    @SerializedName("distancia") val distancia: String? = null
 )
 
 data class Location(

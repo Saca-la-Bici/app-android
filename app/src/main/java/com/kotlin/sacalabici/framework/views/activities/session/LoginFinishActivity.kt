@@ -176,7 +176,7 @@ class LoginFinishActivity : AppCompatActivity() {
         )
 
         val maxDate = Calendar.getInstance()
-        maxDate.add(Calendar.YEAR, -13)
+        maxDate.add(Calendar.YEAR, -18)
         datePickerDialog.datePicker.maxDate = maxDate.timeInMillis
 
         datePickerDialog.show()

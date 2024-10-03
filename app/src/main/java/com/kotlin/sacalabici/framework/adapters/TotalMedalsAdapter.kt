@@ -8,11 +8,11 @@ import com.kotlin.sacalabici.data.models.medals.MedalBase
 import com.kotlin.sacalabici.databinding.ItemMedalBinding
 import com.kotlin.sacalabici.framework.viewholders.TotalMedalsViewHolder
 
-class TotalMedalsAdapter() : RecyclerView.Adapter<TotalMedalsViewHolder>() {
+class TotalMedalsAdapter : RecyclerView.Adapter<TotalMedalsViewHolder>() {
     var data: ArrayList<MedalBase> = ArrayList()
     lateinit var context: Context
 
-    fun TotalMedalsAdapter(basicData: ArrayList<MedalBase>, context: Context) {
+    fun setTotalMedalsAdapter(basicData: ArrayList<MedalBase>, context: Context) {
         this.data = basicData
         this.context = context
     }
@@ -27,7 +27,5 @@ class TotalMedalsAdapter() : RecyclerView.Adapter<TotalMedalsViewHolder>() {
         return TotalMedalsViewHolder(binding) // Pasamos el binding al ViewHolder
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
+    override fun getItemCount(): Int = data.size
 }

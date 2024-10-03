@@ -1,4 +1,5 @@
-import androidx.lifecycle.LiveData
+package com.kotlin.sacalabici.framework.viewmodel
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,6 +20,7 @@ class TotalMedalsViewModel : ViewModel() {
                 val reversedResult = result!!.medals.reversed()
                 medalsObjectLiveData.postValue(reversedResult)
             } catch (e: Exception) {
+                e.printStackTrace()
                 medalsObjectLiveData.postValue(emptyList())
             }
         }

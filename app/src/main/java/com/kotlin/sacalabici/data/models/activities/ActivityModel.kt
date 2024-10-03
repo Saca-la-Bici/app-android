@@ -1,16 +1,17 @@
 package com.kotlin.sacalabici.data.network.model
 
+import android.net.Uri
 import java.util.Date
 
 // Modelo de datos para la información de la actividad (POST)
 data class Informacion(
     val titulo: String,
-    val fecha: Date,
+    val fecha: String,
     val hora: String,
     val ubicacion: String,
     val descripcion: String,
     val duracion: String,
-    val imagen: String? = null,  // El valor 'null' es opcional ya que la imagen no es obligatoria
+    val imagen: Uri?,
     val tipo: String
 )
 

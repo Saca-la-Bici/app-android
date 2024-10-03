@@ -1,17 +1,24 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.databinding.FragmentActivityInfoBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -23,6 +30,9 @@ class AddActivityInfoFragment: Fragment() {
     private lateinit var viewModel: ActivitiesViewModel
     private var _binding: FragmentActivityInfoBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private var selectedImageUri: Uri? = null
 
     /*
     * Permite que el fragmento se comunique con la actividad
@@ -39,7 +49,8 @@ class AddActivityInfoFragment: Fragment() {
                                hourDur: String,
                                minutesDur: String,
                                ubi: String,
-                               description: String)
+                               description: String,
+                               image: Uri?)
     }
 
     override fun onAttach(context: Context) {
@@ -56,8 +67,7 @@ class AddActivityInfoFragment: Fragment() {
 
         // Recuperar el estado guardado o los argumentos
         type = savedInstanceState?.getString("type") ?: arguments?.getString("type")
-
-        Log.d("RegisterActivityInfoFragment", "Tipo en onCreate: $type")
+        registerImagePicker()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -113,8 +123,15 @@ class AddActivityInfoFragment: Fragment() {
             ).show()
         }
 
+        // Evento para cancelar el registro
         binding.ibClose.setOnClickListener {
             listener.onCloseClicked()
+        }
+
+        // Evento para subir imagen
+        binding.imageButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(intent)
         }
 
         /*
@@ -133,9 +150,10 @@ class AddActivityInfoFragment: Fragment() {
                 val minutesDur = binding.minutesSpinnerDur.selectedItem.toString()
                 val ubi = binding.etAddActivityUbi.text.toString()
                 val description = binding.etAddActivityDescription.text.toString()
+                val image = selectedImageUri
 
                 // Enviar información al ViewModel
-                listener.receiveInformation(title, date, hour, minutes, hourDur, minutesDur, ubi, description)
+                listener.receiveInformation(title, date, hour, minutes, hourDur, minutesDur, ubi, description, image)
                 Log.d("Tipo: ", type.toString())
                 listener.onNextClicked(type.toString())
             }
@@ -146,6 +164,15 @@ class AddActivityInfoFragment: Fragment() {
         val dateFormat = "dd/MM/yyyy" // Formato de la fecha
         val sdf = SimpleDateFormat(dateFormat, Locale.getDefault())
         binding.BDate.text = sdf.format(calendar.time)
+    }
+
+    private fun registerImagePicker() {
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                selectedImageUri = result.data?.data
+                binding.imageButton.setImageURI(selectedImageUri)
+            }
+        }
     }
 
     /*
@@ -198,4 +225,5 @@ class AddActivityInfoFragment: Fragment() {
         super.onDetach()
         _binding = null
     }
+
 }

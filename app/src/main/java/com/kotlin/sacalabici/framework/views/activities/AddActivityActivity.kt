@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.views.activities
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -81,31 +82,49 @@ class AddActivityActivity: AppCompatActivity(),
         hourDur: String,
         minutesDur: String,
         ubi: String,
-        description: String
+        description: String,
+        image: Uri?
     ) {
         // Almacenamiento de datos escritos
         val info = ActivityInfo(title, date, hour, minutes, hourDur, minutesDur, ubi, description)
         viewModel.activityInfo.value = info
 
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val dateAct: Date = dateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
+        // Formato para parsear y generar un objeto Date desde yyyy-MM-dd
+        //val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        //val dateAct: Date = dateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
+
+        // Formato para parsear la fecha de entrada (dd/MM/yyyy)
+        val inputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        // Parsear la cadena de fecha en el formato de entrada
+        val parsedDate: Date = inputDateFormat.parse("22/10/2024") ?: throw IllegalArgumentException("Fecha inválida")
+
+        // Formato para la salida (yyyy-MM-dd)
+        val outputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        // Formatear la fecha parseada al formato de salida
+        val formattedDate = outputDateFormat.format(parsedDate)
+
+        // Imprimir o usar la fecha formateada
+        println(formattedDate)  // Esto imprimirá: 2024-10-22
+
 
         val hourAct = "$hour:$minutes"
         val duration = "$hourDur:$minutesDur"
 
         if (type == "Rodada") {
-            val rodadaInfo = Informacion(title, dateAct, hourAct, ubi, description, duration, "", "Rodada")
+            val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Rodada")
             rodadaInformation = rodadaInfo
 
         } else if (type == "Taller") {
-            val tallerInfo = Informacion(title, dateAct, hourAct, ubi, description, duration, "", "Taller")
+            val tallerInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Taller")
             val taller = ActivityModel(listOf(tallerInfo))
-            viewModel.postActivityTaller(taller)
+            viewModel.postActivityTaller(taller, this)
 
         } else if (type == "Evento") {
-            val eventoInfo = Informacion(title, dateAct, hourAct, ubi, description, duration, "", "Evento")
+            val eventoInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Evento")
             val evento = ActivityModel(listOf(eventoInfo))
-            viewModel.postActivityEvento(evento)
+            viewModel.postActivityEvento(evento, this)
         }
     }
 
@@ -190,7 +209,7 @@ class AddActivityActivity: AppCompatActivity(),
     * */
     override fun onRutaConfirmed(rutaID: String) {
         val rodada = Rodada(listOf(rodadaInformation), rutaID)
-        viewModel.postActivityRodada(rodada)
+        viewModel.postActivityRodada(rodada, this)
         showToast("Actividad registrada")
         setResult(Activity.RESULT_OK)
         finish()

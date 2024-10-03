@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -100,12 +101,10 @@ class ActivitiesViewModel(): ViewModel() {
     }
 
     // Función para registrar un evento
-    fun postActivityEvento(evento: ActivityModel) {
+    fun postActivityEvento(evento: ActivityModel, context: Context) {
         viewModelScope.launch {
             try {
-                Log.d("ActivitiesViewModel", "Registrando evento: $evento")
-                requirement.postActivityEvento(evento)
-                Log.d("ActivitiesViewModel", "Evento registrado exitosamente")
+                requirement.postActivityEvento(evento, context)
             } catch (e: Exception) {
                 Log.e("ActivitiesViewModel", "Error al registrar evento", e)
             }
@@ -113,11 +112,10 @@ class ActivitiesViewModel(): ViewModel() {
     }
 
     // Función para registrar una rodada
-    fun postActivityRodada(rodada: Rodada) {
+    fun postActivityRodada(rodada: Rodada, context: Context) {
         viewModelScope.launch {
             try {
-                Log.d("ActivitiesViewModel", "Registrando rodada: $rodada")
-                requirement.postActivityRodada(rodada)
+                requirement.postActivityRodada(rodada, context)
                 Log.d("ActivitiesViewModel", "Rodada registrada exitosamente")
             } catch (e: Exception) {
                 Log.e("ActivitiesViewModel", "Error al registrar rodada", e)
@@ -126,11 +124,10 @@ class ActivitiesViewModel(): ViewModel() {
     }
 
     // Función para registrar un taller
-    fun postActivityTaller(taller: ActivityModel) {
+    fun postActivityTaller(taller: ActivityModel, context: Context) {
         viewModelScope.launch {
             try {
-                Log.d("ActivitiesViewModel", "Registrando taller: $taller")
-                requirement.postActivityTaller(taller)
+                requirement.postActivityTaller(taller, context)
                 Log.d("ActivitiesViewModel", "Taller registrada exitosamente")
             } catch (e: Exception) {
                 Log.e("ActivitiesViewModel", "Error al registrar taller", e)

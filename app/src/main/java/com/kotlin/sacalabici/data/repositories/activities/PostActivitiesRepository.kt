@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.repositories.activities
 
+import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
@@ -11,12 +12,12 @@ class PostActivitiesRepository {
     val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
     private val apiActivities = ActivitiesApiClient(firebaseTokenManager)
 
-    suspend fun postActivityTaller(taller: ActivityModel): ActivityModel? =
-        apiActivities.postActivityTaller(taller)
+    suspend fun postActivityTaller(taller: ActivityModel, context: Context): ActivityModel? =
+        apiActivities.postActivityTaller(taller, context)
 
-    suspend fun postActivityEvento(evento: ActivityModel): ActivityModel? =
-        apiActivities.postActivityEvento(evento)
+    suspend fun postActivityEvento(evento: ActivityModel, context: Context): ActivityModel? =
+        apiActivities.postActivityEvento(evento, context)
 
-    suspend fun postActivityRodada(rodada: Rodada): Rodada? =
-        apiActivities.postActivityRodada(rodada)
+    suspend fun postActivityRodada(rodada: Rodada, context: Context): Rodada? =
+        apiActivities.postActivityRodada(rodada, context)
 }

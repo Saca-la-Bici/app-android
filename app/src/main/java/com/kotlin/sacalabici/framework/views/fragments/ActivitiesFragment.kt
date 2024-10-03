@@ -32,9 +32,6 @@ class ActivitiesFragment: Fragment() {
     ): View {
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
         return binding.root
-
-        // Función listener para agregar actividad
-        addActivity()
     }
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +39,9 @@ class ActivitiesFragment: Fragment() {
         initializeComponents()
         setupObservers()
         loadInitialData()
+
+        // Función listener para agregar actividad
+        addActivity()
     }
 
     override fun onDestroyView() {

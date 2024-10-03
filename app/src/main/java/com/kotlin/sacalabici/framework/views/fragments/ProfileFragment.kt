@@ -18,7 +18,7 @@ import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsAdminFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.adapters.ProfileAdapter
 import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileEditFragment
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel

@@ -18,9 +18,10 @@ class FAQViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result: FAQObjectBase? = faqListRequirement()
-                val faqresult = result!!.faqs
+                val faqresult = result!!.faqs.reversed()
                 faqObjectLiveData.postValue(faqresult)
             } catch (e: Exception) {
+                e.printStackTrace()
                 faqObjectLiveData.postValue(emptyList())
             }
         }

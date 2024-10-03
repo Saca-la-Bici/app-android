@@ -79,7 +79,7 @@ class FAQFragment : Fragment() {
                 false,
             )
         recyclerView.layoutManager = linearLayoutManager
-        adapter.FAQAdapter(dataForList, requireContext())
+        adapter.setFAQAdapter(dataForList, requireContext())
         recyclerView.adapter = adapter
     }
 

@@ -12,7 +12,7 @@ class FAQAdapter : RecyclerView.Adapter<FAQViewHolder>() {
     var data: ArrayList<FAQBase> = ArrayList()
     lateinit var context: Context
 
-    fun FAQAdapter(
+    fun setFAQAdapter(
         basicData: ArrayList<FAQBase>,
         context: Context,
     ) {

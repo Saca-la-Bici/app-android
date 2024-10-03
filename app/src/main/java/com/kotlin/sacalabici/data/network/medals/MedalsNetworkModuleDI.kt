@@ -10,18 +10,18 @@ object MedalsNetworkModuleDI {
 
     private val gsonFactory: GsonConverterFactory = GsonConverterFactory.create()
 
-    private fun createOkHttpClient(token: String?): OkHttpClient {
-        return OkHttpClient.Builder()
+    private fun createOkHttpClient(token: String?): OkHttpClient =
+        OkHttpClient
+            .Builder()
             .addInterceptor(AuthInterceptor(token))
             .build()
-    }
 
-    operator fun invoke(token: String?): MedalsApiService {
-        return Retrofit.Builder()
+    operator fun invoke(token: String?): MedalsApiService =
+        Retrofit
+            .Builder()
             .baseUrl(Constants.BASE_URL)
             .client(createOkHttpClient(token))
             .addConverterFactory(gsonFactory)
             .build()
             .create(MedalsApiService::class.java)
-    }
 }

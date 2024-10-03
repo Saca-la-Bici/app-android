@@ -1,21 +1,29 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.activities.Activity
+import com.kotlin.sacalabici.domain.activities.GetActivityByIdRequirement
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
+import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ActivitiesViewModel: ViewModel() {
+class ActivitiesViewModel(): ViewModel() {
     // LiveData para observar los datos de la UI
     val rodadasLiveData = MutableLiveData<List<Activity>>()
     val eventosLiveData = MutableLiveData<List<Activity>>()
     val talleresLiveData = MutableLiveData<List<Activity>>()
+    private val _permissionsLiveData = MutableLiveData<List<String>>()
+    val permissionsLiveData: LiveData<List<String>> = _permissionsLiveData
+
+    // LiveData para observar una actividad por ID
+    val selectedActivityLiveData = MutableLiveData<Activity?>()
 
     // LiveData para mensajes de error
     val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos
@@ -26,12 +34,19 @@ class ActivitiesViewModel: ViewModel() {
     private val getRodadasRequirement = GetRodadasRequirement()
     private val getEventosRequirement = GetEventosRequirement()
     private val getTalleresRequirement = GetTalleresRequirement()
+    private val getActivityByIdRequirement = GetActivityByIdRequirement()
+    private val permissionsRequirement = PermissionsRequirement()
+
+    init {
+        getPermissions()
+    }
 
     // Función para cargar rodadas
     fun getRodadas() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getRodadasRequirement()
+                Log.d("ActivitiesViewModel", "Rodadas result: $result")
                 if (result.isEmpty()) {
                     errorMessageLiveData.postValue(emptyListActs)
                 } else {
@@ -50,7 +65,6 @@ class ActivitiesViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getEventosRequirement()
-                Log.d("ActivitiesViewModel", "Eventos result: $result")
                 if (result.isEmpty()) {
                     errorMessageLiveData.postValue(emptyListActs)
                 }
@@ -79,6 +93,39 @@ class ActivitiesViewModel: ViewModel() {
             } catch (e: Exception) {
                 errorMessageLiveData.postValue(errorDB)
                 talleresLiveData.postValue(emptyList())
+            }
+        }
+    }
+
+    fun getActivityById(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = getActivityByIdRequirement(id)
+                Log.d("ActivitiesViewModel", "Activity filtrada: $result")
+                if (result == null) {
+                    errorMessageLiveData.postValue("Actividad no encontrada")
+                } else {
+                    errorMessageLiveData.postValue(null)
+                }
+                selectedActivityLiveData.postValue(result)
+            } catch (e: Exception) {
+                errorMessageLiveData.postValue("Error al obtener la actividad")
+                selectedActivityLiveData.postValue(null)
+            }
+        }
+    }
+
+    fun getPermissions() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = permissionsRequirement.getPermissions()
+                if (result.isEmpty()) {
+                    errorMessageLiveData.postValue(emptyListActs)
+                } else {
+                    _permissionsLiveData.postValue(result)
+                }
+            } catch (e: Exception) {
+                errorMessageLiveData.postValue(errorDB)
             }
         }
     }

@@ -187,6 +187,7 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+
     private fun registerUser(currentUser: FirebaseUser) {
         viewModelScope.launch {
             userClient.registerUser(currentUser, firebaseAuth, _authState)

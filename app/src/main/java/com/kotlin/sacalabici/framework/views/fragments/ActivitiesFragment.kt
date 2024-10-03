@@ -1,17 +1,26 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.databinding.FragmentActivitiesBinding
 import com.kotlin.sacalabici.framework.adapters.ActivitiesPagerAdapter
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 
 class ActivitiesFragment: Fragment() {
     private var _binding: FragmentActivitiesBinding? = null
     private val binding get() = _binding!!
+    private val activitiesViewModel: ActivitiesViewModel by activityViewModels()
+
+    private val sharedPreferences by lazy {
+        requireContext().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,13 +28,28 @@ class ActivitiesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        // Consigurar el ViewPager2 con el adaptador
-        val pagerAdapter = ActivitiesPagerAdapter(this)
-        binding.viewPager.adapter = pagerAdapter
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeComponents()
+        setupObservers()
+        loadInitialData()
+    }
 
-        // Configura el TabLayout con el ViewPager2
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initializeComponents() {
+        val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
+        Log.d("ActivitiesFragment", "Stored permissions: $storedPermissions")
+
+        val adapter = ActivitiesPagerAdapter(this)
+        binding.viewPager.adapter = adapter
+
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Rodadas"
@@ -34,11 +58,22 @@ class ActivitiesFragment: Fragment() {
                 else -> null
             }
         }.attach()
-        return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupObservers() {
+        activitiesViewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            Log.d("ActivitiesFragment", "New permissions: $permissions")
+            savePermissionsToSharedPreferences(permissions)
+        }
+    }
+
+    private fun loadInitialData() {
+        activitiesViewModel.getPermissions()
+    }
+
+    private fun savePermissionsToSharedPreferences(permissions: List<String>) {
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("permissions", permissions.toSet())
+        editor.apply()
     }
 }

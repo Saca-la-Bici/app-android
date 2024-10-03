@@ -171,6 +171,11 @@ class AddRouteActivity : AppCompatActivity() {
             val announcement = Route(titulo,distancia,tiempo,nivel,coordenadas)
             viewModel.postRoute(announcement)
             setResult(Activity.RESULT_OK)
+            Toast.makeText(
+                this,
+                "Se ha registrado la ruta con éxito",
+                Toast.LENGTH_SHORT
+            ).show()
             finish()
         }
     }

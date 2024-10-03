@@ -10,14 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.1" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/end_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.9" />
 
     <!-- Guía central -->
     <androidx.constraintlayout.widget.Guideline
@@ -27,19 +27,12 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottomGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.87"/>
-
     <!-- Contenedor principal -->
     <View
         android:id="@+id/VContainer"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/vNavBar"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
         app:layout_constraintStart_toStartOf="@+id/start_guideline" />
 
@@ -56,9 +49,9 @@
     <!-- Botón de regreso -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/btnBack"
-        android:layout_width="17.71dp"
-        android:layout_height="15.5dp"
-        android:src="@drawable/ic_back"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:src="@drawable/back_button"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar" />
@@ -132,11 +125,11 @@
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="Buscar"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/rounded_search_view"
+        app:queryHint="Buscar"
+        app:iconifiedByDefault="false"
         app:layout_constraintTop_toBottomOf="@id/VHorizontalLine"
         app:layout_constraintLeft_toLeftOf="@+id/VContainer"
         app:layout_constraintRight_toRightOf="@id/VContainer" />
@@ -150,6 +143,38 @@
         app:layout_constraintTop_toBottomOf="@+id/searchView"
         app:layout_constraintStart_toStartOf="@id/VContainer"
         app:layout_constraintEnd_toEndOf="@id/VContainer"
-        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
+        app:layout_constraintBottom_toBottomOf="@id/VContainer"/>
+
+    <TextView
+        android:id="@+id/TVNoUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/TNoUsers"
+        style="@style/TextAppearance.TitleMedium"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/RVView_users"
+        app:layout_constraintBottom_toBottomOf="@id/RVView_users"
+        app:layout_constraintStart_toStartOf="@id/VContainer"
+        app:layout_constraintEnd_toEndOf="@id/VContainer" />
+
+    <View
+        android:id="@+id/vNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Barra de progreso -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/sacaLaBiciYellow"
+        app:layout_constraintTop_toBottomOf="@id/searchView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

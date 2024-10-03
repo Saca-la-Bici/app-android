@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.repositories.activities
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
@@ -18,27 +19,61 @@ class ActivitiesRepository {
         val listRodadas = mutableListOf<Activity>()
         rodadasBase?.rodadas?.forEach { itemActivity ->
             val nivel = itemActivity.route?.nivel
+            val distance = itemActivity.route?.distancia
+            val rodadaId = itemActivity.id
             itemActivity.activities.forEach{ activity ->
-                val updatedActivity = activity.copy(nivel = nivel)
+                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel, distancia = distance)
                 listRodadas.add(updatedActivity)
             }
         }
+        Log.d("ActivitiesRepository", "Rodadas filtradas: $listRodadas")
         return listRodadas
     }
+
     suspend fun getEventos(): List<Activity> {
         val eventosBase: EventosBase? =  apiActivities.getEventos()
         val listEventos = mutableListOf<Activity>()
         eventosBase?.eventos?.forEach { itemActivity ->
-            listEventos.addAll(itemActivity.activities)
+            val eventoId = itemActivity.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = eventoId)
+                listEventos.add(updatedActivity)
+            }
         }
+        Log.d("ActivitiesRepository", "Eventos filtrados: $listEventos")
         return listEventos
     }
+
     suspend fun getTalleres(): List<Activity> {
         val talleresBase: TalleresBase? = apiActivities.getTalleres()
         val listTalleres = mutableListOf<Activity>()
         talleresBase?.talleres?.forEach { itemActivity ->
-            listTalleres.addAll(itemActivity.activities)
+            val tallerId = itemActivity.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = tallerId)
+                listTalleres.add(updatedActivity)
+            }
         }
+        Log.d("ActivitiesRepository", "Talleres filtrados: $listTalleres")
         return listTalleres
+    }
+
+    suspend fun getActivityById(id: String): Activity? {
+        Log.d("ActivitiesRepository", "Obteniendo actividad con id: $id")
+        val response = apiActivities.getActivityById(id)
+
+        // Log para ver la respuesta recibida del API
+        Log.d("ActivitiesRepository", "Respuesta del API: $response")
+
+        val activity = response?.actividad?.information?.firstOrNull()
+        val nivel = response?.actividad?.route?.nivel
+        val distancia = response?.actividad?.route?.distancia
+
+        return activity?.copy(nivel = nivel, distancia = distancia)
+    }
+
+    suspend fun getPermissions(): List<String> {
+        val permissionsObject = apiActivities.getPermissions()
+        return permissionsObject?.permisos ?: emptyList()
     }
 }

@@ -197,9 +197,14 @@ class ModifyRouteActivity : AppCompatActivity() {
                 CoordenatesBase(endPoint!!.latitude(), endPoint!!.longitude(),"end")          // Punto final
             )
 
-            val announcement = Route(titulo,distancia,tiempo,nivel,coordenadas)
-            viewModel.putRoute(id, announcement)
+            val route = Route(titulo,distancia,tiempo,nivel,coordenadas)
+            viewModel.putRoute(id, route)
             setResult(Activity.RESULT_OK)
+            Toast.makeText(
+                this,
+                "Se ha modificado la ruta con éxito",
+                Toast.LENGTH_SHORT
+            ).show()
             finish()
         }
 

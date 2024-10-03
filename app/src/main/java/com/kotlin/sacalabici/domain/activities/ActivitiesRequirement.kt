@@ -20,3 +20,8 @@ class GetTalleresRequirement {
 
     suspend operator fun invoke(): List<Activity> = repository.getTalleres()
 }
+
+class GetActivityByIdRequirement {
+    private val repository = ActivitiesRepository()
+    suspend operator fun invoke(id: String): Activity? = repository.getActivityById(id)
+}

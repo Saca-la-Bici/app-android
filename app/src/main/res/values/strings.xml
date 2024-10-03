@@ -79,6 +79,9 @@
         <item>AB+</item>
         <item>AB-</item>
     </string-array>
+    
+    <!--String para Descripción de botones-->
+    <string name="back_button_desc">Pestaña anterior</string>
 
     <!-- strings de Consultar faqs -->
     <string name="Ayuda">Ayuda</string>

@@ -105,6 +105,12 @@
             android:name=".framework.adapters.views.fragments.SettingsFragment"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+
+        <activity
+            android:name=".framework.views.activities.activities.DetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
     </application>
     <queries>
         <package android:name="com.facebook.katana" /> <!-- Facebook App -->

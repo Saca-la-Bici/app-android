@@ -11,7 +11,7 @@ import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.network.model.ActivityInfo
-import com.kotlin.sacalabici.data.network.model.Informacion
+import com.kotlin.sacalabici.domain.activities.GetActivityByIdRequirement
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
@@ -28,6 +28,9 @@ class ActivitiesViewModel(): ViewModel() {
     val permissionsLiveData: LiveData<List<String>> = _permissionsLiveData
     val activityInfo = MutableLiveData<ActivityInfo>()
 
+    // LiveData para observar una actividad por ID
+    val selectedActivityLiveData = MutableLiveData<Activity?>()
+
     // LiveData para mensajes de error
     val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos
     val emptyListActs = "Aún no hay datos para mostrar"
@@ -38,6 +41,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val getEventosRequirement = GetEventosRequirement()
     private val getTalleresRequirement = GetTalleresRequirement()
     private val requirement = PostActivityRequirement()
+    private val getActivityByIdRequirement = GetActivityByIdRequirement()
     private val permissionsRequirement = PermissionsRequirement()
 
     init {
@@ -131,6 +135,24 @@ class ActivitiesViewModel(): ViewModel() {
                 Log.d("ActivitiesViewModel", "Taller registrada exitosamente")
             } catch (e: Exception) {
                 Log.e("ActivitiesViewModel", "Error al registrar taller", e)
+            }
+        }
+    }
+
+    fun getActivityById(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = getActivityByIdRequirement(id)
+                Log.d("ActivitiesViewModel", "Activity filtrada: $result")
+                if (result == null) {
+                    errorMessageLiveData.postValue("Actividad no encontrada")
+                } else {
+                    errorMessageLiveData.postValue(null)
+                }
+                selectedActivityLiveData.postValue(result)
+            } catch (e: Exception) {
+                errorMessageLiveData.postValue("Error al obtener la actividad")
+                selectedActivityLiveData.postValue(null)
             }
         }
     }

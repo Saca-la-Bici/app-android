@@ -1,6 +1,8 @@
 package com.kotlin.sacalabici.data.network.activities
 
+import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
+import com.kotlin.sacalabici.data.models.activities.OneActivityBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.network.model.ActivityModel
@@ -14,6 +16,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import java.util.Date
+import retrofit2.http.Query
 
 interface ActivitiesApiService {
     @GET("actividades/consultar/eventos")
@@ -65,6 +68,9 @@ interface ActivitiesApiService {
         @Part imagen: MultipartBody.Part?
     ): Rodada
     
+    @GET("actividades/consultar")
+    suspend fun getActivityById(@Query("id") id: String): OneActivityBase
+
     @GET("getPermissions")
     suspend fun getPermissions(): PermissionsObject
 }

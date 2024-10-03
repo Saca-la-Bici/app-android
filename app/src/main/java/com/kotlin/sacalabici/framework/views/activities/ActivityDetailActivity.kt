@@ -31,6 +31,10 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 
@@ -40,7 +44,10 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var mapView: MapView
     private lateinit var startButton: Button
     private lateinit var ocultarButton: Button
-    private lateinit var pointAnnotationManager: PointAnnotationManager // Declaración
+    private lateinit var pointAnnotationManager: PointAnnotationManager
+
+    private var isTrackingLocation = false
+    private var locationTrackingJob: Job? = null
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val client = OkHttpClient()
@@ -60,7 +67,6 @@ class DetailActivity : AppCompatActivity() {
         mapView = findViewById(R.id.mapView)
 
         pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
-
 
         val btnRuta: Button = findViewById(R.id.btnRuta)
         ocultarButton = findViewById(R.id.btnOcultarRuta) // Inicializa el botón para ocultar el mapa
@@ -92,10 +98,32 @@ class DetailActivity : AppCompatActivity() {
             ocultarButton.visibility = View.GONE
         }
 
+        // Configuración del botón "Iniciar" para comenzar o detener el bucle
         startButton = findViewById(R.id.btnStart)
-        startButton.setOnClickListener{
-            val idRodada = "idDeLaRodadaPrueba"
-            obtenerUbicacionActual(idRodada)
+        startButton.setOnClickListener {
+            if (!isTrackingLocation) {
+                // Comenzar a rastrear la ubicación
+                isTrackingLocation = true
+                startButton.text = "Detener"
+
+                // Iniciar el bucle de actualización de ubicación en una corrutina
+                locationTrackingJob = GlobalScope.launch {
+                    while (isTrackingLocation) {
+                        val idRodada = "idDeLaRodadaPrueba"
+                        obtenerUbicacionActual(idRodada)
+
+                        // Esperar 5 segundos antes de volver a ejecutar (puedes cambiar este valor)
+                        delay(5000)
+                    }
+                }
+            } else {
+                // Detener el rastreo de ubicación
+                isTrackingLocation = false
+                startButton.text = "Iniciar"
+
+                // Cancelar el trabajo de corrutina para detener el bucle
+                locationTrackingJob?.cancel()
+            }
         }
     }
 

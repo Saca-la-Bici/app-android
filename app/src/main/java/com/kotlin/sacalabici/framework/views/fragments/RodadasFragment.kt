@@ -53,7 +53,9 @@ class RodadasFragment: Fragment() {
     private fun initializeComponents() {
         binding.errorMessageRodadas.visibility = View.GONE
         binding.recyclerViewRodadas.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ActivitiesAdapter(mutableListOf(), getRodadaClickListener())
+        adapter = ActivitiesAdapter(mutableListOf()) { rodada ->
+            passDetailsActivity(rodada.id)
+        }
         binding.recyclerViewRodadas.adapter = adapter
     }
 
@@ -87,12 +89,6 @@ class RodadasFragment: Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(50)
             activitiesViewModel.getRodadas()
-        }
-    }
-
-    private fun getRodadaClickListener(): (Activity) -> Unit {
-        return { rodada ->
-            passDetailsActivity(rodada.id)
         }
     }
 

@@ -101,6 +101,7 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getActivityByIdRequirement(id)
+                Log.d("ActivitiesViewModel", "Activity filtrada: $result")
                 if (result == null) {
                     errorMessageLiveData.postValue("Actividad no encontrada")
                 } else {

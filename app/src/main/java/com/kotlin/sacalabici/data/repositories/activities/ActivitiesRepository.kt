@@ -59,7 +59,17 @@ class ActivitiesRepository {
     }
 
     suspend fun getActivityById(id: String): Activity? {
-        return apiActivities.getActivityById(id)
+        Log.d("ActivitiesRepository", "Obteniendo actividad con id: $id")
+        val response = apiActivities.getActivityById(id)
+
+        // Log para ver la respuesta recibida del API
+        Log.d("ActivitiesRepository", "Respuesta del API: $response")
+
+        val activity = response?.actividad?.information?.firstOrNull()
+        val nivel = response?.actividad?.route?.nivel
+        val distancia = response?.actividad?.route?.distancia
+
+        return activity?.copy(nivel = nivel, distancia = distancia)
     }
 
     suspend fun getPermissions(): List<String> {

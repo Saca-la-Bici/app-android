@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.data.network.activities
 
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
+import com.kotlin.sacalabici.data.models.activities.OneActivityBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
@@ -19,7 +20,7 @@ interface ActivitiesApiService {
     suspend fun getTalleres(): TalleresBase
 
     @GET("actividades/consultar")
-    suspend fun getActivityById(@Query("id") id: String): Activity
+    suspend fun getActivityById(@Query("id") id: String): OneActivityBase
 
     @GET("getPermissions")
     suspend fun getPermissions(): PermissionsObject

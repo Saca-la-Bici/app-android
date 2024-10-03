@@ -19,7 +19,7 @@
     <string name="activity_location_list">Ubicación: %1$s</string>
     <string name="activity_distance">Distancia: %1$s</string>
     <string name="activity_materials">Materiales</string>
-    <string name="activity_rent">Renta de Bicicletas: %1$s</string>
+    <string name="activity_rent">Renta de Bicicletas: </string>
     <string name="activity_route">Ver ruta</string>
     <string name="activity_join">Unirse</string>
     <string name="activity_start">Iniciar</string>

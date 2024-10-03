@@ -21,7 +21,8 @@
             android:background="@android:color/transparent"
             android:padding="8dp"
             android:src="@drawable/btn_back"
-            android:contentDescription="Back Button" />
+            android:contentDescription="Back Button"
+            mapbox:tint="@null" />
 
         <!-- Contenido del layout -->
         <LinearLayout

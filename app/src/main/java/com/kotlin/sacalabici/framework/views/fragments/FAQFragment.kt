@@ -1,58 +1,48 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.FragmentFaqsBinding
-import com.kotlin.sacalabici.framework.FAQAdapter
-import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsAdminFragment
+import com.kotlin.sacalabici.framework.adapters.FAQAdapter
+import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class FAQFragment : Fragment() {
     private var _binding: FragmentFaqsBinding? = null
-    val binding get() = _binding!!
-
-    private lateinit var viewModel: FAQViewModel
     private lateinit var recyclerView: RecyclerView
     private val adapter: FAQAdapter = FAQAdapter()
-    private lateinit var data: ArrayList<FAQBase>
+    private lateinit var viewModel: FAQViewModel
+
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        viewModel = ViewModelProvider(this)[FAQViewModel::class.java]
-
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this)[FAQViewModel::class.java]
         val root: View = binding.root
-        // Función para regresar a SettingsFragment
-        binding.BRegresar.setOnClickListener {
-            val SettingsAdminFragment = SettingsAdminFragment()
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, SettingsAdminFragment)
-                .addToBackStack(null)
-                .commit()
-        }
-
-        // Botón para abrir RegisterFAQFragment
-        setupRegisterFAQsButton()
-
-        data = ArrayList()
-
-        // Llamada a métodos para inicializar componentes y observar cambios en el ViewModel
+        setupBackButton()
         initializeComponents(root)
         initializeObservers()
         viewModel.getFAQList()
 
+        initializeObservers()
         return root
     }
 
@@ -61,22 +51,22 @@ class FAQFragment : Fragment() {
         _binding = null
     }
 
-    // Método para inicializar los componentes de la interfaz
-    private fun initializeComponents(root: View) {
-        recyclerView = root.findViewById(R.id.recyclerFAQ) // Vincula el RecyclerView
-    }
-
-    // Método para inicializar los observadores de LiveData en el ViewModel
     private fun initializeObservers() {
-        viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { pokedexObject ->
-            setUpRecyclerView(pokedexObject.results)
+        viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqList ->
+            lifecycleScope.launch {
+                delay(50)
+                setUpRecyclerView(ArrayList(faqList))
+            }
         }
     }
 
-    // Método para configurar el RecyclerView
-    private fun setUpRecyclerView(dataForList: ArrayList<FAQBase>) {
-        recyclerView.setHasFixedSize(true) // Fija el tamaño del RecyclerView para optimización
+    private fun initializeComponents(root: View) {
+        recyclerView = root.findViewById(R.id.recyclerFAQ)
+    }
 
+    private fun setUpRecyclerView(dataForList: ArrayList<FAQBase>) {
+        Log.d("FAQFragment", dataForList.size.toString())
+        recyclerView.setHasFixedSize(true)
         val linearLayoutManager =
             LinearLayoutManager(
                 requireContext(),
@@ -84,20 +74,18 @@ class FAQFragment : Fragment() {
                 false,
             )
         recyclerView.layoutManager = linearLayoutManager
-
-        // Configura el adapter para gestionar los datos
-        adapter.FAQAdapter(dataForList, requireContext())
+        adapter.setFAQAdapter(dataForList, requireContext())
         recyclerView.adapter = adapter
     }
 
-    // Función para que el botón de Agregar FAQ de lleve a RegisterFAQFragment
-    private fun setupRegisterFAQsButton() {
-        val btnFAQs = binding.BAgregarPregunta
+    // Función para que el botón de Regresar de lleve a SettingsFragment
+    private fun setupBackButton() {
+        val btnFAQs = binding.BRegresar
         btnFAQs.setOnClickListener {
-            // Navegar a RegisterFAQsFragment y reemplazar el contenido en el contenedor principal de MainActivity
+            // Navegar a SettingFragment y reemplazar el contenido en el contenedor principal de MainActivity
             parentFragmentManager
                 .beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, RegisterFAQFragment())
+                .replace(R.id.nav_host_fragment_content_main, SettingsFragment())
                 .addToBackStack(null) // Para permitir navegar hacia atrás
                 .commit()
         }

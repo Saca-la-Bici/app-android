@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
+import ConsultarUsuariosAdapter
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.FragmentRolStaffBinding
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosAdapter
-import com.kotlin.sacalabici.framework.adapters.viewmodel.ConsultarUsuariosViewModel
+import com.kotlin.sacalabici.framework.adapters.viewmodel.modifyRole.ModifyRoleViewModel
+import com.kotlin.sacalabici.framework.viewmodel.profile.ConsultarUsuariosViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,81 +25,123 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 class RolStaffFragment : Fragment() {
-
     private var _binding: FragmentRolStaffBinding? = null
     private val binding get() = _binding!!
-    private val adapter: ConsultarUsuariosAdapter = ConsultarUsuariosAdapter()
+
+    private lateinit var adapter: ConsultarUsuariosAdapter
+    private var currentFragmentRole: String = "66e8824d0f14ea86304fa96f"
+
     private val viewModel: ConsultarUsuariosViewModel by viewModels()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentRolStaffBinding.inflate(inflater, container, false)
 
-        // Observamos los cambios en el ViewModel
-        viewModel.usuarios.observe(viewLifecycleOwner, Observer { usuarios ->
-            if (!usuarios.isNullOrEmpty()) {
-                mostrarUsuariosStaffYUsuarios(ArrayList(usuarios))
-            }
-        })
+        adapter =
+            ConsultarUsuariosAdapter(
+                modifyRoleViewModel = ModifyRoleViewModel(),
+                currentFragmentRole = currentFragmentRole,
+            )
 
-        viewModel.errorMessage.observe(viewLifecycleOwner, Observer { message ->
-            Log.d("Error", message)
-        })
+        // Observamos los cambios en el ViewModel
+        viewModel.usuarios.observe(
+            viewLifecycleOwner,
+            Observer { usuarios ->
+                if (!usuarios.isNullOrEmpty()) {
+                    setUpRecyclerView(ArrayList(usuarios))
+                    binding.RVViewUsers.scrollToPosition(viewModel.scrollPosition) // Restaurar posición aquí
+                }
+            },
+        )
+
+        viewModel.errorMessage.observe(
+            viewLifecycleOwner,
+            Observer { message ->
+                Log.d("Error", message)
+            },
+        )
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
 
         // Cargar usuarios
-        viewModel.getUsuarios()
+        viewModel.getUsuarios(roles = "Staff,Usuario", reset = true)
 
         // Configurar botones
         binding.btnAdministradores.setOnClickListener {
+            viewModel.scrollPosition = 0 // Reiniciar posición
             highlightCurrentFragment("Administradores")
         }
         binding.btnStaff.setOnClickListener {
+            viewModel.scrollPosition = 0 // Reiniciar posición
             highlightCurrentFragment("Staff")
         }
 
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            private var searchJob: Job? = null
+        binding.searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                private var searchJob: Job? = null
 
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchJob?.cancel()
-                if (query != null) {
-                    viewModel.searchUser(query)
-                } // Or appropriate ViewModel function
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                searchJob?.cancel()
-                searchJob = coroutineScope.launch {
-                    delay(500) // Delay of 500 milliseconds (adjust as needed)
-                    if (newText != null) {
-                        viewModel.searchUser(newText)
-                    } // Or appropriate ViewModel function
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    searchJob?.cancel()
+                    if (query != null) {
+                        viewModel.isSearching = true // Entrar en modo de búsqueda
+                        viewModel.searchUser(query, roles = "Staff,Usuario") // Limitar la búsqueda solo a Staff y Usuario
+                    }
+                    return true
                 }
-                return true
-            }
-        })
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    searchJob?.cancel()
+                    searchJob =
+                        coroutineScope.launch {
+                            delay(500)
+                            if (!newText.isNullOrEmpty()) {
+                                // Si hay texto en el buscador, ejecuta la búsqueda
+                                viewModel.searchUser(newText, roles = "Staff,Usuario") // Limitar la búsqueda solo a Staff y Usuario
+                            } else { // Si el texto está vacío, vuelve al estado paginado
+                                viewModel.isSearching = false // Salir del modo de búsqueda
+                                viewModel.getUsuarios(
+                                    roles = "Staff,Usuario",
+                                    reset = true,
+                                ) // Recargar la lista original
+                            }
+                        }
+                    return true
+                }
+            },
+        )
 
         // Agregar scroll listener
-        binding.RVViewUsers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+        binding.RVViewUsers.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(
+                    recyclerView: RecyclerView,
+                    dx: Int,
+                    dy: Int,
+                ) {
+                    super.onScrolled(recyclerView, dx, dy)
 
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val totalItemCount = layoutManager.itemCount
-                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val totalItemCount = layoutManager.itemCount
+                    val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-                if (totalItemCount <= (lastVisibleItem + 1)) {
-                    // Si se llega al final, cargar más usuarios
-                    viewModel.getUsuarios()
+                    // Guardar la posición del scroll
+                    viewModel.updateScrollPosition(lastVisibleItem + 1)
+
+                    if (totalItemCount <= (lastVisibleItem + 1)) {
+                        viewModel.updateScrollPosition(layoutManager.findFirstVisibleItemPosition()) // Guardar posición aquí
+                        // Si se llega al final, cargar más usuarios
+                        viewModel.getUsuarios()
+                    }
                 }
-            }
-        })
+            },
+        )
 
         // Configurar el botón regreso
         binding.btnBack.setOnClickListener {
@@ -113,14 +156,7 @@ class RolStaffFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.RVViewUsers.layoutManager = linearLayoutManager
         binding.RVViewUsers.adapter = adapter
-    }
-
-    private fun mostrarUsuariosStaffYUsuarios(data: ArrayList<ConsultarUsuariosBase>) {
-        val usuariosFiltrados = data.filter {
-            it.rol.nombreRol == "Staff" || it.rol.nombreRol == "Usuario"
-        }
-        adapter.updateData(ArrayList(usuariosFiltrados))
-        setUpRecyclerView(ArrayList(usuariosFiltrados))
+        adapter.updateData(dataForList)
     }
 
     private fun highlightCurrentFragment(currentFragment: String) {
@@ -129,15 +165,16 @@ class RolStaffFragment : Fragment() {
         when (currentFragment) {
             "Administradores" -> {
                 binding.btnAdministradores.setTextColor(Color.YELLOW)
-
-                parentFragmentManager.beginTransaction()
+                parentFragmentManager
+                    .beginTransaction()
                     .replace(R.id.nav_host_fragment_content_main, RolAdministradorFragment())
                     .addToBackStack(null)
                     .commit()
             }
             "Staff" -> {
                 binding.btnStaff.setTextColor(Color.YELLOW)
-                parentFragmentManager.beginTransaction()
+                parentFragmentManager
+                    .beginTransaction()
                     .replace(R.id.nav_host_fragment_content_main, RolStaffFragment())
                     .addToBackStack(null)
                     .commit()

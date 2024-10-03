@@ -72,6 +72,8 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     //implementation(libs.androidx.swiperefreshlayout)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     //Data binding
@@ -115,6 +117,9 @@ dependencies {
     //Retrofit
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
+
+    // OkHttp
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
 
     // Facebook SDK
     implementation("com.facebook.android:facebook-login:latest.release")

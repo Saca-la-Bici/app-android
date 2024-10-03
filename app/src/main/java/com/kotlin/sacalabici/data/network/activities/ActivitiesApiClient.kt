@@ -3,7 +3,6 @@ package com.kotlin.sacalabici.data.network.activities
 import android.content.Context
 import android.net.Uri
 import com.google.gson.Gson
-import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
@@ -77,14 +76,11 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             api = ActivitiesNetworkModuleDI(token)
             try {
                 val response = api.getActivityById(id)
-                Log.d("ApiClient", "Respuesta de la API: $response")
                 response
             } catch (e: Exception) {
-                Log.e("ApiClient", "Error al obtener la actividad", e)
                 null
             }
         } else {
-            Log.e("ApiClient", "Token es null")
             null
         }
     }

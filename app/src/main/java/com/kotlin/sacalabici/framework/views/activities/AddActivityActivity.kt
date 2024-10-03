@@ -3,7 +3,6 @@ package com.kotlin.sacalabici.framework.views.activities
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -135,8 +134,6 @@ class AddActivityActivity: AppCompatActivity(),
         val fragmentManager = supportFragmentManager
         val addActivityRouteFragment = fragmentManager.findFragmentById(R.id.fragmentAddActivity)
 
-        Log.d("ToggleAddActivityRoute", addActivityRouteFragment.toString())
-
         if (isAddActivityRouteFragmentVisible) {
             // Si el fragmento ya está visible, lo eliminamos
             if (addActivityRouteFragment != null) {
@@ -144,14 +141,12 @@ class AddActivityActivity: AppCompatActivity(),
                     .remove(addActivityRouteFragment)
                     .addToBackStack(null)
                     .commit()
-                Log.d(              "ToggleAddActivityRoute", "Fragmento AddActivityRouteFragment eliminado")
             }
             isAddActivityRouteFragmentVisible = false
         } else {
             // Si el fragmento no está visible, lo añadimos
             viewModelRoute.getRouteList() // Esto activará la observación y añadirá el fragmento
             isAddActivityRouteFragmentVisible = true
-            Log.d("ToggleAddActivityRoute", "Fragmento AddActivityRouteFragment añadido")
         }
     }
 
@@ -169,7 +164,6 @@ class AddActivityActivity: AppCompatActivity(),
     * Si es rodada, cambia al siguiente fragmento para elegir una ruta
     * */
     override fun onNextClicked(type: String) {
-        Log.d("Tipo en onNextClicked: ", type)
         if (type == "Rodada") {
             toggleRutasList()
 

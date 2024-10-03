@@ -1,7 +1,6 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,7 +52,6 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getRodadasRequirement()
-                Log.d("ActivitiesViewModel", "Rodadas result: $result")
                 if (result.isEmpty()) {
                     errorMessageLiveData.postValue(emptyListActs)
                 } else {
@@ -110,7 +108,7 @@ class ActivitiesViewModel(): ViewModel() {
             try {
                 requirement.postActivityEvento(evento, context)
             } catch (e: Exception) {
-                Log.e("ActivitiesViewModel", "Error al registrar evento", e)
+                 null
             }
         }
     }
@@ -120,9 +118,8 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch {
             try {
                 requirement.postActivityRodada(rodada, context)
-                Log.d("ActivitiesViewModel", "Rodada registrada exitosamente")
             } catch (e: Exception) {
-                Log.e("ActivitiesViewModel", "Error al registrar rodada", e)
+                null
             }
         }
     }
@@ -132,9 +129,8 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch {
             try {
                 requirement.postActivityTaller(taller, context)
-                Log.d("ActivitiesViewModel", "Taller registrada exitosamente")
             } catch (e: Exception) {
-                Log.e("ActivitiesViewModel", "Error al registrar taller", e)
+                null
             }
         }
     }
@@ -143,7 +139,6 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getActivityByIdRequirement(id)
-                Log.d("ActivitiesViewModel", "Activity filtrada: $result")
                 if (result == null) {
                     errorMessageLiveData.postValue("Actividad no encontrada")
                 } else {

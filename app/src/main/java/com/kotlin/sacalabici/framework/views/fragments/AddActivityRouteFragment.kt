@@ -3,7 +3,6 @@ package com.kotlin.sacalabici.framework.views.fragments
 import RutasAdapter
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,30 +72,16 @@ class AddActivityRouteFragment: Fragment() {
 
         viewModelRoute = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
 
-        viewModelRoute.selectedRuta.observe(viewLifecycleOwner, Observer { ruta ->
-            ruta?.let {
-                Log.d("Ruta Seleccionada en Fragmento", it.titulo)
-            }
-        })
-
         // Observa los LiveData del ViewModel
         viewModelRoute.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
             rutasList?.let {
                 val selectedRuta = viewModelRoute.lastSelectedRuta
                 updateRutasList(it, selectedRuta)
-            } ?: run {
-                Log.d("Error en fragmento", "Error al obtener la lista de rutas.")
             }
-        })
-
-        viewModelRoute.toastMessageLiveData.observe(viewLifecycleOwner, Observer { message ->
-            Log.d("Toast en fragmento", message)
         })
 
         val rutasList = arguments?.getParcelableArrayList<RouteBase>("rutasList")
         val selectedRuta = arguments?.getParcelable<RouteBase>("selectedRuta")
-        Log.d("rutasList", rutasList.toString())
-        Log.d("selectedRuta", selectedRuta.toString())
 
         rutasList?.let {
             updateRutasList(it, selectedRuta)
@@ -106,7 +91,6 @@ class AddActivityRouteFragment: Fragment() {
     fun updateRutasList(rutasList: List<RouteBase>, selectedRuta: RouteBase?) {
         rutasAdapter.updateRutas(rutasList)
         this.lastSelectedRuta = selectedRuta
-        Log.d("LastSelectedRuta: ", lastSelectedRuta.toString())
         rutasAdapter.setSelectedRuta(selectedRuta)
     }
 

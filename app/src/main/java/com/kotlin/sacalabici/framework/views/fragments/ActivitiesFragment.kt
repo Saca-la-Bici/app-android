@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +50,6 @@ class ActivitiesFragment: Fragment() {
 
     private fun initializeComponents() {
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
-        Log.d("ActivitiesFragment", "Stored permissions: $storedPermissions")
 
         val adapter = ActivitiesPagerAdapter(this)
         binding.viewPager.adapter = adapter
@@ -111,7 +109,6 @@ class ActivitiesFragment: Fragment() {
 
     private fun setupObservers() {
         activitiesViewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
-            Log.d("ActivitiesFragment", "New permissions: $permissions")
             savePermissionsToSharedPreferences(permissions)
         }
     }

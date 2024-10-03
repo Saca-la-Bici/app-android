@@ -92,9 +92,9 @@ class ProfileFragment : Fragment() {
     private fun setupSettingsButton() {
         val btnSettings = binding.btnSettings
         btnSettings.setOnClickListener {
-            val settingsAdminFragment = SettingsAdminFragment()
+            val settingsFragment = SettingsFragment()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, settingsAdminFragment)
+                .replace(R.id.nav_host_fragment_content_main, settingsFragment)
                 .addToBackStack(null)
                 .commit()
         }

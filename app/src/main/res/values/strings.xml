@@ -80,5 +80,13 @@
         <item>AB-</item>
     </string-array>
 
+    <!-- strings de Consultar faqs -->
+    <string name="Ayuda">Ayuda</string>
+    <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
+    <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
+
+    <!-- Strings para preguntas frecuentes -->
+    <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
+
 </resources>
 

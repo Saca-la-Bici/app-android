@@ -14,7 +14,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -51,7 +50,7 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
 
     // Vista del mapa y campo de texto para la distancia
     private lateinit var mapView: MapView
-    private lateinit var etDistancia: TextView
+    private lateinit var etDistancia: EditText
 
     // Para almacenar las fuentes y capas de rutas
     private val routeSources = mutableListOf<String>()
@@ -87,7 +86,7 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
      */
 
 
-    fun initializeMap(map: MapView, distancia: TextView, onStartPointSet: (Point) -> Unit, onStopoverPointSet: (Point) -> Unit, onEndPointSet: (Point) -> Unit, onReferencePoint1Set: (Point) -> Unit, onReferencePoint2Set: (Point) -> Unit) {
+    fun initializeMap(map: MapView, distancia: EditText, onStartPointSet: (Point) -> Unit, onStopoverPointSet: (Point) -> Unit, onEndPointSet: (Point) -> Unit, onReferencePoint1Set: (Point) -> Unit, onReferencePoint2Set: (Point) -> Unit) {
         // Asigna las vistas y callbacks proporcionadas
         this.mapView = map
         this.etDistancia = distancia
@@ -138,7 +137,7 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
      */
     private fun setupMapLongClickListener(
         map: MapView,
-        distancia: TextView,
+        distancia: EditText,
         onStartPointSet: (Point) -> Unit,
         onStopoverPointSet: (Point) -> Unit,
         onEndPointSet: (Point) -> Unit,
@@ -220,7 +219,7 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
      * @param map Vista del mapa donde se dibujará la ruta.
      * @param etDistancia Campo de texto donde se mostrará la distancia calculada.
      */
-    private fun drawRoute(map: MapView, etDistancia: TextView) {
+    private fun drawRoute(map: MapView, etDistancia: EditText) {
         // Verificamos que los puntos están establecidos
         if (startPoint == null || endPoint == null || stopoverPoint == null) {
             Toast.makeText(context, "Asegúrate de establecer los puntos de inicio, descanso y final.", Toast.LENGTH_SHORT).show()

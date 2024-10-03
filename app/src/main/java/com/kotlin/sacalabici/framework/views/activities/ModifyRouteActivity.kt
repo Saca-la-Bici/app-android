@@ -46,7 +46,7 @@ class ModifyRouteActivity : AppCompatActivity() {
     private lateinit var viewModel: MapViewModel
     // Variables de UI para el mapa, campo de distancia y nivel de dificultad
     private lateinit var mapViewForm: MapView
-    private lateinit var etDistancia: TextView
+    private lateinit var etDistancia: EditText
     private lateinit var tvNivel: TextView
     private lateinit var btnEliminarRuta: ImageButton
     private lateinit var btnEnviar: Button
@@ -142,7 +142,7 @@ class ModifyRouteActivity : AppCompatActivity() {
 
             mapHelper.clearPreviousRoutes()
             etTiempo.text.clear()
-            etDistancia.text= ""
+            etDistancia.text.clear()
             tvNivel.text = "" // Esto limpia el nivel seleccionado
 
             // Inicializa la clase MapHelper para manejar el mapa y los puntos de ruta

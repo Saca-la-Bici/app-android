@@ -4,6 +4,7 @@ import com.kotlin.sacalabici.data.models.preguntasFrecuentes.PreguntaFrecuente
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface PreguntasFrecuentesAPIService {
@@ -16,6 +17,15 @@ interface PreguntasFrecuentesAPIService {
         @Body preguntaFrecuente: PreguntaFrecuente
     ): PreguntaFrecuente
 
-    @GET("consultarIndividual/{IdPregunta}")
-    suspend fun consultarPreguntaFrecuenteInd(@Path("IdPregunta") IdPregunta :Int): PreguntaFrecuente
+    @GET("preguntaFrecuente/consultarIndividual/{IdPregunta}")
+    suspend fun consultarPreguntaFrecuenteInd(
+        @Path("IdPregunta") IdPregunta :Int): PreguntaFrecuente
+
+    @PUT("consultarIndividual/{IdPregunta}/modificacion")
+    suspend fun modificarPreguntaFrecuente(
+        @Path("IdPregunta") IdPregunta: Int,
+        Pregunta: String,
+        Respuesta: String,
+        Tema: String
+    ):PreguntaFrecuente
 }

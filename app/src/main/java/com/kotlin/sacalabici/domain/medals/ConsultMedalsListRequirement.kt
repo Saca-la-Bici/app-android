@@ -6,6 +6,5 @@ import com.kotlin.sacalabici.data.repositories.medals.MedalsRepository
 class ConsultMedalsListRequirement {
     private val repository = MedalsRepository()
 
-    suspend operator fun invoke(
-    ): MedalObjectBase? = repository.getMedalsList()
+    suspend operator fun invoke(): MedalObjectBase? = repository.getMedalsList()
 }

@@ -49,11 +49,11 @@
                 android:backgroundTint="#F6CD0B" />
 
             <!-- Distancia -->
-            <EditText
+            <TextView
                 android:id="@+id/etDistancia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Distancia (ej. 15km)"
+                android:hint="Distancia (Se calcula automáticamente)"
                 android:textColorHint="#000000"
                 android:textColor="#000000"
                 android:textSize="16sp"

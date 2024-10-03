@@ -24,22 +24,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.Route
-import com.kotlin.sacalabici.data.network.FirebaseTokenManager
-import com.kotlin.sacalabici.data.network.routes.RouteApiClient
 import com.kotlin.sacalabici.databinding.ActivityAgregarrutaBinding
-import com.kotlin.sacalabici.databinding.ActivityModificarrutaBinding
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.helpers.MapHelper
 import com.kotlin.sacalabici.utils.InputValidator
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * Activity para registrar una nueva ruta, donde los usuarios pueden interactuar con un mapa para establecer
@@ -51,7 +44,7 @@ class AddRouteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAgregarrutaBinding
     private lateinit var viewModel: MapViewModel
     private lateinit var mapViewForm: MapView
-    private lateinit var etDistancia: EditText
+    private lateinit var etDistancia: TextView
     private lateinit var tvNivel: TextView
     private lateinit var btnEliminarRuta: ImageButton
 
@@ -87,8 +80,8 @@ class AddRouteActivity : AppCompatActivity() {
             onStartPointSet = { point -> startPoint = point },  // Almacena el punto de inicio
             onStopoverPointSet = { point -> stopoverPoint = point },  // Almacena el punto de descanso
             onEndPointSet = { point -> endPoint = point } ,
-            onReferencePoint1Set = {point -> referencePoint1 = point},
-            onReferencePoint2Set = {point -> referencePoint2 = point}// Almacena el punto final
+            onReferencePoint1Set = { point -> referencePoint1 = point},
+            onReferencePoint2Set = { point -> referencePoint2 = point}// Almacena el punto final
         )
 
         // Inicialización de otros elementos de UI (título, tiempo y botón de enviar)
@@ -128,7 +121,7 @@ class AddRouteActivity : AppCompatActivity() {
 
             mapHelper.clearPreviousRoutes()
             etTiempo.text.clear()
-            etDistancia.text.clear()
+            etDistancia.text = ""
             tvNivel.text = "" // Esto limpia el nivel seleccionado
 
             // Inicializa la clase MapHelper para manejar el mapa y los puntos de ruta

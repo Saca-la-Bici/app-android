@@ -41,6 +41,12 @@
     <string name="TVerifyPassword">Confirmar contraseña</string>
     <string name="TFinish">Finalizar</string>
 
+    <!-- String de FAQ -->
+    <string name="Pregunta">Pregunta</string>
+    <string name="Respuesta">Respuesta</string>
+
+
+
     <!-- String de Perfil -->
     <string name="TProfile">Asignación de roles y permisos</string>
 
@@ -59,7 +65,6 @@
     <string name="País">País\n</string>
     <string name="TPhoneNumber">Número de teléfono</string>
     <string name="TBloodType">Tipo de sangre</string>
-
 
     <string-array name="genders">
         <item>Masculino</item>

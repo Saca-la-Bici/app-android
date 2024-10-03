@@ -23,6 +23,7 @@ class FaqViewModel():ViewModel() {
             try{
                 Log.d("flow", "Entra ViewModel")
                 val result : PreguntaFrecuente = reviewFaqRequirement(IdPregunta)
+                Log.d("ayuda","result")
                 preguntaObjectLiveData.postValue(result)
             } catch (err:Exception){
                 err.printStackTrace()

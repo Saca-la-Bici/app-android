@@ -17,6 +17,7 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import com.kotlin.sacalabici.framework.adapters.views.activities.ProfileEditActivity
+import com.kotlin.sacalabici.framework.views.activities.ReviewSingleFaqActivity
 
 class ProfileFragment : Fragment() {
 
@@ -24,6 +25,7 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
     private lateinit var viewModel: ProfileViewModel
+    private lateinit var FaqBtnLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
 
@@ -51,7 +53,16 @@ class ProfileFragment : Fragment() {
         }
 
         setupEditButton()
+        FaqBtn()
         editProfileLauncher=registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK){
+                viewModel.getProfile()
+            }
+        }
+
+        FaqBtnLauncher=registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK){
@@ -94,6 +105,15 @@ class ProfileFragment : Fragment() {
         val btnEditProfile = binding.btnEditProfile
         btnEditProfile.setOnClickListener {
             val intent = Intent(activity, ProfileEditActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+    }
+
+    private fun FaqBtn() {
+        val btnFaq = binding.btnFaq
+        btnFaq.setOnClickListener {
+            val intent = Intent(activity, ReviewSingleFaqActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }

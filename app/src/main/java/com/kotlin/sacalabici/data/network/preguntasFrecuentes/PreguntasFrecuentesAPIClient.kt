@@ -5,7 +5,8 @@ import com.kotlin.sacalabici.data.models.preguntasFrecuentes.PreguntaFrecuente
 
 class PreguntasFrecuentesAPIClient {
 
-    private val api: PreguntasFrecuentesAPIService = PreguntasFrecuentesModuleDI()
+    private lateinit var api: PreguntasFrecuentesAPIService
+
     suspend fun consultarPreguntasFrecuentesList(): List<PreguntaFrecuente>? {
         return try {
             api.consultarPreguntasFrecuentes()
@@ -25,9 +26,7 @@ class PreguntasFrecuentesAPIClient {
     }
 
     suspend fun consultarPreguntaFrecuenteInd(IdPregunta:Int): PreguntaFrecuente{
-        Log.d("ayuda","Entra ApiClient")
         return try{
-            Log.d("ayuda","Regresó al ApiCLient")
             api.consultarPreguntaFrecuenteInd(IdPregunta)
         } catch(err: Exception){
             throw err

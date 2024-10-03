@@ -15,7 +15,6 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
 import com.kotlin.sacalabici.framework.adapters.ProfileAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
-import com.kotlin.sacalabici.framework.views.fragments.SettingsAdminFragment
 
 class ProfileFragment : Fragment() {
 

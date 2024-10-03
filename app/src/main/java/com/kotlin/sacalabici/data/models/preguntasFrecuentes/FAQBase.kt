@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 // Clase de datos que representa información básica sobre una pregunta frecuente
 data class FAQBase(
+    @SerializedName("_id") val id: String,
     @SerializedName("IdPregunta") val IdPregunta: Int,
     @SerializedName("Pregunta") val Pregunta: String,
     @SerializedName("Respuesta") val Respuesta: String,

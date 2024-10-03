@@ -1,6 +1,6 @@
 package com.kotlin.sacalabici.data.network.preguntasFrecuentes
 
-import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 
 class FAQAPIClient(
@@ -8,18 +8,14 @@ class FAQAPIClient(
 ) {
     private lateinit var api: FAQAPIService
 
-    suspend fun getFAQList(): FAQBase? {
+    suspend fun getFAQList(): FAQObjectBase? {
         val token = firebaseTokenManager.getTokenSynchronously() // Obtener el token de forma sincrónica
+        api = FAQModuleDI(token)
 
-        return if (token != null) {
-            api = FAQModuleDI(token)
-            try {
-                api.getFAQList()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-        } else {
+        return try {
+            api.getFAQList()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
             null
         }
     }

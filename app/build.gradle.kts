@@ -69,6 +69,11 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation(libs.play.services.fido)
     implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     //implementation(libs.androidx.swiperefreshlayout)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     //Data binding
@@ -113,6 +118,9 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
 
+    // OkHttp
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+
     // Facebook SDK
     implementation("com.facebook.android:facebook-login:latest.release")
     implementation("com.facebook.android:facebook-android-sdk:latest.release")
@@ -123,19 +131,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
 
-    implementation("com.mapbox.maps:android:10.10.0")
-    implementation("com.squareup.okhttp3:okhttp:4.9.3") // Verifica que sea la versión más reciente
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
-
-    //implementation ("com.mapbox.android:mapbox-android-core:1.9.0")
-
-    implementation ("com.google.android.gms:play-services-location:20.7.0") // O la versión más reciente
-
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-
-
-
+    implementation("com.hbb20:ccp:2.7.0")
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.12.52")
 
 }

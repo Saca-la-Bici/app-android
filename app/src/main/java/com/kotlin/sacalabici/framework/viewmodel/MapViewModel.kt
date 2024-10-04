@@ -1,18 +1,26 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
-import android.graphics.Color
+import android.util.Log
+import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.BuildConfig
-import com.kotlin.sacalabici.data.models.CoordenadasBase
-import com.kotlin.sacalabici.data.models.RutasBase
-import com.kotlin.sacalabici.framework.services.RutasService
-import com.mapbox.geojson.Feature
-import com.mapbox.geojson.FeatureCollection
-import com.mapbox.geojson.LineString
+import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
+import com.kotlin.sacalabici.data.models.routes.Route
+import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
+import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
+import com.kotlin.sacalabici.domain.routes.PostRouteRequirement
+import com.kotlin.sacalabici.domain.routes.PutRouteRequirement
+import com.kotlin.sacalabici.domain.routes.RouteListRequirement
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
+import com.mapbox.maps.MapView
+import com.mapbox.maps.extension.style.layers.getLayer
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.extension.style.sources.getSourceAs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,74 +35,66 @@ import kotlin.math.sqrt
 
 class MapViewModel : ViewModel() {
 
-    val rutasListLiveData = MutableLiveData<List<RutasBase>?>()
-    val routeSegmentsLiveData = MutableLiveData<Pair<List<Point>, List<Point>>>()
+    val roleLiveData = MutableLiveData<String>()
+    val routeObjectLiveData = MutableLiveData<List<RouteBase>?>()
     val toastMessageLiveData = MutableLiveData<String>()
-    var lastSelectedRuta: RutasBase? = null
+    var lastSelectedRuta: RouteBase? = null
+    private val routeListRequirement = RouteListRequirement()
+    private val postRouteRequirement = PostRouteRequirement()
+    private val patchRouteRequirement = PutRouteRequirement()
 
-    fun getRutasList() {
-        viewModelScope.launch {
-            try {
-                val rutasList = RutasService.getRutasList()
-                rutasListLiveData.postValue(rutasList)
-            } catch (e: Exception) {
-                toastMessageLiveData.postValue("Error al obtener la lista de rutas: ${e.message}")
-                rutasListLiveData.postValue(null)
+    suspend fun processPermissions() {
+
+        val result: RouteObjectBase? = routeListRequirement()
+
+        // Publicar el rol en LiveData
+        if (result != null) {
+            this@MapViewModel.roleLiveData.postValue(result.permission.toString())
+        }  // Publicar los permisos en LiveData
+
+        // Iterar sobre la lista de permisos y mostrar cada uno en Logcat
+        if (result != null) {
+            for (permission in result.permission) {
+                Log.d("Permisos", "Permiso encontrado: $permission")
             }
         }
     }
 
-    fun drawRoute(coordenadas: List<CoordenadasBase>) {
-        val points = coordenadas.map { Point.fromLngLat(it.longitud, it.latitud) }
-        val url = URL("https://api.mapbox.com/directions/v5/mapbox/cycling/${points.joinToString(";") { "${it.longitude()},${it.latitude()}" }}?geometries=polyline6&steps=true&overview=full&access_token=${BuildConfig.MAPBOX_ACCESS_TOKEN}")
-
+    fun getRouteList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "GET"
-                val response = connection.inputStream.bufferedReader().use { it.readText() }
-                val jsonResponse = JSONObject(response)
-                val routes = jsonResponse.getJSONArray("routes")
+                // Obtener el objeto RouteObjectBase en lugar de solo la lista de rutas
+                val result: RouteObjectBase? = routeListRequirement()
 
-                if (routes.length() > 0) {
-                    val geometry = routes.getJSONObject(0).getString("geometry")
-                    val decodedPoints = decodePolyline(geometry)
+                // Publicar las rutas en LiveData
+                val reversedRoutes = result!!.routes.reversed()
+                this@MapViewModel.routeObjectLiveData.postValue(reversedRoutes)
 
-                    val descansoIndex = points.indexOfFirst { calculateDistance(it, points[1]) < 50.0 }
-                    if (descansoIndex == -1) {
-                        toastMessageLiveData.postValue("El punto de descanso no se encontró en los puntos decodificados")
-                        return@launch
-                    }
-
-                    val tramo1 = decodedPoints.take(descansoIndex + 1)
-                    val tramo2 = decodedPoints.drop(descansoIndex)
-
-                    withContext(Dispatchers.Main) {
-                        routeSegmentsLiveData.postValue(Pair(tramo1, tramo2))
-                    }
-                } else {
-                    toastMessageLiveData.postValue("No se encontraron rutas en la respuesta de la API")
-                }
             } catch (e: Exception) {
-                toastMessageLiveData.postValue("Error al obtener la ruta: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    toastMessageLiveData.postValue("Error al cargar la lista de rutas")
+                }
             }
         }
     }
 
-    // Función para calcular la distancia entre dos puntos en metros
-    private fun calculateDistance(p1: Point, p2: Point): Double {
-        val earthRadius = 6371000.0 // Radio de la Tierra en metros
-        val dLat = Math.toRadians(p2.latitude() - p1.latitude())
-        val dLng = Math.toRadians(p2.longitude() - p1.longitude())
-
-        val a = sin(dLat / 2).pow(2.0) + cos(Math.toRadians(p1.latitude())) * cos(Math.toRadians(p2.latitude())) * sin(dLng / 2).pow(2.0)
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        return earthRadius * c // Distancia en metros
+    fun postRoute(route: Route) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                postRouteRequirement(route)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
     }
 
-    // Función para decodificar la polyline
-    private fun decodePolyline(encodedPolyline: String): List<Point> {
-        return PolylineUtils.decode(encodedPolyline, 6).map { Point.fromLngLat(it.longitude(), it.latitude()) }
+    fun putRoute(id: String, route: Route) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                patchRouteRequirement(id, route)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
     }
 }

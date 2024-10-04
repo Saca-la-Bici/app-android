@@ -41,7 +41,55 @@
     <string name="TVerifyPassword">Confirmar contraseña</string>
     <string name="TFinish">Finalizar</string>
 
+    <!-- String de Perfil -->
+    <string name="TProfile">Asignación de roles y permisos</string>
 
     <string name="facebook_app_id">1940390093140800</string>
     <string name="facebook_client_token">b5daf3a37da479db677c140e79b2268d</string>
+    <string name="PRodadas">Rodadas</string>
+    <string name="PKilometros">Kilómetros</string>
+    <string name="PAmigos">Amigos</string>
+    <string name="PEdit">Editar Perfil</string>
+    <string name="PShareProfile">Compartir perfil</string>
+    <string name="genderPE">Género</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">Confirmar</string>
+    <string name="TNombreCompleto">Nombre completo</string>
+    <string name="TNumeroEmergencia">Número de emergencia</string>
+    <string name="País">País\n</string>
+    <string name="TPhoneNumber">Número de teléfono</string>
+    <string name="TBloodType">Tipo de sangre</string>
+    <string name="TNoUsers">No se encontraron usuarios</string>
+
+
+    <string-array name="genders">
+        <item>Masculino</item>
+        <item>Femenino</item>
+        <item>Otro</item>
+        <item>Prefiero no decirlo</item>
+    </string-array>
+
+    <string-array name="bloodTypes">
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>O+</item>
+        <item>O-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+    </string-array>
+    
+    <!--String para Descripción de botones-->
+    <string name="back_button_desc">Pestaña anterior</string>
+
+    <!-- strings de Consultar faqs -->
+    <string name="Ayuda">Ayuda</string>
+    <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
+    <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
+
+    <!-- Strings para preguntas frecuentes -->
+    <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
+
 </resources>
+

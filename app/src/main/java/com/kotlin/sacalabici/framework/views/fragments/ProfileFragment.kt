@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
@@ -75,16 +76,23 @@ class ProfileFragment : Fragment() {
                 binding.profileBlood.text = it.bloodtype
                 binding.textRodadas.text = it.activitiesCompleted.toString()
                 binding.textKilometros.text = "${it.KmCompleted}km"
-                // Verifica que la URL no sea nula y carga la imagen con Glide
-                val imageUrl = it.pImage // Aquí obtienes la URL desde el objeto de perfil recibido
+                // Cargar imagen de perfil usando Glide
+                val profileImageUrl = it.pImage
 
-                if (!imageUrl.isNullOrEmpty()) {
-                    Glide.with(this)
-                        .load(imageUrl)
-                        .into(binding.profileImage) // Cargar en el ImageView a través del binding
+                // Si la URL de la imagen no es nula ni vacía, cargarla con Glide
+                if (!profileImageUrl.isNullOrEmpty()) {
+                    Glide
+                        .with(requireContext())
+                        .load(profileImageUrl) // Cargar la imagen desde la URL
+                        .diskCacheStrategy(DiskCacheStrategy.ALL) // Cachear la imagen
+                        .placeholder(R.drawable.baseline_person_24) // Imagen por defecto mientras se carga
+                        .error(R.drawable.baseline_person_24) // Imagen por defecto en caso de error
+                        .into(binding.profileImage) // Colocar la imagen en el ImageView
                 } else {
-                    Log.d("imagen","error cargando imagen $imageUrl")
+                    // Si la URL es nula o vacía, usar la imagen por defecto
+                    binding.profileImage.setImageResource(R.drawable.baseline_person_24)
                 }
+                Log.d("imagen", profileImageUrl)
             }
         }
     }

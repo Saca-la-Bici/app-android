@@ -16,5 +16,5 @@ data class ProfileBase(
     @SerializedName("firebaseUID") val fireUID: String,
     @SerializedName("fechaRegistro") val date: String,
     @SerializedName("__v") val url: Int,
-    @SerializedName("imageUrl") val pImage: String
+    @SerializedName("imagen") val pImage: String
 )

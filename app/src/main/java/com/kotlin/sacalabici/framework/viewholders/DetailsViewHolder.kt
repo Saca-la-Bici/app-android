@@ -8,12 +8,15 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.text.set
 import com.bumptech.glide.Glide
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ActivityDetailsBinding
+import com.kotlin.sacalabici.framework.views.activities.StartRouteActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -85,7 +88,8 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding) {
         if (activity.type == "Rodada"){
             binding.btnStart.visibility = View.VISIBLE
             binding.btnStart.setOnClickListener {
-                // Lógica para iniciar la actividad
+                val intent = Intent(binding.root.context, StartRouteActivity::class.java) // Cambiado aquí
+                binding.root.context.startActivity(intent)
             }
         } else {
             binding.btnStart.visibility = View.GONE

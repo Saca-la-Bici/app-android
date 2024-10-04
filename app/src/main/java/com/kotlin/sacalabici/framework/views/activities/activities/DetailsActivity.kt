@@ -1,9 +1,13 @@
 package com.kotlin.sacalabici.framework.views.activities.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.kotlin.sacalabici.databinding.ActivityDetailsBinding
+import com.kotlin.sacalabici.framework.views.activities.StartRouteActivity
 import com.kotlin.sacalabici.framework.viewholders.DetailsViewHolder
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 
@@ -30,7 +34,9 @@ class DetailsActivity: AppCompatActivity() {
         }
 
         binding.btnBack.setOnClickListener {
+            Log.d("DetailsActivity", "Botón Back presionado")
             finish() // Regresar a la actividad anterior
         }
+
     }
 }

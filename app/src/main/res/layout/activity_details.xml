@@ -79,7 +79,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/ivActivityImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
                 </FrameLayout>
 
                 <Button
-                    android:visibility="visivility"
+                    android:visibility="gone"
                     android:id="@+id/btnRuta"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

@@ -16,8 +16,7 @@ import com.kotlin.sacalabici.databinding.FragmentProfileEditBinding
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
-import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
+import com.kotlin.sacalabici.data.models.profile.Profile
 
 
 class ProfileEditFragment: Fragment() {
@@ -39,6 +38,7 @@ class ProfileEditFragment: Fragment() {
         setupGenderDropdown()
         setupBloodDropdown()
         setupBackButton()
+        setupUploadButton()
 
         editProfileLauncher=registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -109,18 +109,22 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
-//    private fun setupUploadButton() {
-//        binding.btnSave.setOnClickListener {
+    private fun setupUploadButton() {
+        binding.btnSave.setOnClickListener {
 //            val emptystring = ""
 //            val id = intent.getStringExtra("id") ?: emptystring
-//            val title = binding.etModifyAnnouncementTitle.text.toString()
-//            val description = binding.etModifyAnnouncementDescription.text.toString()
-//            val announcement = Announcement(title, description, image)
-//            viewModel.patchAnnouncement(id, announcement)
-//            setResult(Activity.RESULT_OK)
+            val name = binding.name.text.toString()
+            val username = binding.username.text.toString()
+//            val gender = binding.genderDropDown.text.toString()
+            val blood = binding.bloodDropDown.text.toString()
+            val emergencyNum = binding.emergencyNumber.text.toString()
+
+            val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, "")
+            viewModel.patchProfile(profile)
+//            getActivity().setResult(Activity.RESULT_OK)
 //            finish()
-//        }
-//    }
+        }
+    }
 
 }
 

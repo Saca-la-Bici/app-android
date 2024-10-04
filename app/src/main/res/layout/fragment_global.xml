@@ -1,23 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/swipeRefreshLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- Este ConstraintLayout es innecesario si no vas a poner más elementos dentro de él -->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/TitleGlobal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ahorro de Recursos"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <!-- Agua -->
+        <TextView
+            android:id="@+id/textTitleWater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agua"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/TitleGlobal"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/textLiters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20L"
+            android:textColor="#ADADAD"
+            app:layout_constraintTop_toBottomOf="@+id/TitleGlobal"
+            app:layout_constraintEnd_toEndOf="@+id/progressAgua"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressAgua"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:layout_constraintTop_toBottomOf="@id/textTitleWater"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <TextView
+            android:id="@+id/textAgua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ahorro de agua al utilizar la bicicleta"
+            app:layout_constraintTop_toBottomOf="@id/progressAgua"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+        <!-- CO2 -->
+        <TextView
+            android:id="@+id/textTitleCO2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CO2"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/textAgua"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+        <TextView
+            android:id="@+id/textKilograms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5kg/L"
+            android:textColor="#ADADAD"
+            app:layout_constraintTop_toBottomOf="@+id/textAgua"
+            app:layout_constraintEnd_toEndOf="@+id/progressAgua"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressCO2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:layout_constraintTop_toBottomOf="@id/textTitleCO2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <TextView
+            android:id="@+id/textCO2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reducción de emisiones de CO2"
+            app:layout_constraintTop_toBottomOf="@id/progressCO2"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+        <!-- Air -->
+        <TextView
+            android:id="@+id/textTitleAir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aire"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/textCO2"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressAir"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:layout_constraintTop_toBottomOf="@id/textTitleAir"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <TextView
+            android:id="@+id/textAir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reducción de contaminantes del aire"
+            app:layout_constraintTop_toBottomOf="@id/progressAir"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

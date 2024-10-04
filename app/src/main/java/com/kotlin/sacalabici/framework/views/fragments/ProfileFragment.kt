@@ -3,6 +3,7 @@ package com.kotlin.sacalabici.framework.adapters.views.fragments
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
@@ -73,6 +75,16 @@ class ProfileFragment : Fragment() {
                 binding.profileBlood.text = it.bloodtype
                 binding.textRodadas.text = it.activitiesCompleted.toString()
                 binding.textKilometros.text = "${it.KmCompleted}km"
+                // Verifica que la URL no sea nula y carga la imagen con Glide
+                val imageUrl = it.pImage // Aquí obtienes la URL desde el objeto de perfil recibido
+
+                if (!imageUrl.isNullOrEmpty()) {
+                    Glide.with(this)
+                        .load(imageUrl)
+                        .into(binding.profileImage) // Cargar en el ImageView a través del binding
+                } else {
+                    Log.d("imagen","error cargando imagen $imageUrl")
+                }
             }
         }
     }

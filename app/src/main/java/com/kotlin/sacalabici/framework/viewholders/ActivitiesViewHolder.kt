@@ -1,8 +1,11 @@
 package com.kotlin.sacalabici.framework.viewholders
 
+import com.google.firebase.auth.FirebaseAuth
+
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -19,9 +22,7 @@ class ActivitiesViewHolder(
     private val binding: ItemActivityBinding,
     private val longClickListener: (Activity) -> Boolean,
     private val viewModel: ActivitiesViewModel
-): RecyclerView.ViewHolder(binding.root){
-
-
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Activity) {
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(item.date)
@@ -44,25 +45,42 @@ class ActivitiesViewHolder(
             binding.ivActivityImage.visibility = View.GONE
         }
 
-        if (item.type == "Rodada"){
+        if (item.type == "Rodada") {
             binding.tvActivityLevel.visibility = View.VISIBLE
             binding.tvActivityLevel.text = item.nivel
         } else {
             binding.tvActivityLevel.visibility = View.GONE
         }
 
-        binding.btnJoin.setOnClickListener(){
-            Log.d("ITEM", "$item")
-            //Falta el id del usuario
-            val actividadId = item.id // Este 'item' es tu objeto 'Activity'
-            val tipo = item.type // Este 'type' ya está en tu clase 'Activity'
-            // Llamar al ViewModel para inscribir la actividad
-            Log.d("ActivitiesViewHolder", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
-            viewModel.postInscribirActividad(actividadId, tipo)
-        }
+        // Verificar si el usuario está inscrito en la actividad
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val firebaseUID = firebaseUser?.uid
 
+        if (firebaseUID != null) {
+            // Verificar si el usuario está inscrito en la actividad
+            val usuarioInscrito = item.usuariosInscritos.contains(firebaseUID)
+
+            if (usuarioInscrito) {
+                binding.btnJoin.text = "Cancelar inscripción"
+                binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
+                binding.btnJoin.setOnClickListener {
+                    Log.d("ActivitiesViewHolder", "Cancelar inscripción. Activity ID: ${item.id}, Type: ${item.type}")
+                    viewModel.postCancelarInscripcion(item.id, item.type) // Nueva función para cancelar inscripción
+                }
+            } else {
+                binding.btnJoin.text = "Inscribirse"
+                binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
+                binding.btnJoin.setOnClickListener {
+                    Log.d("ActivitiesViewHolder", "Inscribirse. Activity ID: ${item.id}, Type: ${item.type}")
+                    viewModel.postInscribirActividad(item.id, item.type)
+                }
+            }
+        } else {
+            Log.e("ActivitiesViewHolder", "No Firebase user authenticated.")
+        }
     }
 
+    // Función para cargar la imagen
     private fun getActivityImage(url: String, imageView: ImageView) {
         val requestOptions = RequestOptions()
             .centerCrop()
@@ -75,8 +93,5 @@ class ActivitiesViewHolder(
             .apply(requestOptions)
             .into(imageView)
     }
-
-
-
-
 }
+

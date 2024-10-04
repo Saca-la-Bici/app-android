@@ -44,7 +44,9 @@ data class Activity(
     @SerializedName("personasInscritas") val peopleEnrolled: Int,
     @SerializedName("estado") val state: Boolean,
     @SerializedName("comentarios") val comments: String? = null,
-    @SerializedName("nivel") val nivel: String? = null
+    @SerializedName("nivel") val nivel: String? = null,
+    @SerializedName("usuariosInscritos") val usuariosInscritos: List<String>
+
 )
 
 data class Location(
@@ -52,6 +54,11 @@ data class Location(
     @SerializedName("longitud") val longitude: Double
 )
 data class JoinActivityRequest(
+    val actividadId: String,
+    val tipo: String
+)
+
+data class CancelActivityRequest(
     val actividadId: String,
     val tipo: String
 )

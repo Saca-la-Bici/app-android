@@ -11,6 +11,7 @@ import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
 import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
+import com.kotlin.sacalabici.domain.activities.PostCancelActivity
 import com.kotlin.sacalabici.domain.activities.PostJoinActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,6 +41,7 @@ class ActivitiesViewModel(): ViewModel() {
     }
 
     private val postJoinActivity = PostJoinActivity()
+    private val postCancelActivity = PostCancelActivity()
 
     // Función para cargar rodadas
     fun getRodadas() {
@@ -124,6 +126,21 @@ class ActivitiesViewModel(): ViewModel() {
             }
             catch (e: Exception){
                 Log.e("postInscribirActivityviewModel", "Error al inscribir actividad", e)
+            }
+
+        }
+    }
+
+    fun postCancelarInscripcion(actividadId: String, tipo: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            try{
+                Log.d("ActivitiesViewModel", "btnJoin for cancel clicked. Activity ID: $actividadId, Type: $tipo")
+                postCancelActivity(actividadId, tipo)
+                Log.d("postCancelarActivityviewModel", "btnJoin for cancel clicked. Activity ID: $actividadId, Type: $tipo")
+            }
+            catch (e: Exception){
+                Log.e("postCancelarActivityviewModel", "Error al cancelar actividad", e)
             }
 
         }

@@ -30,3 +30,12 @@ class PostJoinActivity {
         repository.PostJoinActivity(actividadId, tipo)
     }
 }
+
+class PostCancelActivity {
+    private val repository = ActivitiesRepository()
+    suspend operator fun invoke(actividadId:String, tipo:String) {
+        Log.d("ActivitiesRequirement", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
+        repository.PostCancelActivity(actividadId, tipo)
+    }
+}
+

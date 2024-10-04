@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.data.network.activities
 
 import android.util.Log
+import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
@@ -71,6 +72,29 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
                 val request = JoinActivityRequest(actividadId, tipo)
                 api.PostJoinActivity(request)
                 Log.d("ActivitiesApiClient3", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo, Token: $token")
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+
+    }
+
+    suspend fun PostCancelActivity(actividadId:String, tipo:String){
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        if (token != null) {
+            Log.d("ActivitiesApiClient", "btnJoin Cancel clicked. Activity ID: $actividadId, Type: $tipo, Token: $token")
+
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                Log.d("ActivitiesApiClient2", "btnJoin Cancel clicked. Activity ID: $actividadId, Type: $tipo, Token: $token")
+                val request = CancelActivityRequest(actividadId, tipo)
+                api.PostCancelActivity(request)
+                Log.d("ActivitiesApiClient3", "btnJoin Cancel clicked. Activity ID: $actividadId, Type: $tipo, Token: $token")
 
             } catch (e: Exception) {
                 e.printStackTrace()

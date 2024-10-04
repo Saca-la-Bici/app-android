@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.network.activities
 
+import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
@@ -24,4 +25,7 @@ interface ActivitiesApiService {
 
     @POST("actividades/inscripcion/inscribir")
     suspend fun PostJoinActivity(@Body request: JoinActivityRequest)
+
+    @POST("actividades/cancelarAsistencia/cancelar")
+    suspend fun PostCancelActivity(@Body request: CancelActivityRequest)
 }

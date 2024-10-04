@@ -2,25 +2,35 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/clAppBar">
 
     <View
         android:id="@+id/vNavBar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@color/beige"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1">
+        app:layout_constraintBottom_toBottomOf="parent">
     </View>
+
+    <View
+        android:id="@+id/vHighlightView"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:background="@drawable/bg_highlight_black"
+        app:layout_constraintBottom_toBottomOf="@id/btnActividades"
+        app:layout_constraintStart_toStartOf="@id/btnActividades"
+        app:layout_constraintEnd_toEndOf="@id/btnActividades"
+        app:layout_constraintTop_toTopOf="@id/btnActividades" />
+
 
     <ImageButton
         android:id="@+id/btnActividades"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_actividades"
+        android:src="@drawable/ic_actividades_selected"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="@id/vNavBar"
         app:layout_constraintTop_toTopOf="@id/vNavBar"
@@ -92,7 +102,7 @@
         android:id="@+id/btnPerfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_perfil"
+        android:src="@drawable/ic_profile"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="@id/vNavBar"
         app:layout_constraintTop_toTopOf="@id/vNavBar"

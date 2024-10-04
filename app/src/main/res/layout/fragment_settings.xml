@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/vNavBar">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/start_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.1"/>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/end_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.9"/>
+
+            <View
+                android:id="@+id/VContainer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/end_guideline"
+                app:layout_constraintStart_toStartOf="@+id/start_guideline"/>
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/VContainer"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/BBack"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:src="@drawable/back_button"
+                app:layout_constraintTop_toTopOf="@+id/toolbar"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+                app:layout_constraintStart_toStartOf="@+id/toolbar"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/TVTitleConfigyPriv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Configuración y privacidad"
+                style="?attr/textAppearanceTitleMedium"
+                app:layout_constraintEnd_toEndOf="@id/VContainer"
+                app:layout_constraintTop_toTopOf="@+id/toolbar"
+                app:layout_constraintStart_toStartOf="@+id/BBack"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/TVMoreInfoAndAssistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Más información y asistencia"
+                android:layout_marginTop="20dp"
+                style="?attr/textAppearanceLabelMedium"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BHelp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Ayuda"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_help"
+                app:iconTint="@color/black"
+                app:iconSize="0dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/TVMoreInfoAndAssistance"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BInformation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Información"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_informacion"
+                app:iconTint="@color/black"
+                app:iconSize="0dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/BHelp"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BHowToUseApp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Cómo usar la app"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_bike_person"
+                app:iconTint="@color/black"
+                app:iconSize="0dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/BInformation"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_roles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Asignación de roles y permisos"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_person_add_in"
+                app:iconTint="@color/black"
+                app:iconSize="0dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/BHowToUseApp"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_desactivar_roles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Desactivar Usuarios"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_users"
+                app:iconTint="@color/black"
+                app:iconSize="0dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/btn_roles"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"/>
+
+            <View
+                android:id="@+id/VHorizontalLine1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintTop_toBottomOf="@+id/btn_desactivar_roles"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/TVManagementOfAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Administra tu cuenta"
+                style="?attr/textAppearanceLabelMedium"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintTop_toBottomOf="@id/VHorizontalLine1"/>
+
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BMyAccount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Tu cuenta"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_account"
+                app:iconTint="@color/black"
+                app:iconSize="0dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/TVManagementOfAccount"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"
+                />
+
+            <View
+                android:id="@+id/VHorizontalLine2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintTop_toBottomOf="@+id/BMyAccount"
+                />
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/TVOtrasPlataformas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Otras Plataformas"
+                android:layout_marginTop="10dp"
+                style="?attr/textAppearanceLabelMedium"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintTop_toBottomOf="@id/VHorizontalLine2"/>
+
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BSacalaBici"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_marginTop="5dp"
+                android:text="Saca la Bici"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_world_internet"
+                app:iconTint="@color/black"
+                app:iconSize="0dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/TVOtrasPlataformas"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BRentaBici"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_marginTop="0dp"
+                android:text="Rentabici"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_world_internet"
+                app:iconTint="@color/black"
+                app:iconSize="0dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/BSacalaBici"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"/>
+
+
+
+            <View
+                android:id="@+id/VHorizontalLine"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintTop_toBottomOf="@+id/BRentaBici"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BLogOut"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Cerrar Sesión"
+                android:textAllCaps="false"
+                style="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/red"
+                android:backgroundTint="@android:color/transparent"
+                android:gravity="start|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/VHorizontalLine"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="85dp"
+                app:layout_constraintTop_toBottomOf="@id/BLogOut"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/vNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

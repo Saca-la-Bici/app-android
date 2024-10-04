@@ -65,8 +65,8 @@
     <!-- Botón de regreso -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/BBack"
-        android:layout_width="17.71dp"
-        android:layout_height="15.5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/back_button"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -78,15 +78,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/TMakeAccount"
-        android:textFontWeight="700"
         android:textSize="25sp"
+        android:fontFamily="@font/roboto_black"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <!-- Imagen de linea -->
     <View
         android:id="@+id/VHorizontalLine"
-        android:layout_width="90dp"
+        android:layout_width="45dp"
         android:layout_height="2dp"
         android:layout_marginTop="25dp"
         android:layout_marginStart="2dp"
@@ -112,8 +112,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TPassword"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TVTitle" />
 
@@ -122,6 +122,7 @@
         android:id="@+id/TILPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
         app:passwordToggleEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/TVPassword"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
@@ -130,12 +131,14 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
             android:padding="24dp"
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TPassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,8 +149,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/TVerifyPassword"
-        android:textFontWeight="700"
         android:textSize="11sp"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintTop_toBottomOf="@id/TILPassword" />
 
@@ -157,6 +160,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:passwordToggleEnabled="true"
+        android:fontFamily="@font/roboto_regular"
         app:layout_constraintTop_toBottomOf="@id/TVVerifyPassword"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
         app:layout_constraintEnd_toEndOf="@+id/VContainer">
@@ -164,25 +168,28 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_border"
             android:padding="24dp"
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:hint="@string/TVerifyPassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Botón de finalizar -->
+    <!-- Botón de continuar -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/BFinish"
+        android:id="@+id/BContinue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:text="@string/TFinish"
+        android:text="@string/TContinue"
         android:textAllCaps="false"
         android:textSize="14sp"
         android:layout_marginTop="50dp"
+        android:fontFamily="@font/roboto_black"
         app:cornerRadius="14dp"
         app:backgroundTint="@color/yellow"
         android:textColor="@color/black"

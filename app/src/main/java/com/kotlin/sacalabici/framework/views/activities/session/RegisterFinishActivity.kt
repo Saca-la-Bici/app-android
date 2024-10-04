@@ -20,6 +20,7 @@ import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserFinishBinding
 import com.kotlin.sacalabici.framework.viewmodel.session.RegisterFinishViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
 @Suppress("NAME_SHADOWING")

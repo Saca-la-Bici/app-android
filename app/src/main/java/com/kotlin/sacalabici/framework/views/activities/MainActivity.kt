@@ -19,9 +19,9 @@ import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import com.kotlin.sacalabici.framework.views.fragments.ActivitiesFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.AnnouncementsFragment
+import com.kotlin.sacalabici.framework.views.fragments.AnnouncementsFragment
 import com.kotlin.sacalabici.framework.views.fragments.MapFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
+import com.kotlin.sacalabici.framework.views.fragments.ProfileFragment
 import com.kotlin.sacalabici.utils.Constants
 class MainActivity: AppCompatActivity() {
     private lateinit var currentFragment: Fragment

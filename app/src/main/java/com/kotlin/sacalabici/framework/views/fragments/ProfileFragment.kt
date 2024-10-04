@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -13,7 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
+import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
+import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.adapters.ProfileAdapter
+import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileEditFragment
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 
 class ProfileFragment : Fragment() {

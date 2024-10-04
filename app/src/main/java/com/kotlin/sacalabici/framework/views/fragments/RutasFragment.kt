@@ -82,4 +82,3 @@ class RutasFragment : Fragment() {
         }
     }
 }
-

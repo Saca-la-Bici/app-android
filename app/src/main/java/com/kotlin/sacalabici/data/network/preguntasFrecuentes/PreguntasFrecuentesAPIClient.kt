@@ -1,13 +1,13 @@
 package com.kotlin.sacalabici.data.network.preguntasFrecuentes
 
 import android.util.Log
-import com.kotlin.sacalabici.data.models.preguntasFrecuentes.PreguntaFrecuente
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 
 class PreguntasFrecuentesAPIClient {
 
     private lateinit var api: PreguntasFrecuentesAPIService
 
-    suspend fun consultarPreguntasFrecuentesList(): List<PreguntaFrecuente>? {
+    suspend fun consultarPreguntasFrecuentesList(): List<FAQBase>? {
         return try {
             api.consultarPreguntasFrecuentes()
         } catch (e: Exception) {
@@ -16,7 +16,7 @@ class PreguntasFrecuentesAPIClient {
         }
     }
 
-    suspend fun registrarPreguntaFrecuente(preguntaFrecuente: PreguntaFrecuente):PreguntaFrecuente? {
+    suspend fun registrarPreguntaFrecuente(preguntaFrecuente: FAQBase):FAQBase? {
         return try {
             api.registrarPreguntaFrecuente(preguntaFrecuente)
         } catch (e: Exception) {
@@ -25,7 +25,7 @@ class PreguntasFrecuentesAPIClient {
         }
     }
 
-    suspend fun consultarPreguntaFrecuenteInd(IdPregunta:Int): PreguntaFrecuente{
+    suspend fun consultarPreguntaFrecuenteInd(IdPregunta:Int): FAQBase{
         return try{
             api.consultarPreguntaFrecuenteInd(IdPregunta)
         } catch(err: Exception){
@@ -33,7 +33,7 @@ class PreguntasFrecuentesAPIClient {
         }
     }
 
-    suspend fun modificarPreguntaFrecuente(IdPregunta: Int, Pregunta:String, Respuesta:String, Tema:String):PreguntaFrecuente?{
+    suspend fun modificarPreguntaFrecuente(IdPregunta: Int, Pregunta:String, Respuesta:String, Tema:String):FAQBase?{
         return try{
             api.modificarPreguntaFrecuente(IdPregunta,Pregunta,Respuesta,Tema)
         } catch(e : Exception){

@@ -1,37 +1,23 @@
 package com.kotlin.sacalabici.framework.views.activities
 
-import android.content.Context
-import android.content.Intent
+
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.preguntasFrecuentes.PreguntaFrecuente
-import com.kotlin.sacalabici.databinding.ActivityProfileEditBinding
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.ActivitySingleFaqBinding
-import com.kotlin.sacalabici.domain.preguntasFrecuentes.ReviewFaqRequirement
-import com.kotlin.sacalabici.framework.viewmodel.FaqViewModel
+import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 
 class ReviewSingleFaqActivity:AppCompatActivity() {
-    private lateinit var viewModel: FaqViewModel
+    private lateinit var viewModel: FAQViewModel
     private lateinit var binding: ActivitySingleFaqBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(FaqViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(FAQViewModel::class.java)
 
-        viewModel.preguntaObjectLiveData.observe(this){pregunta-> pregunta?.let{
+        viewModel.faqObjectLiveData.observe(this){pregunta-> pregunta?.let{
             setUpFaqLabel(it)
             }
         }
@@ -41,7 +27,7 @@ class ReviewSingleFaqActivity:AppCompatActivity() {
 
     }
 
-    private fun setUpFaqLabel(pregunta: PreguntaFrecuente){
+    private fun setUpFaqLabel(pregunta: FAQBase){
         val questionLabel = binding.preguntaTextView
         val answerLabel = binding.respuestaTextView
 

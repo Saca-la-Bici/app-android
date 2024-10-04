@@ -1,33 +1,56 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.data.models.preguntasFrecuentes.PreguntaFrecuente
-import com.kotlin.sacalabici.data.repositories.PreguntasFrecuentesRepository
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.FAQListRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.ReviewFaqRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FaqViewModel():ViewModel() {
+class FAQViewModel : ViewModel() {
+    val faqObjectLiveData = MutableLiveData<List<FAQBase>>()
+    private val faqListRequirement = FAQListRequirement()
+    // private val postFAQRequirement = PostFAQRequirement()
 
-    private val _preguntaObjectLiveData = MutableLiveData<PreguntaFrecuente>()
-    val preguntaObjectLiveData: MutableLiveData<PreguntaFrecuente> = _preguntaObjectLiveData
-    private val reviewFaqRequirement = ReviewFaqRequirement()
-
-    fun getPreguntaIndividual(IdPregunta:Int) {
+    fun getFAQList() {
         viewModelScope.launch(Dispatchers.IO) {
-            try{
-                Log.d("flow", "Entra ViewModel")
-                val result : PreguntaFrecuente = reviewFaqRequirement(IdPregunta)
-                Log.d("ayuda","result")
-                preguntaObjectLiveData.postValue(result)
-            } catch (err:Exception){
-                err.printStackTrace()
+            try {
+                val result: FAQObjectBase? = faqListRequirement()
+                val faqresult = result!!.faqs.reversed()
+                faqObjectLiveData.postValue(faqresult)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                faqObjectLiveData.postValue(emptyList())
             }
         }
     }
+
+    fun getFAQ(){
+        viewModelScope.launch(Dispatchers.IO){
+            try{
+                val result: FAQObjectBase? = ReviewFaqRequirement()
+                val faqresult = result!!.faqs.reversed()
+                faqObjectLiveData.postValue(faqresult)
+        } catch (err:Exception){
+            err.printStackTrace()
+                faqObjectLiveData.postValue(-1)
+        }
+        }
+    }
+
+    /*
+    fun postFAQ(FAQ: FAQ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                postFAQRequirement(FAQ)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+     */
 }

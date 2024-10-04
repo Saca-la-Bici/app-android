@@ -1,13 +1,15 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,6 +23,8 @@ class ActivitiesFragment: Fragment() {
     private val binding get() = _binding!!
     private val activitiesViewModel: ActivitiesViewModel by activityViewModels()
 
+    private lateinit var addActivityLauncher: ActivityResultLauncher<Intent>
+
     private val sharedPreferences by lazy {
         requireContext().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
     }
@@ -32,6 +36,16 @@ class ActivitiesFragment: Fragment() {
     ): View {
         _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
         binding.fabAddActivity.visibility = View.GONE
+
+        addActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Actualizar todas las actividades (eventos, rodadas, talleres)
+                activitiesViewModel.getEventos()
+                activitiesViewModel.getRodadas()
+                activitiesViewModel.getTalleres()
+            }
+        }
+
         return binding.root
     }
     
@@ -49,7 +63,6 @@ class ActivitiesFragment: Fragment() {
 
     private fun initializeComponents() {
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
-        Log.d("ActivitiesFragment", "Stored permissions: $storedPermissions")
         // Verificación de permiso para agregar actividad
         if (storedPermissions?.contains("Registrar actividad") == true) {
             binding.fabAddActivity.visibility = View.VISIBLE
@@ -95,19 +108,19 @@ class ActivitiesFragment: Fragment() {
                     val intent = Intent(requireContext(), AddActivityActivity::class.java)
                     intent.putExtra("type", "Rodada")
                     //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
+                    addActivityLauncher.launch(intent)
                 }
                 1 -> {
                     val intent = Intent(requireContext(), AddActivityActivity::class.java)
                     intent.putExtra("type", "Taller")
                     //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
+                    addActivityLauncher.launch(intent)
                 }
                 2 -> {
                     val intent = Intent(requireContext(), AddActivityActivity::class.java)
                     intent.putExtra("type", "Evento")
                     //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
+                    addActivityLauncher.launch(intent)
                 }
             }
         }

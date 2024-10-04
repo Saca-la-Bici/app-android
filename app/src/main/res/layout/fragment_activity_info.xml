@@ -86,141 +86,113 @@
             android:layout_marginEnd="28dp"
             android:layout_marginTop="4dp" />
 
-        <!-- Encapsulamiento de fecha, hora y duración -->
-        <LinearLayout
-            android:id="@+id/dateTimePickerLayout"
+        <!--    Título de fecha actividad-->
+        <TextView
+            android:id="@+id/tvAddActivityDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical"
+            android:text="@string/activity_date"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
+            app:layout_constraintTop_toBottomOf="@+id/etAddActivityTitle"
+            app:layout_constraintVertical_bias="0.04"
+            android:textSize="15sp"
+            />
+
+        <!-- Botón de fecha -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/BDate"
+            android:text="@string/activity_dateLabel"
+            app:backgroundTint="@color/semiWhite"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:padding="12dp"
+            app:strokeColor="#D9D9D9"
+            app:strokeWidth="1dp"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etAddActivityTitle">
+            app:layout_constraintTop_toBottomOf="@id/tvAddActivityDate"
+            app:layout_constraintWidth_percent="0.83"/>
 
-            <!--    Título de fecha actividad-->
-            <TextView
-                android:id="@+id/tvAddActivityDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_date"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
-                app:layout_constraintTop_toBottomOf="@+id/etAddAnnouncementTitle"
-                app:layout_constraintVertical_bias="0.04"
-                android:textSize="15sp"
-                />
+        <!--    Título de hora actividad-->
+        <TextView
+            android:id="@+id/tvAddActivityHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_hour"
+            app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
+            app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
+            app:layout_constraintTop_toBottomOf="@+id/BDate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintVertical_bias="0.1"
+            android:textSize="15sp" />
 
+        <!-- Botón de hora -->
+        <Spinner
+            android:id="@+id/hourSpinner"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/minutesSpinner"
+            app:layout_constraintTop_toBottomOf="@id/tvAddActivityHours"
+            android:entries="@array/hours" />
 
-            <!-- Botón de fecha -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/BDate"
-                android:text="@string/activity_dateLabel"
-                app:backgroundTint="@color/semiWhite"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:padding="12dp"
-                app:strokeColor="#D9D9D9"
-                app:strokeWidth="1dp"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAddActivityDate"
-                app:layout_constraintWidth_percent="0.83"/>
+        <!-- Botón de minutos -->
+        <Spinner
+            android:id="@+id/minutesSpinner"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="28dp"
+            app:layout_constraintStart_toEndOf="@id/hourSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAddActivityHours"
+            android:entries="@array/minutes" />
 
-            <!--    Título de hora actividad-->
-            <TextView
-                android:id="@+id/tvAddActivityHours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_hour"
-                app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
-                app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
-                app:layout_constraintTop_toBottomOf="@+id/BDate"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
-                app:layout_constraintVertical_bias="0.1"
-                android:textSize="15sp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent" />
+        <!--    Título de duración actividad-->
+        <TextView
+            android:id="@+id/tvAddActivityDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_duration"
+            app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
+            app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
+            app:layout_constraintTop_toBottomOf="@+id/hourSpinner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintVertical_bias="0.1"
+            android:textSize="15sp"/>
 
-            <!-- Hora -->
-            <LinearLayout
-                android:id="@+id/timePicker"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAddActivityHours">
+        <!-- Botón de hora de duración -->
+        <Spinner
+            android:id="@+id/hourSpinnerDur"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/minutesSpinnerDur"
+            app:layout_constraintTop_toBottomOf="@id/tvAddActivityDuration"
+            android:entries="@array/hours" />
 
-                <Spinner
-                    android:id="@+id/hourSpinner"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:entries="@array/hours" />
-
-                <Spinner
-                    android:id="@+id/minutesSpinner"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:entries="@array/minutes" />
-
-            </LinearLayout>
-
-            <!--    Título de duración actividad-->
-            <TextView
-                android:id="@+id/tvAddActivityDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_duration"
-                app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
-                app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
-                app:layout_constraintTop_toBottomOf="@+id/timePicker"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
-                app:layout_constraintVertical_bias="0.1"
-                android:textSize="15sp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Duración -->
-            <LinearLayout
-                android:id="@+id/durationPicker"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvAddActivityHours">
-
-                <Spinner
-                    android:id="@+id/hourSpinnerDur"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:entries="@array/hours" />
-
-                <Spinner
-                    android:id="@+id/minutesSpinnerDur"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:entries="@array/minutes" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <!-- Botón de minutos de duración-->
+        <Spinner
+            android:id="@+id/minutesSpinnerDur"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="28dp"
+            app:layout_constraintStart_toEndOf="@id/hourSpinnerDur"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAddActivityDuration"
+            android:entries="@array/minutes" />
 
         <!-- Input Dirección -->
 
@@ -235,7 +207,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.093"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dateTimePickerLayout"
+            app:layout_constraintTop_toBottomOf="@id/hourSpinnerDur"
             app:layout_constraintVertical_bias="0.04" />
 
         <EditText
@@ -280,6 +252,7 @@
             android:layout_height="wrap_content"
             android:text="@string/activity_desc"
             android:textSize="15sp"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
             app:layout_constraintHorizontal_bias="0"
@@ -304,6 +277,7 @@
             android:background="@drawable/edit_text_border"
             android:textAppearance="@style/HintStyle"
             android:inputType="textMultiLine"
+            android:gravity="top"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

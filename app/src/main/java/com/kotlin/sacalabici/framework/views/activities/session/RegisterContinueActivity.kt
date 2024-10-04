@@ -46,4 +46,5 @@ class RegisterContinueActivity : AppCompatActivity() {
         binding = ActivityRegisterUserContinueBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
 }

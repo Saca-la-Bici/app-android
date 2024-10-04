@@ -1,6 +1,5 @@
 package com.kotlin.sacalabici.data.repositories.activities
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
@@ -26,7 +25,6 @@ class ActivitiesRepository {
                 listRodadas.add(updatedActivity)
             }
         }
-        Log.d("ActivitiesRepository", "Rodadas filtradas: $listRodadas")
         return listRodadas
     }
 
@@ -40,7 +38,6 @@ class ActivitiesRepository {
                 listEventos.add(updatedActivity)
             }
         }
-        Log.d("ActivitiesRepository", "Eventos filtrados: $listEventos")
         return listEventos
     }
 
@@ -54,16 +51,11 @@ class ActivitiesRepository {
                 listTalleres.add(updatedActivity)
             }
         }
-        Log.d("ActivitiesRepository", "Talleres filtrados: $listTalleres")
         return listTalleres
     }
 
     suspend fun getActivityById(id: String): Activity? {
-        Log.d("ActivitiesRepository", "Obteniendo actividad con id: $id")
         val response = apiActivities.getActivityById(id)
-
-        // Log para ver la respuesta recibida del API
-        Log.d("ActivitiesRepository", "Respuesta del API: $response")
 
         val activity = response?.actividad?.information?.firstOrNull()
         val nivel = response?.actividad?.route?.nivel

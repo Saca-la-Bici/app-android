@@ -1,5 +1,6 @@
 @file:Suppress("DEPRECATION")
 package com.kotlin.sacalabici.framework.views.activities.session
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log

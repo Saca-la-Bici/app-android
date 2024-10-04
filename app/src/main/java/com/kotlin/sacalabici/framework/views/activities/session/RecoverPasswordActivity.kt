@@ -1,4 +1,5 @@
-package com.kotlin.sacalabici.framework.views.activities.Session
+package com.kotlin.sacalabici.framework.views.activities.session
+
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,7 +12,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
 import com.google.android.material.textfield.TextInputEditText
-import com.kotlin.sacalabici.framework.views.activities.session.LoginActivity
+
 class RecoverPasswordActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var delayTime = 2000L

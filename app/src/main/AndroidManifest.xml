@@ -47,7 +47,8 @@
         <activity
             android:name=".framework.views.activities.announcement.AddAnnouncementActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".framework.views.activities.announcement.ModifyAnnouncementActivity"
             android:exported="false"
@@ -61,7 +62,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".framework.views.activities.session.RegisterUserActivity"
+            android:name=".framework.views.activities.session.LoginFinishActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".framework.views.activities.session.RecoverPasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -69,9 +74,20 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".framework.views.activities.Session.RecoverPasswordActivity"
+            android:name=".framework.views.activities.session.RegisterFinishActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".framework.views.activities.session.RegisterUserActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".framework.views.activities.AddActivityActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:screenOrientation="portrait"/>
+
 
         <!-- Otras actividades relevantes -->
         <activity
@@ -84,22 +100,17 @@
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".framework.views.activities.session.RegisterFinishActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait"/>
-
-        <activity
-            android:name=".framework.views.activities.session.LoginFinishActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
-            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".framework.adapters.views.fragments.SettingsFragment"
             android:exported="false"
             android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+
+        <activity
+            android:name=".framework.views.activities.activities.DetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
     </application>
     <queries>
         <package android:name="com.facebook.katana" /> <!-- Facebook App -->

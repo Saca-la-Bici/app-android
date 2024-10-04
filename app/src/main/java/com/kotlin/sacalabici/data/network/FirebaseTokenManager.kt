@@ -7,8 +7,9 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-class FirebaseTokenManager(private val firebaseAuth: FirebaseAuth) {
-
+class FirebaseTokenManager(
+    private val firebaseAuth: FirebaseAuth,
+) {
     private val _token = MutableLiveData<String?>()
     val token: LiveData<String?> get() = _token
 
@@ -16,7 +17,7 @@ class FirebaseTokenManager(private val firebaseAuth: FirebaseAuth) {
         firebaseAuth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 _token.value = task.result?.token
-                Log.d("Token: ", _token.value.toString())
+                Log.d("token", _token.value.toString())
             } else {
                 Log.e("token", "Error al obtener el token", task.exception)
                 _token.value = null
@@ -24,8 +25,8 @@ class FirebaseTokenManager(private val firebaseAuth: FirebaseAuth) {
         }
     }
 
-    suspend fun getTokenSynchronously(): String? {
-        return suspendCancellableCoroutine { continuation ->
+    suspend fun getTokenSynchronously(): String? =
+        suspendCancellableCoroutine { continuation ->
             firebaseAuth.currentUser?.getIdToken(true)?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val token = task.result?.token
@@ -37,6 +38,4 @@ class FirebaseTokenManager(private val firebaseAuth: FirebaseAuth) {
                 }
             }
         }
-    }
 }
-

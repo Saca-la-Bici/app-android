@@ -15,8 +15,8 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
     suspend fun getUsuario(): ProfileBase? {
         val token = firebaseTokenManager.getTokenSynchronously()
         return if (token != null) {
+            Log.d("ProfileApiClient", "Token obtenido correctamente: $token")
             api = ProfileNetworkModuleDI(token)
-
             try {
                 // Llamada al API para obtener el usuario
                 api.getUsuario()

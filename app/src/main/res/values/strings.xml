@@ -79,6 +79,17 @@
         <item>AB+</item>
         <item>AB-</item>
     </string-array>
+    
+    <!--String para Descripción de botones-->
+    <string name="back_button_desc">Pestaña anterior</string>
+
+    <!-- strings de Consultar faqs -->
+    <string name="Ayuda">Ayuda</string>
+    <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
+    <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
+
+    <!-- Strings para preguntas frecuentes -->
+    <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
 
 </resources>
 

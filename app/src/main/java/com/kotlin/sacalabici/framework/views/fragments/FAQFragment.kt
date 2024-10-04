@@ -24,6 +24,7 @@ class FAQFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private val adapter: FAQAdapter = FAQAdapter()
     private lateinit var viewModel: FAQViewModel
+    private var permissions: List<String> = emptyList()
 
     private val binding get() = _binding!!
 

@@ -6,13 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.FAQListRequirement
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.PostFAQRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FAQViewModel : ViewModel() {
     val faqObjectLiveData = MutableLiveData<List<FAQBase>>()
+    val permissionsLiveData = MutableLiveData<List<String>>()
     private val faqListRequirement = FAQListRequirement()
-    // private val postFAQRequirement = PostFAQRequirement()
+    private val postFAQRequirement = PostFAQRequirement()
 
     fun getFAQList() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -20,6 +22,7 @@ class FAQViewModel : ViewModel() {
                 val result: FAQObjectBase? = faqListRequirement()
                 val faqresult = result!!.faqs.reversed()
                 faqObjectLiveData.postValue(faqresult)
+                permissionsLiveData.postValue(result.permissions)
             } catch (e: Exception) {
                 e.printStackTrace()
                 faqObjectLiveData.postValue(emptyList())
@@ -27,16 +30,13 @@ class FAQViewModel : ViewModel() {
         }
     }
 
-    /*
-    fun postFAQ(FAQ: FAQ) {
+    fun postFAQ(faq: FAQBase) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                postFAQRequirement(FAQ)
+                postFAQRequirement(faq)
             } catch (e: Exception) {
                 throw e
             }
         }
     }
-
-     */
 }

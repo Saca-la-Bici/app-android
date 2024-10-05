@@ -16,7 +16,9 @@
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/yellow"
             app:tabSelectedTextColor="@color/black"
-            app:tabTextColor="@color/darkGray"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.viewpager2.widget.ViewPager2

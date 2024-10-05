@@ -16,7 +16,7 @@ object ProfileNetworkModuleDI{
     }
     operator fun invoke(token: String?): ProfileApiService {
         return Retrofit.Builder()
-            .baseUrl(Constants.PROFILE_BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(createOkHttpClient(token))
             .addConverterFactory(gsonFactory)
             .build()

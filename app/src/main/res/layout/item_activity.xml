@@ -27,12 +27,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/add_activity_title"
-                android:textSize="14sp"
-                android:textStyle="bold"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_bold"
                 android:textColor="@color/black"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toStartOf="@id/tvPeopleEnrolled"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
@@ -41,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_participants"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:textColor="@color/black"
                 android:drawableStart="@drawable/ic_inscritos"
                 android:drawablePadding="8dp"
@@ -55,7 +56,7 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/activity_date_list"
                 android:textColor="@color/darkGray"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:layout_marginStart="8dp"
                 app:layout_constraintTop_toBottomOf="@id/tvActivityTitle"
                 app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +64,7 @@
                 app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
             <TextView
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/tvActivityLevel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,7 +76,7 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/activity_level_list"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@id/tvPeopleEnrolled"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -86,7 +87,7 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/activity_time_list"
                 android:textColor="@color/darkGray"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:layout_marginStart="8dp"
                 app:layout_constraintTop_toBottomOf="@id/tvActivityDate"
                 app:layout_constraintStart_toStartOf="parent"
@@ -99,21 +100,9 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/activity_duration_list"
                 android:textColor="@color/darkGray"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:layout_marginStart="8dp"
                 app:layout_constraintTop_toBottomOf="@id/tvActivityTime"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <ImageView
-                android:visibility="visible"
-                android:id="@+id/ivActivityImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/image_empty"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="4dp"
-                app:layout_constraintTop_toBottomOf="@id/tvActivityDuration"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -125,27 +114,41 @@
                 android:layout_marginTop="4dp"
                 android:text="@string/activity_location_list"
                 android:textColor="@color/darkGray"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivActivityImage" />
+                app:layout_constraintTop_toBottomOf="@id/tvActivityDuration" />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:visibility="gone"
+                android:id="@+id/ivActivityImage"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:src="@drawable/image_empty"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tvActivityLocation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:shapeAppearanceOverlay="@style/RoundedImageLess"/>
 
             <TextView
                 android:id="@+id/tvActivityDetails"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:text="@string/activity_details"
-                android:textColor="@color/darkGray"
-                android:textSize="13sp"
+                android:textColor="@color/darkGreen"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvActivityLocation" />
+                app:layout_constraintTop_toBottomOf="@id/ivActivityImage" />
 
             <LinearLayout
                 android:id="@+id/divider"
@@ -157,20 +160,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvActivityDetails" />
-
-            <Button
-                android:visibility="visible"
-                android:id="@+id/btnJoin"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/yellow"
-                android:layout_marginTop="4dp"
-                android:text="@string/activity_join"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvActivityDetails" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -109,18 +109,19 @@ class ProfileEditFragment: Fragment() {
 
     private fun setupUploadButton() {
         binding.btnSave.setOnClickListener {
-//            val emptystring = ""
-//            val id = intent.getStringExtra("id") ?: emptystring
             val name = binding.name.text.toString()
             val username = binding.username.text.toString()
 //            val gender = binding.genderDropDown.text.toString()
             val blood = binding.bloodDropDown.text.toString()
             val emergencyNum = binding.emergencyNumber.text.toString()
-
             val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, "")
+
             viewModel.patchProfile(profile)
-//            getActivity().setResult(Activity.RESULT_OK)
-//            finish()
+            val profileFragment = ProfileFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, profileFragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 

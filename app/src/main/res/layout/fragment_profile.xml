@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <!-- Guias -->
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline"
         android:layout_width="wrap_content"
@@ -19,6 +20,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.9" />
+
+    <!-- Contenedor superior-->
+
+    <LinearLayout
+        android:id="@+id/AllContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/tabProfile"/>
 
     <!-- Contenedor principal -->
     <View
@@ -47,17 +59,6 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="@id/toolbar"
-        app:layout_constraintTop_toTopOf="@id/toolbar" />
-
-    <ImageButton
-        android:id="@+id/btn_notifications"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:src="@drawable/notifications"
-        android:layout_marginRight="30dp"
-        app:layout_constraintBottom_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toStartOf="@id/btnSettings"
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
     <ImageButton
@@ -241,16 +242,24 @@
         app:strokeColor="#D9D9D9"
         app:strokeWidth="1dp" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAgregarAmigos"
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
         android:src="@drawable/ic_add_friend"
-        android:background="@drawable/rounded_button"
+        app:icon="@drawable/ic_add_friend"
+        app:iconGravity="textStart"
+        app:iconTint="@color/black"
+        app:iconSize="28dp"
+        app:iconPadding="0dp"
+        app:backgroundTint="@color/white"
         app:layout_constraintStart_toEndOf="@id/btnEditProfile"
         app:layout_constraintTop_toTopOf="@id/profile_options"
-        app:layout_constraintBottom_toBottomOf="@id/profile_options"/>
+        app:layout_constraintBottom_toBottomOf="@id/profile_options"
+        app:strokeColor="#D9D9D9"
+        app:strokeWidth="1dp"/>
+
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabProfile"
@@ -259,6 +268,7 @@
         app:tabIndicatorColor="@color/yellow"
         app:tabSelectedTextColor="#00FFFFFF"
         app:tabTextColor="#00FFFFFF"
+        app:tabBackground="@color/white"
         app:layout_constraintTop_toBottomOf="@id/profile_options"
         app:layout_constraintStart_toStartOf="@id/parent"
         app:layout_constraintEnd_toEndOf="@id/parent"/>
@@ -267,6 +277,7 @@
         android:id="@+id/vIcons"
         android:layout_width="0dp"
         android:layout_height="25dp"
+        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/profile_options"
         app:layout_constraintStart_toStartOf="@id/parent"
         app:layout_constraintEnd_toEndOf="@id/parent" />

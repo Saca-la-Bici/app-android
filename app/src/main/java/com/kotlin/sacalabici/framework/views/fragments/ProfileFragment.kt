@@ -21,7 +21,6 @@ import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
 import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.adapters.ProfileAdapter
-import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileEditFragment
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 
 class ProfileFragment : Fragment() {

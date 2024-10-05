@@ -3,6 +3,9 @@ package com.kotlin.sacalabici.data.network.profile
 import android.util.Log
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
+import com.kotlin.sacalabici.data.models.profile.Profile
+import com.kotlin.sacalabici.data.network.announcements.AnnouncementNetworkModuleDI
+import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 
 class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
 
@@ -24,6 +27,17 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         } else {
             // Si no se pudo obtener el token, retornar null o manejar el error de alguna otra forma
             println("Error: No se pudo obtener el token de Firebase.")
+            null
+        }
+    }
+
+    suspend fun patchProfile(profile: Profile): Profile?{
+        val token = firebaseTokenManager.getTokenSynchronously()
+        api = ProfileNetworkModuleDI(token)
+        return try {
+            api.patchProfile(profile)
+        } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }

@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
+import com.kotlin.sacalabici.data.models.profile.Profile
 import com.kotlin.sacalabici.domain.GetProfileRequirement
+import com.kotlin.sacalabici.domain.profile.PatchProfileRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -13,6 +15,7 @@ class ProfileViewModel : ViewModel() {
     val profileObjectLiveData: MutableLiveData<ProfileBase?> = _profileObjectLiveData
 
     private val getProfileRequirement = GetProfileRequirement()
+    private val patchProfileRequirement = PatchProfileRequirement()
 
     fun getProfile(): MutableLiveData<ProfileBase?> {
         viewModelScope.launch(Dispatchers.IO) {
@@ -51,4 +54,15 @@ class ProfileViewModel : ViewModel() {
             )
         )
     }
+
+    fun patchProfile(profile: Profile) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                patchProfileRequirement(profile)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
 }

@@ -47,6 +47,8 @@ class ActivitiesViewHolder(
                 "Nivel 1" -> ContextCompat.getColor(context,R.color.level1)
                 "Nivel 2" -> ContextCompat.getColor(context,R.color.level2)
                 "Nivel 3" -> ContextCompat.getColor(context,R.color.level3)
+                "Nivel 4" -> ContextCompat.getColor(context,R.color.level4)
+                "Nivel 5" -> ContextCompat.getColor(context,R.color.level5)
                 else -> ContextCompat.getColor(context, R.color.gray)
             }
             val background = binding.tvActivityLevel.background as GradientDrawable

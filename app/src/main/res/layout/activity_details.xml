@@ -75,7 +75,7 @@
         android:textSize="18sp"
         android:textColor="@color/darkGray"
         android:paddingTop="4dp"
-        android:paddingBottom="8dp"
+        android:paddingBottom="6dp"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintTop_toBottomOf="@id/topRow"
         app:layout_constraintStart_toStartOf="parent"/>

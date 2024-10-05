@@ -5,10 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.activities.ModifyRouteActivity
 
 class RutasAdapter(
@@ -17,6 +20,7 @@ class RutasAdapter(
 ) : RecyclerView.Adapter<RutasAdapter.RutasViewHolder>() {
 
     private var selectedRuta: RouteBase? = null
+    private lateinit var viewModelRoute: MapViewModel
 
     class RutasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tituloTextView: TextView = itemView.findViewById(R.id.TVTitulo)
@@ -31,6 +35,7 @@ class RutasAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RutasViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_ruta, parent, false)
+        viewModelRoute = ViewModelProvider(parent.context as FragmentActivity).get(MapViewModel::class.java)
         return RutasViewHolder(view)
     }
 
@@ -73,6 +78,8 @@ class RutasAdapter(
             Log.d("Ruta Seleccionada", ruta.coordenadas.toString())
 
             onRutaSelected(ruta)
+            viewModelRoute.selectRuta(ruta)
+            viewModelRoute.lastSelectedRuta = ruta
         }
 
         // Manejar clic en el botón de modificar

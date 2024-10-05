@@ -6,45 +6,83 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.databinding.FragmentGlobalBinding
 
 class GlobalFragment : Fragment() {
 
+    private var _binding: FragmentGlobalBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var viewModel: ProfileViewModel
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflar el layout del fragmento
-        return inflater.inflate(R.layout.fragment_global, container, false)
+        // Inicializar el binding
+        _binding = FragmentGlobalBinding.inflate(inflater, container, false)
+
+        // Inicializar el ViewModel
+        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+
+        // Retornar la vista raíz desde el binding
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Datos máximos
-        val maxAgua = 20
-        val maxGasolina = 50
-        val maxElectricidad = 200
+        // Observar el perfil y actualizar los valores cuando cambien
+        viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
+            if (profile != null) {
+                // Obtener los kilómetros recorridos del perfil
+                val kilometers = profile.KmCompleted
 
-        // Valores actuales de ahorro
-        val ahorroAgua = 12
-        val ahorroGasolina = 25
-        val ahorroElectricidad = 150
+                // Datos máximos
+                val maxWater = 80
+                val maxCO2 = 30
+                val maxAir = 5
+                val maxGas = 30
 
-        // Cálculo de porcentajes
-        val porcentajeAgua = (ahorroAgua.toFloat() / maxAgua) * 100
-        val porcentajeGasolina = (ahorroGasolina.toFloat() / maxGasolina) * 100
-        val porcentajeElectricidad = (ahorroElectricidad.toFloat() / maxElectricidad) * 100
+                // Valores de referencia
+                val versaGasConsume = 9 // km por litro
+                val emissionCO2 = 2.31 // kg de CO2 por litro de gasolina
+                val NOx = 0.05
 
-        // Asignar las barras de progreso y textos
-        val progressAgua = view.findViewById<LinearProgressIndicator>(R.id.progressAgua)
-        val textAgua = view.findViewById<TextView>(R.id.textAgua)
+                // Valores actuales de ahorro
+                val water = (kilometers / versaGasConsume) * 3
+                val co2 = (kilometers / versaGasConsume) * emissionCO2
+                val air = kilometers * NOx
+                val gas = kilometers / versaGasConsume
 
-        // Configuración de los valores para el progreso y texto
-        progressAgua.progress = porcentajeAgua.toInt()
-        textAgua.text = "$ahorroAgua L de $maxAgua L"
+                // Cálculo de porcentajes
+                val percentageWater = (water.toFloat() / maxWater) * 100
+                val percentageCO2 = (co2.toFloat() / maxCO2) * 100
+                val percentageAir = (air.toFloat() / maxAir) * 100
+                val percentageGas = (gas.toFloat() / maxGas) * 100
 
+                // Configuración de los valores para el progreso y texto
+                binding.progressAgua.progress = percentageWater.toInt()
+                binding.textResultWater.text = "$water L"
 
+                binding.progressCO2.progress = percentageCO2.toInt()
+                binding.textResultCO2.text = String.format("%.2f kg", co2)
+
+                binding.progressAir.progress = percentageAir.toInt()
+                binding.textResultAir.text = String.format("%.2f kg", air)
+
+                binding.progressGas.progress = percentageGas.toInt()
+                binding.textResultGas.text = "$gas L"
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

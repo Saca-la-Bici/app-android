@@ -73,7 +73,7 @@ class GlobalFragment : Fragment() {
                 binding.textResultCO2.text = String.format("%.2f kg", co2)
 
                 binding.progressAir.progress = percentageAir.toInt()
-                binding.textResultAir.text = String.format("%.2f kg", air)
+                binding.textResultAir.text = String.format("%.2f g", air)
 
                 binding.progressGas.progress = percentageGas.toInt()
                 binding.textResultGas.text = "$gas L"

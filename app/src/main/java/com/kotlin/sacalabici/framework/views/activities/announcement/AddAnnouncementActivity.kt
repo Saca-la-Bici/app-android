@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +41,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
                 val image = selectedImageUri
                 val annnouncement = Announcement(title, description, image)
                 viewModel.postAnnouncement(annnouncement, this)
+                Toast.makeText(this, "Anuncio registrado exitosamente", Toast.LENGTH_SHORT).show()
                 setResult(Activity.RESULT_OK)
                 finish()
             }

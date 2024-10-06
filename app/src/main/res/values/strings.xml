@@ -91,5 +91,16 @@
     <!-- Strings para preguntas frecuentes -->
     <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
 
+    <!-- Strings para Agregar ruta -->
+    <string name="TituloRuta">Título</string>
+    <string name="TiempoRuta">Tiempo (ej. 4h)</string>
+    <string name="PuntoInicioRuta">Punto de Inicio</string>
+    <string name="PuntoDescansoRuta">Punto de Descanso</string>
+    <string name="PuntoFinRuta">Punto de Fin</string>
+    <string name="DistanciaRuta">Distancia (Se calcula automáticamente)</string>
+    <string name="NivelRuta">Selecciona el nivel</string>
+    <string name="Siguiente">Siguiente</string>
+    <string name="RegistrarRuta">Registrar Ruta</string>
+
 </resources>
 

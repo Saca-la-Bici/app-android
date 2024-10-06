@@ -3,7 +3,6 @@ package com.kotlin.sacalabici.framework.views.fragments
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,15 +15,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
-import com.kotlin.sacalabici.framework.adapters.views.fragments.EventFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.GlobalFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.MedalsFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.adapters.ProfileAdapter
+import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 
 class ProfileFragment : Fragment() {
-
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
@@ -44,12 +39,13 @@ class ProfileFragment : Fragment() {
 
         // Configura el TabLayout con ViewPager2
         TabLayoutMediator(binding.tabProfile, binding.vFragment) { tab, position ->
-            tab.text = when (position) {
-                0 -> "____________"
-                1 -> "____________"
-                2 -> "____________"
-                else -> null
-            }
+            tab.text =
+                when (position) {
+                    0 -> "____________"
+                    1 -> "____________"
+                    2 -> "____________"
+                    else -> null
+                }
         }.attach()
 
         // Configura el botón de edición
@@ -57,19 +53,23 @@ class ProfileFragment : Fragment() {
         setupSettingsButton()
 
         // Inicializa el launcher para recibir el resultado de la edición de perfil
-        editProfileLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                // Actualiza los datos del perfil al regresar de ProfileEditActivity
-                viewModel.getProfile()
+        editProfileLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    // Actualiza los datos del perfil al regresar de ProfileEditActivity
+                    viewModel.getProfile()
+                }
             }
-        }
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         // Observa los cambios en el perfil y actualiza la interfaz
@@ -96,7 +96,7 @@ class ProfileFragment : Fragment() {
                     // Si la URL es nula o vacía, usar la imagen por defecto
                     binding.profileImage.setImageResource(R.drawable.baseline_person_24)
                 }
-                Log.d("imagen", profileImageUrl)
+                // Log.d("imagen", profileImageUrl)
             }
         }
     }
@@ -105,7 +105,8 @@ class ProfileFragment : Fragment() {
     private fun setupEditButton() {
         binding.btnEditProfile.setOnClickListener {
             val profileEditFragment = ProfileEditFragment()
-            parentFragmentManager.beginTransaction()
+            parentFragmentManager
+                .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, profileEditFragment)
                 .addToBackStack(null)
                 .commit()
@@ -116,7 +117,8 @@ class ProfileFragment : Fragment() {
         val btnSettings = binding.btnSettings
         btnSettings.setOnClickListener {
             val settingsFragment = SettingsFragment()
-            parentFragmentManager.beginTransaction()
+            parentFragmentManager
+                .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, settingsFragment)
                 .addToBackStack(null)
                 .commit()

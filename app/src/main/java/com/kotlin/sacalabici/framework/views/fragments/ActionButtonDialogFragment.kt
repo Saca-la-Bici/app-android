@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -103,6 +104,7 @@ class ActionButtonDialogFragment : DialogFragment() {
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(500)
                     alertDialog.dismiss()
+                    Toast.makeText(requireContext(), "Anuncio eliminado exitosamente", Toast.LENGTH_SHORT).show()
                     setFragmentResult("actionButtonDialogResult", Bundle().apply {
                         putInt("resultCode", RESULT_OK)
                     })

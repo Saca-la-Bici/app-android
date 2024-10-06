@@ -29,5 +29,5 @@ class GetActivityByIdRequirement {
 
 class PostLocationRequirement {
     private val repository = ActivitiesRepository()
-    suspend operator fun invoke(location: Location): Boolean = repository.postLocation(location)
+    suspend operator fun invoke(id: String, location: Location): Boolean = repository.postLocation(id, location)
 }

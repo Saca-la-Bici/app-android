@@ -78,7 +78,7 @@ class ActivitiesRepository {
         return permissionsObject?.permisos ?: emptyList()
     }
 
-    suspend fun postLocation(location: Location): Boolean {
-        return apiActivities.postLocation(location)
+    suspend fun postLocation(id: String, location: Location): Boolean {
+        return apiActivities.postLocation(id,location)
     }
 }

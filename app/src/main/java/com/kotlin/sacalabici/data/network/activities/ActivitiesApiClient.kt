@@ -94,12 +94,12 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         }
     }
 
-    suspend fun postLocation(location: Location): Boolean {
+    suspend fun postLocation(id: String, location: Location): Boolean {
         val token = firebaseTokenManager.getTokenSynchronously()
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                val response = api.postLocation(location)
+                val response = api.postLocation(id,location)
                 response.isSuccessful
             } catch (e: Exception) {
                 e.printStackTrace()

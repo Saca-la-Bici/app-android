@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:text="Agrega una ruta"
+            android:text="@string/agRutaTit"
             android:textSize="15sp"
             android:fontFamily="@font/roboto_bold"
             android:textColor="#000000"

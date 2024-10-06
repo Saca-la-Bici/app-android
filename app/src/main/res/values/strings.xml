@@ -101,6 +101,20 @@
     <string name="NivelRuta">Selecciona el nivel</string>
     <string name="Siguiente">Siguiente</string>
     <string name="RegistrarRuta">Registrar Ruta</string>
+    <string name="agRutaTit">Agrega una ruta</string>
+    <string name="ModRutaTit">Modifica una ruta</string>
+    <string name="TituloMod">Título</string>
+    <string name="DistanciaMod">Distancia (Se calcula automáticamente)</string>
+    <string name="PuntoInicioMod">Punto de Inicio</string>
+    <string name="PuntoDescansoMod">Punto de Descanso</string>
+    <string name="PuntoFinMod">Punto de Fin</string>
+    <string name="TiempoMod">Tiempo (ej. 4h)</string>
+    <string name="NivelMod">Selecciona el nivel</string>
+    <string name="SiguienteMod">Siguiente</string>
+    <string name="ModRutaBtn">Modificar Ruta</string>
+
+    <!-- Strings para Modificar ruta -->
+
 
 </resources>
 

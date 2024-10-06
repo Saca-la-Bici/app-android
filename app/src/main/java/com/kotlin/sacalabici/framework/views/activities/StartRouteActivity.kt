@@ -20,6 +20,7 @@ import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.repositories.activities.ActivitiesRepository
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
@@ -43,6 +44,7 @@ class StartRouteActivity : AppCompatActivity() {
 
     private lateinit var mapView: MapView
     private lateinit var pointAnnotationManager: PointAnnotationManager
+    private lateinit var postLocationRequirement: ActivitiesRepository
 
 
     private var isTrackingLocation = false

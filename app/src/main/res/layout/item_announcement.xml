@@ -23,21 +23,22 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivAnnouncement"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:src="@drawable/image_empty"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:shapeAppearanceOverlay="@style/RoundedImageLess"/>
 
             <TextView
                 android:id="@+id/tvAnnouncementTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/AnnouncementTitle"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:textStyle="bold"
                 android:paddingTop="8dp"
@@ -48,7 +49,7 @@
                 android:id="@+id/tvAnnouncementContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textColor="#333333"
                 android:text="@string/AnnouncementDescription"
                 android:paddingTop="5dp"

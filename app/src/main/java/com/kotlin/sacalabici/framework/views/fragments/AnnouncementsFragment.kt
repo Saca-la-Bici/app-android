@@ -36,9 +36,6 @@ class AnnouncementsFragment: Fragment() {
         longClickListener = { announcement: AnnouncementBase ->
             showDialog(announcement)
             true
-        },
-        clickListener = { announcement: AnnouncementBase ->
-            passToModifyActivity(requireContext(), announcement)
         }
     )
     private lateinit var viewModel: AnnouncementsViewModel

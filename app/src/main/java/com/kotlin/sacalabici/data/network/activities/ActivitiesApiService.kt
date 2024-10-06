@@ -2,11 +2,15 @@ package com.kotlin.sacalabici.data.network.activities
 
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
+import com.kotlin.sacalabici.data.models.activities.Location
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ActivitiesApiService {
@@ -24,4 +28,9 @@ interface ActivitiesApiService {
 
     @GET("getPermissions")
     suspend fun getPermissions(): PermissionsObject
+
+    @POST("rodadas/iniciarRodada")
+    suspend fun postLocation(
+        @Body location: Location  // Usa la clase Location definida en tu modelo
+    ): Response<Void>
 }

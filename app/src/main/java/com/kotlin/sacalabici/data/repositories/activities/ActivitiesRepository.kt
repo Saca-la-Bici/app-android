@@ -6,6 +6,7 @@ import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.models.activities.EventosBase
+import com.kotlin.sacalabici.data.models.activities.Location
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 
@@ -75,5 +76,9 @@ class ActivitiesRepository {
     suspend fun getPermissions(): List<String> {
         val permissionsObject = apiActivities.getPermissions()
         return permissionsObject?.permisos ?: emptyList()
+    }
+
+    suspend fun postLocation(location: Location): Boolean {
+        return apiActivities.postLocation(location)
     }
 }

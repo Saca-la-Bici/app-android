@@ -44,6 +44,7 @@ class StartRouteActivity : AppCompatActivity() {
     private lateinit var mapView: MapView
     private lateinit var pointAnnotationManager: PointAnnotationManager
 
+
     private var isTrackingLocation = false
     private var locationTrackingJob: Job? = null
 

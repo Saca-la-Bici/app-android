@@ -58,10 +58,10 @@ class AnnouncementsViewModel: ViewModel() {
         }
     }
 
-    fun patchAnnouncement(id: String, announcement: Announcement) {
+    fun patchAnnouncement(id: String, announcement: Announcement, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                patchAnnouncementRequirement(id, announcement)
+                patchAnnouncementRequirement(id, announcement, context)
             } catch (e: Exception) {
                 throw e
             }

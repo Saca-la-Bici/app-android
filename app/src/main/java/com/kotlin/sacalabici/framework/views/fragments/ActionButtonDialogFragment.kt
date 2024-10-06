@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -81,39 +82,8 @@ class ActionButtonDialogFragment : DialogFragment() {
         }
 
         tvDelete.setOnClickListener {
-            // Inflate the custom layout
-            val inflater = LayoutInflater.from(requireContext())
-            val dialogView = inflater.inflate(R.layout.item_delete_message, null)
-
-            // Create the AlertDialog
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setView(dialogView)
-
-            val alertDialog = builder.create()
-
-            // Set the background of the AlertDialog to be transparent
-            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-            // Set click listeners for the buttons in the custom layout
-            dialogView.findViewById<Button>(R.id.btn_cancel).setOnClickListener {
-                alertDialog.dismiss()
-            }
-
-            dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
-                viewModel.deleteAnnouncement(announcement.id)
-                viewLifecycleOwner.lifecycleScope.launch {
-                    delay(500)
-                    alertDialog.dismiss()
-                    Toast.makeText(requireContext(), "Anuncio eliminado exitosamente", Toast.LENGTH_SHORT).show()
-                    setFragmentResult("actionButtonDialogResult", Bundle().apply {
-                        putInt("resultCode", RESULT_OK)
-                    })
-                    dismiss()
-                }
-            }
-            alertDialog.show()
+            showDeleteConfirmationDialog()
         }
-
         tvModify.setOnClickListener {
             val intent = Intent(requireContext(), ModifyAnnouncementActivity::class.java).apply {
                 putExtra("id", announcement.id)
@@ -123,6 +93,48 @@ class ActionButtonDialogFragment : DialogFragment() {
             }
             startActivity(intent)
             dismiss()
+        }
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.item_delete_message, null)
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(dialogView)
+
+        val alertDialog = builder.create()
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogView.findViewById<Button>(R.id.btn_cancel).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
+            alertDialog.dismiss()
+            deleteAnnouncement()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun deleteAnnouncement() {
+
+        viewModel.deleteAnnouncement(announcement.id) { result ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                result.fold(
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "Anuncio eliminado exitosamente", Toast.LENGTH_SHORT).show()
+                        setFragmentResult("actionButtonDialogResult", Bundle().apply {
+                            putInt("resultCode", RESULT_OK)
+                        })
+                        dismiss()
+                    },
+                    onFailure = { error ->
+                        Toast.makeText(requireContext(), "Error al eliminar el anuncio: ${error.message}", Toast.LENGTH_LONG).show()
+                    }
+                )
+            }
         }
     }
 

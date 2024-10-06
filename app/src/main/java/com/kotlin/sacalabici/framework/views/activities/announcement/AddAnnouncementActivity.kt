@@ -34,18 +34,36 @@ class AddAnnouncementActivity: AppCompatActivity() {
             finish()
         }
         binding.ibCheck.setOnClickListener {
-            val title = binding.etAddAnnouncementTitle.text.toString()
-            val description = binding.etAddAnnouncementDescription.text.toString()
-            val image = selectedImageUri
-            val annnouncement = Announcement(title, description, image)
-            viewModel.postAnnouncement(annnouncement, this)
-            setResult(Activity.RESULT_OK)
-            finish()
+            if(validateFields()){
+                val title = binding.etAddAnnouncementTitle.text.toString()
+                val description = binding.etAddAnnouncementDescription.text.toString()
+                val image = selectedImageUri
+                val annnouncement = Announcement(title, description, image)
+                viewModel.postAnnouncement(annnouncement, this)
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
         }
         binding.ibAddImage.setOnClickListener { // Llamar al botón que abre la galería de imágenes
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
         }
+    }
+
+    private fun validateFields(): Boolean {
+        if (binding.etAddAnnouncementTitle.text.isNullOrEmpty()) {
+            binding.etAddAnnouncementTitle.error = "El título no puede estar vacío"
+            return false
+        } else {
+            binding.etAddAnnouncementTitle.error = null
+        }
+        if (binding.etAddAnnouncementDescription.text.isNullOrEmpty()) {
+            binding.etAddAnnouncementDescription.error = "La descripción no puede estar vacía"
+            return false
+        } else {
+            binding.etAddAnnouncementDescription.error = null
+        }
+        return true
     }
 
     private fun initializeBinding() {

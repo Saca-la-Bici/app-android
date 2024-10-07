@@ -115,14 +115,6 @@ class ProfileEditFragment: Fragment() {
         val bloodTypes = resources.getStringArray(R.array.bloodTypes)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, bloodTypes)
         bloodDropdownConfig.setAdapter(arrayAdapter)
-
-//        val defaultValue = "A-"
-//        bloodDropdownConfig.setText(defaultValue, false)
-
-//        val index = arrayAdapter.getPosition(defaultValue)
-//        if (index >= 0) {
-////            bloodDropdownConfig.setSelection(index)
-//        }
     }
 
 

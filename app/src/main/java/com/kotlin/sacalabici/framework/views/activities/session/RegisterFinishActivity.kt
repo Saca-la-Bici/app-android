@@ -33,6 +33,7 @@ class RegisterFinishActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
+        setupBloodDropdown()
         val email = intent.getStringExtra("email")
         val username = intent.getStringExtra("username")
         val name = intent.getStringExtra("name")
@@ -43,12 +44,6 @@ class RegisterFinishActivity : AppCompatActivity() {
         countryCodePicker = findViewById(R.id.ccp)
         countryCodePicker.setCountryForNameCode("MX")
         phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
-        // Opciones de tipo de sangre
-        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
-        // Configurar el adaptador para el AutoCompleteTextView
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, bloodTypes)
-        val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
-        autoCompleteTextView.setAdapter(adapter)
         // Initialize ViewModel
         registerFinishViewModel.initialize(FirebaseAuth.getInstance())
         // Observe registration state
@@ -93,7 +88,7 @@ class RegisterFinishActivity : AppCompatActivity() {
         }
         binding.BFinish.setOnClickListener {
             val birthdate = binding.BDate.text.toString()
-            val bloodType = binding.autoCompleteTextView.text.toString()
+            val bloodType = binding.bloodDropDown.text.toString()
             val phoneNumber = phoneNumberEditText.text.toString()
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.BFinish.isEnabled = true
@@ -107,7 +102,7 @@ class RegisterFinishActivity : AppCompatActivity() {
                     Toast.makeText(this@RegisterFinishActivity, errorMessage, Toast.LENGTH_SHORT).show()
                     when {
                         errorMessage.contains("tipo de sangre") -> {
-                            binding.autoCompleteTextView.error = errorMessage
+                            binding.bloodDropDown.error = errorMessage
                         }
                         errorMessage.contains("número de teléfono") -> {
                             phoneNumberEditText.error = errorMessage
@@ -127,10 +122,19 @@ class RegisterFinishActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun setupBloodDropdown() {
+        val bloodDropdownConfig = binding.bloodDropDown
+        val bloodTypes = resources.getStringArray(R.array.bloodTypes)
+        val arrayAdapter = ArrayAdapter(this, R.layout.drop_down_item, bloodTypes)
+        bloodDropdownConfig.setAdapter(arrayAdapter)
+    }
+
     private fun initializeBinding() {
         binding = ActivityRegisterUserFinishBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)

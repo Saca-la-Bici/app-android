@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.kotlin.sacalabici.R
@@ -21,6 +23,7 @@ import com.kotlin.sacalabici.data.models.profile.Profile
 import com.kotlin.sacalabici.databinding.FragmentProfileEditBinding
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import java.io.File
+import kotlinx.coroutines.*
 
 
 class ProfileEditFragment: Fragment() {
@@ -134,26 +137,29 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
-
     private fun setupUploadButton() {
         val saveButton = binding.btnSave
         saveButton.setOnClickListener {
             val image = selectedImageUri
             val name = binding.name.text.toString()
             val username = binding.username.text.toString()
-//            val gender = binding.genderDropDown.text.toString()
             val blood = binding.bloodDropDown.text.toString()
             val emergencyNum = binding.emergencyNumber.text.toString()
             val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, image)
             val context: Context = requireContext()
 
-            viewModel.patchProfile(profile, context)
-//            this.context?.let { it1 -> viewModel.patchProfile(profile, it1) }
-            val profileFragment = ProfileFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, profileFragment)
-                .addToBackStack(null)
-                .commit()
+            lifecycleScope.launch {
+                val success = viewModel.patchProfile(profile, context)
+                if (success) {
+                    val profileFragment = ProfileFragment()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment_content_main, profileFragment)
+                        .addToBackStack(null)
+                        .commit()
+                } else {
+                    Toast.makeText(context, "Error al actualizar el perfil", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

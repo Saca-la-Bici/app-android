@@ -1,7 +1,7 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +20,7 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.profile.Profile
 import com.kotlin.sacalabici.databinding.FragmentProfileEditBinding
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
+import java.io.File
 
 
 class ProfileEditFragment: Fragment() {
@@ -90,6 +91,7 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
+
     private fun setupGenderDropdown() {
         val genderDropdownConfig = binding.genderDropDown
         val genders = resources.getStringArray(R.array.genders)
@@ -132,6 +134,7 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
+
     private fun setupUploadButton() {
         val saveButton = binding.btnSave
         saveButton.setOnClickListener {
@@ -141,9 +144,11 @@ class ProfileEditFragment: Fragment() {
 //            val gender = binding.genderDropDown.text.toString()
             val blood = binding.bloodDropDown.text.toString()
             val emergencyNum = binding.emergencyNumber.text.toString()
-            val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, "")
+            val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, image)
+            val context: Context = requireContext()
 
-            viewModel.patchProfile(profile)
+            viewModel.patchProfile(profile, context)
+//            this.context?.let { it1 -> viewModel.patchProfile(profile, it1) }
             val profileFragment = ProfileFragment()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, profileFragment)
@@ -155,15 +160,8 @@ class ProfileEditFragment: Fragment() {
     private fun setUpEditImageButton(){
         val imageButton = binding.profileImageLayout
         imageButton.setOnClickListener{
-//            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-////            pickImageLauncher.launch(intent)
-//            val i = Intent(
-//                Intent.ACTION_PICK,
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 pickImageLauncher.launch(intent)
-
-//            startActivityForResult(i, IMAGE_PICKER_SELECT)
         }
     }
 
@@ -175,6 +173,20 @@ class ProfileEditFragment: Fragment() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cleanTemporaryFiles()
+    }
+
+    private fun cleanTemporaryFiles() {
+        val cacheDir = getActivity()?.getCacheDir()
+        val tempFile = File(cacheDir, "tempFile")
+        if (tempFile.exists()) {
+            tempFile.delete()
+        }
+    }
+
 
 }
 

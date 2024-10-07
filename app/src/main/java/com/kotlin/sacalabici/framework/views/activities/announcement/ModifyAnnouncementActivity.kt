@@ -36,7 +36,7 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
 
 
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
-        initializeListeners()
+        initializeListeners(url)
         registerImagePicker()
     }
 
@@ -50,7 +50,7 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
         }
     }
 
-    private fun initializeListeners() {
+    private fun initializeListeners(url: String?) {
         binding.ibClose.setOnClickListener {
             finish()
         }
@@ -61,7 +61,7 @@ class ModifyAnnouncementActivity: AppCompatActivity() {
             val description = binding.etModifyAnnouncementDescription.text.toString()
             val image = selectedImageUri
             val announcement = Announcement(title, description, image)
-            viewModel.patchAnnouncement(id, announcement)
+            viewModel.patchAnnouncement(id, announcement, this)
             setResult(Activity.RESULT_OK)
             finish()
         }

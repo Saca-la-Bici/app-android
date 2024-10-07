@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,10 +56,10 @@ class ProfileViewModel : ViewModel() {
         )
     }
 
-    fun patchProfile(profile: Profile) {
+    fun patchProfile(profile: Profile, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                patchProfileRequirement(profile)
+                patchProfileRequirement(profile, context)
             } catch (e: Exception) {
                 throw e
             }

@@ -1,6 +1,6 @@
 package com.kotlin.sacalabici.data.repositories
 
-
+import android.content.Context
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
@@ -16,8 +16,8 @@ class ProfileRepository {
     suspend fun getUsuario(): ProfileBase?{
         return apiProfile.getUsuario()
     }
-    suspend fun patchProfile(profile: Profile): Profile?{
-        return apiProfile.patchProfile(profile)
+    suspend fun patchProfile(profile: Profile, context: Context): Profile?{
+        return apiProfile.patchProfile(profile, context)
     }
 
 }

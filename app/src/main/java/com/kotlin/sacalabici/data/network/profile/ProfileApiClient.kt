@@ -1,16 +1,20 @@
 package com.kotlin.sacalabici.data.network.profile
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.models.profile.Profile
+import com.kotlin.sacalabici.data.network.MultipartManager
 import com.kotlin.sacalabici.data.network.announcements.AnnouncementNetworkModuleDI
-import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
+
 
 class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
 
     // Inicializar el cliente Retrofit con el token
     private lateinit var api: ProfileApiService
+    private val multipartManager = MultipartManager()
 
     suspend fun getUsuario(): ProfileBase? {
         val token = firebaseTokenManager.getTokenSynchronously()
@@ -31,11 +35,23 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         }
     }
 
-    suspend fun patchProfile(profile: Profile): Profile?{
+    suspend fun patchProfile(profile: Profile, context: Context): Profile?{
         val token = firebaseTokenManager.getTokenSynchronously()
         api = ProfileNetworkModuleDI(token)
+        println("cacaaaaaa")
+        println(profile)
+        val username = profile.username
+        val nombre = profile.nombre
+        val tipoSangre = profile.tipoSangre
+        val numeroEmergencia = profile.numeroEmergencia
+        println(username)
+        println(numeroEmergencia)
+
+        val file = profile.imagen?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
         return try {
-            api.patchProfile(profile)
+            api.patchProfile(username, nombre, tipoSangre, numeroEmergencia, img)
         } catch (e: Exception) {
             e.printStackTrace()
             null

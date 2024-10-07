@@ -23,6 +23,6 @@ class AnnouncementRepository() {
     suspend fun postAnnouncement(announcement: Announcement, context: Context): Announcement? =
         apiAnnouncement.postAnnouncement(announcement, context)
 
-    suspend fun patchAnnouncement(id: String, announcement: Announcement): Announcement? =
-        apiAnnouncement.patchAnnouncement(id, announcement)
+    suspend fun patchAnnouncement(id: String, announcement: Announcement, context: Context): Announcement? =
+        apiAnnouncement.patchAnnouncement(id, announcement, context)
 }

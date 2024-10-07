@@ -25,7 +25,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
 
     // Variables para la paginación
     private var currentPage = 1
-    private val pageSize = 7
+    private val pageSize = 12
     private var currentRoles: String = "Administrador,Usuario"
     private var isLastPage = false
     var scrollPosition = 0
@@ -36,7 +36,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
     }
 
     // Bandera para saber si estamos en modo búsqueda
-    private var isSearching = false
+    var isSearching = false
     private var firebaseAuth: FirebaseAuth
 
     init {
@@ -46,10 +46,10 @@ class ConsultarUsuariosViewModel : ViewModel() {
     // Función para obtener usuarios con paginación
     fun getUsuarios(roles: String? = null, reset: Boolean = false) {
 
-        val rolesToUse = roles ?: currentRoles
-
         // Si ya estamos buscando, no cargamos usuarios paginados
-        if (_isLoading.value == true || isLastPage || isSearching) return
+        if (_isLoading.value == true || isLastPage == true || isSearching == true) return
+
+        val rolesToUse = roles ?: currentRoles
 
         // Reiniciar la paginación si es necesario
         if (reset) {
@@ -92,8 +92,8 @@ class ConsultarUsuariosViewModel : ViewModel() {
         }
     }
 
-    // Función para buscar usuarios
-    fun searchUser(username: String) {
+    // Función para buscar usuarios con roles opcionales
+    fun searchUser(username: String, roles: String? = null) {
 
         _isLoading.value = true
         isSearching = true  // Cambiamos el estado a búsqueda
@@ -103,7 +103,10 @@ class ConsultarUsuariosViewModel : ViewModel() {
                 val idToken = getFirebaseIdToken(firebaseAuth)
                 if (idToken != null) {
                     val buscarUsuariosRequirement = BuscarUsuariosRequirement(idToken)
-                    val usuarios = buscarUsuariosRequirement(username)
+
+                    // Modificar la llamada para incluir los roles si existen
+                    val usuarios = buscarUsuariosRequirement(username, roles)
+
                     withContext(Dispatchers.Main) {
                         if (!usuarios.isNullOrEmpty()) {
                             _usuarios.value = usuarios!!

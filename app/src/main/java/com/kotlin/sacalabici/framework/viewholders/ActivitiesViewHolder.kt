@@ -3,6 +3,7 @@ package com.kotlin.sacalabici.framework.viewholders
 import com.google.firebase.auth.FirebaseAuth
 
 import android.util.Log
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -21,23 +22,21 @@ import java.util.Locale
 
 class ActivitiesViewHolder(
     private val binding: ItemActivityBinding,
-    private val longClickListener: (Activity) -> Boolean,
+    private val clickListener: (Activity) -> Unit,
     private val viewModel: ActivitiesViewModel
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Activity) {
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(item.date)
 
-        binding.tvActivityTitle.text = item.title
-        binding.tvActivityDate.text = binding.root.context.getString(R.string.activity_date_list, formattedDate)
-        binding.tvActivityTime.text = binding.root.context.getString(R.string.activity_time_list, item.time)
-        binding.tvActivityDuration.text = binding.root.context.getString(R.string.activity_duration_list, item.duration)
-        binding.tvPeopleEnrolled.text = item.peopleEnrolled.toString()
-        binding.tvActivityLocation.text = binding.root.context.getString(R.string.activity_location_list, item.location)
+        val context = binding.root.context
 
-        binding.root.setOnLongClickListener {
-            longClickListener(item)
-        }
+        binding.tvActivityTitle.text = item.title
+        binding.tvActivityDate.text = context.getString(R.string.activity_date_list, formattedDate)
+        binding.tvActivityTime.text = context.getString(R.string.activity_time_list, item.time)
+        binding.tvActivityDuration.text = context.getString(R.string.activity_duration_list, item.duration)
+        binding.tvPeopleEnrolled.text = item.peopleEnrolled.toString()
+        binding.tvActivityLocation.text = context.getString(R.string.activity_location_list, item.location)
 
         if (item.imageURL != null) {
             binding.ivActivityImage.visibility = View.VISIBLE
@@ -49,75 +48,26 @@ class ActivitiesViewHolder(
         if (item.type == "Rodada") {
             binding.tvActivityLevel.visibility = View.VISIBLE
             binding.tvActivityLevel.text = item.nivel
+
+            val levelColor = when (item.nivel) {
+                "Nivel 1" -> ContextCompat.getColor(context,R.color.level1)
+                "Nivel 2" -> ContextCompat.getColor(context,R.color.level2)
+                "Nivel 3" -> ContextCompat.getColor(context,R.color.level3)
+                "Nivel 4" -> ContextCompat.getColor(context,R.color.level4)
+                "Nivel 5" -> ContextCompat.getColor(context,R.color.level5)
+                else -> ContextCompat.getColor(context, R.color.gray)
+            }
+            val background = binding.tvActivityLevel.background as GradientDrawable
+            background.setColor(levelColor)
         } else {
             binding.tvActivityLevel.visibility = View.GONE
         }
 
-        // Verificar si el usuario está inscrito en la actividad
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
-        val firebaseUID = firebaseUser?.uid
-
-        if (firebaseUID != null) {
-            val usuarioInscrito = item.usuariosInscritos.contains(firebaseUID)
-
-            if (usuarioInscrito) {
-                setButtonForUnsubscription(item)
-            } else {
-                setButtonForSubscription(item)
-            }
-        } else {
-            Toast.makeText(binding.root.context, "No se ha autenticado ningún usuario.", Toast.LENGTH_SHORT).show()
+        // Configurar clic para desplegar detalles
+        binding.tvActivityDetails.setOnClickListener {
+            clickListener(item)
         }
-    }
 
-    private fun setButtonForSubscription(item: Activity) {
-        binding.btnJoin.text = "Inscribirse"
-        binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
-
-        binding.btnJoin.setOnClickListener {
-            // Deshabilitar el botón mientras se espera la respuesta
-            binding.btnJoin.isEnabled = false
-
-            viewModel.postInscribirActividad(item.id, item.type) { success, message ->
-                // Habilitar el botón después de recibir la respuesta
-                binding.btnJoin.isEnabled = true
-
-                Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
-                if (success) {
-                    // Actualiza el botón para cancelar inscripción
-                    setButtonForUnsubscription(item)
-                } else {
-                    // Si falla, mantener el botón como estaba
-                    binding.btnJoin.text = "Inscribirse"
-                    binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
-                }
-            }
-        }
-    }
-
-    private fun setButtonForUnsubscription(item: Activity) {
-        binding.btnJoin.text = "Cancelar inscripción"
-        binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
-
-        binding.btnJoin.setOnClickListener {
-            // Deshabilitar el botón mientras se espera la respuesta
-            binding.btnJoin.isEnabled = false
-
-            viewModel.postCancelarInscripcion(item.id, item.type) { success, message ->
-                // Habilitar el botón después de recibir la respuesta
-                binding.btnJoin.isEnabled = true
-
-                Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
-                if (success) {
-                    // Actualiza el botón para inscribirse nuevamente
-                    setButtonForSubscription(item)
-                } else {
-                    // Si falla, mantener el botón como estaba
-                    binding.btnJoin.text = "Cancelar inscripción"
-                    binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
-                }
-            }
-        }
     }
 
     // Función para cargar la imagen

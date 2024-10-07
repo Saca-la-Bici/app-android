@@ -20,13 +20,13 @@ class ActivitiesRepository {
         val listRodadas = mutableListOf<Activity>()
         rodadasBase?.rodadas?.forEach { itemActivity ->
             val nivel = itemActivity.route?.nivel
+            val distance = itemActivity.route?.distancia
             val rodadaId = itemActivity.id
             itemActivity.activities.forEach{ activity ->
-                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel)
+                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel, distancia = distance)
                 listRodadas.add(updatedActivity)
             }
         }
-        Log.d("ActivitiesRepository", "Rodadas filtradas: $listRodadas")
         return listRodadas
     }
 
@@ -40,7 +40,6 @@ class ActivitiesRepository {
                 listEventos.add(updatedActivity)
             }
         }
-        Log.d("ActivitiesRepository", "Eventos filtrados: $listEventos")
         return listEventos
     }
 
@@ -54,8 +53,17 @@ class ActivitiesRepository {
                 listTalleres.add(updatedActivity)
             }
         }
-        Log.d("ActivitiesRepository", "Talleres filtrados: $listTalleres")
         return listTalleres
+    }
+
+    suspend fun getActivityById(id: String): Activity? {
+        val response = apiActivities.getActivityById(id)
+
+        val activity = response?.actividad?.information?.firstOrNull()
+        val nivel = response?.actividad?.route?.nivel
+        val distancia = response?.actividad?.route?.distancia
+
+        return activity?.copy(nivel = nivel, distancia = distancia)
     }
 
     suspend fun getPermissions(): List<String> {

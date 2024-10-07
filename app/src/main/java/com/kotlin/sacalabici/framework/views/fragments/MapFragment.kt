@@ -107,13 +107,13 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
             if (permisos.contains("Registrar ruta")) {
                 binding?.btnAdd?.visibility = View.VISIBLE
             } else {
-                binding?.btnAdd?.visibility = View.VISIBLE
+                binding?.btnAdd?.visibility = View.GONE
             }
 
             if (permisos.contains("Consultar ruta")) {
                 binding?.btnDetails?.visibility = View.VISIBLE
             } else {
-                binding?.btnDetails?.visibility = View.VISIBLE
+                binding?.btnDetails?.visibility = View.GONE
             }
         }
 

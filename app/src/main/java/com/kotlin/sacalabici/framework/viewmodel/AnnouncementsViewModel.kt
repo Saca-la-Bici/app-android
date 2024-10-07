@@ -35,30 +35,33 @@ class AnnouncementsViewModel: ViewModel() {
         }
     }
 
-    fun deleteAnnouncement(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun deleteAnnouncement(id: String, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
             try {
                 deleteAnnouncementRequirement(id)
+                callback(Result.success(Unit))
             } catch (e: Exception) {
-                throw e
+                callback(Result.failure(e))
             }
         }
     }
 
-    fun postAnnouncement(announcement: Announcement, context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
+
+    fun postAnnouncement(announcement: Announcement, context: Context, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
             try {
                 postAnnouncementRequirement(announcement, context)
+                callback(Result.success(Unit))
             } catch (e: Exception) {
-                throw e
+                callback(Result.failure(e))
             }
         }
     }
 
-    fun patchAnnouncement(id: String, announcement: Announcement) {
+    fun patchAnnouncement(id: String, announcement: Announcement, context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                patchAnnouncementRequirement(id, announcement)
+                patchAnnouncementRequirement(id, announcement, context)
             } catch (e: Exception) {
                 throw e
             }

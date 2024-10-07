@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kotlin.sacalabici.databinding.FragmentTalleresBinding
 import com.kotlin.sacalabici.framework.adapters.ActivitiesAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.views.activities.activities.DetailsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,9 +52,11 @@ class TalleresFragment : Fragment() {
     private fun initializeComponents() {
         binding.errorMessageTalleres.visibility = View.GONE
         binding.recyclerViewTalleres.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ActivitiesAdapter(mutableListOf(), activitiesViewModel) { taller ->
-            true
-        }
+
+        adapter = ActivitiesAdapter(mutableListOf(), { taller ->
+            passDetailsActivity(taller.id)
+        }, activitiesViewModel)
+
         binding.recyclerViewTalleres.adapter = adapter
     }
 
@@ -87,5 +91,12 @@ class TalleresFragment : Fragment() {
             delay(50)
             activitiesViewModel.getTalleres()
         }
+    }
+
+    private fun passDetailsActivity(tallerId: String){
+        val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
+            putExtra("ACTIVITY_ID", tallerId)
+        }
+        startActivity(intent)
     }
 }

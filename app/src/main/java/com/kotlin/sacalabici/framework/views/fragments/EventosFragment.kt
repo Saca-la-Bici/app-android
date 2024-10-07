@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentEventosBinding
 import com.kotlin.sacalabici.framework.adapters.ActivitiesAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.views.activities.activities.DetailsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -53,9 +55,11 @@ class EventosFragment : Fragment() {
     private fun initializeComponents() {
         binding.errorMessageEventos.visibility = View.GONE
         binding.recyclerViewEventos.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ActivitiesAdapter(mutableListOf(), activitiesViewModel) { evento ->
-            true
-        }
+
+        adapter = ActivitiesAdapter(mutableListOf(), { evento ->
+            passDetailsActivity(evento.id)
+        }, activitiesViewModel)
+
         binding.recyclerViewEventos.adapter = adapter
     }
 
@@ -92,4 +96,10 @@ class EventosFragment : Fragment() {
         }
     }
 
+    private fun passDetailsActivity(eventoId: String){
+        val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
+            putExtra("ACTIVITY_ID", eventoId)
+        }
+        startActivity(intent)
+    }
 }

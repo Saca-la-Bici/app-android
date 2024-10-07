@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.framework.viewmodel
 
 import android.util.Log
 import android.widget.EditText
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,6 +39,10 @@ class MapViewModel : ViewModel() {
     val roleLiveData = MutableLiveData<String>()
     val routeObjectLiveData = MutableLiveData<List<RouteBase>?>()
     val toastMessageLiveData = MutableLiveData<String>()
+
+    private val _selectedRuta = MutableLiveData<RouteBase>()
+    val selectedRuta: LiveData<RouteBase> get() = _selectedRuta
+
     var lastSelectedRuta: RouteBase? = null
     private val routeListRequirement = RouteListRequirement()
     private val postRouteRequirement = PostRouteRequirement()
@@ -76,6 +81,10 @@ class MapViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun selectRuta(ruta: RouteBase) {
+        _selectedRuta.value = ruta
     }
 
     fun postRoute(route: Route) {

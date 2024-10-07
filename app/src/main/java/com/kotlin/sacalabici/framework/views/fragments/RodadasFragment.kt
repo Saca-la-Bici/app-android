@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.FragmentRodadasBinding
 import com.kotlin.sacalabici.framework.adapters.ActivitiesAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.views.activities.activities.DetailsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,9 +53,11 @@ class RodadasFragment: Fragment() {
     private fun initializeComponents() {
         binding.errorMessageRodadas.visibility = View.GONE
         binding.recyclerViewRodadas.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ActivitiesAdapter(mutableListOf(), activitiesViewModel) { rodada ->
-            true
-        }
+
+        adapter = ActivitiesAdapter(mutableListOf(), { rodada ->
+            passDetailsActivity(rodada.id)
+        }, activitiesViewModel)
+
         binding.recyclerViewRodadas.adapter = adapter
     }
 
@@ -87,5 +92,12 @@ class RodadasFragment: Fragment() {
             delay(50)
             activitiesViewModel.getRodadas()
         }
+    }
+
+    private fun passDetailsActivity(rodadaId: String){
+        val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
+            putExtra("ACTIVITY_ID", rodadaId)
+        }
+        startActivity(intent)
     }
 }

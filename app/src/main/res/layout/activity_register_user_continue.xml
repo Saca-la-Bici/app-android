@@ -65,8 +65,8 @@
     <!-- Botón de regreso -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/BBack"
-        android:layout_width="25dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/back_button"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"

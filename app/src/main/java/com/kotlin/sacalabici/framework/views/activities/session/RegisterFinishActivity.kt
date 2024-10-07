@@ -1,5 +1,4 @@
 package com.kotlin.sacalabici.framework.views.activities.session
-
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -21,9 +20,9 @@ import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserFinishBinding
 import com.kotlin.sacalabici.framework.viewmodel.session.RegisterFinishViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
-
 @Suppress("NAME_SHADOWING")
 class RegisterFinishActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterUserFinishBinding
@@ -31,34 +30,27 @@ class RegisterFinishActivity : AppCompatActivity() {
     private lateinit var phoneNumberEditText: TextInputEditText
     private lateinit var phoneNumberUtil: PhoneNumberUtil
     private lateinit var countryCodePicker: CountryCodePicker
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
-
         val email = intent.getStringExtra("email")
         val username = intent.getStringExtra("username")
         val name = intent.getStringExtra("name")
         val password = intent.getStringExtra("password")
-
         // Inicializa el utilitario de PhoneNumber
         phoneNumberUtil = PhoneNumberUtil.getInstance()
-
         // Encuentra el CountryCodePicker en el layout
         countryCodePicker = findViewById(R.id.ccp)
         countryCodePicker.setCountryForNameCode("MX")
         phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
-
         // Opciones de tipo de sangre
         val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
-
         // Configurar el adaptador para el AutoCompleteTextView
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, bloodTypes)
         val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
         autoCompleteTextView.setAdapter(adapter)
         // Initialize ViewModel
         registerFinishViewModel.initialize(FirebaseAuth.getInstance())
-
         // Observe registration state
         registerFinishViewModel.authState.observe(this) { authState ->
             when (authState) {
@@ -68,7 +60,6 @@ class RegisterFinishActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish() // Optional: Finish RegisteerContinueActivity to prevent going back
                 }
-
                 is AuthState.Error -> {
                     Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
@@ -88,32 +79,25 @@ class RegisterFinishActivity : AppCompatActivity() {
                 is AuthState.Unauthenticated -> {
                     Log.d("LoginFinishActivity", "Usuario no autenticado")
                 }
-
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
             }
         }
-
         binding.BDate.setOnClickListener {
             showDatePickerDialog()
         }
-
         binding.BBack.setOnClickListener {
             val intent = Intent(this@RegisterFinishActivity, SessionActivity::class.java)
             startActivity(intent)
             finish()
         }
-
         binding.BFinish.setOnClickListener {
             val birthdate = binding.BDate.text.toString()
             val bloodType = binding.autoCompleteTextView.text.toString()
             val phoneNumber = phoneNumberEditText.text.toString()
-
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.BFinish.isEnabled = true
             }, 5000)
-
-
             lifecycleScope.launch {
                 val errorMessage =
                     registerFinishViewModel.validate(birthdate, bloodType, phoneNumber)
@@ -143,18 +127,15 @@ class RegisterFinishActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun initializeBinding() {
         binding = ActivityRegisterUserFinishBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-
         val datePickerDialog = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
@@ -165,11 +146,9 @@ class RegisterFinishActivity : AppCompatActivity() {
             month,
             day
         )
-
         val maxDate = Calendar.getInstance()
-        maxDate.add(Calendar.YEAR, -13)
+        maxDate.add(Calendar.YEAR, -18)
         datePickerDialog.datePicker.maxDate = maxDate.timeInMillis
-
         datePickerDialog.show()
     }
 }

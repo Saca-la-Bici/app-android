@@ -10,10 +10,9 @@ import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 
 class ActivitiesAdapter(
     private var data: List<Activity>,
-    private var viewModel: ActivitiesViewModel,
-    private val longClickListener: (Activity) -> Boolean,
-
-): RecyclerView.Adapter<ActivitiesViewHolder>(){
+    private val clickListener: (Activity) -> Unit,
+    private val viewModel: ActivitiesViewModel  // Se añade el viewModel al constructor
+) : RecyclerView.Adapter<ActivitiesViewHolder>() {
 
     fun updateData(newData: List<Activity>) {
         data = newData
@@ -26,9 +25,8 @@ class ActivitiesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivitiesViewHolder {
-        val binding = ItemActivityBinding.inflate(LayoutInflater.from(parent.context), parent,false)
-        return ActivitiesViewHolder(binding, longClickListener,viewModel)
-
+        val binding = ItemActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ActivitiesViewHolder(binding, clickListener, viewModel) // Se pasa el viewModel al ViewHolder
     }
 
     override fun getItemCount(): Int {

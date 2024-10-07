@@ -1,5 +1,4 @@
 package com.kotlin.sacalabici.framework.views.activities
-
 import android.app.Application
 import android.content.Intent
 import android.graphics.Color
@@ -20,64 +19,46 @@ import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import com.kotlin.sacalabici.framework.views.fragments.ActivitiesFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.AnnouncementsFragment
+import com.kotlin.sacalabici.framework.views.fragments.AnnouncementsFragment
 import com.kotlin.sacalabici.framework.views.fragments.MapFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
+import com.kotlin.sacalabici.framework.views.fragments.ProfileFragment
 import com.kotlin.sacalabici.utils.Constants
-
-
 class MainActivity: AppCompatActivity() {
     private lateinit var currentFragment: Fragment
-
     private var currentMenuOption:String?= null
-
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var firebaseAuth: FirebaseAuth
-
     private lateinit var tokenManager: FirebaseTokenManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initializeBinding()
         initializeObservers()
         initializeListeners()
         exchangeCurrentFragment(ActivitiesFragment(), Constants.MENU_ACTIVITIES)
         moveHighlightToButton(binding.appBarMain.btnActividades)
-
         firebaseAuth = FirebaseAuth.getInstance()
         tokenManager = FirebaseTokenManager(firebaseAuth)
         tokenManager.getIdToken()
-
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(applicationContext as Application)
-
         if (firebaseAuth.currentUser == null) {
             // Usuario no está autenticado, redirige a SessionActivity
             startActivity(Intent(this, SessionActivity::class.java))
             finish() // Opcional: Termina la actividad actual para que el usuario no pueda volver a ella con el botón "Atrás"
         }
     }
-
     private fun initializeBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-
     private fun initializeObservers(){
-
     }
-
     private fun exchangeCurrentFragment(newFragment: Fragment, newMenuOption:String){
         currentFragment = newFragment
-
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment_content_main,currentFragment)
             .commit()
-
         currentMenuOption = newMenuOption
-
         if (currentMenuOption == Constants.MENU_PROFILE ||
             currentMenuOption == Constants.MENU_MAP) {
             binding.topAppBar.clTopBar.visibility = View.GONE
@@ -85,36 +66,28 @@ class MainActivity: AppCompatActivity() {
             binding.topAppBar.clTopBar.visibility = View.VISIBLE
         }
     }
-
     private fun initializeListeners(){
-
         binding.appBarMain.btnActividades.setOnClickListener {
             selectMenuOption(Constants.MENU_ACTIVITIES)
             moveHighlightToButton(binding.appBarMain.btnActividades)
         }
-
         binding.appBarMain.btnMapa.setOnClickListener {
             selectMenuOption(Constants.MENU_MAP)
             moveHighlightToButton(binding.appBarMain.btnMapa)
         }
-
         binding.appBarMain.btnAnuncios.setOnClickListener {
             selectMenuOption(Constants.MENU_ANNOUNCEMENTS)
             moveHighlightToButton(binding.appBarMain.btnAnuncios)
         }
-
         binding.appBarMain.btnPerfil.setOnClickListener {
             selectMenuOption(Constants.MENU_PROFILE)
             moveHighlightToButton(binding.appBarMain.btnPerfil)
         }
-
     }
-
     private fun selectMenuOption(menuOption:String){
         if(menuOption == currentMenuOption){
             return
         }
-
         when(menuOption){
             Constants.MENU_ACTIVITIES -> {
                 exchangeCurrentFragment(ActivitiesFragment(),Constants.MENU_ACTIVITIES)
@@ -142,13 +115,11 @@ class MainActivity: AppCompatActivity() {
             }
         }
     }
-
     private fun highlightCurrentActivity(
         currentMenuOption: String,
         buttonClicked: ImageButton,
         textClicked: TextView,
     ) {
-
         // Restablecer todos los botones a su estado original
         resetButtonState(
             binding.appBarMain.btnActividades,
@@ -166,7 +137,6 @@ class MainActivity: AppCompatActivity() {
             binding.appBarMain.btnAnuncios,
             binding.appBarMain.tvAnuncios,
             R.drawable.ic_anuncios)
-
         // Aplicar animaciones y cambiar el color según el botón seleccionado
         when (currentMenuOption) {
             Constants.MENU_ACTIVITIES -> {
@@ -181,34 +151,27 @@ class MainActivity: AppCompatActivity() {
             }
         }
     }
-
     // Función para resetear el estado de un botón
     private fun resetButtonState(button: ImageButton, textView: TextView, defaultIcon: Int) {
         button.setImageResource(defaultIcon)
         textView.setTextColor(Color.GRAY)
     }
-
     // Función para seleccionar un botón y aplicar el estado seleccionado
     private fun selectButtonState(button: ImageButton, textView: TextView, selectedIcon: Int) {
         button.setImageResource(selectedIcon)
         textView.setTextColor(Color.BLACK)
     }
-
     private fun moveHighlightToButton(targetButton: ImageButton) {
         val constraintLayout = binding.appBarMain.clAppBar
         val constraintSet = ConstraintSet()
-
         constraintSet.clone(constraintLayout)
-
         // Conectar el highlightView al botón seleccionado
         constraintSet.connect(R.id.vHighlightView, ConstraintSet.START, targetButton.id, ConstraintSet.START)
         constraintSet.connect(R.id.vHighlightView, ConstraintSet.END, targetButton.id, ConstraintSet.END)
-
         // Aplicar la transición
         val transition = ChangeBounds()
         transition.duration = 300 // Cambiar duración si es necesario para debugging
         TransitionManager.beginDelayedTransition(constraintLayout, transition)
-
         // Aplicar el ConstraintSet
         constraintSet.applyTo(constraintLayout)
     }

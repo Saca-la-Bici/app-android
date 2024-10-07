@@ -116,35 +116,39 @@ class ActivitiesViewModel(): ViewModel() {
 
 
     // Función para inscribir al usuario en una actividad
-    fun postInscribirActividad(actividadId: String, tipo: String) {
+    fun postInscribirActividad(actividadId: String, tipo: String, callback: (Boolean, String) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-
-            try{
-                Log.d("ActivitiesViewModel", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
-                postJoinActivity(actividadId, tipo)
-                Log.d("postInscribirActivityviewModel", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
+            try {
+                val (success, message) = postJoinActivity(actividadId, tipo)
+                withContext(Dispatchers.Main) {
+                    callback(success, message)
+                }
+            } catch (e: Exception) {
+                Log.e("postInscribirActivityViewModel", "Error al inscribir actividad", e)
+                withContext(Dispatchers.Main) {
+                    callback(false, "Error desconocido. Por favor, intenta más tarde.")
+                }
             }
-            catch (e: Exception){
-                Log.e("postInscribirActivityviewModel", "Error al inscribir actividad", e)
-            }
-
         }
     }
 
-    fun postCancelarInscripcion(actividadId: String, tipo: String) {
+
+    fun postCancelarInscripcion(actividadId: String, tipo: String, callback: (Boolean, String) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-
-            try{
-                Log.d("ActivitiesViewModel", "btnJoin for cancel clicked. Activity ID: $actividadId, Type: $tipo")
-                postCancelActivity(actividadId, tipo)
-                Log.d("postCancelarActivityviewModel", "btnJoin for cancel clicked. Activity ID: $actividadId, Type: $tipo")
+            try {
+                val (success, message) = postCancelActivity(actividadId, tipo)
+                withContext(Dispatchers.Main) {
+                    callback(success, message)
+                }
+            } catch (e: Exception) {
+                Log.e("postCancelarActivityViewModel", "Error al cancelar la actividad", e)
+                withContext(Dispatchers.Main) {
+                    callback(false, "Error desconocido. Por favor, intenta más tarde.")
+                }
             }
-            catch (e: Exception){
-                Log.e("postCancelarActivityviewModel", "Error al cancelar actividad", e)
-            }
-
         }
     }
+
 
 
 }

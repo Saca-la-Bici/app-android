@@ -63,14 +63,15 @@ class ActivitiesRepository {
         return permissionsObject?.permisos ?: emptyList()
     }
 
-    suspend fun PostJoinActivity(actividadId: String, tipo: String) {
+    suspend fun postJoinActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
         Log.d("ActivitiesRepository", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
-        apiActivities.PostJoinActivity(actividadId, tipo)
+        return apiActivities.PostJoinActivity(actividadId, tipo)
     }
 
-    suspend fun PostCancelActivity(actividadId: String, tipo: String) {
+    suspend fun postCancelActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
         Log.d("ActivitiesRepository", "btnJoin Cancel clicked. Activity ID: $actividadId, Type: $tipo")
-        apiActivities.PostCancelActivity(actividadId, tipo)
+        return apiActivities.PostCancelActivity(actividadId, tipo)
     }
+
 
 }

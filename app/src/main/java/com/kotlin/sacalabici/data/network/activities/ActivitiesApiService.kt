@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.network.activities
 
+import com.google.android.gms.common.api.Response
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
@@ -9,6 +10,7 @@ import com.kotlin.sacalabici.data.models.profile.PermissionsObject
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import kotlin.Result as Result1
 
 interface ActivitiesApiService {
     @GET("actividades/consultar/eventos")

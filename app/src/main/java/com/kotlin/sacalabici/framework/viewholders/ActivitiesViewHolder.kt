@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -57,26 +58,65 @@ class ActivitiesViewHolder(
         val firebaseUID = firebaseUser?.uid
 
         if (firebaseUID != null) {
-            // Verificar si el usuario está inscrito en la actividad
             val usuarioInscrito = item.usuariosInscritos.contains(firebaseUID)
 
             if (usuarioInscrito) {
-                binding.btnJoin.text = "Cancelar inscripción"
-                binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
-                binding.btnJoin.setOnClickListener {
-                    Log.d("ActivitiesViewHolder", "Cancelar inscripción. Activity ID: ${item.id}, Type: ${item.type}")
-                    viewModel.postCancelarInscripcion(item.id, item.type) // Nueva función para cancelar inscripción
-                }
+                setButtonForUnsubscription(item)
             } else {
-                binding.btnJoin.text = "Inscribirse"
-                binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
-                binding.btnJoin.setOnClickListener {
-                    Log.d("ActivitiesViewHolder", "Inscribirse. Activity ID: ${item.id}, Type: ${item.type}")
-                    viewModel.postInscribirActividad(item.id, item.type)
-                }
+                setButtonForSubscription(item)
             }
         } else {
-            Log.e("ActivitiesViewHolder", "No Firebase user authenticated.")
+            Toast.makeText(binding.root.context, "No se ha autenticado ningún usuario.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setButtonForSubscription(item: Activity) {
+        binding.btnJoin.text = "Inscribirse"
+        binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
+
+        binding.btnJoin.setOnClickListener {
+            // Deshabilitar el botón mientras se espera la respuesta
+            binding.btnJoin.isEnabled = false
+
+            viewModel.postInscribirActividad(item.id, item.type) { success, message ->
+                // Habilitar el botón después de recibir la respuesta
+                binding.btnJoin.isEnabled = true
+
+                Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
+                if (success) {
+                    // Actualiza el botón para cancelar inscripción
+                    setButtonForUnsubscription(item)
+                } else {
+                    // Si falla, mantener el botón como estaba
+                    binding.btnJoin.text = "Inscribirse"
+                    binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
+                }
+            }
+        }
+    }
+
+    private fun setButtonForUnsubscription(item: Activity) {
+        binding.btnJoin.text = "Cancelar inscripción"
+        binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
+
+        binding.btnJoin.setOnClickListener {
+            // Deshabilitar el botón mientras se espera la respuesta
+            binding.btnJoin.isEnabled = false
+
+            viewModel.postCancelarInscripcion(item.id, item.type) { success, message ->
+                // Habilitar el botón después de recibir la respuesta
+                binding.btnJoin.isEnabled = true
+
+                Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
+                if (success) {
+                    // Actualiza el botón para inscribirse nuevamente
+                    setButtonForSubscription(item)
+                } else {
+                    // Si falla, mantener el botón como estaba
+                    binding.btnJoin.text = "Cancelar inscripción"
+                    binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
+                }
+            }
         }
     }
 

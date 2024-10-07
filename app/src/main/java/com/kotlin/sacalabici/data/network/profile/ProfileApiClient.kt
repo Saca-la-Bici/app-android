@@ -42,7 +42,7 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         val nombre = profile.nombre
         val tipoSangre = profile.tipoSangre
         val numeroEmergencia = profile.numeroEmergencia
-        
+
         val file = profile.imagen?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
 

@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -20,10 +19,9 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.framework.views.activities.announcement.ModifyAnnouncementActivity
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
-import kotlinx.coroutines.delay
+import com.kotlin.sacalabici.framework.views.activities.announcement.ModifyAnnouncementActivity
 import kotlinx.coroutines.launch
 
 class ActionButtonDialogFragment : DialogFragment() {

@@ -116,29 +116,4 @@ class AddAnnouncementActivity: AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.ibCheck.isEnabled = !isLoading
     }
-
-//    private fun observePostAnnouncementStatus() {
-//        viewModel.announcementStatus.observe(this) { status ->
-//            when (status) {
-//                is AnnouncementStatus.Loading -> {
-//                    // Mostrar progreso
-//                    binding.progressBar.visibility = View.VISIBLE
-//                    binding.ibCheck.isEnabled = false
-//                }
-//                is AnnouncementStatus.Success -> {
-//                    // Ocultar progreso
-//                    binding.progressBar.visibility = View.GONE
-//                    Toast.makeText(this, "Anuncio registrado exitosamente", Toast.LENGTH_SHORT).show()
-//                    setResult(Activity.RESULT_OK)
-//                    finish()
-//                }
-//                is AnnouncementStatus.Error -> {
-//                    // Ocultar progreso y mostrar error
-//                    binding.progressBar.visibility = View.GONE
-//                    binding.ibCheck.isEnabled = true
-//                    Toast.makeText(this, "Error: ${status.message}", Toast.LENGTH_LONG).show()
-//                }
-//            }
-//        }
-//    }
 }

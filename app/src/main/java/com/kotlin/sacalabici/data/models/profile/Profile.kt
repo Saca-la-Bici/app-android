@@ -1,5 +1,7 @@
 package com.kotlin.sacalabici.data.models.profile
 
+import android.net.Uri
+
 data class Profile(
     val username: String,
     val nombre: String,
@@ -8,6 +10,6 @@ data class Profile(
     val rodadasCompletadas: Int,
     val tiempoRecorrido: Int,
     val kilometrosRecorridos: Double,
-    val imagen: String
+    val imagen: Uri?
 )
 

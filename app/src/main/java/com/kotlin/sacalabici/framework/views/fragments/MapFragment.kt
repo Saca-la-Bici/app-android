@@ -144,25 +144,36 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
     }
 
     private fun observeViewModel() {
+        // Observamos las rutas del ViewModel
         viewModel.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
-            rutasList?.let {
-                // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment
-                val rutasFragment = RutasFragment.newInstance(it, viewModel.lastSelectedRuta)
-                // Usar childFragmentManager para agregar RutasFragment como hijo
-                childFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, rutasFragment) // Asegúrate de que este ID sea el correcto
-                    .addToBackStack(null)
-                    .commit()
-            } ?: run {
-                showToast("Error al obtener la lista de rutas.")
+            if (rutasList.isNullOrEmpty()) {
+                // Si no hay rutas, mostramos el Toast
+                showToast("No se encontraron rutas")
+                Log.d("ObserveViewModel", "No se encontraron rutas")
+            } else {
+                // Si hay rutas disponibles, verificamos si el fragmento ya está visible
+                val rutasFragment = childFragmentManager.findFragmentById(R.id.fragment_container)
+
+                if (rutasFragment == null) {
+                    // Si el fragmento no está visible, lo añadimos
+                    val newRutasFragment = RutasFragment.newInstance(rutasList, viewModel.lastSelectedRuta)
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, newRutasFragment) // Reemplazamos el fragmento existente
+                        .addToBackStack(null)
+                        .commit()
+
+                    // Actualizamos la visibilidad del fragmento
+                    isRutasFragmentVisible = true
+                    Log.d("ObserveViewModel", "Fragmento RutasFragment añadido")
+                }
             }
         })
 
+        // Observamos los mensajes de Toast
         viewModel.toastMessageLiveData.observe(viewLifecycleOwner, Observer { message ->
             showToast(message)
         })
     }
-
 
     private fun initializeMap() {
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
@@ -187,19 +198,31 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
             // Si el fragmento ya está visible, lo eliminamos
             if (rutasFragment != null) {
                 childFragmentManager.beginTransaction()
-                    .remove(rutasFragment) // Asegúrate de que este ID sea el correcto
+                    .remove(rutasFragment)
                     .addToBackStack(null)
                     .commit()
                 Log.d("ToggleRutas", "Fragmento RutasFragment eliminado")
             }
             isRutasFragmentVisible = false
         } else {
-            // Si el fragmento no está visible, lo añadimos
-            viewModel.getRouteList() // Esto activará la observación y añadirá el fragmento
-            isRutasFragmentVisible = true
-            Log.d("ToggleRutas", "Fragmento RutasFragment añadido")
+            // Si el fragmento no está visible, primero obtén las rutas y luego agrégalo
+            viewModel.getRouteList() // Esto activará la observación y añadirá el fragmento cuando las rutas se carguen
+            viewModel.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
+                if (rutasList.isNullOrEmpty()) {
+                    showToast("No se encontraron rutas")
+                } else {
+                    val newRutasFragment = RutasFragment.newInstance(rutasList, viewModel.lastSelectedRuta)
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, newRutasFragment)
+                        .addToBackStack(null)
+                        .commit()
+                    isRutasFragmentVisible = true
+                    Log.d("ToggleRutas", "Fragmento RutasFragment añadido")
+                }
+            })
         }
     }
+
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()

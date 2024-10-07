@@ -1,6 +1,6 @@
 package com.kotlin.sacalabici.domain.activities
 
-import com.kotlin.sacalabici.data.models.activities.Location
+import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.repositories.activities.ActivitiesRepository
 
@@ -29,5 +29,5 @@ class GetActivityByIdRequirement {
 
 class PostLocationRequirement {
     private val repository = ActivitiesRepository()
-    suspend operator fun invoke(id: String, location: Location): Boolean = repository.postLocation(id, location)
+    suspend operator fun invoke(id: String, location: LocationR): Boolean = repository.postLocation(id, location)
 }

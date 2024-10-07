@@ -11,6 +11,6 @@ data class ApiActivity(
     @SerializedName("_id") val id: String,
     @SerializedName("informacion") val information: List<Activity>,
     @SerializedName("ruta") val route: Route? = null,
-    @SerializedName("ubicacion") val location: List<Location>? = null,
+    @SerializedName("ubicacion") val location: List<LocationR>? = null,
 )
 

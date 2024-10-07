@@ -3,7 +3,7 @@ package com.kotlin.sacalabici.data.network.activities
 import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
-import com.kotlin.sacalabici.data.models.activities.Location
+import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
@@ -94,7 +94,7 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         }
     }
 
-    suspend fun postLocation(id: String, location: Location): Boolean {
+    suspend fun postLocation(id: String, location: LocationR): Boolean {
         val token = firebaseTokenManager.getTokenSynchronously()
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)

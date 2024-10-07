@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.models.activities
 
+
 import com.google.gson.annotations.SerializedName
 import com.kotlin.sacalabici.data.models.routes.Route
 import java.util.Date
@@ -23,7 +24,7 @@ data class RodadaActivity(
     @SerializedName("_id") val id: String,
     @SerializedName("informacion") val activities: List<Activity>,
     @SerializedName("ruta") val route: Route? = null,
-    @SerializedName("ubicacion") val liveLocation: List<Location>
+    @SerializedName("ubicacion") val liveLocation: List<LocationR>
 )
 
 data class DefaultActivity(
@@ -50,7 +51,8 @@ data class Activity(
     @SerializedName("distancia") val distancia: String? = null
 )
 
-data class Location(
+data class LocationR(
+    @SerializedName("_id") val id: String,
     @SerializedName("latitud") val latitude: Double,
     @SerializedName("longitud") val longitude: Double
 )

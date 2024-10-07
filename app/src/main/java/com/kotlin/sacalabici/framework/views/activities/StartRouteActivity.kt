@@ -2,13 +2,12 @@ package com.kotlin.sacalabici.framework.views.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -16,25 +15,19 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.layers.generated.lineLayer
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.repositories.activities.ActivitiesRepository
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.plugin.PuckBearing
-import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.locationcomponent.location
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -44,8 +37,10 @@ class StartRouteActivity : AppCompatActivity() {
 
     private lateinit var mapView: MapView
     private lateinit var pointAnnotationManager: PointAnnotationManager
-    private lateinit var postLocationRequirement: ActivitiesRepository
 
+    private lateinit var postLocationRequirement: ActivitiesRepository
+    private lateinit var rodadaId: String
+    private lateinit var loca: LocationR
 
     private var isTrackingLocation = false
     private var locationTrackingJob: Job? = null
@@ -72,6 +67,10 @@ class StartRouteActivity : AppCompatActivity() {
         mapView = findViewById(R.id.mapView)
         initializeMap()
 
+        postLocationRequirement = ActivitiesRepository()
+
+        // Obtener el id de la rodada de alguna fuente (por ejemplo, desde un Intent)
+        rodadaId = intent.getStringExtra("RODADA_ID") ?: "default_id" // Definir el id aquí
     }
 
     private fun initializeMap(){
@@ -88,7 +87,6 @@ class StartRouteActivity : AppCompatActivity() {
     }
 
     private fun enableLocationComponent() {
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
             return
@@ -136,13 +134,14 @@ class StartRouteActivity : AppCompatActivity() {
                         rutaDelUsuario.add(punto)
                         // Dibujar la línea en el mapa
                         dibujarLineaEnMapa()
+
+                        sendLocation(rodadaId, loca)
                     }
                 }
             },
             null
         )
     }
-
 
     private fun dibujarLineaEnMapa() {
         mapView.getMapboxMap().getStyle { style ->
@@ -168,34 +167,18 @@ class StartRouteActivity : AppCompatActivity() {
         }
     }
 
-
-
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun enviarUbicacion(latitud: Double, longitud: Double) {
-        val url = "http://18.220.205.53:8080/rodadas/iniciarRodada/:idRodada"
-        val requestBody = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            JSONObject().apply {
-                put("latitud", latitud)
-                put("longitud", longitud)
-            }.toString()
-        )
-
-        // Ejecutar la llamada en un hilo separado
-        GlobalScope.launch {
+    private fun sendLocation(id: String, loca: LocationR) {
+        lifecycleScope.launch {
             try {
-                val request = Request.Builder()
-                    .url(url)
-                    .post(requestBody)
-                    .build()
-                val response: Response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    Log.d("Ubicacion", "Ubicación actualizada exitosamente")
+                // Llamar al método del repositorio para enviar la ubicación
+                val resultado = postLocationRequirement.postLocation(id,loca)
+                if (resultado) {
+                    Log.d("Ubicacion", "Ubicación enviada exitosamenteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
                 } else {
-                    Log.e("Ubicacion", "Error al actualizar ubicación: ${response.message}")
+                    Log.e("Ubicacion", "Error al enviar la ubicación")
                 }
             } catch (e: Exception) {
-                Log.e("Ubicacion", "Error al realizar la solicitud: ${e.message}")
+                Log.e("Ubicacion", "Error en la solicitud: ${e.message}")
             }
         }
     }

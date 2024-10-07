@@ -2,7 +2,7 @@ package com.kotlin.sacalabici.data.network.activities
 
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
-import com.kotlin.sacalabici.data.models.activities.Location
+import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
@@ -33,6 +33,6 @@ interface ActivitiesApiService {
     @POST("rodadas/iniciarRodada/{id}")
     suspend fun postLocation(
         @Path("id") id: String,
-        @Body location: Location  // Usa la clase Location definida en tu modelo
+        @Body location: LocationR  // Usa la clase Location definida en tu modelo
     ): Response<Void>
 }

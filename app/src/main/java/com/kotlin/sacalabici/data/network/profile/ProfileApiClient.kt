@@ -38,15 +38,11 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
     suspend fun patchProfile(profile: Profile, context: Context): Profile?{
         val token = firebaseTokenManager.getTokenSynchronously()
         api = ProfileNetworkModuleDI(token)
-        println("cacaaaaaa")
-        println(profile)
         val username = profile.username
         val nombre = profile.nombre
         val tipoSangre = profile.tipoSangre
         val numeroEmergencia = profile.numeroEmergencia
-        println(username)
-        println(numeroEmergencia)
-
+        
         val file = profile.imagen?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
 

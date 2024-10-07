@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.kotlin.sacalabici.domain.GetProfileRequirement
 import com.kotlin.sacalabici.domain.profile.PatchProfileRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProfileViewModel : ViewModel() {
     private val _profileObjectLiveData = MutableLiveData<ProfileBase?>()
@@ -56,13 +58,15 @@ class ProfileViewModel : ViewModel() {
         )
     }
 
-    fun patchProfile(profile: Profile, context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
+    suspend fun patchProfile(profile: Profile, context: Context): Boolean {
+        return try {
+            withContext(Dispatchers.IO) {
                 patchProfileRequirement(profile, context)
-            } catch (e: Exception) {
-                throw e
             }
+            true
+        } catch (e: Exception) {
+            Log.e("ViewModel", "Error al actualizar el perfil: ${e.message}", e)
+            false
         }
     }
 

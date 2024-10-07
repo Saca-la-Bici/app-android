@@ -65,7 +65,7 @@
                 android:id="@+id/profileImage"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/baseline_person_24"
                 android:background="@color/gray"
                 android:scaleType="centerCrop"

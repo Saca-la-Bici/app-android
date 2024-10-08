@@ -88,7 +88,8 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding) {
         if (activity.type == "Rodada"){
             binding.btnStart.visibility = View.VISIBLE
             binding.btnStart.setOnClickListener {
-                val intent = Intent(binding.root.context, StartRouteActivity::class.java) // Cambiado aquí
+                val intent = Intent(binding.root.context, StartRouteActivity::class.java)
+                intent.putExtra("ID",activity.id)
                 binding.root.context.startActivity(intent)
             }
         } else {

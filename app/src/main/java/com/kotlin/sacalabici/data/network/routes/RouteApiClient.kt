@@ -27,6 +27,17 @@ class RouteApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         }
     }
 
+    suspend fun getRuta(id: String): Route? {
+        val token = firebaseTokenManager.getTokenSynchronously() // Obtener el token de forma sincrónica
+        api = RouteNetworkModuleDI(token)
+        return try {
+            api.getRuta(id)
+        } catch (e:java.lang.Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     suspend fun postRoute(route: Route): Route? {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = RouteNetworkModuleDI(token)

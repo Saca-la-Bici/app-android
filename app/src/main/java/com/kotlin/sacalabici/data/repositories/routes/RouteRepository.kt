@@ -15,6 +15,8 @@ class RouteRepository {
     suspend fun getRouteList(): RouteObjectBase? =
         apiRoute.getRutasList()
 
+    suspend fun getRoute(id:String): Route? =
+        apiRoute.getRuta(id)
 
     suspend fun postRoute(route: Route): Route? =
         apiRoute.postRoute(route)

@@ -5,6 +5,7 @@ import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
+import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
@@ -107,6 +108,21 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             }
         } else {
             false
+        }
+    }
+
+    suspend fun getRodadaInfo(id: String): RodadaInfoBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.getRodadaInfo(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
         }
     }
 

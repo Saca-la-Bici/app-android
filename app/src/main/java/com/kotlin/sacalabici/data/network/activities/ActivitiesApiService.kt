@@ -4,6 +4,7 @@ import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
+import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
@@ -35,4 +36,7 @@ interface ActivitiesApiService {
         @Path("id") id: String,
         @Body location: LocationR  // Usa la clase Location definida en tu modelo
     ): Response<Void>
+
+    @GET("rodadas/obtenerRodadaPorId")
+    suspend fun getRodadaInfo(@Query("id") id: String): RodadaInfoBase
 }

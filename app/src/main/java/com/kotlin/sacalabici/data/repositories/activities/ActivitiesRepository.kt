@@ -7,8 +7,10 @@ import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
+import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
+import com.kotlin.sacalabici.data.models.routes.Route
 
 class ActivitiesRepository {
     val firebaseAuth = FirebaseAuth.getInstance()
@@ -81,4 +83,8 @@ class ActivitiesRepository {
     suspend fun postLocation(id: String, location: LocationR): Boolean {
         return apiActivities.postLocation(id,location)
     }
+
+    suspend fun getInfoRodada(id:String): RodadaInfoBase? =
+        apiActivities.getRodadaInfo(id)
+
 }

@@ -12,6 +12,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface RouteApiService {
     @GET("mapa/consultarRutas")
@@ -25,4 +26,7 @@ interface RouteApiService {
         @Path("id") id: String,
         @Body route: Route
     ): Route
+
+    @GET("mapa/consultarRutas")
+    suspend fun getRuta(@Query("id") id: String): Route
 }

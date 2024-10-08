@@ -6,17 +6,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.activities.Activity
+import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.domain.activities.GetActivityByIdRequirement
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
 import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
+import com.kotlin.sacalabici.domain.activities.RodadaInfoRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ActivitiesViewModel(): ViewModel() {
     // LiveData para observar los datos de la UI
     val rodadasLiveData = MutableLiveData<List<Activity>>()
+    val rodadaInfoLiveData = MutableLiveData<RodadaInfoBase>()
     val eventosLiveData = MutableLiveData<List<Activity>>()
     val talleresLiveData = MutableLiveData<List<Activity>>()
     private val _permissionsLiveData = MutableLiveData<List<String>>()
@@ -36,6 +39,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val getTalleresRequirement = GetTalleresRequirement()
     private val getActivityByIdRequirement = GetActivityByIdRequirement()
     private val permissionsRequirement = PermissionsRequirement()
+    private val getRodadaInfoRequirement = RodadaInfoRequirement()
 
     init {
         getPermissions()
@@ -126,6 +130,16 @@ class ActivitiesViewModel(): ViewModel() {
                 }
             } catch (e: Exception) {
                 errorMessageLiveData.postValue(errorDB)
+            }
+        }
+    }
+
+    fun getRodadaInfo(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                getRodadaInfoRequirement(id)
+            } catch (e: Exception) {
+                throw e
             }
         }
     }

@@ -52,9 +52,11 @@ class EventosFragment : Fragment() {
     private fun initializeComponents() {
         binding.errorMessageEventos.visibility = View.GONE
         binding.recyclerViewEventos.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ActivitiesAdapter(mutableListOf()) { evento ->
+
+        adapter = ActivitiesAdapter(mutableListOf(), { evento ->
             passDetailsActivity(evento.id)
-        }
+        }, activitiesViewModel)
+
         binding.recyclerViewEventos.adapter = adapter
     }
 

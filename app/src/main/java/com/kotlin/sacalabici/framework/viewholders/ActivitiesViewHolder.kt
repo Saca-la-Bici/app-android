@@ -12,13 +12,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ItemActivityBinding
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ActivitiesViewHolder(
     private val binding: ItemActivityBinding,
-    private val clickListener: (Activity) -> Unit
-): RecyclerView.ViewHolder(binding.root){
+    private val clickListener: (Activity) -> Unit,
+    private val viewModel: ActivitiesViewModel
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Activity) {
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(item.date)
@@ -39,7 +41,7 @@ class ActivitiesViewHolder(
             binding.ivActivityImage.visibility = View.GONE
         }
 
-        if (item.type == "Rodada"){
+        if (item.type == "Rodada") {
             binding.tvActivityLevel.visibility = View.VISIBLE
             binding.tvActivityLevel.text = item.nivel
 
@@ -64,6 +66,7 @@ class ActivitiesViewHolder(
 
     }
 
+    // Función para cargar la imagen
     private fun getActivityImage(url: String, imageView: ImageView) {
         val requestOptions = RequestOptions()
             .centerCrop()
@@ -76,6 +79,5 @@ class ActivitiesViewHolder(
             .apply(requestOptions)
             .into(imageView)
     }
-
-
 }
+

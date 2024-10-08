@@ -1,10 +1,10 @@
 package com.kotlin.sacalabici.data.network.activities
 
+import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
-import com.google.gson.Gson
-import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
+import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
@@ -13,10 +13,7 @@ import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.data.network.MultipartManager
-import com.squareup.okhttp.RequestBody
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
+
 
 class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
     private lateinit var api: ActivitiesApiService
@@ -181,7 +178,65 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             null
         }
     }
-    
+
+    suspend fun PostJoinActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                val request = JoinActivityRequest(actividadId, tipo)
+
+                // Usa runCatching para manejar el resultado
+                val result = runCatching { api.PostJoinActivity(request) }
+
+                result.fold(
+                    onSuccess = {
+                        Pair(true, "Te has inscrito a la actividad.")  // Operación exitosa
+                    },
+                    onFailure = { exception ->
+                        Pair(false, "Error: ${exception.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                Pair(false, "Error de red o conexión. Intenta más tarde.")
+            }
+        } else {
+            Pair(false, "Error de autenticación. Por favor, inicia sesión.")
+        }
+    }
+
+
+
+
+    suspend fun PostCancelActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                val request = CancelActivityRequest(actividadId, tipo)
+
+                // Usa runCatching para manejar el resultado
+                val result = runCatching { api.PostCancelActivity(request) }
+
+                result.fold(
+                    onSuccess = {
+                        Pair(true, "Has cancelado tu inscripción.")
+                    },
+                    onFailure = { exception ->
+                        Pair(false, "Error: ${exception.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                Pair(false, "Error de red o conexión. Intenta más tarde.")
+            }
+        } else {
+            Pair(false, "Error de autenticación. Por favor, inicia sesión.")
+        }
+    }
+
+
     suspend fun getPermissions(): PermissionsObject? {
         val token = firebaseTokenManager.getTokenSynchronously()
         return if (token != null) {

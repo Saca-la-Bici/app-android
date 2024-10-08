@@ -45,19 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
+        android:fontFamily="@font/roboto_black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="@id/toolbar"
-        app:layout_constraintTop_toTopOf="@id/toolbar" />
-
-    <ImageButton
-        android:id="@+id/btn_notifications"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:src="@drawable/notifications"
-        android:layout_marginRight="30dp"
-        app:layout_constraintBottom_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toStartOf="@id/btnSettings"
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
     <ImageButton
@@ -97,8 +88,6 @@
         android:layout_marginTop="64dp"
         android:background="@drawable/ic_blood"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="@id/vUser"
-        app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/profile_image"
         app:layout_constraintTop_toTopOf="@id/profile_image" />
@@ -109,8 +98,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="@color/black"
-        android:textSize="13sp"
-        android:textStyle="bold"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_bold"
         app:layout_constraintEnd_toEndOf="@id/vUser"
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginStart="4dp"
@@ -122,9 +111,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="normal"
+        android:fontFamily="@font/roboto_light"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@id/vUser"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@id/vUser"
@@ -133,7 +121,7 @@
     <View
         android:id="@+id/vUserinformation"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         app:layout_constraintTop_toBottomOf="@id/profileName"
         app:layout_constraintEnd_toEndOf="@id/VContainer"
         app:layout_constraintStart_toStartOf="@id/VContainer" />
@@ -142,8 +130,8 @@
         android:id="@+id/textRodadas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_light"
         app:layout_constraintBottom_toTopOf="@id/label_rodadas"
         app:layout_constraintStart_toStartOf="@id/label_rodadas"
         app:layout_constraintEnd_toEndOf="@id/label_rodadas"/>
@@ -156,18 +144,18 @@
         android:text="@string/PRodadas"
         android:textColor="@color/black"
         android:textSize="14sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/roboto_bold"
         android:layout_marginRight="24dp"
         app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
-        app:layout_constraintEnd_toStartOf="@id/label_kilometros" />
+        app:layout_constraintEnd_toStartOf="@id/label_kilometros"
+        app:layout_constraintStart_toStartOf="@id/vUserinformation" />
 
     <TextView
         android:id="@+id/textKilometros"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_light"
         app:layout_constraintBottom_toTopOf="@id/label_kilometros"
         app:layout_constraintStart_toStartOf="@id/label_kilometros"
         app:layout_constraintEnd_toEndOf="@id/label_kilometros" />
@@ -180,35 +168,11 @@
         android:text="@string/PKilometros"
         android:textColor="@color/black"
         android:textSize="14sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/roboto_bold"
         app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
-        app:layout_constraintStart_toStartOf="@id/vUserinformation"
+        app:layout_constraintStart_toEndOf="@id/label_rodadas"
         app:layout_constraintEnd_toEndOf="@id/vUserinformation"
         />
-
-    <TextView
-        android:id="@+id/text_amigos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="223"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/label_amigos"
-        app:layout_constraintStart_toStartOf="@id/label_amigos"
-        app:layout_constraintEnd_toEndOf="@id/label_amigos" />
-
-    <TextView
-        android:id="@+id/label_amigos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/PAmigos"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="24dp"
-        app:layout_constraintBottom_toBottomOf="@id/vUserinformation"
-        app:layout_constraintStart_toEndOf="@id/label_kilometros"/>
 
 
     <View
@@ -232,45 +196,12 @@
         app:cornerRadius="14dp"
         app:backgroundTint="@color/white"
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/VContainer"
-        app:layout_constraintEnd_toStartOf="@id/btn_share_profile"
-        app:layout_constraintTop_toTopOf="@id/profile_options"
+        app:layout_constraintStart_toStartOf="@id/profile_options"
+        app:layout_constraintEnd_toEndOf="@id/profile_options"
         app:layout_constraintBottom_toBottomOf="@id/profile_options"
+        app:layout_constraintTop_toTopOf="@id/profile_options"
         app:strokeColor="#D9D9D9"
         app:strokeWidth="1dp" />
-
-    <!-- Botón de continuar -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_share_profile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:text="@string/PShareProfile"
-        android:textAllCaps="false"
-        android:textSize="14sp"
-        android:fontFamily="@font/roboto_black"
-        android:layout_marginRight="12dp"
-        android:layout_marginLeft="12dp"
-        app:cornerRadius="14dp"
-        app:backgroundTint="@color/white"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="@id/profile_options"
-        app:layout_constraintBottom_toBottomOf="@id/profile_options"
-        app:layout_constraintEnd_toStartOf="@+id/btnAgregarAmigos"
-        app:layout_constraintStart_toEndOf="@+id/btnEditProfile"
-        app:strokeColor="#D9D9D9"
-        app:strokeWidth="1dp" />
-
-    <!-- Botón de continuar -->
-    <ImageButton
-        android:id="@+id/btnAgregarAmigos"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_add_friend"
-        android:background="@drawable/rounded_button"
-        app:layout_constraintEnd_toEndOf="@id/VContainer"
-        app:layout_constraintTop_toTopOf="@id/profile_options"
-        app:layout_constraintBottom_toBottomOf="@id/profile_options"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabProfile"

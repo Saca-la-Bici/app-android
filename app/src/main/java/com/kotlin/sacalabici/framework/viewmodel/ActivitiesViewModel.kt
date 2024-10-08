@@ -1,7 +1,6 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -184,7 +183,6 @@ class ActivitiesViewModel(): ViewModel() {
                     callback(success, message)
                 }
             } catch (e: Exception) {
-                Log.e("postInscribirActivityViewModel", "Error al inscribir actividad", e)
                 withContext(Dispatchers.Main) {
                     callback(false, "Error desconocido. Por favor, intenta más tarde.")
                 }
@@ -201,7 +199,6 @@ class ActivitiesViewModel(): ViewModel() {
                     callback(success, message)
                 }
             } catch (e: Exception) {
-                Log.e("postCancelarActivityViewModel", "Error al cancelar la actividad", e)
                 withContext(Dispatchers.Main) {
                     callback(false, "Error desconocido. Por favor, intenta más tarde.")
                 }

@@ -1,7 +1,6 @@
 package com.kotlin.sacalabici.framework.views.activities.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.sacalabici.databinding.ActivityDetailsBinding
@@ -22,7 +21,6 @@ class DetailsActivity : AppCompatActivity() {
         // Pasar el viewModel al crear DetailsViewHolder
         detailsViewHolder = DetailsViewHolder(binding, activitiesViewModel, activityId!!)
 
-        Log.d("testing", "intent: ${activityId}")
         activityId?.let {
             activitiesViewModel.getActivityById(it)
         }
@@ -30,7 +28,6 @@ class DetailsActivity : AppCompatActivity() {
         activitiesViewModel.selectedActivityLiveData.observe(this) { activity ->
             activity?.let { detailsViewHolder.bind(it) }
             if (activity != null) {
-                Log.d("testing", "viewmodel: ${activity.id}")
             }
         }
 

@@ -27,6 +27,8 @@ class DetailsActivity : AppCompatActivity() {
 
         activitiesViewModel.selectedActivityLiveData.observe(this) { activity ->
             activity?.let { detailsViewHolder.bind(it) }
+            if (activity != null) {
+            }
         }
 
         binding.btnBack.setOnClickListener {

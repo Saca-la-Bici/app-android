@@ -1,18 +1,12 @@
 package com.kotlin.sacalabici.data.network.routes
 
-import android.util.Log
-import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.Route
-import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
-import com.kotlin.sacalabici.data.network.announcements.AnnouncementNetworkModuleDI
-import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
-import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
-import com.mapbox.geojson.Point
 
-class RouteApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
-
+class RouteApiClient(
+    private val firebaseTokenManager: FirebaseTokenManager,
+) {
     private lateinit var api: RouteApiService
 
     // Obtener la lista de rutas
@@ -21,7 +15,7 @@ class RouteApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         api = RouteNetworkModuleDI(token)
         return try {
             api.getRutasList()
-        } catch (e:java.lang.Exception) {
+        } catch (e: java.lang.Exception) {
             e.printStackTrace()
             null
         }
@@ -38,11 +32,28 @@ class RouteApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         }
     }
 
-    suspend fun modifyRoute(id: String, route: Route): Route? {
+    suspend fun modifyRoute(
+        id: String,
+        route: Route,
+    ): Route? {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = RouteNetworkModuleDI(token)
         return try {
             api.modifyRoute(id, route)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    suspend fun deleteRoute(
+        id: String,
+        route: Route,
+    ): Route? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        api = RouteNetworkModuleDI(token)
+        return try {
+            api.deleteRoute(id, route)
         } catch (e: Exception) {
             e.printStackTrace()
             null

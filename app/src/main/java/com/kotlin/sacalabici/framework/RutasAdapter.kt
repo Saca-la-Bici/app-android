@@ -30,7 +30,6 @@ class RutasAdapter(
         val divider: View = itemView.findViewById(R.id.LLRutasDivider)
         val rutaContainer: View = itemView.findViewById(R.id.rutaContainer)
         val btnModificar: View = itemView.findViewById(R.id.btnMod)
-        val btnEliminar: View = itemView.findViewById(R.id.btnDel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RutasViewHolder {
@@ -102,7 +101,7 @@ class RutasAdapter(
 
         // Desactivar línea divisora para el último elemento
         holder.divider.visibility = if (position == rutasList.size - 1) View.GONE else View.VISIBLE
-
+    }
 
     override fun getItemCount(): Int {
         return rutasList.size

@@ -61,11 +61,18 @@ class AnnouncementApiClient(private val firebaseTokenManager: FirebaseTokenManag
         }
     }
 
-    suspend fun patchAnnouncement(id: String, announcement: Announcement): Announcement? {
+    suspend fun patchAnnouncement(id: String, announcement: Announcement, context: Context): Announcement? {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = AnnouncementNetworkModuleDI(token)
+
+        val titulo = announcement.titulo
+        val contenido = announcement.contenido
+
+        val file = announcement.imagen?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
         return try {
-            api.patchAnnouncement(id, announcement)
+            api.patchAnnouncement(id, titulo, contenido, img)
         } catch (e: Exception) {
             e.printStackTrace()
             null

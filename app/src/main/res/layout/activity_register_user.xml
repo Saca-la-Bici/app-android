@@ -94,58 +94,44 @@
         app:layout_constraintStart_toEndOf="@+id/TVTitle"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <!-- Correo electrónico -->
-    <TextView
-        android:id="@+id/TVEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TEmail"
-        android:textSize="11sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TVTitle" />
+
 
     <!-- Campo de texto de correo electrónico -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TILEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/TVEmail"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@id/TVTitle"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintEnd_toEndOf="@+id/VContainer"><com.google.android.material.textfield.TextInputEditText
+        app:layout_constraintEnd_toEndOf="@+id/VContainer">
+
+        <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
-        android:layout_marginTop="5dp"
         android:textSize="14sp"
         android:hint="@string/TEmail"
         android:fontFamily="@font/roboto_regular"
         android:maxLines="1"
         android:lines="1"
         android:singleLine="true"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Nombre de usuario -->
-    <TextView
-        android:id="@+id/TVUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TUsername"
-        android:textSize="11sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TILEmail" />
+
 
     <!-- Campo de texto de nombre de usuario -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TILUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/TVUsername"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@id/TILEmail"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintEnd_toEndOf="@+id/VContainer"><com.google.android.material.textfield.TextInputEditText
+        app:layout_constraintEnd_toEndOf="@+id/VContainer">
+
+        <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
@@ -156,28 +142,21 @@
         android:maxLines="1"
         android:lines="1"
         android:singleLine="true"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Nombre de usuario -->
-    <TextView
-        android:id="@+id/TVName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TNombreCompleto"
-        android:textSize="11sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TILUsername" />
 
     <!-- Campo de texto de nombre completo -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TILName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/TVName"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@id/TILUsername"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintEnd_toEndOf="@+id/VContainer"><com.google.android.material.textfield.TextInputEditText
+        app:layout_constraintEnd_toEndOf="@+id/VContainer">
+
+        <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
@@ -188,6 +167,7 @@
         android:maxLines="1"
         android:lines="1"
         android:singleLine="true"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Botón de continuar -->
@@ -199,7 +179,7 @@
         android:text="@string/TContinue"
         android:textAllCaps="false"
         android:textSize="14sp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/roboto_black"
         app:cornerRadius="14dp"
         app:backgroundTint="@color/yellow"

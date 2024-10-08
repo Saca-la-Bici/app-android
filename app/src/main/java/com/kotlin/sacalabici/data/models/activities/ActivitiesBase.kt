@@ -32,25 +32,35 @@ data class DefaultActivity(
 )
 
 data class Activity(
-    @SerializedName("_id") val id: String,
+    @SerializedName("_id") var id: String,
     @SerializedName("titulo") val title: String,
     @SerializedName("fecha") val date: Date,
     @SerializedName("hora") val time: String,
     @SerializedName("ubicacion") val location: String,
     @SerializedName("descripcion") val description: String,
     @SerializedName("duracion") val duration: String,
-    @SerializedName("imagen") val imageURL: String? = null,  // El valor 'null' es opcional ya que la imagen no es obligatoria
+    @SerializedName("imagen") val imageURL: String? = null,
     @SerializedName("tipo") val type: String,
     @SerializedName("personasInscritas") val peopleEnrolled: Int,
     @SerializedName("estado") val state: Boolean,
     @SerializedName("foro") val foro: String? = null,
     @SerializedName("usuariosInscritos") val register: List<String>? = null,
-    // Elementos para rodada de ruta
+    // Elementos específicos de rodada
     @SerializedName("nivel") val nivel: String? = null,
     @SerializedName("distancia") val distancia: String? = null
 )
 
+
 data class Location(
     @SerializedName("latitud") val latitude: Double,
     @SerializedName("longitud") val longitude: Double
+)
+data class JoinActivityRequest(
+    val actividadId: String,
+    val tipo: String
+)
+
+data class CancelActivityRequest(
+    val actividadId: String,
+    val tipo: String
 )

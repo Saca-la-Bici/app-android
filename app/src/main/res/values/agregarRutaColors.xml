@@ -25,4 +25,11 @@
     <color name="yellow_able">#F6CD0B</color>
     <color name="yellow_disabled">#e3e3ac</color>
     <color name="selected_bg">#D3D3D3</color>
+
+    <!-- Colores de Niveles -->
+    <color name="level1">#81C784</color>
+    <color name="level2">#388E3C</color>
+    <color name="level3">#FDD835</color>
+    <color name="level4">#FF9800</color>
+    <color name="level5">#F44336</color>
 </resources>

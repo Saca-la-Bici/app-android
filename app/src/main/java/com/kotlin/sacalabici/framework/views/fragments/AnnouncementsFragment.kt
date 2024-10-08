@@ -5,7 +5,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,6 @@ import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
 import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
 import com.kotlin.sacalabici.framework.views.activities.announcement.AddAnnouncementActivity
 import kotlinx.coroutines.delay
-import com.kotlin.sacalabici.framework.views.activities.announcement.ModifyAnnouncementActivity
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -36,9 +34,6 @@ class AnnouncementsFragment: Fragment() {
         longClickListener = { announcement: AnnouncementBase ->
             showDialog(announcement)
             true
-        },
-        clickListener = { announcement: AnnouncementBase ->
-            passToModifyActivity(requireContext(), announcement)
         }
     )
     private lateinit var viewModel: AnnouncementsViewModel
@@ -68,7 +63,7 @@ class AnnouncementsFragment: Fragment() {
         }
         initializeObservers()
         setupClickListeners()
-        fetchAnnouncementsWithDelay()
+        fetchAnnouncements()
 
         addAnnouncementLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -91,7 +86,7 @@ class AnnouncementsFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        fetchAnnouncementsWithDelay()
+        fetchAnnouncements()
     }
 
     override fun onDestroyView() {
@@ -110,15 +105,6 @@ class AnnouncementsFragment: Fragment() {
         addAnnouncementLauncher.launch(intent)
     }
 
-    private fun passToModifyActivity(context: Context, announcement: AnnouncementBase) {
-        val intent = Intent(context, ModifyAnnouncementActivity::class.java).apply {
-            putExtra("id", announcement.id)
-            putExtra("title", announcement.title)
-            putExtra("content", announcement.content)
-            putExtra("url", announcement.url)
-        }
-        modifyAnnouncementLauncher.launch(intent)
-    }
 
     private fun initializeObservers() {
         viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
@@ -140,13 +126,12 @@ class AnnouncementsFragment: Fragment() {
         recyclerView = root.findViewById(R.id.RVAnnouncements)
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
-            fetchAnnouncementsWithDelay()
+            fetchAnnouncements()
         }
     }
 
-    private fun fetchAnnouncementsWithDelay() {
+    private fun fetchAnnouncements() {
         lifecycleScope.launch(Dispatchers.Main) {
-            delay(50)
             viewModel.getAnnouncementList()
         }
     }

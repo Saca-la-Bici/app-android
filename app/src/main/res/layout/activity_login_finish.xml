@@ -105,6 +105,29 @@
         app:layout_constraintStart_toEndOf="@+id/VHorizontalLine"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
+    <!-- Campo de texto de nombre completo -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TILName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/TVTitle"
+        app:layout_constraintStart_toStartOf="@+id/VContainer"
+        app:layout_constraintEnd_toEndOf="@+id/VContainer">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
+            android:layout_marginTop="5dp"
+            android:textSize="14sp"
+            android:hint="@string/TNombreCompleto"
+            android:fontFamily="@font/roboto_regular"
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
     <!-- Fecha de nacimeinto -->
     <TextView
         android:id="@+id/TVBirthday"
@@ -115,7 +138,7 @@
         android:textSize="19sp"
         android:fontFamily="@font/roboto_regular"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TVTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/TILName" />
 
     <!-- Advertencia de informacion publica -->
     <TextView
@@ -133,7 +156,7 @@
         android:id="@+id/BDate"
         android:layout_width="0dp"
         android:text="@string/TDate"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="2dp"
         app:backgroundTint="@color/white"
         android:textColor="@color/black"
         android:textSize="14sp"
@@ -148,49 +171,10 @@
         app:strokeColor="#D9D9D9"
         app:strokeWidth="1dp" />
 
-    <!-- Nombre de usuario -->
-    <TextView
-        android:id="@+id/TVName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TNombreCompleto"
-        android:textSize="11sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/BDate" />
 
-    <!-- Campo de texto de nombre completo -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/TILName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/TVName"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintEnd_toEndOf="@+id/VContainer"><com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:layout_marginTop="5dp"
-        android:textSize="14sp"
-        android:hint="@string/TNombreCompleto"
-        android:fontFamily="@font/roboto_regular"
-        android:maxLines="1"
-        android:lines="1"
-        android:singleLine="true"/>
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Número de emergencia -->
-    <TextView
-        android:id="@+id/TVEmergencyPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TNumeroEmergencia"
-        android:textSize="19sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TILName" />
+
+
 
     <!-- Advertencia de n[umero de emergencia -->
     <TextView
@@ -200,8 +184,9 @@
         android:text="@string/TPrivacityAdd"
         android:textSize="11sp"
         android:fontFamily="@font/roboto_regular"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TVEmergencyPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/BDate" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TILPhoneNumber"
@@ -236,17 +221,6 @@
         app:layout_constraintBottom_toBottomOf="@id/TILPhoneNumber"
         app:layout_constraintTop_toTopOf="@id/TILPhoneNumber"/>
 
-    <!-- Número de emergencia -->
-    <TextView
-        android:id="@+id/TVBloodType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TBloodType"
-        android:textSize="19sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TILPhoneNumber" />
 
     <!-- Advertencia de n[umero de emergencia -->
     <TextView
@@ -256,8 +230,9 @@
         android:text="@string/TPrivacityAdd"
         android:textSize="11sp"
         android:fontFamily="@font/roboto_regular"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TVBloodType" />
+        app:layout_constraintTop_toBottomOf="@+id/TILPhoneNumber" />
 
 
 

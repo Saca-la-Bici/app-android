@@ -1,6 +1,5 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
-import RutasAdapter
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.databinding.FragmentActivityRouteBinding
+import com.kotlin.sacalabici.framework.RutasAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment.OnFragmentInteractionListener

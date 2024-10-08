@@ -19,6 +19,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.LocationR
+import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.repositories.activities.ActivitiesRepository
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.sources.addSource
@@ -42,8 +43,6 @@ class StartRouteActivity : AppCompatActivity() {
     private lateinit var rodadaId: String
     private lateinit var loca: LocationR
 
-    private var isTrackingLocation = false
-    private var locationTrackingJob: Job? = null
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val client = OkHttpClient()
@@ -71,6 +70,8 @@ class StartRouteActivity : AppCompatActivity() {
 
         // Obtener el id de la rodada de alguna fuente (por ejemplo, desde un Intent)
         rodadaId = intent.getStringExtra("RODADA_ID") ?: "default_id" // Definir el id aquí
+
+        obtenerYdibujarRuta(rodadaId)
     }
 
     private fun initializeMap(){
@@ -135,6 +136,7 @@ class StartRouteActivity : AppCompatActivity() {
                         // Dibujar la línea en el mapa
                         dibujarLineaEnMapa()
 
+
                         sendLocation(rodadaId, loca)
                     }
                 }
@@ -166,6 +168,67 @@ class StartRouteActivity : AppCompatActivity() {
             style.addLayer(lineLayer)
         }
     }
+
+    private fun obtenerYdibujarRuta(rutaId: String) {
+        lifecycleScope.launch {
+            try {
+                val request = okhttp3.Request.Builder()
+                    .url("http://18.220.205.53:8080/rodada/obtenerUbicacion/$rutaId") // Asegúrate de usar la ID correcta en la URL
+                    .build()
+
+                val response: Response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val jsonData = response.body?.string()
+                    val jsonObject = JSONObject(jsonData)
+                    val coordenadas = jsonObject.getJSONArray("coordenadas")
+
+                    // Limpiar la lista antes de llenarla
+                    rutaDelUsuario.clear()
+
+                    for (i in 0 until coordenadas.length()) {
+                        val punto = coordenadas.getJSONObject(i)
+                        val latitud = punto.getDouble("latitud")
+                        val longitud = punto.getDouble("longitud")
+                        rutaDelUsuario.add(Point.fromLngLat(longitud, latitud))
+                    }
+
+                    // Llama a la función para dibujar la ruta, pasando la lista de puntos
+                    dibujarRutaEstablecidaEnMapa(rutaDelUsuario)
+                } else {
+                    Log.e("Ruta", "Error al obtener la ruta: ${response.message}")
+                }
+            } catch (e: Exception) {
+                Log.e("Ruta", "Error en la solicitud: ${e.message}")
+            }
+        }
+    }
+
+
+    private fun dibujarRutaEstablecidaEnMapa(puntosRuta: List<Point>) {
+        mapView.getMapboxMap().getStyle { style ->
+            // Si el estilo ya tiene una capa de línea, la eliminamos primero
+            style.removeStyleLayer("rutaEstablecidaLayer")
+            style.removeStyleSource("rutaEstablecidaSource")
+
+            // Creamos la fuente con los puntos de la ruta establecida
+            val geoJsonSource = geoJsonSource("rutaEstablecidaSource") {
+                feature(com.mapbox.geojson.Feature.fromGeometry(LineString.fromLngLats(puntosRuta)))
+            }
+
+            // Añadimos la fuente al estilo del mapa
+            style.addSource(geoJsonSource)
+
+            // Creamos la capa de línea y la añadimos al estilo
+            val lineLayer = lineLayer("rutaEstablecidaLayer", "rutaEstablecidaSource") {
+                lineColor("#FF0000") // Cambiar color a rojo
+                lineWidth(4.0) // Grosor de la línea
+            }
+
+            style.addLayer(lineLayer)
+        }
+    }
+
+
 
     private fun sendLocation(id: String, loca: LocationR) {
         lifecycleScope.launch {

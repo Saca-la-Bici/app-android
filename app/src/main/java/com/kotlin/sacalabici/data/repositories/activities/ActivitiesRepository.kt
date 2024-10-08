@@ -1,6 +1,5 @@
 package com.kotlin.sacalabici.data.repositories.activities
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
@@ -8,7 +7,6 @@ import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
-import com.kotlin.sacalabici.domain.activities.PostCancelActivity
 
 class ActivitiesRepository {
     val firebaseAuth = FirebaseAuth.getInstance()
@@ -72,12 +70,10 @@ class ActivitiesRepository {
     }
 
     suspend fun postJoinActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
-        Log.d("ActivitiesRepository", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo")
         return apiActivities.PostJoinActivity(actividadId, tipo)
     }
 
     suspend fun postCancelActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
-        Log.d("ActivitiesRepository", "btnJoin Cancel clicked. Activity ID: $actividadId, Type: $tipo")
         return apiActivities.PostCancelActivity(actividadId, tipo)
     }
 

@@ -1,8 +1,7 @@
 package com.kotlin.sacalabici.data.network.activities
 
-import com.google.android.gms.common.api.Response
+
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
-import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
@@ -12,14 +11,11 @@ import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import retrofit2.http.Body
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
-import com.kotlin.sacalabici.data.network.model.Informacion
 import okhttp3.MultipartBody
 import retrofit2.http.GET
-import kotlin.Result as Result1
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
-import java.util.Date
 import retrofit2.http.Query
 
 interface ActivitiesApiService {

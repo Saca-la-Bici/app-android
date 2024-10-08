@@ -28,7 +28,11 @@ import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DetailsViewHolder(private val binding: ActivityDetailsBinding, private val viewModel: ActivitiesViewModel) {
+class DetailsViewHolder(
+    private val binding: ActivityDetailsBinding,
+    private val viewModel: ActivitiesViewModel,
+    private val activityID: String
+) {
 
     fun bind(activity: Activity) {
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(activity.date)
@@ -69,10 +73,8 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding, private val
         binding.tvActivityLocation.text = context.getString(R.string.activity_location_list, activity.location)
         binding.tvActivityDescription.text = activity.description
 
-        // Configurar botón de inscripción
         setupJoinButton(activity)
 
-        // Copiar ubicación al portapapeles
         binding.btnCopyLocation.setOnClickListener {
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("Ubicación", activity.location)
@@ -84,9 +86,7 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding, private val
             binding.tvActivityDistance.visibility = View.VISIBLE
             binding.tvActivityDistance.text = context.getString(R.string.activity_distance, activity.distancia)
             binding.tvActivityRenta.visibility = View.VISIBLE
-
             setupRentLink()
-
         } else {
             binding.tvActivityDistance.visibility = View.GONE
             binding.tvActivityRenta.visibility = View.GONE
@@ -99,6 +99,7 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding, private val
     private fun setupJoinButton(activity: Activity) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         val firebaseUID = firebaseUser?.uid
+        activity.id = activityID
 
         if (firebaseUID != null) {
             val usuarioInscrito = activity.register?.contains(firebaseUID) == true
@@ -118,15 +119,17 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding, private val
         binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
 
         binding.btnJoin.setOnClickListener {
-            // Deshabilitar el botón mientras se espera la respuesta
             binding.btnJoin.isEnabled = false
 
             viewModel.postInscribirActividad(activity.id, activity.type) { success: Boolean, message: String ->
-                // Habilitar el botón después de recibir la respuesta
                 binding.btnJoin.isEnabled = true
-
                 Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
+
                 if (success) {
+                    // Actualizar el contador localmente
+                    val currentCount = binding.tvPeopleCount.text.toString().toInt()
+                    binding.tvPeopleCount.text = (currentCount + 1).toString()
+
                     setButtonForUnsubscription(activity)
                 } else {
                     binding.btnJoin.text = "Inscribirse"
@@ -141,15 +144,17 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding, private val
         binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
 
         binding.btnJoin.setOnClickListener {
-            // Deshabilitar el botón mientras se espera la respuesta
             binding.btnJoin.isEnabled = false
 
             viewModel.postCancelarInscripcion(activity.id, activity.type) { success: Boolean, message: String ->
-                // Habilitar el botón después de recibir la respuesta
                 binding.btnJoin.isEnabled = true
-
                 Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
+
                 if (success) {
+                    // Actualizar el contador localmente
+                    val currentCount = binding.tvPeopleCount.text.toString().toInt()
+                    binding.tvPeopleCount.text = (currentCount - 1).toString()
+
                     setButtonForSubscription(activity)
                 } else {
                     binding.btnJoin.text = "Cancelar inscripción"
@@ -172,7 +177,6 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding, private val
         }
 
         spannableString.setSpan(clickableSpan, text.length, text.length + linkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
         val colorSpan = ForegroundColorSpan(Color.parseColor("#7DA68D"))
         spannableString.setSpan(colorSpan, text.length, text.length + linkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
@@ -215,5 +219,3 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding, private val
             .into(imageView)
     }
 }
-
-

@@ -1,12 +1,8 @@
 package com.kotlin.sacalabici.framework.viewholders
 
-import com.google.firebase.auth.FirebaseAuth
-
-import android.util.Log
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide

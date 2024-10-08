@@ -1,11 +1,8 @@
 package com.kotlin.sacalabici.data.network.activities
 
-import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
-import com.google.gson.Gson
-import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
@@ -16,10 +13,7 @@ import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.data.network.MultipartManager
-import com.squareup.okhttp.RequestBody
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
+
 
 class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
     private lateinit var api: ActivitiesApiService
@@ -189,7 +183,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         val token = firebaseTokenManager.getTokenSynchronously()
 
         return if (token != null) {
-            Log.d("ActivitiesApiClient", "btnJoin clicked. Activity ID: $actividadId, Type: $tipo, Token: $token")
             api = ActivitiesNetworkModuleDI(token)
             try {
                 val request = JoinActivityRequest(actividadId, tipo)
@@ -199,20 +192,16 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
 
                 result.fold(
                     onSuccess = {
-                        Log.d("ActivitiesApiClient", "Inscripción exitosa.")
                         Pair(true, "Te has inscrito a la actividad.")  // Operación exitosa
                     },
                     onFailure = { exception ->
-                        Log.e("ActivitiesApiClient", "Error al inscribir actividad: ${exception.message}")
                         Pair(false, "Error: ${exception.message}")
                     }
                 )
             } catch (e: Exception) {
-                Log.e("ActivitiesApiClient", "Excepción al inscribir actividad", e)
                 Pair(false, "Error de red o conexión. Intenta más tarde.")
             }
         } else {
-            Log.e("ActivitiesApiClient", "Token no disponible")
             Pair(false, "Error de autenticación. Por favor, inicia sesión.")
         }
     }
@@ -224,7 +213,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         val token = firebaseTokenManager.getTokenSynchronously()
 
         return if (token != null) {
-            Log.d("ActivitiesApiClient", "btnJoin Cancel clicked. Activity ID: $actividadId, Type: $tipo, Token: $token")
             api = ActivitiesNetworkModuleDI(token)
             try {
                 val request = CancelActivityRequest(actividadId, tipo)
@@ -234,20 +222,16 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
 
                 result.fold(
                     onSuccess = {
-                        Log.d("ActivitiesApiClient", "Cancelación exitosa.")
                         Pair(true, "Has cancelado tu inscripción.")
                     },
                     onFailure = { exception ->
-                        Log.e("ActivitiesApiClient", "Error al cancelar actividad: ${exception.message}")
                         Pair(false, "Error: ${exception.message}")
                     }
                 )
             } catch (e: Exception) {
-                Log.e("ActivitiesApiClient", "Excepción al cancelar actividad", e)
                 Pair(false, "Error de red o conexión. Intenta más tarde.")
             }
         } else {
-            Log.e("ActivitiesApiClient", "Token no disponible")
             Pair(false, "Error de autenticación. Por favor, inicia sesión.")
         }
     }

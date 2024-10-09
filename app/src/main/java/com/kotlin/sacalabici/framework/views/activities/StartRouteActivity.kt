@@ -203,6 +203,21 @@ class StartRouteActivity : AppCompatActivity() {
                             val punto = Point.fromLngLat(location.longitude, location.latitude)
                             rutaDelUsuario.add(punto)
                             dibujarLineaEnMapa()
+
+                            val updatedUserLocationR = LocationR(
+                                id = "uniqueIdForLocation",  // Asigna un ID único o generado
+                                latitude = location.latitude,
+                                longitude = location.longitude
+                            )
+
+                            // Agregar log antes de enviar la ubicación
+                            Log.d("Location", "Ubicación actualizada: Latitud = ${location.latitude}, Longitud = ${location.longitude}")
+
+                            // Enviar la ubicación actualizada al servidor
+                            rodadaId?.let {
+                                Log.d("Location", "Enviando ubicación actualizada al servidor para rodadaId = $rodadaId")
+                                viewModel.postUbicacion(it, updatedUserLocationR)
+                            }
                         }
                     }
                 }

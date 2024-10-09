@@ -1,7 +1,9 @@
 package com.kotlin.sacalabici.data.network.profile
 
+import com.kotlin.sacalabici.data.models.activities.ActivitiesBase
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.data.models.profile.Profile
+import com.kotlin.sacalabici.data.models.activities.ActivityBase
 
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -24,6 +26,9 @@ interface ProfileApiService {
         @Part("numeroEmergencia") numeroEmergencia: String,
         @Part imagen: MultipartBody.Part?
     ): Profile
+
+    @GET("perfil/consultarActividadesInscritas/")
+    suspend fun getActividades(): ActivitiesBase
 }
 
 

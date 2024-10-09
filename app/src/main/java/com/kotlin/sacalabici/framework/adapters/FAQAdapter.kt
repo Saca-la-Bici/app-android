@@ -23,6 +23,7 @@ sealed class FAQItem {
 
 class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var data: ArrayList<FAQItem> = ArrayList()
+    var dataSearch: ArrayList<FAQBase> = ArrayList()
     lateinit var context: Context
 
     companion object {
@@ -80,4 +81,10 @@ class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         } else {
             VIEW_TYPE_FAQ
         }
+
+    // Function to update the list dynamically
+    fun updateList(newData: ArrayList<FAQBase>) {
+        dataSearch = newData
+        notifyDataSetChanged()
+    }
 }

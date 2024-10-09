@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +26,9 @@ class FAQFragment : Fragment() {
     private val adapter: FAQAdapter = FAQAdapter()
     private lateinit var viewModel: FAQViewModel
 
+    private lateinit var data: ArrayList<FAQBase>
+    private var faqList: ArrayList<FAQBase> = ArrayList()
+
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -40,6 +44,13 @@ class FAQFragment : Fragment() {
         viewModel.getFAQList()
 
         initializeObservers()
+
+        // Listener para el filtro de búsqueda
+        binding.etFilter.addTextChangedListener { query ->
+            val filteredList = filterFAQs(query.toString())
+            adapter.updateList(filteredList)
+        }
+
         return root
     }
 
@@ -67,6 +78,8 @@ class FAQFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(dataForList: ArrayList<FAQBase>) {
+        faqList = dataForList
+
         Log.d("FAQFragment", dataForList.size.toString())
         recyclerView.setHasFixedSize(true)
         val linearLayoutManager =
@@ -92,4 +105,18 @@ class FAQFragment : Fragment() {
                 .commit()
         }
     }
+
+    // Función para filtrar las preguntas
+    private fun filterFAQs(query: String): ArrayList<FAQBase> =
+        if (query.isEmpty()) {
+            faqList
+        } else {
+            val filteredList = ArrayList<FAQBase>()
+            for (movie in faqList) {
+                if (movie.Pregunta.contains(query, ignoreCase = true)) {
+                    filteredList.add(movie)
+                }
+            }
+            filteredList
+        }
 }

@@ -1,3 +1,4 @@
+// FAQFragment.kt
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
@@ -8,39 +9,36 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.FragmentFaqsBinding
 import com.kotlin.sacalabici.framework.adapters.FAQAdapter
 import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
+import com.kotlin.sacalabici.framework.ui.FAQDetailFragment
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FAQFragment : Fragment() {
     private var _binding: FragmentFaqsBinding? = null
-    private lateinit var recyclerView: RecyclerView
-    private val adapter: FAQAdapter = FAQAdapter()
+    private lateinit var adapter: FAQAdapter
     private lateinit var viewModel: FAQViewModel
 
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[FAQViewModel::class.java]
-        val root: View = binding.root
+        viewModel = ViewModelProvider(requireActivity())[FAQViewModel::class.java]
         setupBackButton()
-        initializeComponents(root)
+        initializeComponents()
         viewModel.getFAQList()
-
         initializeObservers()
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -56,39 +54,37 @@ class FAQFragment : Fragment() {
             }
         }
 
-        // Observador para el mensaje de error
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             binding.errorMessageFAQ.text = errorMessage
         }
+
+        viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
+            faq?.let {
+                // Navigate to FAQDetailFragment programmatically
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.replace(R.id.nav_host_fragment_content_main, FAQDetailFragment())
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+        }
     }
 
-    private fun initializeComponents(root: View) {
-        recyclerView = root.findViewById(R.id.recyclerFAQ)
+    private fun initializeComponents() {
+        binding.recyclerFAQ.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun setUpRecyclerView(dataForList: ArrayList<FAQBase>) {
-        Log.d("FAQFragment", dataForList.size.toString())
-        recyclerView.setHasFixedSize(true)
-        val linearLayoutManager =
-            LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false,
-            )
-        recyclerView.layoutManager = linearLayoutManager
+        adapter = FAQAdapter(viewModel)
         adapter.setFAQAdapter(dataForList, requireContext())
-        recyclerView.adapter = adapter
+        binding.recyclerFAQ.adapter = adapter
     }
 
-    // Función para que el botón de Regresar de lleve a SettingsFragment
     private fun setupBackButton() {
-        val btnFAQs = binding.BRegresar
-        btnFAQs.setOnClickListener {
-            // Navegar a SettingFragment y reemplazar el contenido en el contenedor principal de MainActivity
+        binding.BRegresar.setOnClickListener {
             parentFragmentManager
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, SettingsFragment())
-                .addToBackStack(null) // Para permitir navegar hacia atrás
+                .addToBackStack(null)
                 .commit()
         }
     }

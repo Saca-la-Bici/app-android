@@ -9,8 +9,8 @@ import com.kotlin.sacalabici.databinding.ItemFaqBinding
 import com.kotlin.sacalabici.databinding.ItemFaqCategoryBinding
 import com.kotlin.sacalabici.framework.viewholders.CategoryFAQViewHolder
 import com.kotlin.sacalabici.framework.viewholders.FAQViewHolder
+import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 
-// Definir FAQItem para manejar categorías y FAQs
 sealed class FAQItem {
     data class Category(
         val name: String,
@@ -21,12 +21,13 @@ sealed class FAQItem {
     ) : FAQItem()
 }
 
-class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FAQAdapter(
+    private val viewModel: FAQViewModel
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var data: ArrayList<FAQItem> = ArrayList()
     lateinit var context: Context
 
     companion object {
-        // Tipos de vista para el RecyclerView
         const val VIEW_TYPE_CATEGORY = 0
         const val VIEW_TYPE_FAQ = 1
     }
@@ -36,14 +37,12 @@ class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         context: Context,
     ) {
         this.context = context
-        // Agrupamos por categoría utilizando el campo Tema
         val groupedData = basicData.groupBy { it.Tema }
         data.clear()
         for ((category, faqs) in groupedData) {
-            data.add(FAQItem.Category(category)) // Añadimos el encabezado de la categoría
-            faqs.forEach { faq -> data.add(FAQItem.FAQ(faq)) } // Añadimos las FAQ dentro de esa categoría
+            data.add(FAQItem.Category(category))
+            faqs.forEach { faq -> data.add(FAQItem.FAQ(faq)) }
         }
-        // Notificamos que los datos han cambiado para actualizar la vista
         notifyDataSetChanged()
     }
 
@@ -56,6 +55,9 @@ class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             (holder as CategoryFAQViewHolder).bind((item as FAQItem.Category).name)
         } else {
             (holder as FAQViewHolder).bind((item as FAQItem.FAQ).faqBase)
+            holder.itemView.setOnClickListener {
+                viewModel.selectFAQ((item as FAQItem.FAQ).faqBase)
+            }
         }
     }
 
@@ -73,7 +75,6 @@ class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = data.size
 
-    // Verificamos el tipo de vista para determinar cómo enlazar los datos
     override fun getItemViewType(position: Int): Int =
         if (data[position] is FAQItem.Category) {
             VIEW_TYPE_CATEGORY

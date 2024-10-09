@@ -15,6 +15,7 @@ class FAQViewModel : ViewModel() {
     // private val postFAQRequirement = PostFAQRequirement()
 
     val errorMessage = MutableLiveData<String?>()
+    val selectedFAQ = MutableLiveData<FAQBase?>()
 
     fun getFAQList() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -34,6 +35,10 @@ class FAQViewModel : ViewModel() {
                 faqObjectLiveData.postValue(emptyList())
             }
         }
+    }
+
+    fun selectFAQ(faq: FAQBase) {
+        selectedFAQ.postValue(faq)
     }
 }
 

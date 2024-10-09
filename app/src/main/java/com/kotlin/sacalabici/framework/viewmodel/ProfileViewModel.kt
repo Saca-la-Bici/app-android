@@ -84,6 +84,7 @@ class ProfileViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getActivitiesRequirement()
+                Log.d("Result:", "$result")
                 if (result.isEmpty()) {
                     errorMessageLiveData.postValue(emptyListActs)
                 }

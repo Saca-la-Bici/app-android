@@ -60,7 +60,9 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         return if (token != null) {
             api = ProfileNetworkModuleDI(token)
             try {
-                api.getActividades()
+                val activitiesBase = api.getActividades()
+                Log.d("ProfileApiClient", "ActivitiesBase: $activitiesBase")
+                activitiesBase
             } catch (e: Exception) {
                 e.printStackTrace()
                 null

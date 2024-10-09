@@ -22,11 +22,11 @@ data class DefaultActivityBase(
     @SerializedName("_id") val id: String,
     @SerializedName("informacion") val actividades: List<ActivityBase>,
     @SerializedName("ruta") val route: Route? = null,
-    @SerializedName("ubicacion") val liveLocation: List<Location>
+    @SerializedName("ubicacion") val liveLocation: List<Location>? = null
 )
 
 
 data class ActivitiesBase(
-    @SerializedName("activities") val activities: List<DefaultActivityBase>
+    @SerializedName("actividadesInscritas") val activities: List<DefaultActivityBase>
     //   @SerializedName("permisos") val permisos: List<String>
 )

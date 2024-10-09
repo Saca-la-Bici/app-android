@@ -29,6 +29,7 @@ interface ProfileApiService {
 
     @GET("perfil/consultarActividadesInscritas/")
     suspend fun getActividades(): ActivitiesBase
+
 }
 
 

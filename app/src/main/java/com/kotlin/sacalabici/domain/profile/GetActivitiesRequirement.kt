@@ -7,5 +7,13 @@ import com.kotlin.sacalabici.data.repositories.ProfileRepository
 class GetActivitiesRequirement {
     private val repository = ProfileRepository()
 
-    suspend operator fun invoke(): List<ActivityBase> = repository.getActividades()
+    suspend operator fun invoke(): List<ActivityBase> {
+        return try {
+            repository.getActividades()
+        } catch (e: Exception) {
+            // Log the exception
+            println("Error fetching activities: ${e.message}")
+            emptyList()
+        }
+    }
 }

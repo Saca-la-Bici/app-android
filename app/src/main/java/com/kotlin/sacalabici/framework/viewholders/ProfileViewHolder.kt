@@ -18,7 +18,14 @@ class ProfileViewHolder (
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: ActivityBase) {
-        val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(item.date)
+        // Define the date format used in the API response
+        val apiDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+        val formattedDate = try {
+            val date = apiDateFormat.parse(item.date)
+            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(date)
+        } catch (e: Exception) {
+            item.date  // Fallback to the original date string if parsing fails
+        }
 
         val context = binding.root.context
 
@@ -51,6 +58,5 @@ class ProfileViewHolder (
         binding.tvEventDetails.setOnClickListener {
             clickListener(item)
         }
-
     }
 }

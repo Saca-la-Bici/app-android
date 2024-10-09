@@ -86,7 +86,6 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
                     }
 
                     // Creamos el objeto Announcement con el Uri resultante
-                    Log.d("ModifyAnnouncement", "ImageUri: $imageUri")
                     val announcement = Announcement(title, description, imageUri)
 
                     // Enviamos el anuncio modificado al ViewModel

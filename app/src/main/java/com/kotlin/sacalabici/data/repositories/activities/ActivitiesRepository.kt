@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.repositories.activities
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
@@ -20,11 +21,13 @@ class ActivitiesRepository {
             val nivel = itemActivity.route?.nivel
             val distance = itemActivity.route?.distancia
             val rodadaId = itemActivity.id
-            itemActivity.activities.forEach{ activity ->
-                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel, distancia = distance)
+            val rutaId = itemActivity.route?.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel, distancia = distance, idRouteBase = rutaId)
                 listRodadas.add(updatedActivity)
             }
         }
+        Log.d("ActivitiesRepository", "getRodadas: $listRodadas")
         return listRodadas
     }
 

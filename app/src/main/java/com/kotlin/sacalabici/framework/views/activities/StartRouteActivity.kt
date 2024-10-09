@@ -16,15 +16,19 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.layers.generated.lineLayer
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
+import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteInfoObjectBase
 import com.kotlin.sacalabici.data.repositories.activities.ActivitiesRepository
 import com.kotlin.sacalabici.databinding.ActivityStartRouteBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
+import com.kotlin.sacalabici.helpers.MapHelper
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
@@ -44,6 +48,7 @@ class StartRouteActivity : AppCompatActivity() {
     private val rutaDelUsuario = mutableListOf<Point>()
     private var rodadaId: String? = null
     private var rutaId: String? = null
+    private var coordenadasRuta: List<CoordenatesBase>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +60,13 @@ class StartRouteActivity : AppCompatActivity() {
         val extras = intent.extras
         val id = extras?.getString("ID") ?: ""
 
+        var mapHelper = MapHelper(this)
+
         // Observa los cambios en el LiveData del ViewModel
+        // Primero, observamos ambos LiveData en el mismo bloque
         viewModel.rodadaInfo.observe(this) { rodadaInfo ->
-            rodadaInfo?.let {
+            // Lógica para `rodadaInfo`
+            rodadaInfo?.let { it ->
                 rodadaInfoData = it // Guarda la información en la variable
                 Log.d("Rodada", "Información de la rodada recibida: $rodadaInfoData")
 
@@ -66,23 +75,25 @@ class StartRouteActivity : AppCompatActivity() {
 
                 Log.d("Rodada", "Id de la rodada recibida: $rodadaId")
                 Log.d("Rodada", "Id de la ruta recibida: $rutaId")
+
+                rutaId?.let { it1 -> viewModel.getRoute(it1) }
             }
         }
 
         viewModel.routeInfo.observe(this) { routeInfo ->
-            routeInfo?.let {
-                routeInfoData = it
-                Log.d("Ruta", "Información de la ruta recibida: $routeInfoData")
-                Log.d("Ruta", "Coordenadas: ${routeInfoData!!.ruta.coordenadas}")
+            routeInfoData = routeInfo
+            routeInfoData?.ruta?.coordenadas?.let { coordenadas ->
+
+                val coordenadasJson = Gson().toJson(routeInfoData?.ruta?.coordenadas)
+                val coordenadasType = object : TypeToken<ArrayList<CoordenatesBase>>() {}.type
+                val coordenadasList: ArrayList<CoordenatesBase> = Gson().fromJson(coordenadasJson, coordenadasType)
+
+                mapHelper.drawRouteWithCoordinates(mapView,coordenadasList)
             }
         }
 
         // Solicita la información de la rodada desde el ViewModel
         viewModel.getRodadaInfo(id)
-
-        rutaId?.let { viewModel.getRoute(it) }
-
-
 
         // Ocultar el ActionBar si existe
         supportActionBar?.hide()

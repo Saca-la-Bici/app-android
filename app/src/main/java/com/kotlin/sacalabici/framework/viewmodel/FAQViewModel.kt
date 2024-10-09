@@ -14,20 +14,30 @@ class FAQViewModel : ViewModel() {
     private val faqListRequirement = FAQListRequirement()
     // private val postFAQRequirement = PostFAQRequirement()
 
+    val errorMessage = MutableLiveData<String?>()
+
     fun getFAQList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result: FAQObjectBase? = faqListRequirement()
-                val faqresult = result!!.faqs.reversed()
-                faqObjectLiveData.postValue(faqresult)
+                val faqresult = result!!.faqs
+
+                if (faqresult.isEmpty()) {
+                    errorMessage.postValue("No se encontraron preguntas frecuentes")
+                } else {
+                    faqObjectLiveData.postValue(faqresult)
+                    errorMessage.postValue(null)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
+                errorMessage.postValue("Error al consultar los datos")
                 faqObjectLiveData.postValue(emptyList())
             }
         }
     }
+}
 
-    /*
+/*
     fun postFAQ(FAQ: FAQ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -38,5 +48,4 @@ class FAQViewModel : ViewModel() {
         }
     }
 
-     */
-}
+ */

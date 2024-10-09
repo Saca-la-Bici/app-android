@@ -1,6 +1,5 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
-import RutasAdapter
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.framework.RutasAdapter
 
 class RutasFragment : Fragment() {
 
@@ -82,4 +82,3 @@ class RutasFragment : Fragment() {
         }
     }
 }
-

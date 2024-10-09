@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -33,19 +35,55 @@ class AddAnnouncementActivity: AppCompatActivity() {
         binding.ibClose.setOnClickListener {
             finish()
         }
+
         binding.ibCheck.setOnClickListener {
-            val title = binding.etAddAnnouncementTitle.text.toString()
-            val description = binding.etAddAnnouncementDescription.text.toString()
-            val image = selectedImageUri
-            val annnouncement = Announcement(title, description, image)
-            viewModel.postAnnouncement(annnouncement, this)
-            setResult(Activity.RESULT_OK)
-            finish()
+            if (validateFields()) {
+                val title = binding.etAddAnnouncementTitle.text.toString()
+                val description = binding.etAddAnnouncementDescription.text.toString()
+                val image = selectedImageUri
+                val announcement = Announcement(title, description, image)
+
+                // Mostrar progreso
+                showLoading(true)
+
+                viewModel.postAnnouncement(announcement, this) { result ->
+                    runOnUiThread {
+                        showLoading(false)
+                        result.fold(
+                            onSuccess = {
+                                Toast.makeText(this, "Anuncio registrado exitosamente", Toast.LENGTH_SHORT).show()
+                                setResult(Activity.RESULT_OK)
+                                finish()
+                            },
+                            onFailure = { error ->
+                                Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                            }
+                        )
+                    }
+                }
+            }
         }
-        binding.ibAddImage.setOnClickListener { // Llamar al botón que abre la galería de imágenes
+
+        binding.ibAddImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
         }
+    }
+
+    private fun validateFields(): Boolean {
+        if (binding.etAddAnnouncementTitle.text.isNullOrEmpty()) {
+            binding.etAddAnnouncementTitle.error = "El título no puede estar vacío"
+            return false
+        } else {
+            binding.etAddAnnouncementTitle.error = null
+        }
+        if (binding.etAddAnnouncementDescription.text.isNullOrEmpty()) {
+            binding.etAddAnnouncementDescription.error = "La descripción no puede estar vacía"
+            return false
+        } else {
+            binding.etAddAnnouncementDescription.error = null
+        }
+        return true
     }
 
     private fun initializeBinding() {
@@ -72,5 +110,10 @@ class AddAnnouncementActivity: AppCompatActivity() {
         if (tempFile.exists()) {
             tempFile.delete()
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.ibCheck.isEnabled = !isLoading
     }
 }

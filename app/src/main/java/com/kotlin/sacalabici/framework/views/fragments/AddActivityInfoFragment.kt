@@ -303,7 +303,7 @@ class AddActivityInfoFragment: Fragment() {
             isValid = false
         }
 
-        if (binding.BDate.text.isNullOrEmpty()) {
+        if (binding.BDate.text == "Año-Mes-Día") {
             Toast.makeText(requireContext(), "Por favor, selecciona una fecha", Toast.LENGTH_SHORT).show()
             isValid = false
         }

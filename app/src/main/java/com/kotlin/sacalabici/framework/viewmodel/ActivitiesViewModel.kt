@@ -15,8 +15,11 @@ import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
 import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
+import com.kotlin.sacalabici.domain.activities.PostCancelActivity
+import com.kotlin.sacalabici.domain.activities.PostJoinActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ActivitiesViewModel(): ViewModel() {
     // LiveData para observar los datos de la UI
@@ -46,6 +49,9 @@ class ActivitiesViewModel(): ViewModel() {
     init {
         getPermissions()
     }
+
+    private val postJoinActivity = PostJoinActivity()
+    private val postCancelActivity = PostCancelActivity()
 
     // Función para cargar rodadas
     fun getRodadas() {
@@ -166,4 +172,40 @@ class ActivitiesViewModel(): ViewModel() {
             }
         }
     }
+
+
+    // Función para inscribir al usuario en una actividad
+    fun postInscribirActividad(actividadId: String, tipo: String, callback: (Boolean, String) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val (success, message) = postJoinActivity(actividadId, tipo)
+                withContext(Dispatchers.Main) {
+                    callback(success, message)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    callback(false, "Error desconocido. Por favor, intenta más tarde.")
+                }
+            }
+        }
+    }
+
+
+    fun postCancelarInscripcion(actividadId: String, tipo: String, callback: (Boolean, String) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val (success, message) = postCancelActivity(actividadId, tipo)
+                withContext(Dispatchers.Main) {
+                    callback(success, message)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    callback(false, "Error desconocido. Por favor, intenta más tarde.")
+                }
+            }
+        }
+    }
+
+
+
 }

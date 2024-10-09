@@ -1,3 +1,5 @@
+package com.kotlin.sacalabici.framework
+
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,6 +32,7 @@ class RutasAdapter(
         val divider: View = itemView.findViewById(R.id.LLRutasDivider)
         val rutaContainer: View = itemView.findViewById(R.id.rutaContainer)
         val btnModificar: View = itemView.findViewById(R.id.btnMod)
+        val btnEliminar: View = itemView.findViewById(R.id.btnDel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RutasViewHolder {
@@ -71,10 +74,10 @@ class RutasAdapter(
             notifyItemChanged(rutasList.indexOf(previousRuta))
             notifyItemChanged(rutasList.indexOf(selectedRuta))
 
-            Log.d("Ruta Seleccionada",ruta.titulo)
-            Log.d("Ruta Seleccionada",ruta.nivel)
-            Log.d("Ruta Seleccionada",ruta.tiempo)
-            Log.d("Ruta Seleccionada",ruta.distancia)
+            Log.d("Ruta Seleccionada", ruta.titulo)
+            Log.d("Ruta Seleccionada", ruta.nivel)
+            Log.d("Ruta Seleccionada", ruta.tiempo)
+            Log.d("Ruta Seleccionada", ruta.distancia)
             Log.d("Ruta Seleccionada", ruta.coordenadas.toString())
 
             onRutaSelected(ruta)
@@ -88,7 +91,7 @@ class RutasAdapter(
             val intent = Intent(context, ModifyRouteActivity::class.java)
 
             // Agrega datos adicionales al Intent como extras
-            intent.putExtra("ID",ruta.id)
+            intent.putExtra("ID", ruta.id)
             intent.putExtra("TITULO", ruta.titulo)
             intent.putExtra("DISTANCIA", ruta.distancia)
             intent.putExtra("TIEMPO", ruta.tiempo)
@@ -112,6 +115,4 @@ class RutasAdapter(
         rutasList = newRutas
         notifyDataSetChanged()
     }
-
-
 }

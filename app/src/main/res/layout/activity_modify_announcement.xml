@@ -62,6 +62,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.2" />
 
+
+    <TextView
+        android:id="@+id/tvEraseImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eliminar imagen"
+        app:layout_constraintTop_toBottomOf="@id/ibAddImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        android:textColor="@color/red"/>
+
+
+
+
+
     <TextView
         android:id="@+id/tvModifyAnnouncementTitle"
         android:layout_width="wrap_content"
@@ -72,7 +89,7 @@
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ibAddImage"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.15" />
 
     <EditText
         android:id="@+id/etModifyAnnouncementTitle"
@@ -93,7 +110,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvModifyAnnouncementTitle"
-        app:layout_constraintVertical_bias="0.01"/>
+        app:layout_constraintVertical_bias="0.015"/>
 
     <TextView
         android:id="@+id/tvModifyAnnouncementDescription"
@@ -106,7 +123,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/tvModifyAnnouncementTitle"
         app:layout_constraintTop_toBottomOf="@+id/etModifyAnnouncementTitle"
-        app:layout_constraintVertical_bias="0.04" />
+        app:layout_constraintVertical_bias="0.06" />
 
     <EditText
         android:id="@+id/etModifyAnnouncementDescription"
@@ -130,7 +147,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvModifyAnnouncementDescription"
-        app:layout_constraintVertical_bias="0.01"/>
+        app:layout_constraintVertical_bias="0.025"/>
 
     
     <include layout="@layout/main_navbar"/>

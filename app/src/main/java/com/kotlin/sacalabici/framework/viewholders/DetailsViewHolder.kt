@@ -20,17 +20,22 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ActivityDetailsBinding
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DetailsViewHolder(private val binding: ActivityDetailsBinding) {
+class DetailsViewHolder(
+    private val binding: ActivityDetailsBinding,
+    private val viewModel: ActivitiesViewModel,
+    private val activityID: String
+) {
 
     fun bind(activity: Activity) {
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(activity.date)
-
         val context = binding.root.context
 
         binding.tvActivityTitle.text = activity.title
@@ -40,11 +45,11 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding) {
             binding.tvActivityLevel.text = activity.nivel
 
             val levelColor = when (activity.nivel) {
-                "Nivel 1" -> ContextCompat.getColor(context,R.color.level1)
-                "Nivel 2" -> ContextCompat.getColor(context,R.color.level2)
-                "Nivel 3" -> ContextCompat.getColor(context,R.color.level3)
-                "Nivel 4" -> ContextCompat.getColor(context,R.color.level4)
-                "Nivel 5" -> ContextCompat.getColor(context,R.color.level5)
+                "Nivel 1" -> ContextCompat.getColor(context, R.color.level1)
+                "Nivel 2" -> ContextCompat.getColor(context, R.color.level2)
+                "Nivel 3" -> ContextCompat.getColor(context, R.color.level3)
+                "Nivel 4" -> ContextCompat.getColor(context, R.color.level4)
+                "Nivel 5" -> ContextCompat.getColor(context, R.color.level5)
                 else -> ContextCompat.getColor(context, R.color.gray)
             }
             val background = binding.tvActivityLevel.background as GradientDrawable
@@ -53,7 +58,6 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding) {
             binding.tvActivityLevel.visibility = View.GONE
         }
 
-        binding.tvActivityLevel.text = activity.nivel
         binding.tvPeopleCount.text = activity.peopleEnrolled.toString()
 
         if (activity.imageURL != null) {
@@ -69,49 +73,119 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding) {
         binding.tvActivityLocation.text = context.getString(R.string.activity_location_list, activity.location)
         binding.tvActivityDescription.text = activity.description
 
-        binding.btnJoin.setOnClickListener {
-            // Lógica para unirse a la actividad
-        }
+        setupJoinButton(activity)
 
-        // Copiar ubicación al portapapeles
         binding.btnCopyLocation.setOnClickListener {
-            val clipboard = binding.root.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Ubicación",activity.location)
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Ubicación", activity.location)
             clipboard.setPrimaryClip(clip)
-            Toast.makeText(binding.root.context, "Ubicación copiada al portapapeles", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ubicación copiada al portapapeles", Toast.LENGTH_SHORT).show()
         }
 
         if (activity.type == "Rodada") {
-            binding.tvActivityDistance.visibility  = View.VISIBLE
-            binding.tvActivityDistance.text = binding.root.context.getString(R.string.activity_distance, activity.distancia)
+            binding.tvActivityDistance.visibility = View.VISIBLE
+            binding.tvActivityDistance.text = context.getString(R.string.activity_distance, activity.distancia)
             binding.tvActivityRenta.visibility = View.VISIBLE
-
-            // Enlace después del texto "Renta de Bicicletas: "
-            val text = binding.root.context.getString(R.string.activity_rent) + " "
-            val linkText = "Clic aquí"
-            val spannableString = SpannableString(text + linkText)
-
-            val clickableSpan = object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://rentabici.sacalabici.org/"))
-                    widget.context.startActivity(intent)
-                }
-            }
-
-            spannableString.setSpan(clickableSpan, text.length, text.length + linkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-            val colorSpan = ForegroundColorSpan(Color.parseColor("#7DA68D"))
-            spannableString.setSpan(colorSpan, text.length, text.length + linkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-            binding.tvActivityRenta.text = spannableString
-            binding.tvActivityRenta.movementMethod = LinkMovementMethod.getInstance()
-
+            setupRentLink()
         } else {
             binding.tvActivityDistance.visibility = View.GONE
             binding.tvActivityRenta.visibility = View.GONE
         }
 
-        if (activity.type == "Rodada"){
+        setupStartButton(activity)
+        setupRutaButton(activity)
+    }
+
+    private fun setupJoinButton(activity: Activity) {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val firebaseUID = firebaseUser?.uid
+        activity.id = activityID
+
+        if (firebaseUID != null) {
+            val usuarioInscrito = activity.register?.contains(firebaseUID) == true
+
+            if (usuarioInscrito) {
+                setButtonForUnsubscription(activity)
+            } else {
+                setButtonForSubscription(activity)
+            }
+        } else {
+            Toast.makeText(binding.root.context, "No se ha autenticado ningún usuario.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setButtonForSubscription(activity: Activity) {
+        binding.btnJoin.text = "Inscribirse"
+        binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
+
+        binding.btnJoin.setOnClickListener {
+            binding.btnJoin.isEnabled = false
+
+            viewModel.postInscribirActividad(activity.id, activity.type) { success: Boolean, message: String ->
+                binding.btnJoin.isEnabled = true
+                Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
+
+                if (success) {
+                    // Actualizar el contador localmente
+                    val currentCount = binding.tvPeopleCount.text.toString().toInt()
+                    binding.tvPeopleCount.text = (currentCount + 1).toString()
+
+                    setButtonForUnsubscription(activity)
+                } else {
+                    binding.btnJoin.text = "Inscribirse"
+                    binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
+                }
+            }
+        }
+    }
+
+    private fun setButtonForUnsubscription(activity: Activity) {
+        binding.btnJoin.text = "Cancelar inscripción"
+        binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
+
+        binding.btnJoin.setOnClickListener {
+            binding.btnJoin.isEnabled = false
+
+            viewModel.postCancelarInscripcion(activity.id, activity.type) { success: Boolean, message: String ->
+                binding.btnJoin.isEnabled = true
+                Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
+
+                if (success) {
+                    // Actualizar el contador localmente
+                    val currentCount = binding.tvPeopleCount.text.toString().toInt()
+                    binding.tvPeopleCount.text = (currentCount - 1).toString()
+
+                    setButtonForSubscription(activity)
+                } else {
+                    binding.btnJoin.text = "Cancelar inscripción"
+                    binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
+                }
+            }
+        }
+    }
+
+    private fun setupRentLink() {
+        val text = binding.root.context.getString(R.string.activity_rent) + " "
+        val linkText = "Clic aquí"
+        val spannableString = SpannableString(text + linkText)
+
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://rentabici.sacalabici.org/"))
+                widget.context.startActivity(intent)
+            }
+        }
+
+        spannableString.setSpan(clickableSpan, text.length, text.length + linkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val colorSpan = ForegroundColorSpan(Color.parseColor("#7DA68D"))
+        spannableString.setSpan(colorSpan, text.length, text.length + linkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        binding.tvActivityRenta.text = spannableString
+        binding.tvActivityRenta.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun setupStartButton(activity: Activity) {
+        if (activity.type == "Rodada") {
             binding.btnStart.visibility = View.VISIBLE
             binding.btnStart.setOnClickListener {
                 // Lógica para iniciar la actividad
@@ -119,7 +193,9 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding) {
         } else {
             binding.btnStart.visibility = View.GONE
         }
+    }
 
+    private fun setupRutaButton(activity: Activity) {
         if (activity.type == "Rodada") {
             binding.btnRuta.visibility = View.VISIBLE
             binding.btnRuta.setOnClickListener {

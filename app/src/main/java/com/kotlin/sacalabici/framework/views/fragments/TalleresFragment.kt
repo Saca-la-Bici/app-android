@@ -52,9 +52,11 @@ class TalleresFragment : Fragment() {
     private fun initializeComponents() {
         binding.errorMessageTalleres.visibility = View.GONE
         binding.recyclerViewTalleres.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ActivitiesAdapter(mutableListOf()) { taller ->
+
+        adapter = ActivitiesAdapter(mutableListOf(), { taller ->
             passDetailsActivity(taller.id)
-        }
+        }, activitiesViewModel)
+
         binding.recyclerViewTalleres.adapter = adapter
     }
 

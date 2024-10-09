@@ -70,4 +70,14 @@ class ActivitiesRepository {
         val permissionsObject = apiActivities.getPermissions()
         return permissionsObject?.permisos ?: emptyList()
     }
+
+    suspend fun postJoinActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
+        return apiActivities.PostJoinActivity(actividadId, tipo)
+    }
+
+    suspend fun postCancelActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
+        return apiActivities.PostCancelActivity(actividadId, tipo)
+    }
+
+
 }

@@ -26,7 +26,6 @@ class FAQFragment : Fragment() {
     private val adapter: FAQAdapter = FAQAdapter()
     private lateinit var viewModel: FAQViewModel
 
-    private lateinit var data: ArrayList<FAQBase>
     private var faqList: ArrayList<FAQBase> = ArrayList()
 
     private val binding get() = _binding!!
@@ -45,7 +44,7 @@ class FAQFragment : Fragment() {
 
         initializeObservers()
 
-        // Listener para el filtro de búsqueda
+        // Listener for search filter
         binding.etFilter.addTextChangedListener { query ->
             val filteredList = filterFAQs(query.toString())
             adapter.updateList(filteredList)
@@ -60,14 +59,15 @@ class FAQFragment : Fragment() {
     }
 
     private fun initializeObservers() {
-        viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqList ->
+        // Observing the FAQ list data from the ViewModel
+        viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
             lifecycleScope.launch {
                 delay(50)
-                setUpRecyclerView(ArrayList(faqList))
+                setUpRecyclerView(ArrayList(faqListData))
             }
         }
 
-        // Observador para el mensaje de error
+        // Observer for error messages
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             binding.errorMessageFAQ.text = errorMessage
         }
@@ -80,7 +80,7 @@ class FAQFragment : Fragment() {
     private fun setUpRecyclerView(dataForList: ArrayList<FAQBase>) {
         faqList = dataForList
 
-        Log.d("FAQFragment", dataForList.size.toString())
+        Log.d("FAQFragment", "FAQ List Size: ${dataForList.size}")
         recyclerView.setHasFixedSize(true)
         val linearLayoutManager =
             LinearLayoutManager(
@@ -93,28 +93,29 @@ class FAQFragment : Fragment() {
         recyclerView.adapter = adapter
     }
 
-    // Función para que el botón de Regresar de lleve a SettingsFragment
+    // Function to handle back button, navigating to SettingsFragment
     private fun setupBackButton() {
         val btnFAQs = binding.BRegresar
         btnFAQs.setOnClickListener {
-            // Navegar a SettingFragment y reemplazar el contenido en el contenedor principal de MainActivity
+            // Navigate to SettingsFragment and replace content in MainActivity's container
             parentFragmentManager
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, SettingsFragment())
-                .addToBackStack(null) // Para permitir navegar hacia atrás
+                .addToBackStack(null) // Allows navigating back
                 .commit()
         }
     }
 
-    // Función para filtrar las preguntas
+    // Function to filter FAQs based on the search query
     private fun filterFAQs(query: String): ArrayList<FAQBase> =
         if (query.isEmpty()) {
-            faqList
+            faqList // If query is empty, return the full list
         } else {
+            // Filter the FAQ list based on the query
             val filteredList = ArrayList<FAQBase>()
-            for (movie in faqList) {
-                if (movie.Pregunta.contains(query, ignoreCase = true)) {
-                    filteredList.add(movie)
+            for (faq in faqList) {
+                if (faq.Pregunta.contains(query, ignoreCase = true)) {
+                    filteredList.add(faq)
                 }
             }
             filteredList

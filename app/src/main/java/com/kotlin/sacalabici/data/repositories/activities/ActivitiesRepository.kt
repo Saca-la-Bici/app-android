@@ -62,8 +62,11 @@ class ActivitiesRepository {
         val activity = response?.actividad?.information?.firstOrNull()
         val nivel = response?.actividad?.route?.nivel
         val distancia = response?.actividad?.route?.distancia
+        val rutaId = response?.actividad?.route?.id
 
-        return activity?.copy(nivel = nivel, distancia = distancia)
+        val activityResponse = activity?.copy(nivel = nivel, distancia = distancia, idRouteBase = rutaId)
+        Log.d("UnaActividad","${activityResponse}")
+        return activityResponse
     }
 
     suspend fun getPermissions(): List<String> {

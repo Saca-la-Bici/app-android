@@ -27,7 +27,6 @@ class ActivitiesRepository {
                 listRodadas.add(updatedActivity)
             }
         }
-        Log.d("ActivitiesRepository", "getRodadas: $listRodadas")
         return listRodadas
     }
 

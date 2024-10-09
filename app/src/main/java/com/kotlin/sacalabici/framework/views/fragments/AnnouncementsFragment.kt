@@ -114,6 +114,11 @@ class AnnouncementsFragment: Fragment() {
             }
         }
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->
+            if (announcementList.isEmpty()) {
+                binding.tvNoAnnouncements.visibility = View.VISIBLE
+            } else {
+                binding.tvNoAnnouncements.visibility = View.GONE
+            }
             lifecycleScope.launch {
                 delay(50)
                 setUpRecyclerView(ArrayList(announcementList))

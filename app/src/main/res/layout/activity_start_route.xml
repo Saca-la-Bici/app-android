@@ -28,4 +28,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <!-- Botón para detener la rodada -->
+    <Button
+        android:id="@+id/stop_tracking_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Detener Ruta"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

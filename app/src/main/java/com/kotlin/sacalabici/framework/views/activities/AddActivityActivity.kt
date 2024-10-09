@@ -88,28 +88,17 @@ class AddActivityActivity: AppCompatActivity(),
         val info = ActivityInfo(title, date, hour, minutes, hourDur, minutesDur, ubi, description)
         viewModel.activityInfo.value = info
 
-        // Formato para parsear y generar un objeto Date desde yyyy-MM-dd
-        //val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        //val dateAct: Date = dateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
-
         // Formato para parsear la fecha de entrada (dd/MM/yyyy)
         val inputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
         // Parsear la cadena de fecha en el formato de entrada
         val parsedDate: Date = inputDateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
-
         // Formato para la salida (yyyy-MM-dd)
         val outputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
         // Formatear la fecha parseada al formato de salida
         val formattedDate = outputDateFormat.format(parsedDate)
 
-        // Imprimir o usar la fecha formateada
-        println(formattedDate)  // Esto imprimirá: 2024-10-22
-
-
-        val hourAct = "$hour horas $minutes minutos"
-        val duration = "$hourDur:$minutesDur"
+        val hourAct = "$hour:$minutes"
+        val duration = "$hourDur horas $minutesDur minutos"
 
         if (type == "Rodada") {
             val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Rodada")

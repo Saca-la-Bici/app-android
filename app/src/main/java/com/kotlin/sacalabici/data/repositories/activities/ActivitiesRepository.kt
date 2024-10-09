@@ -84,7 +84,10 @@ class ActivitiesRepository {
         return apiActivities.postLocation(id,location)
     }
 
-    suspend fun getInfoRodada(id:String): RodadaInfoBase? =
-        apiActivities.getRodadaInfo(id)
+    suspend fun getInfoRodada(id: String): RodadaInfoBase? {
+        Log.d("ActivitiesRepository", "Fetching Rodada info for id: $id")
+        return apiActivities.getRodadaInfo(id)
+    }
+
 
 }

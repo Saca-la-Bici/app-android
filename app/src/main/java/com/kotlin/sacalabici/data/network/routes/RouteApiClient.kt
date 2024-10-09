@@ -4,6 +4,7 @@ import android.util.Log
 import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.data.models.routes.RouteInfoObjectBase
 import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.announcements.AnnouncementNetworkModuleDI
@@ -27,7 +28,7 @@ class RouteApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         }
     }
 
-    suspend fun getRuta(id: String): Route? {
+    suspend fun getRuta(id: String): RouteInfoObjectBase? {
         val token = firebaseTokenManager.getTokenSynchronously() // Obtener el token de forma sincrónica
         api = RouteNetworkModuleDI(token)
         return try {

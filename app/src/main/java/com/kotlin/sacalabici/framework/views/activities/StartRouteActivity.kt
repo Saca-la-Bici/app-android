@@ -7,54 +7,82 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.layers.generated.lineLayer
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.LocationR
+import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.routes.Route
+import com.kotlin.sacalabici.data.models.routes.RouteInfoObjectBase
 import com.kotlin.sacalabici.data.repositories.activities.ActivitiesRepository
+import com.kotlin.sacalabici.databinding.ActivityStartRouteBinding
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.plugin.PuckBearing
 import com.mapbox.maps.plugin.locationcomponent.location
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.RequestBody
-import okhttp3.Response
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import org.json.JSONObject
 
 class StartRouteActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityStartRouteBinding
+    private lateinit var viewModel: ActivitiesViewModel
     private lateinit var mapView: MapView
-    private lateinit var pointAnnotationManager: PointAnnotationManager
-
     private lateinit var postLocationRequirement: ActivitiesRepository
-    private lateinit var rodadaId: String
-    private lateinit var loca: LocationR
-
-
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val client = OkHttpClient()
-
     private val LOCATION_PERMISSION_REQUEST_CODE = 1000
-
-    // Lista de puntos que representarán la ruta del usuario
+    private var rodadaInfoData: RodadaInfoBase? = null
+    private var routeInfoData: RouteInfoObjectBase? = null
     private val rutaDelUsuario = mutableListOf<Point>()
+    private var rodadaId: String? = null
+    private var rutaId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_route)
+        initializeBinding()
+
+        viewModel = ViewModelProvider(this).get(ActivitiesViewModel::class.java)
+
+        val extras = intent.extras
+        val id = extras?.getString("ID") ?: ""
+
+        // Observa los cambios en el LiveData del ViewModel
+        viewModel.rodadaInfo.observe(this) { rodadaInfo ->
+            rodadaInfo?.let {
+                rodadaInfoData = it // Guarda la información en la variable
+                Log.d("Rodada", "Información de la rodada recibida: $rodadaInfoData")
+
+                rodadaId = rodadaInfoData?.rodadaId
+                rutaId = rodadaInfoData?.rutaId
+
+                Log.d("Rodada", "Id de la rodada recibida: $rodadaId")
+                Log.d("Rodada", "Id de la ruta recibida: $rutaId")
+            }
+        }
+
+        viewModel.routeInfo.observe(this) { routeInfo ->
+            routeInfo?.let {
+                routeInfoData = it
+                Log.d("Ruta", "Información de la ruta recibida: $routeInfoData")
+                Log.d("Ruta", "Coordenadas: ${routeInfoData!!.ruta.coordenadas}")
+            }
+        }
+
+        // Solicita la información de la rodada desde el ViewModel
+        viewModel.getRodadaInfo(id)
+
+        rutaId?.let { viewModel.getRoute(it) }
+
+
 
         // Ocultar el ActionBar si existe
         supportActionBar?.hide()
@@ -67,10 +95,14 @@ class StartRouteActivity : AppCompatActivity() {
         initializeMap()
 
         postLocationRequirement = ActivitiesRepository()
-
     }
 
-    private fun initializeMap(){
+    private fun initializeBinding() {
+        binding = ActivityStartRouteBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    private fun initializeMap() {
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
 
         // Centrar la cámara en una ubicación inicial (por ejemplo, Querétaro)
@@ -103,6 +135,22 @@ class StartRouteActivity : AppCompatActivity() {
                     .build()
                 mapView.getMapboxMap().setCamera(userLocation)
 
+                // Crear el objeto LocationR con la ubicación del usuario
+                val userLocationR = LocationR(
+                    id = "uniqueIdForLocation",  // Asigna un ID único o generado
+                    latitude = it.latitude,
+                    longitude = it.longitude
+                )
+
+                // Agregar log antes de enviar la ubicación
+                Log.d("Location", "Ubicación obtenida: Latitud = ${it.latitude}, Longitud = ${it.longitude}")
+
+                // Enviar la ubicación al servidor
+                rodadaId?.let {
+                    Log.d("Location", "Enviando ubicación a servidor para rodadaId = $rodadaId")
+                    viewModel.postUbicacion(it, userLocationR)
+                }
+
                 // Comenzar a seguir la ubicación del usuario
                 iniciarSeguimientoDeUbicacion()
             }
@@ -132,14 +180,28 @@ class StartRouteActivity : AppCompatActivity() {
                         // Dibujar la línea en el mapa
                         dibujarLineaEnMapa()
 
+                        // Crear el objeto LocationR con la nueva ubicación del usuario
+                        val updatedUserLocationR = LocationR(
+                            id = "uniqueIdForLocation",  // Asigna un ID único o generado
+                            latitude = location.latitude,
+                            longitude = location.longitude
+                        )
 
-                        sendLocation(rodadaId, loca)
+                        // Agregar log antes de enviar la ubicación
+                        Log.d("Location", "Ubicación actualizada: Latitud = ${location.latitude}, Longitud = ${location.longitude}")
+
+                        // Enviar la ubicación actualizada al servidor
+                        rodadaId?.let {
+                            Log.d("Location", "Enviando ubicación actualizada al servidor para rodadaId = $rodadaId")
+                            viewModel.postUbicacion(it, updatedUserLocationR)
+                        }
                     }
                 }
             },
             null
         )
     }
+
 
     private fun dibujarLineaEnMapa() {
         mapView.getMapboxMap().getStyle { style ->
@@ -162,22 +224,6 @@ class StartRouteActivity : AppCompatActivity() {
             }
 
             style.addLayer(lineLayer)
-        }
-    }
-
-    private fun sendLocation(id: String, loca: LocationR) {
-        lifecycleScope.launch {
-            try {
-                // Llamar al método del repositorio para enviar la ubicación
-                val resultado = postLocationRequirement.postLocation(id,loca)
-                if (resultado) {
-                    Log.d("Ubicacion", "Ubicación enviada exitosamenteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-                } else {
-                    Log.e("Ubicacion", "Error al enviar la ubicación")
-                }
-            } catch (e: Exception) {
-                Log.e("Ubicacion", "Error en la solicitud: ${e.message}")
-            }
         }
     }
 }

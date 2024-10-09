@@ -1,8 +1,8 @@
 package com.kotlin.sacalabici.data.models.activities
 
+import com.google.gson.annotations.SerializedName
+
 data class RodadaInfoBase(
-    val idRodada: String?,
-    val idRuta: String?,
-    val message: String? = null,
-    val error: Boolean = false
+    @SerializedName("rodadaId") var rodadaId: String,
+    @SerializedName("rutaId") var rutaId: String
 )

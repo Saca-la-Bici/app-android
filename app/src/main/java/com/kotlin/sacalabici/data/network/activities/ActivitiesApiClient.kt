@@ -113,18 +113,24 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
 
     suspend fun getRodadaInfo(id: String): RodadaInfoBase? {
         val token = firebaseTokenManager.getTokenSynchronously()
+        Log.d("ActivitiesRepository", "Token retrieved: $token")
+
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
+                Log.d("ActivitiesRepository", "Calling API to get Rodada info with id: $id")
                 api.getRodadaInfo(id)
             } catch (e: Exception) {
+                Log.e("ActivitiesRepository", "Error fetching Rodada info: ${e.message}")
                 e.printStackTrace()
                 null
             }
         } else {
+            Log.w("ActivitiesRepository", "Token is null, cannot proceed")
             null
         }
     }
+
 
 
 }

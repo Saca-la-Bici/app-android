@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.data.network.routes
 
 import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.data.models.routes.RouteInfoObjectBase
 import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import retrofit2.Response
@@ -27,6 +28,6 @@ interface RouteApiService {
         @Body route: Route
     ): Route
 
-    @GET("mapa/consultarRutas")
-    suspend fun getRuta(@Query("id") id: String): Route
+    @GET("mapa/consultarRutas/{id}")
+    suspend fun getRuta(@Path("id") id: String): RouteInfoObjectBase
 }

@@ -12,6 +12,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -31,12 +32,12 @@ interface ActivitiesApiService {
     @GET("getPermissions")
     suspend fun getPermissions(): PermissionsObject
 
-    @POST("rodadas/iniciarRodada/{id}")
+    @PUT("rodadas/iniciarRodada/{id}")
     suspend fun postLocation(
         @Path("id") id: String,
         @Body location: LocationR  // Usa la clase Location definida en tu modelo
     ): Response<Void>
 
-    @GET("rodadas/obtenerRodadaPorId")
-    suspend fun getRodadaInfo(@Query("id") id: String): RodadaInfoBase
+    @GET("rodadas/obtenerRodadaPorId/{id}")
+    suspend fun getRodadaInfo(@Path("id") id: String): RodadaInfoBase
 }

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityModifyAnnouncementBinding
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
@@ -30,6 +31,7 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private var selectedImageUri: Uri? = null
     private var originalImageUrl: String? = null
+    private var isImageErased: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +65,9 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         binding.ibClose.setOnClickListener {
             finish()
         }
+        binding.tvEraseImage.setOnClickListener {
+            eraseImage()
+        }
         binding.ibCheck.setOnClickListener {
             if (validateFields()) {
                 val id = intent.getStringExtra("id") ?: ""
@@ -74,12 +79,14 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     // Si se ha seleccionado una nueva imagen, usamos ese Uri. De lo contrario, descargamos la imagen original.
                     val imageUri = when {
+                        isImageErased -> null
                         selectedImageUri != null -> selectedImageUri
-                        !originalImageUrl.isNullOrEmpty() -> downloadImageToFile(originalImageUrl!!)
+                        !originalImageUrl.isNullOrEmpty() && !isImageErased -> downloadImageToFile(originalImageUrl!!)
                         else -> null
                     }
 
                     // Creamos el objeto Announcement con el Uri resultante
+                    Log.d("ModifyAnnouncement", "ImageUri: $imageUri")
                     val announcement = Announcement(title, description, imageUri)
 
                     // Enviamos el anuncio modificado al ViewModel
@@ -164,6 +171,12 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.ibCheck.isEnabled = !isLoading
+    }
+
+    private fun eraseImage() {
+        selectedImageUri = null
+        isImageErased = true
+        binding.ibAddImage.setImageResource(R.drawable.ic_add_image)
     }
 
 }

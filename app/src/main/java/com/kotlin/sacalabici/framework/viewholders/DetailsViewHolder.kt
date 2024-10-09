@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ActivityDetailsBinding
+import com.kotlin.sacalabici.framework.views.activities.LookRouteActivity
 import com.kotlin.sacalabici.framework.views.activities.StartRouteActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -99,7 +100,9 @@ class DetailsViewHolder(private val binding: ActivityDetailsBinding) {
         if (activity.type == "Rodada") {
             binding.btnRuta.visibility = View.VISIBLE
             binding.btnRuta.setOnClickListener {
-                // Lógica para ver la ruta de la actividad
+                val intent = Intent(binding.root.context, LookRouteActivity::class.java)
+                intent.putExtra("ID",activity.id)
+                binding.root.context.startActivity(intent)
             }
         } else {
             binding.btnRuta.visibility = View.GONE

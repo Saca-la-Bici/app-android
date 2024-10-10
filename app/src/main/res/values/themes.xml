@@ -1,21 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.Sacalabici" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Base application theme for light mode -->
+    <style name="Theme.Sacalabici.Light" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black</item>
         <item name="colorPrimaryVariant">@color/yellow</item>
-        <item name="colorOnPrimary">@color/semiWhite</item>
+        <item name="colorOnPrimary">@color/white</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/green</item>
         <item name="colorSecondaryVariant">@color/darkGreen</item>
         <item name="colorOnSecondary">@color/darkGray</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-    </style>
 
-    <style name="Theme.Sacalabici.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/semiWhite</item>
+        <item name="colorSurface">@color/semiWhite</item>
+
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/darkGray</item>
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- Customize your theme -->
     </style>
 </resources>

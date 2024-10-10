@@ -25,11 +25,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textSize="12sp"
         android:text="Nombre del Usuario"
+        android:fontFamily="@font/roboto_bold"
         android:textColor="@android:color/black"
         android:layout_gravity="center_vertical"
-        android:paddingStart="16dp"
-        style="@style/TextAppearance.LabelSmall" />
+        android:paddingStart="16dp" />
 
     <!-- Botón Agregar o Eliminar -->
     <Button
@@ -40,10 +41,11 @@
         android:textColor="#1D1B20"
         android:backgroundTint="@color/yellow"
         android:layout_gravity="center_vertical"
-        app:cornerRadius="12dp"
+        android:fontFamily="@font/roboto_black"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:layout_marginLeft="15dp"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"
+        app:cornerRadius="12dp"/>
 
 </LinearLayout>

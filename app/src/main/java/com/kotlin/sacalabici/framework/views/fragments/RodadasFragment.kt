@@ -103,6 +103,7 @@ class RodadasFragment: Fragment() {
         }
     }
 
+    // Iniciar activity con detalles acorde al ID de la rodada seleccionado
     private fun passDetailsActivity(rodadaId: String){
         val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
             putExtra("ACTIVITY_ID", rodadaId)

@@ -109,11 +109,16 @@ class AnnouncementsFragment: Fragment() {
     private fun initializeObservers() {
         viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
-            if (!permissions.contains("Registrar anuncio")) {
-                binding.fabAddAnouncement.visibility = View.GONE
+            if (permissions.contains("Registrar anuncio")) {
+                binding.fabAddAnouncement.visibility = View.VISIBLE
             }
         }
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->
+            if (announcementList.isEmpty()) {
+                binding.tvNoAnnouncements.visibility = View.VISIBLE
+            } else {
+                binding.tvNoAnnouncements.visibility = View.GONE
+            }
             lifecycleScope.launch {
                 delay(50)
                 setUpRecyclerView(ArrayList(announcementList))

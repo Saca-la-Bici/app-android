@@ -126,6 +126,7 @@ class TalleresFragment : Fragment() {
                 taller.duration,
                 taller.imageURL,
                 "Taller",
+                null,
                 storedPermissions
             )
             dialogFragment.show(parentFragmentManager, ActivityActionDialogFragment.TAG)

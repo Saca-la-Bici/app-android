@@ -33,8 +33,7 @@ class ActivityActionDialogFragment: DialogFragment() {
     private lateinit var hourDur: String
     private var url: String? = null
     private lateinit var type: String
-    private var level: String? = null
-    private var distance: String? = null
+    private var idRoute: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +49,7 @@ class ActivityActionDialogFragment: DialogFragment() {
             hourDur = it.getString("hourDur") ?: throw IllegalArgumentException("Hour duration is required")
             url = it.getString("url")
             type = it.getString("type") ?: throw IllegalArgumentException("Type is required")
+            idRoute = it.getString("idRoute")
             permissions = it.getStringArrayList("permissions") ?: emptyList()
         } ?: throw IllegalArgumentException("Arguments are required")
     }
@@ -94,6 +94,7 @@ class ActivityActionDialogFragment: DialogFragment() {
                 putExtra("desc", desc)
                 putExtra("hourDur", hourDur)
                 putExtra("url", url)
+                putExtra("idRoute", idRoute)
                 putExtra("type", type)
             }
             startActivity(intent)
@@ -113,6 +114,7 @@ class ActivityActionDialogFragment: DialogFragment() {
             hourDur: String,
             url: String?,
             type: String,
+            idRoute: String?,
             permissions: List<String>
         ): ActivityActionDialogFragment {
             val fragment = ActivityActionDialogFragment()
@@ -126,6 +128,7 @@ class ActivityActionDialogFragment: DialogFragment() {
             args.putString("hourDur", hourDur)
             args.putString("url", url)
             args.putString("type", type)
+            args.putString("idRoute", idRoute)
             args.putStringArrayList("permissions", ArrayList(permissions))
             fragment.arguments = args
             return fragment

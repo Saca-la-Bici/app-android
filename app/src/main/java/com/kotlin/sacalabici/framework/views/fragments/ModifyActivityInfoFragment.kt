@@ -83,7 +83,7 @@ class ModifyActivityInfoFragment: Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment.OnFragmentInteractionListener) {
+        if (context is com.kotlin.sacalabici.framework.views.fragments.ModifyActivityInfoFragment.OnFragmentInteractionListener) {
             listener = context
         } else {
             throw RuntimeException("$context debe implementar OnFragmentInteractionListener")

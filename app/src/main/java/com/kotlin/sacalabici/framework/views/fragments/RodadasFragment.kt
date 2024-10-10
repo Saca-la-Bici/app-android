@@ -126,6 +126,7 @@ class RodadasFragment: Fragment() {
                 rodada.duration,
                 rodada.imageURL,
                 "Rodada",
+                rodada.idRouteBase,
                 storedPermissions
             )
             dialogFragment.show(parentFragmentManager, ActivityActionDialogFragment.TAG)

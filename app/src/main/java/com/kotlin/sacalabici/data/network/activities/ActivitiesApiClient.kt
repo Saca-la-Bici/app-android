@@ -237,6 +237,105 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
     }
 
 
+    suspend fun patchActivityTaller(id: String, taller: ActivityModel, context: Context): ActivityModel? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        val informacion = taller.informacion
+        val id = id
+        val titulo = informacion[0].titulo
+        val fecha = informacion[0].fecha
+        val hora = informacion[0].hora
+        val duracion = informacion[0].duracion
+        val ubicacion = informacion[0].ubicacion
+        val descripcion = informacion[0].descripcion
+        val tipo = informacion[0].tipo
+
+        val file = taller.informacion[0].imagen?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.patchActivityTaller(
+                    id,
+                    titulo,
+                    fecha,
+                    hora,
+                    duracion,
+                    ubicacion,
+                    descripcion,
+                    tipo,
+                    img
+                )
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    suspend fun patchActivityEvento(id: String, evento: ActivityModel, context: Context): ActivityModel? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        val informacion = evento.informacion
+
+        val titulo = informacion[0].titulo
+        val fecha = informacion[0].fecha
+        val hora = informacion[0].hora
+        val duracion = informacion[0].duracion
+        val ubicacion = informacion[0].ubicacion
+        val descripcion = informacion[0].descripcion
+        val tipo = informacion[0].tipo
+
+        val file = evento.informacion[0].imagen?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.patchActivityEvento(id, titulo, fecha, hora, duracion, ubicacion, descripcion, tipo, img)
+            } catch (e: java.lang.Exception){
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    suspend fun patchActivityRodada(id: String, rodada: Rodada, context: Context): Rodada? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        val informacion = rodada.informacion
+
+        val titulo = informacion[0].titulo
+        val fecha = informacion[0].fecha
+        val hora = informacion[0].hora
+        val duracion = informacion[0].duracion
+        val ubicacion = informacion[0].ubicacion
+        val descripcion = informacion[0].descripcion
+        val tipo = informacion[0].tipo
+        val ruta = rodada.ruta
+
+        val file = rodada.informacion[0].imagen?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.patchActivityRodada(id, titulo, fecha, hora, duracion, ubicacion, descripcion, tipo, ruta, img)
+            } catch (e: java.lang.Exception){
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+
     suspend fun getPermissions(): PermissionsObject? {
         val token = firebaseTokenManager.getTokenSynchronously()
         return if (token != null) {

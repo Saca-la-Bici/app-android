@@ -14,6 +14,7 @@ import com.kotlin.sacalabici.data.models.profile.PermissionsObject
 import okhttp3.MultipartBody
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Query
@@ -79,4 +80,48 @@ interface ActivitiesApiService {
 
     @POST("actividades/cancelarAsistencia/cancelar")
     suspend fun PostCancelActivity(@Body request: CancelActivityRequest)
+
+    @Multipart
+    @PATCH("actividades/modificar/taller")
+    suspend fun patchActivityTaller(
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
+        @Part imagen: MultipartBody.Part?
+    ): ActivityModel
+
+    @Multipart
+    @PATCH("actividades/modificar/evento")
+    suspend fun patchActivityEvento(
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
+        @Part imagen: MultipartBody.Part?
+    ): ActivityModel
+
+    @Multipart
+    @PATCH("actividades/modificar/rodada")
+    suspend fun patchActivityRodada(
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
+        @Part("ruta") ruta: String,
+        @Part imagen: MultipartBody.Part?
+    ): Rodada
+
 }

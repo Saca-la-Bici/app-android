@@ -14,6 +14,7 @@ import com.kotlin.sacalabici.domain.activities.GetActivityByIdRequirement
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
+import com.kotlin.sacalabici.domain.activities.PatchActivityRequirement
 import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
 import com.kotlin.sacalabici.domain.activities.PostCancelActivity
 import com.kotlin.sacalabici.domain.activities.PostJoinActivity
@@ -43,6 +44,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val getEventosRequirement = GetEventosRequirement()
     private val getTalleresRequirement = GetTalleresRequirement()
     private val requirement = PostActivityRequirement()
+    private val patchRequirement = PatchActivityRequirement()
     private val getActivityByIdRequirement = GetActivityByIdRequirement()
     private val permissionsRequirement = PermissionsRequirement()
 
@@ -206,6 +208,42 @@ class ActivitiesViewModel(): ViewModel() {
         }
     }
 
+
+    // Modificar evento
+    fun patchActivityEvento(id: String, evento: ActivityModel, context: Context, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                patchRequirement.patchActivityEvento(id, evento, context)
+                callback(Result.success(Unit))
+            } catch (e: Exception) {
+                callback(Result.failure(e))
+            }
+        }
+    }
+
+    // Modificar rodada
+    fun patchActivityRodada(id: String, rodada: Rodada, context: Context, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                patchRequirement.patchActivityRodada(id, rodada, context)
+                callback(Result.success(Unit))
+            } catch (e: Exception) {
+                callback(Result.failure(e))
+            }
+        }
+    }
+
+    // Modificar taller
+    fun patchActivityTaller(id: String, taller: ActivityModel, context: Context, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                patchRequirement.patchActivityTaller(id, taller, context)
+                callback(Result.success(Unit))
+            } catch (e: Exception) {
+                callback(Result.failure(e))
+            }
+        }
+    }
 
 
 }

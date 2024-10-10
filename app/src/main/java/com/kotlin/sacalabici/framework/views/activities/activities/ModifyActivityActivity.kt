@@ -3,6 +3,8 @@ package com.kotlin.sacalabici.framework.views.activities.activities
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -31,8 +33,9 @@ import java.util.Date
 import java.util.Locale
 
 class ModifyActivityActivity: AppCompatActivity(),
-    AddActivityInfoFragment.OnFragmentInteractionListener,
-    AddActivityRouteFragment.OnRutaConfirmListener
+
+    ModifyActivityInfoFragment.OnFragmentInteractionListener,
+    ModifyActivityRouteFragment.OnRutaConfirmListener
 {
 
     private lateinit var binding: ActivityAddactivityBinding
@@ -49,6 +52,7 @@ class ModifyActivityActivity: AppCompatActivity(),
     private lateinit var desc: String
     private lateinit var hourDur: String
     private lateinit var type: String
+    private var idRoute: String? = null
 
     private var selectedImageUri: Uri? = null
     private var originalImageUrl: String? = null
@@ -73,6 +77,7 @@ class ModifyActivityActivity: AppCompatActivity(),
         hourDur = intent.getStringExtra("hourDur").toString()
         originalImageUrl = intent.getStringExtra("url")
         type = intent.getStringExtra("type").toString()
+        idRoute = intent.getStringExtra("idRoute")
 
         // Observa los cambios en los LiveData del ViewModel
         observeViewModel()
@@ -104,7 +109,7 @@ class ModifyActivityActivity: AppCompatActivity(),
     }
 
     /*
-    * Función llamada desde AddActivityInfoFragment
+    * Función llamada desde ModifyActivityInfoFragment
     * Recibe la información general del formulario en el primer fragmento
     * */
     override fun receiveInformation(
@@ -139,18 +144,40 @@ class ModifyActivityActivity: AppCompatActivity(),
             }
 
             if (type == "Rodada") {
-                val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Rodada")
+                val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Rodada")
                 rodadaInformation = rodadaInfo
 
             } else if (type == "Taller") {
-                val tallerInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Taller")
+                val tallerInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Taller")
                 val taller = ActivityModel(listOf(tallerInfo))
-                // Función del viewmodel
+                viewModel.patchActivityTaller(id, taller, this@ModifyActivityActivity) { result ->
+                    result.fold(
+                        onSuccess = {
+                            showToast("Taller modificado exitosamente")
+                            setResult(Activity.RESULT_OK)
+                            finish()
+                        },
+                        onFailure = { error ->
+                            showToast("Error al modificar el taller")
+                        }
+                    )
+                }
 
             } else if (type == "Evento") {
-                val eventoInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Evento")
+                val eventoInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Evento")
                 val evento = ActivityModel(listOf(eventoInfo))
-                // Función del viewmodel
+                viewModel.patchActivityEvento(id, evento, this@ModifyActivityActivity) { result ->
+                    result.fold(
+                        onSuccess = {
+                            showToast("Evento modificado exitosamente")
+                            setResult(Activity.RESULT_OK)
+                            finish()
+                        },
+                        onFailure = { error ->
+                            showToast("Error al modificar el evento")
+                        }
+                    )
+                }
             }
 
         }
@@ -161,13 +188,13 @@ class ModifyActivityActivity: AppCompatActivity(),
     * */
     private fun toggleRutasList() {
         val fragmentManager = supportFragmentManager
-        val addActivityRouteFragment = fragmentManager.findFragmentById(R.id.fragmentAddActivity)
+        val modifyActivityRouteFragment = fragmentManager.findFragmentById(R.id.fragmentAddActivity)
 
         if (isAddActivityRouteFragmentVisible) {
             // Si el fragmento ya está visible, lo eliminamos
-            if (addActivityRouteFragment != null) {
+            if (modifyActivityRouteFragment != null) {
                 fragmentManager.beginTransaction()
-                    .remove(addActivityRouteFragment)
+                    .remove(modifyActivityRouteFragment)
                     .addToBackStack(null)
                     .commit()
             }
@@ -197,10 +224,6 @@ class ModifyActivityActivity: AppCompatActivity(),
         if (type == "Rodada") {
             toggleRutasList()
 
-        } else {
-            Toast.makeText(this, "Actividad modificada", Toast.LENGTH_SHORT).show()
-            setResult(Activity.RESULT_OK)
-            finish()
         }
     }
 
@@ -233,10 +256,18 @@ class ModifyActivityActivity: AppCompatActivity(),
     * */
     override fun onRutaConfirmed(rutaID: String) {
         val rodada = Rodada(listOf(rodadaInformation), rutaID)
-        viewModel.postActivityRodada(rodada, this)
-        showToast("Actividad registrada")
-        setResult(Activity.RESULT_OK)
-        finish()
+        viewModel.patchActivityRodada(id, rodada, this@ModifyActivityActivity) { result ->
+            result.fold(
+                onSuccess = {
+                    showToast("Rodada modificada exitosamente")
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                },
+                onFailure = { error ->
+                    showToast("Error al modificar la rodada")
+                }
+            )
+        }
     }
 
     private fun showToast(message: String) {

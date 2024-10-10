@@ -131,6 +131,7 @@ class EventosFragment : Fragment() {
                 evento.duration,
                 evento.imageURL,
                 "Evento",
+                null,
                 storedPermissions
             )
             dialogFragment.show(parentFragmentManager, ActivityActionDialogFragment.TAG)

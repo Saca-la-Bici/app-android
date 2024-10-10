@@ -13,6 +13,9 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -106,26 +109,77 @@ class DetailsViewHolder(
 
             if (usuarioInscrito) {
                 setButtonForUnsubscription(activity)
-                setupValidateAttendanceButton(activity) // Llamar al setupValidateAttendanceButton si el usuario ya está inscrito
+                setupValidateAttendanceButton(activity, true) // Mostrar el botón si ya está inscrito
             } else {
                 setButtonForSubscription(activity)
+                setupValidateAttendanceButton(activity, false) // Ocultar el botón si no está inscrito
             }
         } else {
             Toast.makeText(binding.root.context, "No se ha autenticado ningún usuario.", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun setupValidateAttendanceButton(activity: Activity) {
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
-        val firebaseUID = firebaseUser?.uid
-
-        if (activity.type == "Rodada" && firebaseUID != null && activity.register?.contains(firebaseUID) == true) {
-            binding.btnValidateAttendance.visibility = View.VISIBLE
+    private fun setupValidateAttendanceButton(activity: Activity, show: Boolean) {
+        if (show && activity.type == "Rodada") {
+            animateButtonVisibility(binding.btnValidateAttendance, true)
             binding.btnValidateAttendance.setOnClickListener {
-                Toast.makeText(binding.root.context, "Asistencia validada", Toast.LENGTH_SHORT).show()
+                showValidationDialog()
             }
         } else {
-            binding.btnValidateAttendance.visibility = View.GONE
+            animateButtonVisibility(binding.btnValidateAttendance, false)
+        }
+    }
+
+    private fun showValidationDialog() {
+        val context = binding.root.context
+        val dialogView = View.inflate(context, R.layout.dialog_validate_attendance, null)
+        val editText = dialogView.findViewById<EditText>(R.id.etValidationCode)
+
+        val dialog = android.app.AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        dialogView.findViewById<View>(R.id.btnConfirm).setOnClickListener {
+            val code = editText.text.toString()
+            if (code.length == 4) {
+                dialog.dismiss()
+                handleValidationCode(code)
+            } else {
+                Toast.makeText(context, "Por favor ingrese un código de 4 números.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        dialog.show()
+    }
+
+    private fun handleValidationCode(code: String) {
+        Toast.makeText(binding.root.context, "Código ingresado: $code", Toast.LENGTH_SHORT).show()
+        // Implementa la lógica para enviar el código al backend si es necesario
+        // viewModel.validateAttendance(activityID, code)
+    }
+
+    private fun animateButtonVisibility(button: View, show: Boolean) {
+        if (show) {
+            button.visibility = View.VISIBLE
+            val fadeIn = AlphaAnimation(0.0f, 1.0f)
+            fadeIn.duration = 300
+            button.startAnimation(fadeIn)
+        } else {
+            val fadeOut = AlphaAnimation(1.0f, 0.0f)
+            fadeOut.duration = 300
+            fadeOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {}
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    button.visibility = View.GONE
+                }
+
+                override fun onAnimationRepeat(animation: Animation?) {}
+            })
+            button.startAnimation(fadeOut)
         }
     }
 
@@ -144,8 +198,7 @@ class DetailsViewHolder(
                     val currentCount = binding.tvPeopleCount.text.toString().toInt()
                     binding.tvPeopleCount.text = (currentCount + 1).toString()
                     setButtonForUnsubscription(activity)
-                    if (activity.type == "Rodada") {binding.btnValidateAttendance.visibility = View.VISIBLE}
-
+                    setupValidateAttendanceButton(activity, true)
                 } else {
                     binding.btnJoin.text = "Inscribirse"
                     binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
@@ -169,8 +222,7 @@ class DetailsViewHolder(
                     val currentCount = binding.tvPeopleCount.text.toString().toInt()
                     binding.tvPeopleCount.text = (currentCount - 1).toString()
                     setButtonForSubscription(activity)
-                    if (activity.type == "Rodada") {binding.btnValidateAttendance.visibility = View.GONE}
-
+                    setupValidateAttendanceButton(activity, false)
                 } else {
                     binding.btnJoin.text = "Cancelar inscripción"
                     binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))

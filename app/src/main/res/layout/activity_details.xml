@@ -270,17 +270,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <!-- Botón de Validar Asistencia -->
-                <Button
-                    android:id="@+id/btnValidateAttendance"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/verifyBlue"
-                    android:text="@string/Verificar"
-                    android:fontFamily="@font/roboto_regular"
-                    android:textSize="14sp"
-                    android:textColor="@color/semiWhite"/>
+
 
                 <Button
                     android:id="@+id/btnJoin"
@@ -291,6 +281,8 @@
                     android:fontFamily="@font/roboto_regular"
                     android:textSize="14sp"
                     android:textColor="@color/semiWhite"/>
+
+
 
                 <LinearLayout
                     android:id="@+id/btnSecondaryContainer"
@@ -322,6 +314,18 @@
                         android:textSize="14sp"
                         android:textColor="@color/semiWhite"/>
                 </LinearLayout>
+
+                <!-- Botón de Validar Asistencia -->
+                <Button
+                    android:id="@+id/btnValidateAttendance"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/verifyBlue"
+                    android:text="@string/Verificar"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/semiWhite"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

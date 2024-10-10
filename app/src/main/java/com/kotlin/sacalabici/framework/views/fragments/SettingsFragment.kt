@@ -2,7 +2,14 @@ package com.kotlin.sacalabici.framework.adapters.views.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,6 +77,14 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        binding.BRentaBici.setOnClickListener{
+            setupRentLink()
+        }
+
+        binding.BSacalaBici.setOnClickListener{
+            setupMainPageLink()
+        }
+
         // Botón para abrir FAQFragment
         setupFAQsButton()
 
@@ -93,4 +108,16 @@ class SettingsFragment : Fragment() {
         super.onDestroyView()
         _binding = null // Liberar el binding
     }
+
+    private fun setupRentLink() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://rentabici.sacalabici.org/"))
+        startActivity(intent)
+    }
+
+    private fun setupMainPageLink() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://sacalabici.org/"))
+        startActivity(intent)
+    }
+
+
 }

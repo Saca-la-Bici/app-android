@@ -114,8 +114,8 @@ class RutasAdapter(
             val context = holder.itemView.context
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
 
-            rutaEliminar.let { id ->
-                val deleteFragment = DeleteRouteItemFragment.newInstance(id.toString())
+            rutaEliminar.let { rutaEliminar.id }?.let { id ->
+                val deleteFragment = DeleteRouteItemFragment.newInstance(id)
                 deleteFragment.show(fragmentManager, "deleteFragment")
             }
         }

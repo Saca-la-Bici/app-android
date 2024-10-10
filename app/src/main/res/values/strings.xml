@@ -117,5 +117,8 @@
     <!-- Strings para Modificar ruta -->
 
 
+    <!-- Strings de inscribir actividad -->
+    <string name="Verificar">Verificar Asistencia</string>
+
 </resources>
 

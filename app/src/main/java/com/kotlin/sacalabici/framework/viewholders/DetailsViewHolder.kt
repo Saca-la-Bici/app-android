@@ -106,11 +106,26 @@ class DetailsViewHolder(
 
             if (usuarioInscrito) {
                 setButtonForUnsubscription(activity)
+                setupValidateAttendanceButton(activity) // Llamar al setupValidateAttendanceButton si el usuario ya está inscrito
             } else {
                 setButtonForSubscription(activity)
             }
         } else {
             Toast.makeText(binding.root.context, "No se ha autenticado ningún usuario.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setupValidateAttendanceButton(activity: Activity) {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        val firebaseUID = firebaseUser?.uid
+
+        if (activity.type == "Rodada" && firebaseUID != null && activity.register?.contains(firebaseUID) == true) {
+            binding.btnValidateAttendance.visibility = View.VISIBLE
+            binding.btnValidateAttendance.setOnClickListener {
+                Toast.makeText(binding.root.context, "Asistencia validada", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            binding.btnValidateAttendance.visibility = View.GONE
         }
     }
 
@@ -126,11 +141,11 @@ class DetailsViewHolder(
                 Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
 
                 if (success) {
-                    // Actualizar el contador localmente
                     val currentCount = binding.tvPeopleCount.text.toString().toInt()
                     binding.tvPeopleCount.text = (currentCount + 1).toString()
-
                     setButtonForUnsubscription(activity)
+                    if (activity.type == "Rodada") {binding.btnValidateAttendance.visibility = View.VISIBLE}
+
                 } else {
                     binding.btnJoin.text = "Inscribirse"
                     binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
@@ -151,11 +166,11 @@ class DetailsViewHolder(
                 Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
 
                 if (success) {
-                    // Actualizar el contador localmente
                     val currentCount = binding.tvPeopleCount.text.toString().toInt()
                     binding.tvPeopleCount.text = (currentCount - 1).toString()
-
                     setButtonForSubscription(activity)
+                    if (activity.type == "Rodada") {binding.btnValidateAttendance.visibility = View.GONE}
+
                 } else {
                     binding.btnJoin.text = "Cancelar inscripción"
                     binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))

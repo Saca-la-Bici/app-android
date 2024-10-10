@@ -6,7 +6,6 @@
     android:id="@+id/clDetailActivity"
     android:padding="20dp">
 
-    <!-- LinearLayout fijo en la parte superior -->
     <LinearLayout
         android:id="@+id/topRow"
         android:layout_width="match_parent"
@@ -80,7 +79,6 @@
         app:layout_constraintTop_toBottomOf="@id/topRow"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- ScrollView para el contenido desplazable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -272,6 +270,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
+                <!-- Botón de Validar Asistencia -->
+                <Button
+                    android:id="@+id/btnValidateAttendance"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/verifyBlue"
+                    android:text="@string/Verificar"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/semiWhite"/>
+
                 <Button
                     android:id="@+id/btnJoin"
                     android:layout_width="match_parent"
@@ -312,7 +322,6 @@
                         android:textSize="14sp"
                         android:textColor="@color/semiWhite"/>
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

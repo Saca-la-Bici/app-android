@@ -112,6 +112,7 @@
     <string name="NivelMod">Selecciona el nivel</string>
     <string name="SiguienteMod">Siguiente</string>
     <string name="ModRutaBtn">Modificar Ruta</string>
+    <string name="noAnnouncements">No se encuentran anuncios disponibles</string>
 
     <!-- Strings para Modificar ruta -->
 

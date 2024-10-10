@@ -1,7 +1,6 @@
 package com.kotlin.sacalabici.framework
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,16 +14,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.activities.ModifyRouteActivity
 import com.kotlin.sacalabici.framework.views.fragments.DeleteRouteItemFragment
 
-class RutasAdapter(
+class RouteAdapter(
     private var rutasList: List<RouteBase>,
     private val onRutaSelected: (RouteBase) -> Unit // Add the callback as a second parameter
-) : RecyclerView.Adapter<RutasAdapter.RutasViewHolder>() {
+) : RecyclerView.Adapter<RouteAdapter.RutasViewHolder>() {
 
     private var selectedRuta: RouteBase? = null
     private var ruta: RouteBase? = null

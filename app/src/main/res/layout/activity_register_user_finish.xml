@@ -161,6 +161,7 @@
                 android:id="@+id/TILPhoneNumber"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/TVEmergencyPhoneAdd"
                 app:layout_constraintStart_toStartOf="@+id/VContainer"
                 app:layout_constraintEnd_toEndOf="@+id/VContainer">
@@ -209,6 +210,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/TBloodType"
+                android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/TVBloodTypeAdd"
                 app:layout_constraintStart_toStartOf="@id/VContainer"
                 app:layout_constraintEnd_toEndOf="@id/VContainer"

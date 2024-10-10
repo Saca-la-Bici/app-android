@@ -118,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="25dp"
+                android:background="@color/white"
                 app:passwordToggleEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/TVTitle"
                 app:layout_constraintStart_toStartOf="@+id/VContainer"
@@ -146,6 +147,7 @@
                 app:passwordToggleEnabled="true"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="25dp"
+                android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/TILPassword"
                 app:layout_constraintStart_toStartOf="@+id/VContainer"
                 app:layout_constraintEnd_toEndOf="@+id/VContainer">

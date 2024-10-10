@@ -6,22 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.activities.ModifyRouteActivity
+import com.kotlin.sacalabici.framework.views.fragments.DeleteRouteItemFragment
 
-class RutasAdapter(
+class RouteAdapter(
     private var rutasList: List<RouteBase>,
     private val onRutaSelected: (RouteBase) -> Unit // Add the callback as a second parameter
-) : RecyclerView.Adapter<RutasAdapter.RutasViewHolder>() {
+) : RecyclerView.Adapter<RouteAdapter.RutasViewHolder>() {
 
     private var selectedRuta: RouteBase? = null
+    private var ruta: RouteBase? = null
     private lateinit var viewModelRoute: MapViewModel
 
     class RutasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -101,6 +105,19 @@ class RutasAdapter(
 
             context.startActivity(intent)
         }
+
+        // Manejar clic en el botón de eliminar
+        holder.btnEliminar.setOnClickListener {
+            val rutaEliminar = ruta
+            val context = holder.itemView.context
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+
+            rutaEliminar.let { rutaEliminar.id }?.let { id ->
+                val deleteFragment = DeleteRouteItemFragment.newInstance(id)
+                deleteFragment.show(fragmentManager, "deleteFragment")
+            }
+        }
+
 
         // Desactivar línea divisora para el último elemento
         holder.divider.visibility = if (position == rutasList.size - 1) View.GONE else View.VISIBLE

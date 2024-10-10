@@ -34,9 +34,10 @@ class ActivitiesFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentActivitiesBinding.inflate(inflater, container, false)
-        binding.fabAddActivity.visibility = View.GONE
+        _binding = FragmentActivitiesBinding.inflate(inflater, container, false) // Inflar el diseño del fragmento
+        binding.fabAddActivity.visibility = View.GONE // Ocultar botón agregar actividad
 
+        // Manejar los resultados de AddActivityActivity
         addActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 // Actualizar todas las actividades (eventos, rodadas, talleres)
@@ -49,6 +50,7 @@ class ActivitiesFragment: Fragment() {
         return binding.root
     }
     
+    // 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeComponents()
@@ -56,6 +58,7 @@ class ActivitiesFragment: Fragment() {
         loadInitialData()
     }
 
+    // Limpiar binding para optimizar uso de recursos
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -75,6 +78,7 @@ class ActivitiesFragment: Fragment() {
         val adapter = ActivitiesPagerAdapter(this)
         binding.viewPager.adapter = adapter
 
+        // Configura el TabLayout con el ViewPager
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Rodadas"

@@ -3,11 +3,11 @@ package com.kotlin.sacalabici.data.network.profile
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.kotlin.sacalabici.data.models.activities.ActivitiesBase
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.models.profile.Profile
 import com.kotlin.sacalabici.data.network.MultipartManager
-import com.kotlin.sacalabici.data.network.announcements.AnnouncementNetworkModuleDI
 
 
 class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
@@ -50,6 +50,24 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
             api.patchProfile(username, nombre, tipoSangre, numeroEmergencia, img)
         } catch (e: Exception) {
             e.printStackTrace()
+            null
+        }
+    }
+
+    suspend fun getActividades(): ActivitiesBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ProfileNetworkModuleDI(token)
+            try {
+                val activitiesBase = api.getActividades()
+                Log.d("ProfileApiClient", "ActivitiesBase: $activitiesBase")
+                activitiesBase
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
             null
         }
     }

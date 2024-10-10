@@ -26,6 +26,6 @@ interface RouteApiService {
 
     @PUT("mapa/eliminarRuta/{id}")
     suspend fun deleteRoute(
-        @Path("id") id: String
+        @Path("ID") id: String
     ): Response<Void>
 }

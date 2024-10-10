@@ -58,6 +58,8 @@ class StartRouteActivity : AppCompatActivity() {
         val extras = intent.extras
         val id = extras?.getString("ID") ?: ""
 
+        Log.d("Actividad", "ID de la actividad: $id")
+
         var mapHelper = MapHelper(this)
 
         binding.stopTrackingButton.setOnClickListener {

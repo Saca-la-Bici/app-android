@@ -20,8 +20,7 @@ class RouteRepository {
         route: Route,
     ): Route? = apiRoute.modifyRoute(id, route)
 
-    suspend fun deleteRoute(
-        id: String,
-        route: Route,
-    ): Route? = apiRoute.deleteRoute(id, route)
+    suspend fun deleteRoute(id: String): Boolean {
+        return apiRoute.deleteRoute(id)
+    }
 }

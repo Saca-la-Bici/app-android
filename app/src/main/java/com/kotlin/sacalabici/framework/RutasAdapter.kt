@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.kotlin.sacalabici.R
@@ -26,6 +27,7 @@ class RutasAdapter(
 ) : RecyclerView.Adapter<RutasAdapter.RutasViewHolder>() {
 
     private var selectedRuta: RouteBase? = null
+    private var ruta: RouteBase? = null
     private lateinit var viewModelRoute: MapViewModel
 
     class RutasViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -108,26 +110,14 @@ class RutasAdapter(
 
         // Manejar clic en el botón de eliminar
         holder.btnEliminar.setOnClickListener {
+            val rutaEliminar = ruta
             val context = holder.itemView.context
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
 
-            // Crear una instancia del fragmento de confirmación de eliminación
-            val deleteFragment = DeleteRouteItemFragment()
-
-            // Pasar los datos de la ruta al fragmento como argumentos
-            val bundle = Bundle()
-            bundle.putString("ID", ruta.id)
-            bundle.putString("ROUTE", route.Route)
-            bundle.putString("DISTANCIA", ruta.distancia)
-            bundle.putString("TIEMPO", ruta.tiempo)
-            bundle.putString("NIVEL", ruta.nivel)
-            val coordenadasJson = Gson().toJson(ruta.coordenadas)
-            bundle.putString("COORDENADAS", coordenadasJson)
-
-            deleteFragment.arguments = bundle
-
-            // Mostrar el fragmento de confirmación
-            deleteFragment.show(fragmentManager, "deleteFragment")
+            rutaEliminar.let { id ->
+                val deleteFragment = DeleteRouteItemFragment.newInstance(id.toString())
+                deleteFragment.show(fragmentManager, "deleteFragment")
+            }
         }
 
 

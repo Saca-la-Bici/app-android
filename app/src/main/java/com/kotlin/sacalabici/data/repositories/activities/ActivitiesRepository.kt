@@ -20,8 +20,9 @@ class ActivitiesRepository {
             val nivel = itemActivity.route?.nivel
             val distance = itemActivity.route?.distancia
             val rodadaId = itemActivity.id
-            itemActivity.activities.forEach{ activity ->
-                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel, distancia = distance)
+            val rutaId = itemActivity.route?.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel, distancia = distance, idRouteBase = rutaId)
                 listRodadas.add(updatedActivity)
             }
         }
@@ -60,8 +61,10 @@ class ActivitiesRepository {
         val activity = response?.actividad?.information?.firstOrNull()
         val nivel = response?.actividad?.route?.nivel
         val distancia = response?.actividad?.route?.distancia
+        val rutaId = response?.actividad?.route?.id
 
-        return activity?.copy(nivel = nivel, distancia = distancia)
+        val activityResponse = activity?.copy(nivel = nivel, distancia = distancia, idRouteBase = rutaId)
+        return activityResponse
     }
 
     suspend fun getPermissions(): List<String> {

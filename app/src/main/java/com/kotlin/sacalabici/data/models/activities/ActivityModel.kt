@@ -1,7 +1,6 @@
 package com.kotlin.sacalabici.data.network.model
 
 import android.net.Uri
-import java.util.Date
 
 // Modelo de datos para la información de la actividad (POST)
 data class Informacion(

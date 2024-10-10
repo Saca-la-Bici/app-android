@@ -34,6 +34,9 @@ class DeleteRouteItemFragment : DialogFragment() {
     private lateinit var viewModel: MapViewModel
     private lateinit var rutaid: String
 
+    private lateinit var btnCancel: Button
+    private lateinit var btnConfirm: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
@@ -69,13 +72,19 @@ class DeleteRouteItemFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Aseguramos que el layout contenga btnDel
-        val tvDelete: Button? = view.findViewById(R.id.btnDel)
+        // Accedemos a los botones del layout
+        btnCancel = view.findViewById(R.id.btn_cancelEliminarRuta)
+        btnConfirm = view.findViewById(R.id.btn_confirmEliminarRuta)
 
-        // Verificamos si el botón existe en el layout
-        tvDelete?.setOnClickListener {
-            showDeleteConfirmationRouteDialog()
-        } ?: Log.e("DeleteRouteItemFragment", "Button btnDel not found in layout")
+        // Acción para confirmar eliminación
+        btnConfirm.setOnClickListener {
+            deleteRoute() // Llamar directamente a la función de eliminación
+        }
+
+        // Acción para cancelar
+        btnCancel.setOnClickListener {
+            dismiss() // Simplemente cerrar el diálogo
+        }
     }
 
     override fun onCreateView(
@@ -83,35 +92,8 @@ class DeleteRouteItemFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Asegúrate de que estás inflando el layout correcto
+        // Inflamos el layout
         return inflater.inflate(R.layout.item_delete_route, container, false)
-    }
-
-    private fun showDeleteConfirmationRouteDialog() {
-        val inflater = LayoutInflater.from(requireContext())
-        val dialogView = inflater.inflate(R.layout.item_delete_route, null)
-
-        val btnCancel: Button = dialogView.findViewById(R.id.btn_cancelEliminarRuta)
-        val btnConfirm: Button = dialogView.findViewById(R.id.btn_confirmEliminarRuta)
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setView(dialogView)
-
-        val alertDialog = builder.create()
-        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        // Manejo del botón de cancelar
-        btnCancel.setOnClickListener {
-            alertDialog.dismiss() // Cierra el diálogo
-        }
-
-        // Manejo del botón de confirmar (eliminar)
-        btnConfirm.setOnClickListener {
-            alertDialog.dismiss() // Cierra el diálogo
-            deleteRoute() // Llama a la función para eliminar la ruta
-        }
-
-        alertDialog.show()
     }
 
     private fun deleteRoute() {
@@ -127,7 +109,7 @@ class DeleteRouteItemFragment : DialogFragment() {
                         setFragmentResult("DeleteConfirmationRouteDialogResult", Bundle().apply {
                             putInt("resultCode", RESULT_OK)
                         })
-                        dismiss()
+                        dismiss() // Cerramos el diálogo después de eliminar la ruta
                     },
                     onFailure = {
                         Toast.makeText(

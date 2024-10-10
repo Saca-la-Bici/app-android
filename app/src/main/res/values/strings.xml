@@ -113,8 +113,13 @@
     <string name="SiguienteMod">Siguiente</string>
     <string name="ModRutaBtn">Modificar Ruta</string>
     <string name="noAnnouncements">No se encuentran anuncios disponibles</string>
+    <string name="QuieresEliminarEstaRuta">¿Quieres eliminar esta ruta?</string>
+    <string name="ImportanteUnaVezEliminadaLaRutaNoSePodraRecuperar">¡Importante! Una vez eliminada la ruta no se podrá recuperar.</string>
+    <string name="CancelarEliminarRuta">Cancelar</string>
+    <string name="ConfirmarEliminarRuta">Confirmar</string>
 
-    <!-- Strings para Modificar ruta -->
+    <!-- Strings para Eliminar ruta -->
+
 
 
 </resources>

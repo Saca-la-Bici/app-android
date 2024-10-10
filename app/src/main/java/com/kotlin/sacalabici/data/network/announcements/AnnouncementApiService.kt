@@ -32,8 +32,12 @@ interface AnnouncementApiService {
         @Part imagen: MultipartBody.Part?
     ): Announcement
 
+    @Multipart
     @PATCH("anuncios/modificar/{id}")
     suspend fun  patchAnnouncement(
         @Path("id") id: String,
-        @Body announcement: Announcement): Announcement
+        @Part("titulo") titulo: String,
+        @Part("contenido") contenido: String,
+        @Part imagen: MultipartBody.Part?
+    ): Announcement
 }

@@ -52,9 +52,11 @@ class TalleresFragment : Fragment() {
     private fun initializeComponents() {
         binding.errorMessageTalleres.visibility = View.GONE
         binding.recyclerViewTalleres.layoutManager = LinearLayoutManager(requireContext())
-        adapter = ActivitiesAdapter(mutableListOf()) { taller ->
+
+        adapter = ActivitiesAdapter(mutableListOf(), { taller ->
             passDetailsActivity(taller.id)
-        }
+        }, activitiesViewModel)
+
         binding.recyclerViewTalleres.adapter = adapter
     }
 
@@ -91,6 +93,7 @@ class TalleresFragment : Fragment() {
         }
     }
 
+    // Iniciar activity con detalles acorde al ID del taller seleccionado
     private fun passDetailsActivity(tallerId: String){
         val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
             putExtra("ACTIVITY_ID", tallerId)

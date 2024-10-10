@@ -3,7 +3,8 @@
     <string name="add_rodada"> Añadir rodada </string>
     <string name="add_evento"> Añadir evento </string>
     <string name="add_taller"> Añadir taller </string>
-    <string name="activity_title"> Título </string>
+    <string name="add_actRoute"> Escoge una ruta </string>
+    <string name="add_activity_title"> Título </string>
     <string name="activity_date"> Fecha </string>
     <string name="activity_hour"> Hora </string>
     <string name="activity_duration"> Duración </string>
@@ -22,9 +23,13 @@
     <string name="activity_rent">Renta de Bicicletas: </string>
     <string name="activity_route">Ver ruta</string>
     <string name="activity_join">Unirse</string>
+    <string name="activity_unsubscribe">Cancelar inscripción</string>
     <string name="activity_start">Iniciar</string>
     <string name="activity_details">Más detalles…</string>
-    <string name="activity_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="char_count">"%1$d/%2$d"</string>
+    <string name="activity_description">Lorem ipsum dolor sit amet.</string>
+    <string name="copy_location" >Copiar ubicación al portapales</string>
+    <string name="activity_value">valor</string>
 
     <string-array name="hours">
         <item>00</item>

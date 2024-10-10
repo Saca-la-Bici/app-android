@@ -1,6 +1,5 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
-import RutasAdapter
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,11 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.routes.RouteBase
+import com.kotlin.sacalabici.framework.RouteAdapter
 
-class RutasFragment : Fragment() {
+class RouteFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var rutasAdapter: RutasAdapter
+    private lateinit var rutasAdapter: RouteAdapter
     private var onRutaSelectedListener: OnRutaSelectedListener? = null
     private var lastSelectedRuta: RouteBase? = null
 
@@ -28,7 +28,7 @@ class RutasFragment : Fragment() {
         recyclerView = view.findViewById(R.id.RVRutas)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        rutasAdapter = RutasAdapter(emptyList()) { ruta ->
+        rutasAdapter = RouteAdapter(emptyList()) { ruta ->
             onRutaSelected(ruta)
         }
         recyclerView.adapter = rutasAdapter
@@ -72,8 +72,8 @@ class RutasFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(rutasList: List<RouteBase>?, selectedRuta: RouteBase?): RutasFragment {
-            val fragment = RutasFragment()
+        fun newInstance(rutasList: List<RouteBase>?, selectedRuta: RouteBase?): RouteFragment {
+            val fragment = RouteFragment()
             val args = Bundle()
             args.putParcelableArrayList("rutasList", rutasList?.let { ArrayList(it) })
             args.putParcelable("selectedRuta", selectedRuta)
@@ -82,4 +82,3 @@ class RutasFragment : Fragment() {
         }
     }
 }
-

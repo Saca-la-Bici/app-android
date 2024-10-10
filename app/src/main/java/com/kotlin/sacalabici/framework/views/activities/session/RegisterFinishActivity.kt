@@ -20,6 +20,7 @@ import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityRegisterUserFinishBinding
 import com.kotlin.sacalabici.framework.viewmodel.session.RegisterFinishViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
 @Suppress("NAME_SHADOWING")
@@ -32,6 +33,13 @@ class RegisterFinishActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
+        // Opciones de tipo de sangre
+        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "No especificado")
+        // Configurar el adaptador para el AutoCompleteTextView
+        val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
+        val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+        autoCompleteTextView.setAdapter(adapter)
+
         val email = intent.getStringExtra("email")
         val username = intent.getStringExtra("username")
         val name = intent.getStringExtra("name")
@@ -42,12 +50,6 @@ class RegisterFinishActivity : AppCompatActivity() {
         countryCodePicker = findViewById(R.id.ccp)
         countryCodePicker.setCountryForNameCode("MX")
         phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
-        // Opciones de tipo de sangre
-        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
-        // Configurar el adaptador para el AutoCompleteTextView
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, bloodTypes)
-        val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
-        autoCompleteTextView.setAdapter(adapter)
         // Initialize ViewModel
         registerFinishViewModel.initialize(FirebaseAuth.getInstance())
         // Observe registration state
@@ -69,14 +71,10 @@ class RegisterFinishActivity : AppCompatActivity() {
                     finish()
                 }
                 is AuthState.CompleteProfile -> {
-                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                     finish()
-                }
-                is AuthState.Unauthenticated -> {
-                    Log.d("LoginFinishActivity", "Usuario no autenticado")
                 }
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
@@ -92,7 +90,7 @@ class RegisterFinishActivity : AppCompatActivity() {
         }
         binding.BFinish.setOnClickListener {
             val birthdate = binding.BDate.text.toString()
-            val bloodType = binding.autoCompleteTextView.text.toString()
+            val bloodType = binding.autoCompleteTextView.toString()
             val phoneNumber = phoneNumberEditText.text.toString()
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.BFinish.isEnabled = true
@@ -126,10 +124,12 @@ class RegisterFinishActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun initializeBinding() {
         binding = ActivityRegisterUserFinishBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -146,7 +146,7 @@ class RegisterFinishActivity : AppCompatActivity() {
             day
         )
         val maxDate = Calendar.getInstance()
-        maxDate.add(Calendar.YEAR, -13)
+        maxDate.add(Calendar.YEAR, -18)
         datePickerDialog.datePicker.maxDate = maxDate.timeInMillis
         datePickerDialog.show()
     }

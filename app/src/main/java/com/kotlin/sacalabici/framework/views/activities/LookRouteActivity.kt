@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -75,6 +76,19 @@ class LookRouteActivity : AppCompatActivity() {
                 Log.d("Rodada", "Id de la ruta recibida: $rutaId")
 
                 rutaId?.let { it1 -> viewModel.getRoute(it1) }
+
+                // En tu onCreate
+                val handler = Handler(mainLooper)
+                val runnable = object : Runnable {
+                    override fun run() {
+                        // Llamar a la función para obtener la ubicación
+                        rodadaId?.let { it1 -> viewModel.getLocation(it1) } // `id` es el que has recibido en el intent
+                        handler.postDelayed(this, 3000) // Llamar a esta función cada 3 segundos
+                    }
+                }
+
+                handler.post(runnable)
+
             }
         }
 
@@ -87,6 +101,21 @@ class LookRouteActivity : AppCompatActivity() {
                 val coordenadasList: ArrayList<CoordenatesBase> = Gson().fromJson(coordenadasJson, coordenadasType)
 
                 mapHelper.drawRouteWithCoordinates(mapView, coordenadasList)
+            }
+        }
+
+        // En tu onCreate o en el lugar adecuado
+        viewModel.locationInfo.observe(this) { locationList ->
+            // Lógica para agregar el último punto de la lista a la ruta
+            locationList?.let {
+                if (it.isNotEmpty()) {
+                    // Agregar el último punto de la lista de ubicaciones
+                    val lastLocation = it.last()
+                    Log.d("Ubicacion", "Ultima ubicacion: $lastLocation")
+                    val point = Point.fromLngLat(lastLocation.longitude, lastLocation.latitude)
+                    rutaDelUsuario.add(point)
+                    dibujarLineaEnMapa() // Redibujar la ruta con el nuevo punto
+                }
             }
         }
 

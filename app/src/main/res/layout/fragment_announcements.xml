@@ -72,7 +72,7 @@
         app:fabSize="normal"
         app:backgroundTint="@color/sacaLaBiciYellow"
         app:tint="@null"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bottomGuideline"
         app:layout_constraintEnd_toStartOf="@+id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"

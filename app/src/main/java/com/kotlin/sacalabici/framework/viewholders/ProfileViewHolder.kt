@@ -36,24 +36,6 @@ class ProfileViewHolder (
         binding.tvPeopleEnrolled.text = item.peopleEnrolled.toString()
         binding.tvEventLocation.text = context.getString(R.string.activity_location_list, item.location)
 
-        if (item.type == "Rodada") {
-            binding.tvEventLevel.visibility = View.VISIBLE
-            binding.tvEventLevel.text = item.nivel
-
-            val levelColor = when (item.nivel) {
-                "Nivel 1" -> ContextCompat.getColor(context, R.color.level1)
-                "Nivel 2" -> ContextCompat.getColor(context, R.color.level2)
-                "Nivel 3" -> ContextCompat.getColor(context, R.color.level3)
-                "Nivel 4" -> ContextCompat.getColor(context, R.color.level4)
-                "Nivel 5" -> ContextCompat.getColor(context, R.color.level5)
-                else -> ContextCompat.getColor(context, R.color.gray)
-            }
-            val background = binding.tvEventLevel.background as GradientDrawable
-            background.setColor(levelColor)
-        } else {
-            binding.tvEventLevel.visibility = View.GONE
-        }
-
         // Configurar clic para desplegar detalles
         binding.tvEventDetails.setOnClickListener {
             clickListener(item)

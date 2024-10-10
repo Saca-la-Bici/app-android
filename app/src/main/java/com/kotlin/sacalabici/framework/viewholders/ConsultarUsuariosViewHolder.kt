@@ -1,4 +1,4 @@
-//Consultar Usuario View Holder
+// Consultar Usuario View Holder
 package com.kotlin.sacalabici.framework.viewholders
 
 import android.util.Log
@@ -10,11 +10,13 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.ItemUserBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.modifyRole.ModifyRoleViewModel
+import com.kotlin.sacalabici.framework.viewmodel.profile.ConsultarUsuariosViewModel
 
 class ConsultarUsuariosViewHolder(
     val binding: ItemUserBinding,
     private val modifyRoleViewModel: ModifyRoleViewModel, // ViewModel para cambiar el rol
     private val currentFragmentRole: String, // Rol del fragmento actual
+    private val getUsuariosViewModel: ConsultarUsuariosViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ConsultarUsuariosBase) {
         binding.RVuserName.text = item.usuario.username
@@ -51,6 +53,8 @@ class ConsultarUsuariosViewHolder(
             binding.btnChangerol.isEnabled = false
             binding.btnChangerol.setBackgroundColor(itemView.context.getColor(R.color.gray))
             Toast.makeText(itemView.context, "Rol cambiado exitosamente", Toast.LENGTH_SHORT).show()
+
+            getUsuariosViewModel.getUsuarios(reset = true)
         }
 
         // Cargar imagen de perfil usando Glide

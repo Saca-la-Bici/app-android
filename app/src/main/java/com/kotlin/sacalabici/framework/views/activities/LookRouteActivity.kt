@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.framework.views.activities
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -28,6 +29,8 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.generated.lineLayer
+import com.mapbox.maps.extension.style.layers.generated.symbolLayer
+import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.plugin.PuckBearing
@@ -209,10 +212,12 @@ class LookRouteActivity : AppCompatActivity() {
     }
 
     private fun dibujarLineaEnMapa() {
-        mapView.getMapboxMap().getStyle { style ->
+        mapView.mapboxMap.getStyle { style ->
             // Si el estilo ya tiene una capa de línea, la eliminamos primero
             style.removeStyleLayer("rutaDelUsuarioLayer")
             style.removeStyleSource("rutaDelUsuarioSource")
+            style.removeStyleLayer("caminoIconsLayer")
+            style.removeStyleSource("caminoIconsSource")
 
             // Creamos la fuente con los puntos de la ruta
             val geoJsonSource =
@@ -234,6 +239,24 @@ class LookRouteActivity : AppCompatActivity() {
                 }
 
             style.addLayer(lineLayer)
+
+            // Cargar el ícono en el mapa para los puntos del camino
+            if (!style.styleLayerExists("custom-waypoint-icon")) {
+                style.addImage(
+                    "custom-waypoint-icon",
+                    BitmapFactory.decodeResource(resources, R.drawable.waypoint_icon),
+                )
+            }
+
+            // Crear la capa para los íconos en los puntos del camino
+            val caminoIconsLayer =
+                symbolLayer("caminoIconsLayer", "caminoIconsSource") {
+                    iconImage("custom-waypoint-icon")
+                    iconAllowOverlap(true)
+                    iconIgnorePlacement(true)
+                    iconAnchor(IconAnchor.CENTER)
+                }
+            style.addLayer(caminoIconsLayer)
         }
     }
 }

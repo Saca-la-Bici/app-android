@@ -26,7 +26,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:mapbox_locationComponentEnabled = "true"
+        app:mapbox_locationComponentLocationPuck= "location_puck_2_d"
+        app:mapbox_locationComponentLocationPuckLocationPuck2DTopImage= "@drawable/location_icon"
+        app:mapbox_locationComponentLocationPuckLocationPuck2DBearingImage= "@drawable/location_icon"
+        app:mapbox_locationComponentLocationPuckLocationPuck2DShadowImage= "@drawable/location_icon"
         tools:ignore="MissingConstraints" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

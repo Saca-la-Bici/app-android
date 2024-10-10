@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.network.activities
 
+import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
@@ -40,4 +41,7 @@ interface ActivitiesApiService {
 
     @GET("rodadas/obtenerRodadaPorId/{id}")
     suspend fun getRodadaInfo(@Path("id") id: String): RodadaInfoBase
+
+    @GET("rodadas/obtenerUbicacion/{id}")
+    suspend fun getUbicacion(@Path("id") id: String): List<LocationR>
 }

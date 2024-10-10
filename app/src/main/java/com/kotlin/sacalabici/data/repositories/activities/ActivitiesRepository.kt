@@ -89,5 +89,10 @@ class ActivitiesRepository {
         return apiActivities.getRodadaInfo(id)
     }
 
+    suspend fun getUbicacion(id: String): List<LocationR>? {
+        Log.d("ActivitiesRepository", "Fetching Rodada info for id: $id")
+        return apiActivities.getUbicacion(id)
+    }
+
 
 }

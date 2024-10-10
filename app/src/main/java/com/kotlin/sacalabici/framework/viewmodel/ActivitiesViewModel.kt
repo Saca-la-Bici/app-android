@@ -17,6 +17,7 @@ import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
 import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
 import com.kotlin.sacalabici.domain.activities.PostLocationRequirement
 import com.kotlin.sacalabici.domain.activities.RodadaInfoRequirement
+import com.kotlin.sacalabici.domain.activities.UbicacionRequirement
 import com.kotlin.sacalabici.domain.routes.RouteRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,6 +29,8 @@ class ActivitiesViewModel(): ViewModel() {
     val rodadaInfo: MutableLiveData<RodadaInfoBase?> get() = _rodadaInfoLiveData
     val _routeInfoLiveData = MutableLiveData<RouteInfoObjectBase?>()
     val routeInfo: MutableLiveData<RouteInfoObjectBase?> get() = _routeInfoLiveData
+    val _locationInfoLiveData = MutableLiveData<List<LocationR>?>()
+    val locationInfo: MutableLiveData<List<LocationR>?> get() = _locationInfoLiveData
     val eventosLiveData = MutableLiveData<List<Activity>>()
     val talleresLiveData = MutableLiveData<List<Activity>>()
     private val _permissionsLiveData = MutableLiveData<List<String>>()
@@ -50,6 +53,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val getRodadaInfoRequirement = RodadaInfoRequirement()
     private val postLocationRequirement = PostLocationRequirement()
     private val routeRequirement = RouteRequirement()
+    private val getUbicacionRequirement = UbicacionRequirement()
 
     init {
         getPermissions()
@@ -170,6 +174,17 @@ class ActivitiesViewModel(): ViewModel() {
             try {
                 val routeInfoBase = routeRequirement(id) // Supongo que este método devuelve un RodadaInfoBase
                 _routeInfoLiveData.postValue(routeInfoBase) // Actualiza el valor del LiveData
+            } catch (e: Exception) {
+                // Maneja el error, podrías enviar un mensaje de error a otro LiveData si es necesario
+            }
+        }
+    }
+
+    fun getLocation(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val locationInfoBase = getUbicacionRequirement(id) // Supongo que este método devuelve un RodadaInfoBase
+                _locationInfoLiveData.postValue(locationInfoBase) // Actualiza el valor del LiveData
             } catch (e: Exception) {
                 // Maneja el error, podrías enviar un mensaje de error a otro LiveData si es necesario
             }

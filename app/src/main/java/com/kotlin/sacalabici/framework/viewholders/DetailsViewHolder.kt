@@ -15,6 +15,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -31,7 +32,8 @@ import java.util.Locale
 class DetailsViewHolder(
     private val binding: ActivityDetailsBinding,
     private val viewModel: ActivitiesViewModel,
-    private val activityID: String
+    private val activityID: String,
+    private val permissions: List<String>
 ) {
 
     fun bind(activity: Activity) {
@@ -185,7 +187,7 @@ class DetailsViewHolder(
     }
 
     private fun setupStartButton(activity: Activity) {
-        if (activity.type == "Rodada") {
+        if (permissions.contains("Iniciar rodada")) {
             binding.btnStart.visibility = View.VISIBLE
             binding.btnStart.setOnClickListener {
                 // Lógica para iniciar la actividad

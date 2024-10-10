@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.model.ActivityInfo
 import com.kotlin.sacalabici.data.network.model.ActivityModel
@@ -19,6 +20,12 @@ import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment
 import com.kotlin.sacalabici.framework.views.fragments.ModifyActivityInfoFragment
 import com.kotlin.sacalabici.framework.views.fragments.ModifyActivityRouteFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -41,8 +48,10 @@ class ModifyActivityActivity: AppCompatActivity(),
     private lateinit var ubi: String
     private lateinit var desc: String
     private lateinit var hourDur: String
-    private var url: String? = null
     private lateinit var type: String
+
+    private var selectedImageUri: Uri? = null
+    private var originalImageUrl: String? = null
 
     private lateinit var rodadaInformation: Informacion
 
@@ -62,6 +71,7 @@ class ModifyActivityActivity: AppCompatActivity(),
         ubi = intent.getStringExtra("ubi").toString()
         desc = intent.getStringExtra("desc").toString()
         hourDur = intent.getStringExtra("hourDur").toString()
+        originalImageUrl = intent.getStringExtra("url")
         type = intent.getStringExtra("type").toString()
 
         // Observa los cambios en los LiveData del ViewModel
@@ -77,7 +87,7 @@ class ModifyActivityActivity: AppCompatActivity(),
                     putString("ubi", ubi)
                     putString("desc", desc)
                     putString("hourDur", hourDur)
-                    putString("url", url)
+                    putString("url", originalImageUrl)
                     putString("type", type)
                 }
             }
@@ -120,21 +130,29 @@ class ModifyActivityActivity: AppCompatActivity(),
         val hourAct = "$hour:$minutes"
         val duration = "$hourDur horas $minutesDur minutos"
 
+        lifecycleScope.launch {
+            // Si se ha seleccionado una nueva imagen, usamos ese Uri. De lo contrario, descargamos la imagen original.
+            val imageUri = when {
+                selectedImageUri != null -> selectedImageUri
+                !originalImageUrl.isNullOrEmpty() -> downloadImageToFile(originalImageUrl!!)
+                else -> null
+            }
 
+            if (type == "Rodada") {
+                val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Rodada")
+                rodadaInformation = rodadaInfo
 
-        if (type == "Rodada") {
-            val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Rodada")
-            rodadaInformation = rodadaInfo
+            } else if (type == "Taller") {
+                val tallerInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Taller")
+                val taller = ActivityModel(listOf(tallerInfo))
+                // Función del viewmodel
 
-        } else if (type == "Taller") {
-            val tallerInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Taller")
-            val taller = ActivityModel(listOf(tallerInfo))
-            viewModel.postActivityTaller(taller, this)
+            } else if (type == "Evento") {
+                val eventoInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Evento")
+                val evento = ActivityModel(listOf(eventoInfo))
+                // Función del viewmodel
+            }
 
-        } else if (type == "Evento") {
-            val eventoInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Evento")
-            val evento = ActivityModel(listOf(eventoInfo))
-            viewModel.postActivityEvento(evento, this)
         }
     }
 
@@ -223,5 +241,26 @@ class ModifyActivityActivity: AppCompatActivity(),
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private suspend fun downloadImageToFile(url: String): Uri? {
+        return withContext(Dispatchers.IO) {
+            try {
+                // Abrimos un stream para la URL remota
+                val input = URL(url).openStream()
+                // Creamos un archivo temporal en el directorio de caché
+                val file = File(cacheDir, "temp_image.jpg")
+                val output = FileOutputStream(file)
+                // Copiamos los bytes de la imagen al archivo local
+                input.copyTo(output)
+                // Cerramos el stream de salida
+                output.close()
+                // Devolvemos el Uri del archivo local
+                Uri.fromFile(file)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
     }
 }

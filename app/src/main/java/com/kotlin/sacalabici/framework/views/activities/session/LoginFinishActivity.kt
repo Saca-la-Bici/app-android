@@ -51,13 +51,6 @@ class LoginFinishActivity : AppCompatActivity() {
         autoCompleteTextView.setAdapter(adapter)
         // Initialize ViewModel
         loginFinishViewModel.initialize(FirebaseAuth.getInstance())
-        ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleEventObserver {
-            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                if (event == Lifecycle.Event.ON_STOP) {
-                    FirebaseAuth.getInstance().signOut()
-                }
-            }
-        })
         // Observe registration state
         loginFinishViewModel.authState.observe(this) { authState ->
             when (authState) {
@@ -74,14 +67,8 @@ class LoginFinishActivity : AppCompatActivity() {
                     Log.d("LoginFinishActivity", "Usuario incompleto")
                 }
                 is AuthState.CompleteProfile -> {
-                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
-                }
-                is AuthState.Unauthenticated -> {
-                    val intent = Intent(this, SessionActivity::class.java)
                     startActivity(intent)
                     finish()
                 }

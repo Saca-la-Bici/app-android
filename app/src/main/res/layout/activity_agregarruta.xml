@@ -34,21 +34,51 @@
             android:textSize="15sp"
             android:fontFamily="@font/roboto_bold"
             android:textColor="#000000"
-            android:padding="15dp" />
+            android:padding="8dp" />
 
-        <!-- Contenido del layout -->
+        <LinearLayout
+            android:id="@+id/subtitle_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_background"
+            android:layout_below="@id/agRutaTitulo">
+
+            <TextView
+                android:id="@+id/agRutaSubTitulo2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/importante_la_ruta_es_solo_de_referencia"
+                android:textSize="12sp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#FF0000" />
+
+            <TextView
+                android:id="@+id/agRutaSubTitulo1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/puede_cambiar_en_el_momento_de_la_rodada"
+                android:textSize="12sp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/red" />
+        </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:layout_below="@id/btnBack">
+            android:padding="10dp"
+            android:layout_below="@id/btnBack"
+            android:layout_marginTop="40dp">
 
             <!-- Título -->
             <EditText
                 android:id="@+id/etTitulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:hint="@string/TituloRuta"
                 android:textColorHint="#898989"
                 android:textColor="#000000"
@@ -58,11 +88,12 @@
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="#F6CD0B" />
 
-            <!-- Distancia -->
+
             <EditText
                 android:id="@+id/etTiempo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="#F6CD0B"
                 android:fontFamily="@font/roboto_regular"
@@ -121,6 +152,7 @@
                 android:id="@+id/etDistancia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="#F6CD0B"
                 android:fontFamily="@font/roboto_regular"
@@ -163,7 +195,8 @@
                     android:background="@android:color/transparent"
                     android:layout_gravity="bottom|end"
                     android:layout_margin="8dp"
-                    android:backgroundTint="@color/white"/>
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="@string/eliminar_ruta" />
             </FrameLayout>
 
             <LinearLayout
@@ -200,7 +233,3 @@
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
-
-
-
-

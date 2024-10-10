@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.data.network.routes
 
 import com.kotlin.sacalabici.data.models.routes.Route
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 
@@ -48,14 +49,14 @@ class RouteApiClient(
 
     suspend fun deleteRoute(
         id: String
-    ): Boolean {
+    ): RouteBase? {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = RouteNetworkModuleDI(token)
         return try {
-            api.deleteRoute(id).isSuccessful
+            api.deleteRoute(id)
         } catch (e: Exception) {
             e.printStackTrace()
-            false
+            null
         }
     }
 }

@@ -41,7 +41,7 @@ class DeleteRouteItemFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
         arguments?.let {
-            rutaid = it.getString("ID") ?: throw IllegalArgumentException("ID is required")
+            rutaid = it.getString("id") ?: throw IllegalArgumentException("ID is required")
         } ?: throw IllegalArgumentException("Route is required")
     }
 
@@ -128,7 +128,7 @@ class DeleteRouteItemFragment : DialogFragment() {
         fun newInstance(id: String): DeleteRouteItemFragment {
             val fragment = DeleteRouteItemFragment()
             val args = Bundle().apply {
-                putString("ID", id)
+                putString("id", id)
             }
             fragment.arguments = args
             return fragment

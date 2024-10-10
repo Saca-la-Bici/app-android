@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.data.network.routes
 
 import com.kotlin.sacalabici.data.models.routes.Route
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import retrofit2.Response
 import retrofit2.http.Body
@@ -26,6 +27,6 @@ interface RouteApiService {
 
     @PUT("mapa/eliminarRuta/{id}")
     suspend fun deleteRoute(
-        @Path("ID") id: String
-    ): Response<Void>
+        @Path("id") id: String
+    ): RouteBase
 }

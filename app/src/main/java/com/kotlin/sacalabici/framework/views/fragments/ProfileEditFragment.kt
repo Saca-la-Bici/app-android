@@ -24,6 +24,7 @@ import com.kotlin.sacalabici.databinding.FragmentProfileEditBinding
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 import java.io.File
 import kotlinx.coroutines.*
+import okhttp3.internal.threadName
 
 
 class ProfileEditFragment: Fragment() {
@@ -132,6 +133,7 @@ class ProfileEditFragment: Fragment() {
     private fun setupUploadButton() {
         val saveButton = binding.btnSave
         saveButton.setOnClickListener {
+            val valid = inputValidation()
             val image = selectedImageUri
             val name = binding.name.text.toString()
             val username = binding.username.text.toString()
@@ -140,16 +142,18 @@ class ProfileEditFragment: Fragment() {
             val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, image)
             val context: Context = requireContext()
 
-            lifecycleScope.launch {
-                val success = viewModel.patchProfile(profile, context)
-                if (success) {
-                    val profileFragment = ProfileFragment()
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment_content_main, profileFragment)
-                        .addToBackStack(null)
-                        .commit()
-                } else {
-                    Toast.makeText(context, "Error al actualizar el perfil", Toast.LENGTH_SHORT).show()
+            if(valid){
+                lifecycleScope.launch {
+                    val success = viewModel.patchProfile(profile, context)
+                    if (success) {
+                        val profileFragment = ProfileFragment()
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.nav_host_fragment_content_main, profileFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    } else {
+                        Toast.makeText(context, "Error al actualizar el perfil", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -185,6 +189,23 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
+    private fun inputValidation(): Boolean{
+        val nameBinding = binding.name
+        val usernameBinding = binding.username
+
+        val name = nameBinding.getText().toString();
+        if (name.trim().isEmpty()){
+            Toast.makeText(activity, "Nombre no debe estar vacío", Toast.LENGTH_LONG).show()
+            return false
+        }
+
+        val username = usernameBinding.getText().toString();
+        if (username.trim().isEmpty()){
+            Toast.makeText(activity, "Nombre de usuario no debe estar vacío", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
+    }
 
 }
 

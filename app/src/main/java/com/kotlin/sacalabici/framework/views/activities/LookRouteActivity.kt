@@ -178,14 +178,39 @@ class LookRouteActivity : AppCompatActivity() {
                         .build()
                 mapView.getMapboxMap().setCamera(userLocation)
 
-                // Agregar log antes de enviar la ubicación
-                Log.d("Location", "Ubicación obtenida: Latitud = ${it.latitude}, Longitud = ${it.longitude}")
+                // Agregar icono de ubicación del usuario
+                mapView.getMapboxMap().getStyle { style ->
+                    if (!style.styleLayerExists("user-location-layer")) {
+                        style.addImage(
+                            "user-location-icon",
+                            BitmapFactory.decodeResource(resources, R.drawable.location_icon)
+                        )
+                    }
 
-                // Comenzar a seguir la ubicación del usuario
+                    style.addSource(
+                        geoJsonSource("user-location-source") {
+                            feature(
+                                com.mapbox.geojson.Feature.fromGeometry(
+                                    Point.fromLngLat(it.longitude, it.latitude)
+                                )
+                            )
+                        }
+                    )
+
+                    style.addLayer(
+                        symbolLayer("user-location-layer", "user-location-source") {
+                            iconImage("user-location-icon")
+                            iconAllowOverlap(true)
+                            iconIgnorePlacement(true)
+                        }
+                    )
+                }
+
                 iniciarSeguimientoDeUbicacion()
             }
         }
     }
+
 
     private fun iniciarSeguimientoDeUbicacion() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -213,34 +238,28 @@ class LookRouteActivity : AppCompatActivity() {
 
     private fun dibujarLineaEnMapa() {
         mapView.mapboxMap.getStyle { style ->
-            // Si el estilo ya tiene una capa de línea, la eliminamos primero
             style.removeStyleLayer("rutaDelUsuarioLayer")
             style.removeStyleSource("rutaDelUsuarioSource")
             style.removeStyleLayer("caminoIconsLayer")
             style.removeStyleSource("caminoIconsSource")
 
-            // Creamos la fuente con los puntos de la ruta
             val geoJsonSource =
                 geoJsonSource("rutaDelUsuarioSource") {
                     feature(
-                        com.mapbox.geojson.Feature
-                            .fromGeometry(LineString.fromLngLats(rutaDelUsuario)),
+                        com.mapbox.geojson.Feature.fromGeometry(LineString.fromLngLats(rutaDelUsuario)),
                     )
                 }
 
-            // Añadimos la fuente al estilo del mapa
             style.addSource(geoJsonSource)
 
-            // Creamos la capa de línea y la añadimos al estilo
             val lineLayer =
                 lineLayer("rutaDelUsuarioLayer", "rutaDelUsuarioSource") {
-                    lineColor("#0000FF") // Cambiar color a azul
+                    lineColor("#0000FF") // Color de la línea
                     lineWidth(4.0) // Grosor de la línea
                 }
 
             style.addLayer(lineLayer)
 
-            // Cargar el ícono en el mapa para los puntos del camino
             if (!style.styleLayerExists("custom-waypoint-icon")) {
                 style.addImage(
                     "custom-waypoint-icon",
@@ -248,15 +267,27 @@ class LookRouteActivity : AppCompatActivity() {
                 )
             }
 
-            // Crear la capa para los íconos en los puntos del camino
-            val caminoIconsLayer =
-                symbolLayer("caminoIconsLayer", "caminoIconsSource") {
-                    iconImage("custom-waypoint-icon")
-                    iconAllowOverlap(true)
-                    iconIgnorePlacement(true)
-                    iconAnchor(IconAnchor.CENTER)
-                }
-            style.addLayer(caminoIconsLayer)
+            // Agregar el ícono solo en el último punto de la ruta
+            val lastPoint = rutaDelUsuario.lastOrNull()
+            if (lastPoint != null) {
+                style.addSource(
+                    geoJsonSource("caminoIconsSource") {
+                        feature(
+                            com.mapbox.geojson.Feature.fromGeometry(lastPoint)
+                        )
+                    }
+                )
+
+                val caminoIconsLayer =
+                    symbolLayer("caminoIconsLayer", "caminoIconsSource") {
+                        iconImage("custom-waypoint-icon")
+                        iconAllowOverlap(true)
+                        iconIgnorePlacement(true)
+                        iconAnchor(IconAnchor.CENTER)
+                    }
+                style.addLayer(caminoIconsLayer)
+            }
         }
     }
+
 }

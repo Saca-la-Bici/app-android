@@ -5,18 +5,25 @@ import android.graphics.Color
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
+import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
+import com.kotlin.sacalabici.framework.views.activities.session.LoginFinishActivity
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import com.kotlin.sacalabici.framework.views.fragments.ActivitiesFragment
 import com.kotlin.sacalabici.framework.views.fragments.AnnouncementsFragment
@@ -29,6 +36,8 @@ class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var tokenManager: FirebaseTokenManager
+    private val authViewModel: AuthViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
@@ -41,10 +50,43 @@ class MainActivity: AppCompatActivity() {
         tokenManager.getIdToken()
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(applicationContext as Application)
+
+        authViewModel.initialize(
+            FirebaseAuth.getInstance(),
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(Constants.REQUEST_ID_TOKEN)
+                .requestEmail()
+                .build(),
+            this
+        )
+
         if (firebaseAuth.currentUser == null) {
             // Usuario no está autenticado, redirige a SessionActivity
             startActivity(Intent(this, SessionActivity::class.java))
             finish() // Opcional: Termina la actividad actual para que el usuario no pueda volver a ella con el botón "Atrás"
+        }
+
+        // Observe registration state
+        authViewModel.authState.observe(this) { authState ->
+            Log.d("SessionActivity", "Observando")
+            when (authState) {
+                is AuthState.Success -> {
+                    // Registration successful
+                }
+                is AuthState.Error -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
+                }
+                is AuthState.IncompleteProfile -> {
+                    val intent = Intent(this, SessionActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+                is AuthState.CompleteProfile -> {
+                }
+                AuthState.Cancel -> TODO()
+                AuthState.SignedOut -> TODO()
+            }
         }
     }
     private fun initializeBinding() {
@@ -174,5 +216,9 @@ class MainActivity: AppCompatActivity() {
         TransitionManager.beginDelayedTransition(constraintLayout, transition)
         // Aplicar el ConstraintSet
         constraintSet.applyTo(constraintLayout)
+    }
+    override fun onStart() {
+        super.onStart()
+        authViewModel.startAuthStateListener()
     }
 }

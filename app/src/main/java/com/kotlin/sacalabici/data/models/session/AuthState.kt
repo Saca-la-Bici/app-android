@@ -7,7 +7,6 @@ sealed class         AuthState {
     data class Error(val message: String) : AuthState()
     object Cancel : AuthState()
     object SignedOut : AuthState() // Add this line
-    object Unauthenticated : AuthState() // Usuario no autenticado
     object IncompleteProfile : AuthState() // Perfil incompleto
     object CompleteProfile : AuthState() // Perfil completo
 }

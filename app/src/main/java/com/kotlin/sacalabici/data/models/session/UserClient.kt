@@ -39,6 +39,7 @@ class UserClient {
 
             if (result != null) {
                 _authState.postValue(AuthState.Success(firebaseAuth.currentUser))
+                _authState.postValue(AuthState.CompleteProfile)
             } else {
                 firebaseAuth.signOut()
                 _authState.postValue(AuthState.Error("Error al iniciar sesión"))

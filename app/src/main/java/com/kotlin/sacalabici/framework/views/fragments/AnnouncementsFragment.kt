@@ -109,8 +109,8 @@ class AnnouncementsFragment: Fragment() {
     private fun initializeObservers() {
         viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
-            if (!permissions.contains("Registrar anuncio")) {
-                binding.fabAddAnouncement.visibility = View.GONE
+            if (permissions.contains("Registrar anuncio")) {
+                binding.fabAddAnouncement.visibility = View.VISIBLE
             }
         }
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->

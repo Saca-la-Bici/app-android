@@ -68,14 +68,8 @@ class LookRouteActivity : AppCompatActivity() {
             // Lógica para `rodadaInfo`
             rodadaInfo?.let { it ->
                 rodadaInfoData = it // Guarda la información en la variable
-                Log.d("Rodada", "Información de la rodada recibida: $rodadaInfoData")
-
                 rodadaId = rodadaInfoData?.rodadaId
                 rutaId = rodadaInfoData?.rutaId
-
-                Log.d("Rodada", "Id de la rodada recibida: $rodadaId")
-                Log.d("Rodada", "Id de la ruta recibida: $rutaId")
-
                 rutaId?.let { it1 -> viewModel.getRoute(it1) }
 
                 // En tu onCreate
@@ -112,7 +106,6 @@ class LookRouteActivity : AppCompatActivity() {
                 if (it.isNotEmpty()) {
                     // Agregar el último punto de la lista de ubicaciones
                     val lastLocation = it.last()
-                    Log.d("Ubicacion", "Ultima ubicacion: $lastLocation")
                     val point = Point.fromLngLat(lastLocation.longitude, lastLocation.latitude)
                     rutaDelUsuario.add(point)
                     dibujarLineaEnMapa() // Redibujar la ruta con el nuevo punto

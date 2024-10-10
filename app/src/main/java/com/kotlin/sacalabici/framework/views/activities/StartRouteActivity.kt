@@ -77,14 +77,8 @@ class StartRouteActivity : AppCompatActivity() {
             // Lógica para `rodadaInfo`
             rodadaInfo?.let { it ->
                 rodadaInfoData = it // Guarda la información en la variable
-                Log.d("Rodada", "Información de la rodada recibida: $rodadaInfoData")
-
                 rodadaId = rodadaInfoData?.rodadaId
                 rutaId = rodadaInfoData?.rutaId
-
-                Log.d("Rodada", "Id de la rodada recibida: $rodadaId")
-                Log.d("Rodada", "Id de la ruta recibida: $rutaId")
-
                 rutaId?.let { it1 -> viewModel.getRoute(it1) }
             }
         }
@@ -167,12 +161,8 @@ class StartRouteActivity : AppCompatActivity() {
                         longitude = it.longitude,
                     )
 
-                // Agregar log antes de enviar la ubicación
-                Log.d("Location", "Ubicación obtenida: Latitud = ${it.latitude}, Longitud = ${it.longitude}")
-
                 // Enviar la ubicación al servidor
                 rodadaId?.let {
-                    Log.d("Location", "Enviando ubicación a servidor para rodadaId = $rodadaId")
                     viewModel.postUbicacion(it, userLocationR)
                 }
 
@@ -211,13 +201,8 @@ class StartRouteActivity : AppCompatActivity() {
                                 latitude = location.latitude,
                                 longitude = location.longitude
                             )
-
-                            // Agregar log antes de enviar la ubicación
-                            Log.d("Location", "Ubicación actualizada: Latitud = ${location.latitude}, Longitud = ${location.longitude}")
-
                             // Enviar la ubicación actualizada al servidor
                             rodadaId?.let {
-                                Log.d("Location", "Enviando ubicación actualizada al servidor para rodadaId = $rodadaId")
                                 viewModel.postUbicacion(it, updatedUserLocationR)
                             }
                         }

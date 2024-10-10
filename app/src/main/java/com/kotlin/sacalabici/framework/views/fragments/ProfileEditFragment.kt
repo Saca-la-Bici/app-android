@@ -152,7 +152,7 @@ class ProfileEditFragment: Fragment() {
                             .addToBackStack(null)
                             .commit()
                     } else {
-                        Toast.makeText(context, "Error al actualizar el perfil", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Error al actualizar perfil", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

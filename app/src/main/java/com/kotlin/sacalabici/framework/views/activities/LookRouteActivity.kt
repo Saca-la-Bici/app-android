@@ -60,7 +60,7 @@ class LookRouteActivity : AppCompatActivity() {
         val extras = intent.extras
         val id = extras?.getString("ID") ?: ""
 
-        var mapHelper = MapHelper(this)
+        val mapHelper = MapHelper(this)
 
         // Observa los cambios en el LiveData del ViewModel
         // Primero, observamos ambos LiveData en el mismo bloque

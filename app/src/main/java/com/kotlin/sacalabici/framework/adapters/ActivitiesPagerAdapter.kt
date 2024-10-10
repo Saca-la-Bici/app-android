@@ -9,6 +9,7 @@ import com.kotlin.sacalabici.framework.views.fragments.TalleresFragment
 class ActivitiesPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 3
 
+    // Navegación entre pestañas
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> RodadasFragment()

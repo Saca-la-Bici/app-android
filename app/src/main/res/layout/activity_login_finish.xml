@@ -243,13 +243,14 @@
                 android:hint="@string/TBloodType"
                 app:layout_constraintTop_toBottomOf="@id/TVBloodTypeAdd"
                 app:layout_constraintStart_toStartOf="@id/VContainer"
-                app:layout_constraintEnd_toEndOf="@id/VContainer">
+                app:layout_constraintEnd_toEndOf="@id/VContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="none"
                     android:padding="24dp"
                     android:layout_marginTop="5dp"
                     android:textSize="14sp"

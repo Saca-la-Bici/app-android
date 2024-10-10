@@ -208,21 +208,26 @@
                 android:id="@+id/TILBloodType"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:hint="@string/TBloodType"
                 app:layout_constraintTop_toBottomOf="@id/TVBloodTypeAdd"
                 app:layout_constraintStart_toStartOf="@id/VContainer"
                 app:layout_constraintEnd_toEndOf="@id/VContainer"
-                android:hint="Tipo de sangre"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                 <AutoCompleteTextView
-                    android:id="@+id/bloodDropDown"
+                    android:id="@+id/autoCompleteTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="24dp"
                     android:inputType="none"
-                    android:fontFamily="@font/roboto_regular"
+                    android:padding="24dp"
+                    android:layout_marginTop="5dp"
                     android:textSize="14sp"
-                    />
+                    android:hint="@string/TBloodType"
+                    android:fontFamily="@font/roboto_regular"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:singleLine="true"/>
+
             </com.google.android.material.textfield.TextInputLayout>
 
 

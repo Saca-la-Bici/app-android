@@ -44,7 +44,7 @@ class LoginFinishActivity : AppCompatActivity() {
         countryCodePicker.setCountryForNameCode("MX")
         phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
         // Opciones de tipo de sangre
-        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "No especificado")
         // Configurar el adaptador para el AutoCompleteTextView
         val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
         val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)

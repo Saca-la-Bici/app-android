@@ -14,13 +14,11 @@ import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.RouteInfoObjectBase
 import com.kotlin.sacalabici.data.repositories.activities.ActivitiesRepository
 import com.kotlin.sacalabici.databinding.ActivityLookRouteBinding
-import com.kotlin.sacalabici.databinding.ActivityStartRouteBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.helpers.MapHelper
 import com.mapbox.geojson.LineString
@@ -79,16 +77,16 @@ class LookRouteActivity : AppCompatActivity() {
 
                 // En tu onCreate
                 val handler = Handler(mainLooper)
-                val runnable = object : Runnable {
-                    override fun run() {
-                        // Llamar a la función para obtener la ubicación
-                        rodadaId?.let { it1 -> viewModel.getLocation(it1) } // `id` es el que has recibido en el intent
-                        handler.postDelayed(this, 3000) // Llamar a esta función cada 3 segundos
+                val runnable =
+                    object : Runnable {
+                        override fun run() {
+                            // Llamar a la función para obtener la ubicación
+                            rodadaId?.let { it1 -> viewModel.getLocation(it1) } // `id` es el que has recibido en el intent
+                            handler.postDelayed(this, 2000) // Llamar a esta función cada 2 segundos
+                        }
                     }
-                }
 
                 handler.post(runnable)
-
             }
         }
 
@@ -180,7 +178,6 @@ class LookRouteActivity : AppCompatActivity() {
                 // Agregar log antes de enviar la ubicación
                 Log.d("Location", "Ubicación obtenida: Latitud = ${it.latitude}, Longitud = ${it.longitude}")
 
-
                 // Comenzar a seguir la ubicación del usuario
                 iniciarSeguimientoDeUbicacion()
             }
@@ -205,7 +202,6 @@ class LookRouteActivity : AppCompatActivity() {
             locationRequest,
             object : com.google.android.gms.location.LocationCallback() {
                 override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
-
                 }
             },
             null,

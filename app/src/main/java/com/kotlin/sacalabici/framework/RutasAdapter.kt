@@ -1,20 +1,24 @@
 package com.kotlin.sacalabici.framework
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.activities.ModifyRouteActivity
+import com.kotlin.sacalabici.framework.views.fragments.DeleteRouteItemFragment
 
 class RutasAdapter(
     private var rutasList: List<RouteBase>,
@@ -101,6 +105,31 @@ class RutasAdapter(
 
             context.startActivity(intent)
         }
+
+        // Manejar clic en el botón de eliminar
+        holder.btnEliminar.setOnClickListener {
+            val context = holder.itemView.context
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
+
+            // Crear una instancia del fragmento de confirmación de eliminación
+            val deleteFragment = DeleteRouteItemFragment()
+
+            // Pasar los datos de la ruta al fragmento como argumentos
+            val bundle = Bundle()
+            bundle.putString("ID", ruta.id)
+            bundle.putString("ROUTE", route.Route)
+            bundle.putString("DISTANCIA", ruta.distancia)
+            bundle.putString("TIEMPO", ruta.tiempo)
+            bundle.putString("NIVEL", ruta.nivel)
+            val coordenadasJson = Gson().toJson(ruta.coordenadas)
+            bundle.putString("COORDENADAS", coordenadasJson)
+
+            deleteFragment.arguments = bundle
+
+            // Mostrar el fragmento de confirmación
+            deleteFragment.show(fragmentManager, "deleteFragment")
+        }
+
 
         // Desactivar línea divisora para el último elemento
         holder.divider.visibility = if (position == rutasList.size - 1) View.GONE else View.VISIBLE

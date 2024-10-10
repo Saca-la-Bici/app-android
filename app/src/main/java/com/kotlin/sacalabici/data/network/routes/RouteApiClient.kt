@@ -47,16 +47,15 @@ class RouteApiClient(
     }
 
     suspend fun deleteRoute(
-        id: String,
-        route: Route,
-    ): Route? {
+        id: String
+    ): Boolean {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = RouteNetworkModuleDI(token)
         return try {
-            api.deleteRoute(id, route)
+            api.deleteRoute(id).isSuccessful
         } catch (e: Exception) {
             e.printStackTrace()
-            null
+            false
         }
     }
 }

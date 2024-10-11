@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -42,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:orientation="vertical"
-            android:background="@drawable/rounded_background"
+            android:padding="10dp"
+            android:background="@drawable/background_with_border"
             android:layout_below="@id/agRutaTitulo">
 
             <TextView
@@ -89,19 +90,45 @@
                 android:backgroundTint="#F6CD0B" />
 
 
-            <EditText
-                android:id="@+id/etTiempo"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="#F6CD0B"
-                android:fontFamily="@font/roboto_regular"
-                android:hint="@string/TiempoRuta"
-                android:padding="12dp"
-                android:textColor="#000000"
-                android:textColorHint="#898989"
-                android:textSize="16sp" />
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <Spinner
+                    android:id="@+id/spinnerHoras"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#F6CD0B"
+                    android:fontFamily="@font/roboto_regular"
+                    android:padding="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="horas"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerMinutos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#F6CD0B"
+                    android:fontFamily="@font/roboto_regular"
+                    android:padding="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="minutos"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
 
             <!-- Punto Inicio -->
             <EditText
@@ -178,7 +205,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="350dp">
+                android:layout_height="320dp">
 
                 <!-- MapView -->
                 <com.mapbox.maps.MapView
@@ -232,4 +259,4 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-</ScrollView>
+</LinearLayout>

@@ -79,7 +79,7 @@
         <item>AB+</item>
         <item>AB-</item>
     </string-array>
-    
+
     <!--String para Descripción de botones-->
     <string name="back_button_desc">Pestaña anterior</string>
 
@@ -119,7 +119,6 @@
     <string name="ConfirmarEliminarRuta">Confirmar</string>
 
     <!-- Strings para Eliminar ruta -->
-
 
 
 </resources>

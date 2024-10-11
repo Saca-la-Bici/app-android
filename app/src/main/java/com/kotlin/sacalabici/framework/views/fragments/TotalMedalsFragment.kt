@@ -48,9 +48,11 @@ class TotalMedalsFragment : Fragment() {
 
     private fun initializeObservers() {
         viewModel.medalsObjectLiveData.observe(viewLifecycleOwner) { medalsList ->
-            lifecycleScope.launch {
-                delay(50)
-                setUpRecyclerView(ArrayList(medalsList))
+            medalsList?.let{
+                lifecycleScope.launch {
+                    delay(50)
+                    setUpRecyclerView(ArrayList(medalsList))
+                }
             }
         }
     }

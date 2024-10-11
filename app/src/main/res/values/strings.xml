@@ -136,8 +136,11 @@
     <string name="ImportanteUnaVezEliminadaLaRutaNoSePodraRecuperar">¡Importante! Una vez eliminada la ruta no se podrá recuperar.</string>
     <string name="CancelarEliminarRuta">Cancelar</string>
     <string name="ConfirmarEliminarRuta">Confirmar</string>
+    <string name="puede_cambiar_en_el_momento_de_la_rodada">puede cambiar en el momento de la rodada</string>
+    <string name="importante_la_ruta_es_solo_de_referencia">¡IMPORTANTE! La ruta es solo de referencia</string>
+    <string name="eliminar_ruta">EliminarRuta</string>
 
-    <!-- Strings para Eliminar ruta -->
+    <!-- Strings para Nuevo mensaje de Agregar Ruta -->
 
 
 

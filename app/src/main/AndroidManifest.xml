@@ -85,9 +85,12 @@
         <activity
             android:name=".framework.views.activities.AddActivityActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.Light"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".framework.views.activities.activities.ModifyActivityActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <!-- Otras actividades relevantes -->
         <activity

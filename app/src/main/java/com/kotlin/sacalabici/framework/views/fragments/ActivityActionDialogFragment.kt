@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +33,7 @@ class ActivityActionDialogFragment: DialogFragment() {
     private lateinit var desc: String
     private lateinit var hourDur: String
     private var url: String? = null
-    private lateinit var type: String
+    private lateinit var typeAct: String
     private var idRoute: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +48,8 @@ class ActivityActionDialogFragment: DialogFragment() {
             ubi = it.getString("ubi") ?: throw IllegalArgumentException("Ubi is required")
             desc = it.getString("desc") ?: throw IllegalArgumentException("Description is required")
             hourDur = it.getString("hourDur") ?: throw IllegalArgumentException("Hour duration is required")
+            typeAct = it.getString("typeAct") ?: throw IllegalArgumentException("Type duration is required")
             url = it.getString("url")
-            type = it.getString("type") ?: throw IllegalArgumentException("Type is required")
             idRoute = it.getString("idRoute")
             permissions = it.getStringArrayList("permissions") ?: emptyList()
         } ?: throw IllegalArgumentException("Arguments are required")
@@ -94,9 +95,10 @@ class ActivityActionDialogFragment: DialogFragment() {
                 putExtra("desc", desc)
                 putExtra("hourDur", hourDur)
                 putExtra("url", url)
+                putExtra("typeAct", typeAct)
                 putExtra("idRoute", idRoute)
-                putExtra("type", type)
             }
+            Log.d("ActivityActionDialogFragment", "typeAct: $typeAct")
             startActivity(intent)
             dismiss()
         }
@@ -113,7 +115,7 @@ class ActivityActionDialogFragment: DialogFragment() {
             desc: String,
             hourDur: String,
             url: String?,
-            type: String,
+            typeAct: String,
             idRoute: String?,
             permissions: List<String>
         ): ActivityActionDialogFragment {
@@ -127,7 +129,7 @@ class ActivityActionDialogFragment: DialogFragment() {
             args.putString("desc", desc)
             args.putString("hourDur", hourDur)
             args.putString("url", url)
-            args.putString("type", type)
+            args.putString("typeAct", typeAct)
             args.putString("idRoute", idRoute)
             args.putStringArrayList("permissions", ArrayList(permissions))
             fragment.arguments = args

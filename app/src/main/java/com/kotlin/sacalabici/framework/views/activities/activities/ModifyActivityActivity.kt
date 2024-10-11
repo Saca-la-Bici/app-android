@@ -34,7 +34,7 @@ import java.util.Locale
 
 class ModifyActivityActivity: AppCompatActivity(),
 
-    ModifyActivityInfoFragment.OnFragmentInteractionListener,
+    ModifyActivityInfoFragment.OnNextInteractionListener,
     ModifyActivityRouteFragment.OnRutaConfirmListener
 {
 
@@ -51,7 +51,7 @@ class ModifyActivityActivity: AppCompatActivity(),
     private lateinit var ubi: String
     private lateinit var desc: String
     private lateinit var hourDur: String
-    private lateinit var type: String
+    private lateinit var typeAct: String
     private var idRoute: String? = null
 
     private var selectedImageUri: Uri? = null
@@ -76,9 +76,10 @@ class ModifyActivityActivity: AppCompatActivity(),
         desc = intent.getStringExtra("desc").toString()
         hourDur = intent.getStringExtra("hourDur").toString()
         originalImageUrl = intent.getStringExtra("url")
-        type = intent.getStringExtra("type").toString()
+        typeAct = intent.getStringExtra("typeAct").toString()
         idRoute = intent.getStringExtra("idRoute")
 
+        Log.d("ModifyActivity onCreate", "typeAct: $typeAct")
         // Observa los cambios en los LiveData del ViewModel
         observeViewModel()
 
@@ -93,7 +94,7 @@ class ModifyActivityActivity: AppCompatActivity(),
                     putString("desc", desc)
                     putString("hourDur", hourDur)
                     putString("url", originalImageUrl)
-                    putString("type", type)
+                    putString("typeAct", typeAct)
                 }
             }
             // Agrega el fragmento al contenedor de la vista de la Activity
@@ -135,19 +136,23 @@ class ModifyActivityActivity: AppCompatActivity(),
         val hourAct = "$hour:$minutes"
         val duration = "$hourDur horas $minutesDur minutos"
 
+        Log.d("ModifyActivity", "Información recibida")
         lifecycleScope.launch {
+            Log.d("ModifyActivity", "Entra a lifecycleScope")
             // Si se ha seleccionado una nueva imagen, usamos ese Uri. De lo contrario, descargamos la imagen original.
             val imageUri = when {
                 selectedImageUri != null -> selectedImageUri
                 !originalImageUrl.isNullOrEmpty() -> downloadImageToFile(originalImageUrl!!)
                 else -> null
             }
+            Log.d("ModifyActivity", "Sale de lo de imagen")
+            Log.d("ModifyActivity", "Tipo: $typeAct")
 
-            if (type == "Rodada") {
+            if (typeAct == "Rodada") {
                 val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Rodada")
                 rodadaInformation = rodadaInfo
 
-            } else if (type == "Taller") {
+            } else if (typeAct == "Taller") {
                 val tallerInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Taller")
                 val taller = ActivityModel(listOf(tallerInfo))
                 viewModel.patchActivityTaller(id, taller, this@ModifyActivityActivity) { result ->
@@ -163,12 +168,14 @@ class ModifyActivityActivity: AppCompatActivity(),
                     )
                 }
 
-            } else if (type == "Evento") {
+            } else if (typeAct == "Evento") {
                 val eventoInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Evento")
                 val evento = ActivityModel(listOf(eventoInfo))
+                Log.d("ModifyActivity", "Entra a if de evento")
                 viewModel.patchActivityEvento(id, evento, this@ModifyActivityActivity) { result ->
                     result.fold(
                         onSuccess = {
+                            Log.d("ModifyActivity", "Entra a onSuccess")
                             showToast("Evento modificado exitosamente")
                             setResult(Activity.RESULT_OK)
                             finish()
@@ -188,13 +195,13 @@ class ModifyActivityActivity: AppCompatActivity(),
     * */
     private fun toggleRutasList() {
         val fragmentManager = supportFragmentManager
-        val modifyActivityRouteFragment = fragmentManager.findFragmentById(R.id.fragmentAddActivity)
+        val modifyActivityFragment = fragmentManager.findFragmentById(R.id.fragmentAddActivity)
 
         if (isAddActivityRouteFragmentVisible) {
             // Si el fragmento ya está visible, lo eliminamos
-            if (modifyActivityRouteFragment != null) {
+            if (modifyActivityFragment != null) {
                 fragmentManager.beginTransaction()
-                    .remove(modifyActivityRouteFragment)
+                    .remove(modifyActivityFragment)
                     .addToBackStack(null)
                     .commit()
             }
@@ -223,7 +230,6 @@ class ModifyActivityActivity: AppCompatActivity(),
     override fun onNextClicked(type: String) {
         if (type == "Rodada") {
             toggleRutasList()
-
         }
     }
 
@@ -292,6 +298,18 @@ class ModifyActivityActivity: AppCompatActivity(),
                 e.printStackTrace()
                 null
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cleanTemporaryFiles()
+    }
+
+    private fun cleanTemporaryFiles() {
+        val tempFile = File(cacheDir, "tempFile")
+        if (tempFile.exists()) {
+            tempFile.delete()
         }
     }
 }

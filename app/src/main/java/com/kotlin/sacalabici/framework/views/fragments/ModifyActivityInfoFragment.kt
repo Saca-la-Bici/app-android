@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,13 +25,12 @@ import com.bumptech.glide.Glide
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentActivityInfoBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
-import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment.OnFragmentInteractionListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class ModifyActivityInfoFragment: Fragment() {
-    private lateinit var listener: com.kotlin.sacalabici.framework.views.fragments.ModifyActivityInfoFragment.OnFragmentInteractionListener
+    private lateinit var listener: OnNextInteractionListener
     private lateinit var viewModel: ActivitiesViewModel
     private var _binding: FragmentActivityInfoBinding? = null
     private val binding get() = _binding!!
@@ -67,9 +67,8 @@ class ModifyActivityInfoFragment: Fragment() {
     * Le notificará cuando se seleccione el botón "Siguiente"
     * Llama a la función para recibir la información del formulario
     * */
-    interface OnFragmentInteractionListener {
+    interface OnNextInteractionListener {
         fun onCloseClicked()
-        fun onNextClicked(type: String)
         fun receiveInformation(title: String,
                                date: String,
                                hour: String,
@@ -79,14 +78,15 @@ class ModifyActivityInfoFragment: Fragment() {
                                ubi: String,
                                description: String,
                                image: Uri?)
+        fun onNextClicked(type: String)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is com.kotlin.sacalabici.framework.views.fragments.ModifyActivityInfoFragment.OnFragmentInteractionListener) {
+        if (context is OnNextInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException("$context debe implementar OnFragmentInteractionListener")
+            throw RuntimeException("$context debe implementar OnNextInteractionListener")
         }
     }
 
@@ -101,7 +101,7 @@ class ModifyActivityInfoFragment: Fragment() {
         desc = savedInstanceState?.getString("desc") ?: arguments?.getString("desc")
         hourDur = savedInstanceState?.getString("hourDur") ?: arguments?.getString("hourDur")
         url = savedInstanceState?.getString("url") ?: arguments?.getString("url")
-        type = savedInstanceState?.getString("type") ?: arguments?.getString("type")
+        type = savedInstanceState?.getString("typeAct") ?: arguments?.getString("typeAct")
 
         registerImagePicker()
     }
@@ -153,12 +153,22 @@ class ModifyActivityInfoFragment: Fragment() {
     ) {
         etTitle.setText(title)
         binding.BDate.text = date
-        hourSpin.setSelection(hour?.substring(0, 2)?.toInt() ?: 0)
-        minutesSpin.setSelection(hour?.substring(3, 5)?.toInt() ?: 0)
-        hourDurSpin.setSelection(hourDur?.substring(0, 2)?.toInt() ?: 0)
-        minutesDurSpin.setSelection(hourDur?.substring(3, 5)?.toInt() ?: 0)
         etUbi.setText(ubi)
         etDesc.setText(desc)
+
+        // Extraer las horas y los minutos
+        val (hours, minutes) = extractTime(hour)
+
+        // Asignar directamente las horas y minutos al Spinner (sin buscar el índice manualmente)
+        setSpinnerSelection(hourSpin, hours)
+        setSpinnerSelection(minutesSpin, minutes)
+
+        // Extraer la duración de horas y minutos
+        val (hoursDur, minutesDur) = extractHoursAndMinutes(hourDur)
+
+        // Asignar directamente la duración de horas y minutos al Spinner
+        setSpinnerSelection(hourDurSpin, hoursDur)
+        setSpinnerSelection(minutesDurSpin, minutesDur)
 
         if (!url.isNullOrEmpty()) {
             Glide.with(requireContext())
@@ -166,6 +176,54 @@ class ModifyActivityInfoFragment: Fragment() {
                 .into(binding.imageButton)
         }
     }
+
+    // Función para extraer horas y minutos de una cadena en formato "HH:mm" y devolverlos como Strings
+    private fun extractTime(hour: String?): Pair<String, String> {
+        if (hour == null) return Pair("00", "00")
+
+        // Regex para capturar horas y minutos en formato "HH:mm"
+        val regex = Regex("(\\d{1,2}):(\\d{1,2})")
+        val matchResult = regex.find(hour)
+
+        return if (matchResult != null) {
+            val hours = matchResult.groupValues[1]
+            val minutes = matchResult.groupValues[2].padStart(2, '0')
+            Pair(hours, minutes)
+        } else {
+            Pair("00", "00") // Valor por defecto si no coincide con el formato esperado
+        }
+    }
+
+
+    // Función para extraer horas y minutos de una cadena de duración y devolverlos como Strings
+    private fun extractHoursAndMinutes(duration: String?): Pair<String, String> {
+        if (duration == null) return Pair("00", "00")
+
+        val regex = Regex("(\\d{1,2})\\s*horas?\\s*(\\d{1,2})\\s*minutos?")
+        val matchResult = regex.find(duration)
+
+        return if (matchResult != null) {
+            val hours = matchResult.groupValues[1]
+            val minutes = matchResult.groupValues[2].padStart(2, '0')
+            Pair(hours, minutes)
+        } else {
+            Pair("00", "00") // Valor por defecto si no coincide con el formato esperado
+        }
+    }
+
+    // Función auxiliar para establecer la selección del Spinner basada en el valor de la cadena
+    private fun setSpinnerSelection(spinner: Spinner, value: String) {
+        val adapter = spinner.adapter
+        for (i in 0 until adapter.count) {
+            if (adapter.getItem(i).toString() == value) {
+                spinner.setSelection(i)
+                return
+            }
+        }
+        spinner.setSelection(0)
+    }
+
+
 
     private fun initializeListeners() {
         // Listener para cuando se seleccione la fecha en el DatePickerDialog
@@ -218,6 +276,7 @@ class ModifyActivityInfoFragment: Fragment() {
                 val image = selectedImageUri
 
                 // Enviar información al ViewModel
+                Log.d("InfoFragment", "Enviando información al Activity")
                 listener.receiveInformation(title, date, hour, minutes, hourDur, minutesDur, ubi, description, image)
                 listener.onNextClicked(type.toString())
             }

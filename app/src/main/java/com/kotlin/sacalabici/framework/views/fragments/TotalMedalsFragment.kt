@@ -14,7 +14,6 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.medals.MedalBase
 import com.kotlin.sacalabici.databinding.FragmentTotalMedalsBinding
 import com.kotlin.sacalabici.framework.adapters.TotalMedalsAdapter
-import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
 import com.kotlin.sacalabici.framework.viewmodel.TotalMedalsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -30,12 +29,11 @@ class TotalMedalsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentTotalMedalsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[TotalMedalsViewModel::class.java]
         val root: View = binding.root
-        setupBackButton()
         initializeComponents(root)
         viewModel.getMedalsList()
         initializeObservers()
@@ -59,37 +57,24 @@ class TotalMedalsFragment : Fragment() {
 
     private fun initializeComponents(root: View) {
         recyclerView = root.findViewById(R.id.RVMedallas)
-
     }
 
     private fun setUpRecyclerView(dataForList: ArrayList<MedalBase>) {
         Log.d("MedalsFragment", dataForList.size.toString())
         recyclerView.setHasFixedSize(true)
 
-        val gridLayoutManager = GridLayoutManager(
-            requireContext(),
-            3,  // 3 columnas
-            GridLayoutManager.VERTICAL,  // Disposición vertical
-            false
-        )
+        val gridLayoutManager =
+            GridLayoutManager(
+                requireContext(),
+                3, // 3 columnas
+                GridLayoutManager.VERTICAL, // Disposición vertical
+                false,
+            )
 
         recyclerView.layoutManager = gridLayoutManager
 
         adapter.setTotalMedalsAdapter(dataForList, requireContext())
 
         recyclerView.adapter = adapter
-    }
-
-    //Función para que el botón de Regresar te lleve a Perfil
-    private fun setupBackButton() {
-        val btnMedals = binding.BRegresar
-        btnMedals.setOnClickListener {
-            // Navegar a SettingFragment y reemplazar el contenido en el contenedor principal de MainActivity
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, ProfileFragment())
-                .addToBackStack(null) // Para permitir navegar hacia atrás
-                .commit()
-        }
     }
 }

@@ -44,8 +44,10 @@ class ConsultarUsuariosViewModel : ViewModel() {
     }
 
     // Función para obtener usuarios con paginación
-    fun getUsuarios(roles: String? = null, reset: Boolean = false) {
-
+    fun getUsuarios(
+        roles: String? = null,
+        reset: Boolean = false,
+    ) {
         // Si ya estamos buscando, no cargamos usuarios paginados
         if (_isLoading.value == true || isLastPage == true || isSearching == true) return
 
@@ -54,7 +56,7 @@ class ConsultarUsuariosViewModel : ViewModel() {
         // Reiniciar la paginación si es necesario
         if (reset) {
             currentPage = 1
-            _usuarios.value = emptyList()  // Reiniciar la lista paginada
+            _usuarios.value = emptyList() // Reiniciar la lista paginada
             isLastPage = false
             if (roles != null) {
                 currentRoles = roles
@@ -72,9 +74,9 @@ class ConsultarUsuariosViewModel : ViewModel() {
                     withContext(Dispatchers.Main) {
                         if (!usuarios.isNullOrEmpty()) {
                             val currentList = _usuarios.value?.toMutableList() ?: mutableListOf()
-                            currentList.addAll(usuarios)  // Agregar nuevos usuarios a la lista actual
+                            currentList.addAll(usuarios) // Agregar nuevos usuarios a la lista actual
                             _usuarios.value = currentList
-                            currentPage++  // Incrementar la página
+                            currentPage++ // Incrementar la página
                         } else {
                             _errorMessage.value = "No hay más usuarios para cargar."
                         }
@@ -93,10 +95,12 @@ class ConsultarUsuariosViewModel : ViewModel() {
     }
 
     // Función para buscar usuarios con roles opcionales
-    fun searchUser(username: String, roles: String? = null) {
-
+    fun searchUser(
+        username: String,
+        roles: String? = null,
+    ) {
         _isLoading.value = true
-        isSearching = true  // Cambiamos el estado a búsqueda
+        isSearching = true // Cambiamos el estado a búsqueda
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -128,12 +132,13 @@ class ConsultarUsuariosViewModel : ViewModel() {
         }
     }
 
-    private suspend fun getFirebaseIdToken(firebaseAuth: FirebaseAuth): String? {
-        return try {
-            firebaseAuth.currentUser?.getIdToken(true)?.await()?.token
+    private suspend fun getFirebaseIdToken(firebaseAuth: FirebaseAuth): String? =
+        try {
+            firebaseAuth.currentUser
+                ?.getIdToken(true)
+                ?.await()
+                ?.token
         } catch (e: Exception) {
             null
         }
-    }
 }
-

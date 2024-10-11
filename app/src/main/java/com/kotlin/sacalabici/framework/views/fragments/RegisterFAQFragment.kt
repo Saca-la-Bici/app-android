@@ -64,7 +64,7 @@ class RegisterFAQFragment : Fragment() {
             val tema = getSelectedTema()
 
             // Validar que los campos no estén vacíos
-            if (pregunta.isNotEmpty() && respuesta.isNotEmpty() && tema != null) {
+            if (pregunta.isNotBlank() && respuesta.isNotBlank() && tema != null) {
                 // Hacer la llamada al ViewModel para registrar la pregunta
                 faqViewModel.postFAQ(pregunta, respuesta, tema, "")
 

@@ -14,7 +14,8 @@ import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivityLoginBinding
 import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
-import com.kotlin.sacalabici.framework.views.activities.Session.RecoverPasswordActivity
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
+import com.kotlin.sacalabici.framework.views.activities.session.RecoverPasswordActivity
 import com.kotlin.sacalabici.utils.Constants
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -50,14 +51,8 @@ class LoginActivity : AppCompatActivity() {
                     finish()
                 }
                 is AuthState.CompleteProfile -> {
-                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
-                }
-                is AuthState.Unauthenticated -> {
-                    val intent = Intent(this, SessionActivity::class.java)
                     startActivity(intent)
                     finish()
                 }

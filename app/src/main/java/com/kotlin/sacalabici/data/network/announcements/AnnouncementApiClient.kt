@@ -2,11 +2,12 @@ package com.kotlin.sacalabici.data.network.announcements
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.MultipartManager
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementObjectBase
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 class AnnouncementApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
@@ -47,8 +48,8 @@ class AnnouncementApiClient(private val firebaseTokenManager: FirebaseTokenManag
         val token = firebaseTokenManager.getTokenSynchronously()
         api = AnnouncementNetworkModuleDI(token)
 
-        val titulo = announcement.titulo
-        val contenido = announcement.contenido
+        val titulo = announcement.titulo.toRequestBody("text/plain".toMediaTypeOrNull())
+        val contenido = announcement.contenido.toRequestBody("text/plain".toMediaTypeOrNull())
 
         val file = announcement.imagen?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
@@ -61,11 +62,18 @@ class AnnouncementApiClient(private val firebaseTokenManager: FirebaseTokenManag
         }
     }
 
-    suspend fun patchAnnouncement(id: String, announcement: Announcement): Announcement? {
+    suspend fun patchAnnouncement(id: String, announcement: Announcement, context: Context): Announcement? {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = AnnouncementNetworkModuleDI(token)
+
+        val titulo = announcement.titulo.toRequestBody("text/plain".toMediaTypeOrNull())
+        val contenido = announcement.contenido.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        val file = announcement.imagen?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
         return try {
-            api.patchAnnouncement(id, announcement)
+            api.patchAnnouncement(id, titulo, contenido, img)
         } catch (e: Exception) {
             e.printStackTrace()
             null

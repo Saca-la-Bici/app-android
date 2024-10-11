@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:text="[Título]"
             android:id="@+id/TVTitulo"
-            android:textStyle="bold"
+            android:fontFamily="@font/roboto_bold"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -46,23 +46,42 @@
         android:text="Distancia: "
         android:textColor="@color/black"
         android:id="@+id/TVDistancia"
+        android:fontFamily="@font/roboto_regular"
         android:textSize="16sp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="Tiempo Promedio: "
+        android:fontFamily="@font/roboto_regular"
         android:textColor="@color/black"
         android:id="@+id/TVTiempo"
         android:textSize="16sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="Nivel: "
-        android:textColor="@color/black"
-        android:id="@+id/TVNivel"
-        android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:text="Nivel: "
+                android:textColor="@color/black"
+                android:id="@+id/TVNivel"
+                android:textSize="16sp"/>
+
+            <ImageButton
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/baseline_delete_24"
+                android:id="@+id/btnDel"
+                android:layout_gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

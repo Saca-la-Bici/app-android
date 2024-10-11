@@ -42,7 +42,7 @@
     <string name="TFinish">Finalizar</string>
 
     <!-- String de Perfil -->
-    <string name="TProfile">Asignación de roles y permisos</string>
+    <string name="TProfile">Asignación de roles</string>
 
     <string name="facebook_app_id">1940390093140800</string>
     <string name="facebook_client_token">b5daf3a37da479db677c140e79b2268d</string>
@@ -109,6 +109,37 @@
     <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
     <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
     <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
+
+    <!-- Strings para Agregar ruta -->
+    <string name="TituloRuta">Título</string>
+    <string name="TiempoRuta">Tiempo (ej. 4h)</string>
+    <string name="PuntoInicioRuta">Punto de Inicio</string>
+    <string name="PuntoDescansoRuta">Punto de Descanso</string>
+    <string name="PuntoFinRuta">Punto de Fin</string>
+    <string name="DistanciaRuta">Distancia (Se calcula automáticamente)</string>
+    <string name="NivelRuta">Selecciona el nivel</string>
+    <string name="Siguiente">Siguiente</string>
+    <string name="RegistrarRuta">Registrar Ruta</string>
+    <string name="agRutaTit">Agrega una ruta</string>
+    <string name="ModRutaTit">Modifica una ruta</string>
+    <string name="TituloMod">Título</string>
+    <string name="DistanciaMod">Distancia (Se calcula automáticamente)</string>
+    <string name="PuntoInicioMod">Punto de Inicio</string>
+    <string name="PuntoDescansoMod">Punto de Descanso</string>
+    <string name="PuntoFinMod">Punto de Fin</string>
+    <string name="TiempoMod">Tiempo (ej. 4h)</string>
+    <string name="NivelMod">Selecciona el nivel</string>
+    <string name="SiguienteMod">Siguiente</string>
+    <string name="ModRutaBtn">Modificar Ruta</string>
+    <string name="noAnnouncements">No se encuentran anuncios disponibles</string>
+    <string name="QuieresEliminarEstaRuta">¿Quieres eliminar esta ruta?</string>
+    <string name="ImportanteUnaVezEliminadaLaRutaNoSePodraRecuperar">¡Importante! Una vez eliminada la ruta no se podrá recuperar.</string>
+    <string name="CancelarEliminarRuta">Cancelar</string>
+    <string name="ConfirmarEliminarRuta">Confirmar</string>
+
+    <!-- Strings para Eliminar ruta -->
+
+
 
 </resources>
 

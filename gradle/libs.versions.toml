@@ -28,6 +28,7 @@ firebaseCrashlyticsBuildtools = "3.0.2"
 lifecycleProcess = "2.8.6"
 activity = "1.9.2"
 constraintlayout = "2.1.4"
+compilercommon = "3.2.0-alpha11"
 
 [libraries]
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -60,6 +61,7 @@ firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "fireb
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-compilercommon = { group = "androidx.databinding", name = "compilerCommon", version.ref = "compilercommon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

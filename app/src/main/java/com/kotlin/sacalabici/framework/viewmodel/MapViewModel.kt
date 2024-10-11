@@ -90,16 +90,15 @@ class MapViewModel : ViewModel() {
         }
     }
 
-    fun deleteRoute(
-        id: String,
-        route: Route,
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun deleteRoute(id: String, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
             try {
-                deleteRouteRequirement(id, route)
+                deleteRouteRequirement(id)
+                callback(Result.success(Unit))
             } catch (e: Exception) {
-                throw e
+                callback(Result.failure(e))
             }
         }
     }
+
 }

@@ -1,6 +1,5 @@
-package com.kotlin.sacalabici.domain
+package com.kotlin.sacalabici.domain.profile
 
-import android.util.Log
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.data.repositories.ProfileRepository
 

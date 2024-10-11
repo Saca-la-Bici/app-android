@@ -93,6 +93,7 @@ class EventosFragment : Fragment() {
         }
     }
 
+    // Iniciar activity con detalles acorde al ID del evento seleccionado
     private fun passDetailsActivity(eventoId: String){
         val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
             putExtra("ACTIVITY_ID", eventoId)

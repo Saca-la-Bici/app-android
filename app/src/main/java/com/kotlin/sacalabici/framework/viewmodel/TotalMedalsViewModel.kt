@@ -17,13 +17,11 @@ class TotalMedalsViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result: MedalObjectBase? = medalsListRequirement()
-                val reversedResult = result!!.medals.reversed()
-                medalsObjectLiveData.postValue(reversedResult)
+                medalsObjectLiveData.postValue(result!!.medals)
             } catch (e: Exception) {
                 e.printStackTrace()
                 medalsObjectLiveData.postValue(emptyList())
             }
         }
     }
-
 }

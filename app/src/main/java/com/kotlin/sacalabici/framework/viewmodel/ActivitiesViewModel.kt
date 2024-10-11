@@ -1,16 +1,22 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kotlin.sacalabici.data.network.model.ActivityModel
+import com.kotlin.sacalabici.data.network.model.Rodada
+import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
 import com.kotlin.sacalabici.data.models.activities.Activity
+import com.kotlin.sacalabici.data.network.model.ActivityInfo
+import com.kotlin.sacalabici.domain.activities.GetActivityByIdRequirement
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
 import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
+import com.kotlin.sacalabici.domain.activities.PostCancelActivity
+import com.kotlin.sacalabici.domain.activities.PostJoinActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,6 +28,10 @@ class ActivitiesViewModel(): ViewModel() {
     val talleresLiveData = MutableLiveData<List<Activity>>()
     private val _permissionsLiveData = MutableLiveData<List<String>>()
     val permissionsLiveData: LiveData<List<String>> = _permissionsLiveData
+    val activityInfo = MutableLiveData<ActivityInfo>()
+
+    // LiveData para observar una actividad por ID
+    val selectedActivityLiveData = MutableLiveData<Activity?>()
 
     // LiveData para mensajes de error
     val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos
@@ -32,11 +42,16 @@ class ActivitiesViewModel(): ViewModel() {
     private val getRodadasRequirement = GetRodadasRequirement()
     private val getEventosRequirement = GetEventosRequirement()
     private val getTalleresRequirement = GetTalleresRequirement()
+    private val requirement = PostActivityRequirement()
+    private val getActivityByIdRequirement = GetActivityByIdRequirement()
     private val permissionsRequirement = PermissionsRequirement()
 
     init {
         getPermissions()
     }
+
+    private val postJoinActivity = PostJoinActivity()
+    private val postCancelActivity = PostCancelActivity()
 
     // Función para cargar rodadas
     fun getRodadas() {
@@ -61,7 +76,6 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getEventosRequirement()
-                Log.d("ActivitiesViewModel", "Eventos result: $result")
                 if (result.isEmpty()) {
                     errorMessageLiveData.postValue(emptyListActs)
                 }
@@ -94,6 +108,56 @@ class ActivitiesViewModel(): ViewModel() {
         }
     }
 
+    // Función para registrar un evento
+    fun postActivityEvento(evento: ActivityModel, context: Context) {
+        viewModelScope.launch {
+            try {
+                requirement.postActivityEvento(evento, context)
+            } catch (e: Exception) {
+                 null
+            }
+        }
+    }
+
+    // Función para registrar una rodada
+    fun postActivityRodada(rodada: Rodada, context: Context) {
+        viewModelScope.launch {
+            try {
+                requirement.postActivityRodada(rodada, context)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    // Función para registrar un taller
+    fun postActivityTaller(taller: ActivityModel, context: Context) {
+        viewModelScope.launch {
+            try {
+                requirement.postActivityTaller(taller, context)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    fun getActivityById(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = getActivityByIdRequirement(id)
+                if (result == null) {
+                    errorMessageLiveData.postValue("Actividad no encontrada")
+                } else {
+                    errorMessageLiveData.postValue(null)
+                }
+                selectedActivityLiveData.postValue(result)
+            } catch (e: Exception) {
+                errorMessageLiveData.postValue("Error al obtener la actividad")
+                selectedActivityLiveData.postValue(null)
+            }
+        }
+    }
+
     fun getPermissions() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -108,4 +172,40 @@ class ActivitiesViewModel(): ViewModel() {
             }
         }
     }
+
+
+    // Función para inscribir al usuario en una actividad
+    fun postInscribirActividad(actividadId: String, tipo: String, callback: (Boolean, String) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val (success, message) = postJoinActivity(actividadId, tipo)
+                withContext(Dispatchers.Main) {
+                    callback(success, message)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    callback(false, "Error desconocido. Por favor, intenta más tarde.")
+                }
+            }
+        }
+    }
+
+
+    fun postCancelarInscripcion(actividadId: String, tipo: String, callback: (Boolean, String) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val (success, message) = postCancelActivity(actividadId, tipo)
+                withContext(Dispatchers.Main) {
+                    callback(success, message)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    callback(false, "Error desconocido. Por favor, intenta más tarde.")
+                }
+            }
+        }
+    }
+
+
+
 }

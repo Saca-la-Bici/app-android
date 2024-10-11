@@ -44,168 +44,155 @@
         app:layout_constraintGuide_percent="0.9" />
 
     <!-- Contenedor principal -->
-    <View
-        android:id="@+id/VContainer"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/end_guideline"
-        app:layout_constraintStart_toStartOf="@+id/start_guideline" />
+        app:layout_constraintStart_toStartOf="@+id/start_guideline" >
 
-    <!-- Barra de tareas -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/VContainer"
-        app:layout_constraintStart_toStartOf="@+id/VContainer" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/VContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <!-- Botón de regreso -->
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/BBack"
-        android:layout_width="25dp"
-        android:layout_height="0dp"
-        android:src="@drawable/back_button"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="@+id/toolbar" />
+            <!-- Barra de tareas -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/VContainer"
+                app:layout_constraintStart_toStartOf="@+id/VContainer" />
 
-    <!-- Título de la vista -->
-    <TextView
-        android:id="@+id/TVTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/TMakeAccount"
-        android:textSize="25sp"
-        android:fontFamily="@font/roboto_bold"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            <!-- Botón de regreso -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/BBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_button"
+                app:layout_constraintTop_toTopOf="@+id/toolbar"
+                app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+                app:layout_constraintStart_toStartOf="@+id/toolbar" />
 
-    <!-- Imagen de bicicleta -->
-    <View
-        android:id="@+id/VBike"
-        android:layout_width="35dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/ic_bike"
-        app:layout_constraintStart_toEndOf="@+id/TVTitle"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            <!-- Título de la vista -->
+            <TextView
+                android:id="@+id/TVTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/TMakeAccount"
+                android:textSize="25sp"
+                android:fontFamily="@font/roboto_bold"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <!-- Correo electrónico -->
-    <TextView
-        android:id="@+id/TVEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TEmail"
-        android:textSize="11sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TVTitle" />
+            <!-- Imagen de bicicleta -->
+            <View
+                android:id="@+id/VBike"
+                android:layout_width="35dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_bike"
+                app:layout_constraintStart_toEndOf="@+id/TVTitle"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <!-- Campo de texto de correo electrónico -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/TILEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/TVEmail"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintEnd_toEndOf="@+id/VContainer"><com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:layout_marginTop="5dp"
-        android:textSize="14sp"
-        android:hint="@string/TEmail"
-        android:fontFamily="@font/roboto_regular"
-        android:maxLines="1"
-        android:lines="1"
-        android:singleLine="true"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            <!-- Campo de texto de correo electrónico -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/TVTitle"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer">
 
-    <!-- Nombre de usuario -->
-    <TextView
-        android:id="@+id/TVUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TUsername"
-        android:textSize="11sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TILEmail" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="24dp"
+                    android:textSize="14sp"
+                    android:hint="@string/TEmail"
+                    android:fontFamily="@font/roboto_regular"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:singleLine="true"/>
 
-    <!-- Campo de texto de nombre de usuario -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/TILUsername"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/TVUsername"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintEnd_toEndOf="@+id/VContainer"><com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:layout_marginTop="5dp"
-        android:textSize="14sp"
-        android:hint="@string/TUsername"
-        android:fontFamily="@font/roboto_regular"
-        android:maxLines="1"
-        android:lines="1"
-        android:singleLine="true"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Nombre de usuario -->
-    <TextView
-        android:id="@+id/TVName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/TNombreCompleto"
-        android:textSize="11sp"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TILUsername" />
+            <!-- Campo de texto de nombre de usuario -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILUsername"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/TILEmail"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer">
 
-    <!-- Campo de texto de nombre completo -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/TILName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/TVName"
-        app:layout_constraintStart_toStartOf="@+id/VContainer"
-        app:layout_constraintEnd_toEndOf="@+id/VContainer"><com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:layout_marginTop="5dp"
-        android:textSize="14sp"
-        android:hint="@string/TNombreCompleto"
-        android:fontFamily="@font/roboto_regular"
-        android:maxLines="1"
-        android:lines="1"
-        android:singleLine="true"/>
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="24dp"
+                    android:layout_marginTop="5dp"
+                    android:textSize="14sp"
+                    android:hint="@string/TUsername"
+                    android:fontFamily="@font/roboto_regular"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:singleLine="true"/>
 
-    <!-- Botón de continuar -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/BContinue"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:text="@string/TContinue"
-        android:textAllCaps="false"
-        android:textSize="14sp"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/roboto_black"
-        app:cornerRadius="14dp"
-        app:backgroundTint="@color/yellow"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/VContainer"
-        app:layout_constraintEnd_toEndOf="@id/VContainer"
-        app:layout_constraintTop_toBottomOf="@id/TILName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- Campo de texto de nombre completo -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/TILUsername"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="24dp"
+                    android:layout_marginTop="5dp"
+                    android:textSize="14sp"
+                    android:hint="@string/TNombreCompleto"
+                    android:fontFamily="@font/roboto_regular"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:singleLine="true"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Botón de continuar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BContinue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="@string/TContinue"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/roboto_black"
+                app:cornerRadius="14dp"
+                app:backgroundTint="@color/yellow"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@id/VContainer"
+                app:layout_constraintEnd_toEndOf="@id/VContainer"
+                app:layout_constraintTop_toBottomOf="@id/TILName" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

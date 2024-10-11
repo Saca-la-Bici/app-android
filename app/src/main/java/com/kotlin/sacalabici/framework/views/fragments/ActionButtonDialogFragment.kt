@@ -13,21 +13,22 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
-import kotlinx.coroutines.delay
+import com.kotlin.sacalabici.framework.views.activities.announcement.ModifyAnnouncementActivity
 import kotlinx.coroutines.launch
 
 class ActionButtonDialogFragment : DialogFragment() {
 
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var announcement: AnnouncementBase
+    private var permissions: List<String> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,7 @@ class ActionButtonDialogFragment : DialogFragment() {
             val title = it.getString("title") ?: throw IllegalArgumentException("Title is required")
             val content = it.getString("content") ?: throw IllegalArgumentException("Content is required")
             val url = it.getString("url") // url can be null
+            permissions = it.getStringArrayList("permissions") ?: emptyList()
             announcement = AnnouncementBase(id, title, content, url ?: "")
         } ?: throw IllegalArgumentException("Arguments are required")
     }
@@ -67,40 +69,19 @@ class ActionButtonDialogFragment : DialogFragment() {
 
         val tvDelete: TextView = view.findViewById(R.id.TVDelete)
         val tvModify: TextView = view.findViewById(R.id.TVModify)
+        Log.d("ActionButtonDialogFragment", "onViewCreated: $permissions")
 
-        tvDelete.setOnClickListener {
-            // Inflate the custom layout
-            val inflater = LayoutInflater.from(requireContext())
-            val dialogView = inflater.inflate(R.layout.item_delete_message, null)
-
-            // Create the AlertDialog
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setView(dialogView)
-
-            val alertDialog = builder.create()
-
-            // Set the background of the AlertDialog to be transparent
-            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-            // Set click listeners for the buttons in the custom layout
-            dialogView.findViewById<Button>(R.id.btn_cancel).setOnClickListener {
-                alertDialog.dismiss()
-            }
-
-            dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
-                viewModel.deleteAnnouncement(announcement.id)
-                viewLifecycleOwner.lifecycleScope.launch {
-                    delay(500)
-                    alertDialog.dismiss()
-                    setFragmentResult("actionButtonDialogResult", Bundle().apply {
-                        putInt("resultCode", RESULT_OK)
-                    })
-                    dismiss()
-                }
-            }
-            alertDialog.show()
+        if (!permissions.contains("Eliminar anuncio")) {
+            tvDelete.visibility = View.GONE
         }
 
+        if (!permissions.contains("Modificar anuncio")) {
+            tvModify.visibility = View.GONE
+        }
+
+        tvDelete.setOnClickListener {
+            showDeleteConfirmationDialog()
+        }
         tvModify.setOnClickListener {
             val intent = Intent(requireContext(), ModifyAnnouncementActivity::class.java).apply {
                 putExtra("id", announcement.id)
@@ -113,15 +94,58 @@ class ActionButtonDialogFragment : DialogFragment() {
         }
     }
 
+    private fun showDeleteConfirmationDialog() {
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.item_delete_message, null)
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(dialogView)
+
+        val alertDialog = builder.create()
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogView.findViewById<Button>(R.id.btn_cancel).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
+            alertDialog.dismiss()
+            deleteAnnouncement()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun deleteAnnouncement() {
+
+        viewModel.deleteAnnouncement(announcement.id) { result ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                result.fold(
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "Anuncio eliminado exitosamente", Toast.LENGTH_SHORT).show()
+                        setFragmentResult("actionButtonDialogResult", Bundle().apply {
+                            putInt("resultCode", RESULT_OK)
+                        })
+                        dismiss()
+                    },
+                    onFailure = { error ->
+                        Toast.makeText(requireContext(), "Error al eliminar el anuncio: ${error.message}", Toast.LENGTH_LONG).show()
+                    }
+                )
+            }
+        }
+    }
+
     companion object {
         const val TAG = "ActionButtonDialogFragment"
-        fun newInstance(id: String, title: String, content: String, url: String?): ActionButtonDialogFragment {
+        fun newInstance(id: String, title: String, content: String, url: String?, permissions: List<String>): ActionButtonDialogFragment {
             val fragment = ActionButtonDialogFragment()
             val args = Bundle()
             args.putString("id", id)
             args.putString("title", title)
             args.putString("content", content)
             args.putString("url", url)
+            args.putStringArrayList("permissions", ArrayList(permissions))
             fragment.arguments = args
             return fragment
         }

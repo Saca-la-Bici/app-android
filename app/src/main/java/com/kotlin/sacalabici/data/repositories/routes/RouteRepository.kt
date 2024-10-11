@@ -12,13 +12,16 @@ class RouteRepository {
     private val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
     private val apiRoute = RouteApiClient(firebaseTokenManager)
 
-    suspend fun getRouteList(): RouteObjectBase? =
-        apiRoute.getRutasList()
+    suspend fun getRouteList(): RouteObjectBase? = apiRoute.getRutasList()
 
+    suspend fun postRoute(route: Route): Route? = apiRoute.postRoute(route)
 
-    suspend fun postRoute(route: Route): Route? =
-        apiRoute.postRoute(route)
+    suspend fun putRoute(
+        id: String,
+        route: Route,
+    ): Route? = apiRoute.modifyRoute(id, route)
 
-    suspend fun putRoute(id: String, route: Route): Route? =
-        apiRoute.modifyRoute(id, route)
+    suspend fun deleteRoute(id: String): RouteBase? {
+        return apiRoute.deleteRoute(id)
+    }
 }

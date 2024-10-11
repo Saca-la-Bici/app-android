@@ -20,3 +20,35 @@ class GetTalleresRequirement {
 
     suspend operator fun invoke(): List<Activity> = repository.getTalleres()
 }
+
+class GetActivityByIdRequirement {
+    private val repository = ActivitiesRepository()
+    suspend operator fun invoke(id: String): Activity? = repository.getActivityById(id)
+}
+
+class PostJoinActivity {
+    private val repository = ActivitiesRepository()
+
+    suspend operator fun invoke(actividadId: String, tipo: String): Pair<Boolean, String> {
+        return try {
+            repository.postJoinActivity(actividadId, tipo)
+        } catch (e: Exception) {
+            Pair(false, "Error al intentar inscribir la actividad. Por favor, intenta más tarde.")
+        }
+    }
+}
+
+
+class PostCancelActivity {
+    private val repository = ActivitiesRepository()
+
+    suspend operator fun invoke(actividadId: String, tipo: String): Pair<Boolean, String> {
+        return try {
+            repository.postCancelActivity(actividadId, tipo)
+        } catch (e: Exception) {
+            Pair(false, "Error al intentar cancelar la actividad. Por favor, intenta más tarde.")
+        }
+    }
+}
+
+

@@ -118,6 +118,9 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
 
+    // OkHttp
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+
     // Facebook SDK
     implementation("com.facebook.android:facebook-login:latest.release")
     implementation("com.facebook.android:facebook-android-sdk:latest.release")
@@ -130,5 +133,8 @@ dependencies {
 
     implementation("com.hbb20:ccp:2.7.0")
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.52")
+
+    // ThreeTenABP para formatear fechas
+    implementation ("com.jakewharton.threetenabp:threetenabp:1.3.1")
 
 }

@@ -18,8 +18,11 @@ class ActivitiesRepository {
         val listRodadas = mutableListOf<Activity>()
         rodadasBase?.rodadas?.forEach { itemActivity ->
             val nivel = itemActivity.route?.nivel
-            itemActivity.activities.forEach{ activity ->
-                val updatedActivity = activity.copy(nivel = nivel)
+            val distance = itemActivity.route?.distancia
+            val rodadaId = itemActivity.id
+            val rutaId = itemActivity.route?.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = rodadaId, nivel = nivel, distancia = distance, idRouteBase = rutaId)
                 listRodadas.add(updatedActivity)
             }
         }
@@ -30,7 +33,11 @@ class ActivitiesRepository {
         val eventosBase: EventosBase? =  apiActivities.getEventos()
         val listEventos = mutableListOf<Activity>()
         eventosBase?.eventos?.forEach { itemActivity ->
-            listEventos.addAll(itemActivity.activities)
+            val eventoId = itemActivity.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = eventoId)
+                listEventos.add(updatedActivity)
+            }
         }
         return listEventos
     }
@@ -39,13 +46,39 @@ class ActivitiesRepository {
         val talleresBase: TalleresBase? = apiActivities.getTalleres()
         val listTalleres = mutableListOf<Activity>()
         talleresBase?.talleres?.forEach { itemActivity ->
-            listTalleres.addAll(itemActivity.activities)
+            val tallerId = itemActivity.id
+            itemActivity.activities.forEach { activity ->
+                val updatedActivity = activity.copy(id = tallerId)
+                listTalleres.add(updatedActivity)
+            }
         }
         return listTalleres
+    }
+
+    suspend fun getActivityById(id: String): Activity? {
+        val response = apiActivities.getActivityById(id)
+
+        val activity = response?.actividad?.information?.firstOrNull()
+        val nivel = response?.actividad?.route?.nivel
+        val distancia = response?.actividad?.route?.distancia
+        val rutaId = response?.actividad?.route?.id
+
+        val activityResponse = activity?.copy(nivel = nivel, distancia = distancia, idRouteBase = rutaId)
+        return activityResponse
     }
 
     suspend fun getPermissions(): List<String> {
         val permissionsObject = apiActivities.getPermissions()
         return permissionsObject?.permisos ?: emptyList()
     }
+
+    suspend fun postJoinActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
+        return apiActivities.PostJoinActivity(actividadId, tipo)
+    }
+
+    suspend fun postCancelActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
+        return apiActivities.PostCancelActivity(actividadId, tipo)
+    }
+
+
 }

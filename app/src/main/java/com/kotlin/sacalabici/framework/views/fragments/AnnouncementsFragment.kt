@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.adapters.views.fragments
+package com.kotlin.sacalabici.framework.views.fragments
 
 import android.app.Activity
 import android.app.Activity.RESULT_OK
@@ -20,9 +20,8 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.databinding.FragmentAnnouncementsBinding
 import com.kotlin.sacalabici.framework.adapters.AnnouncementAdapter
-import com.kotlin.sacalabici.framework.adapters.views.activities.AddAnnouncementActivity
+import com.kotlin.sacalabici.framework.views.activities.announcement.AddAnnouncementActivity
 import kotlinx.coroutines.delay
-import com.kotlin.sacalabici.framework.adapters.views.activities.ModifyAnnouncementActivity
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,15 +34,13 @@ class AnnouncementsFragment: Fragment() {
         longClickListener = { announcement: AnnouncementBase ->
             showDialog(announcement)
             true
-        },
-        clickListener = { announcement: AnnouncementBase ->
-            passToModifyActivity(requireContext(), announcement)
         }
     )
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var addAnnouncementLauncher: ActivityResultLauncher<Intent>
     private lateinit var modifyAnnouncementLauncher: ActivityResultLauncher<Intent>
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private var permissions: List<String> = emptyList()
 
     private val binding get() = _binding!!
 
@@ -66,7 +63,7 @@ class AnnouncementsFragment: Fragment() {
         }
         initializeObservers()
         setupClickListeners()
-        fetchAnnouncementsWithDelay()
+        fetchAnnouncements()
 
         addAnnouncementLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -89,7 +86,7 @@ class AnnouncementsFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        fetchAnnouncementsWithDelay()
+        fetchAnnouncements()
     }
 
     override fun onDestroyView() {
@@ -108,18 +105,20 @@ class AnnouncementsFragment: Fragment() {
         addAnnouncementLauncher.launch(intent)
     }
 
-    private fun passToModifyActivity(context: Context, announcement: AnnouncementBase) {
-        val intent = Intent(context, ModifyAnnouncementActivity::class.java).apply {
-            putExtra("id", announcement.id)
-            putExtra("title", announcement.title)
-            putExtra("content", announcement.content)
-            putExtra("url", announcement.url)
-        }
-        modifyAnnouncementLauncher.launch(intent)
-    }
 
     private fun initializeObservers() {
+        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            this.permissions = permissions
+            if (permissions.contains("Registrar anuncio")) {
+                binding.fabAddAnouncement.visibility = View.VISIBLE
+            }
+        }
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->
+            if (announcementList.isEmpty()) {
+                binding.tvNoAnnouncements.visibility = View.VISIBLE
+            } else {
+                binding.tvNoAnnouncements.visibility = View.GONE
+            }
             lifecycleScope.launch {
                 delay(50)
                 setUpRecyclerView(ArrayList(announcementList))
@@ -132,13 +131,12 @@ class AnnouncementsFragment: Fragment() {
         recyclerView = root.findViewById(R.id.RVAnnouncements)
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
-            fetchAnnouncementsWithDelay()
+            fetchAnnouncements()
         }
     }
 
-    private fun fetchAnnouncementsWithDelay() {
+    private fun fetchAnnouncements() {
         lifecycleScope.launch(Dispatchers.Main) {
-            delay(50)
             viewModel.getAnnouncementList()
         }
     }
@@ -156,12 +154,15 @@ class AnnouncementsFragment: Fragment() {
     }
 
     private fun showDialog(announcement: AnnouncementBase) {
-        val dialogFragment = ActionButtonDialogFragment.newInstance(
-            announcement.id,
-            announcement.title,
-            announcement.content,
-            announcement.url
-        )
-        dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
+        if (permissions.contains("Modificar anuncio") || permissions.contains("Eliminar anuncio")) {
+            val dialogFragment = ActionButtonDialogFragment.newInstance(
+                announcement.id,
+                announcement.title,
+                announcement.content,
+                announcement.url,
+                permissions
+            )
+            dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
+        }
     }
 }

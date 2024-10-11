@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     android:id="@+id/clAddAnouncement">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ImageButton
         android:id="@+id/ibClose"
         android:layout_width="wrap_content"
@@ -42,8 +52,8 @@
 
     <ImageButton
         android:id="@+id/ibAddImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:background="@null"
         android:src="@drawable/ic_add_image"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -78,6 +88,7 @@
         android:paddingEnd="15dp"
         android:paddingBottom="12dp"
         android:textAppearance="@style/HintStyle"
+        android:maxLength="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,6 +125,7 @@
         android:textAppearance="@style/HintStyle"
         android:gravity="top | start"
         android:inputType="textMultiLine"
+        android:maxLength="500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

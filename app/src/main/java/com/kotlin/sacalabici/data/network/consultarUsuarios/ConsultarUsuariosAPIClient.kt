@@ -18,10 +18,10 @@ class ConsultarUsuariosAPIClient(private val idToken: String?) {
         }
     }
 
-    suspend fun searchUser(username: String): List<ConsultarUsuariosBase>? {
+    suspend fun searchUser(username: String, roles: String? = null): List<ConsultarUsuariosBase>? {
         api = ConsultarUsuariosModuleDI(idToken) // Asegúrate de obtener la instancia correctamente
         return try {
-            val response = api.searchUser(username)
+            val response = api.searchUser(username, roles ?: "") // Asegúrate de pasar el firebaseUID
             response.usuarios // Devuelve la lista de usuarios
         } catch (e: Exception) {
             e.printStackTrace()

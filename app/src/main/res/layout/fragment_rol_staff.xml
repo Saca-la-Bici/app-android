@@ -49,8 +49,8 @@
     <!-- Botón de regreso -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/btnBack"
-        android:layout_width="25dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
         android:src="@drawable/back_button"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -61,7 +61,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/TProfile"
-        style="@style/TextAppearance.TitleMedium"
+        android:fontFamily="@font/roboto_black"
+        android:textSize="18sp"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
@@ -83,6 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Administradores"
+            android:fontFamily="@font/roboto_regular"
             android:background="@android:color/transparent"
             android:textColor="@android:color/darker_gray"
             android:textAllCaps="false" />
@@ -94,6 +96,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="Staff"
+            android:fontFamily="@font/roboto_regular"
             android:textAllCaps="false"
             android:textColor="@drawable/btn_admin_selected" />
     </LinearLayout>
@@ -127,6 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/rounded_search_view"
+        android:fontFamily="@font/roboto_medium"
         app:queryHint="Buscar"
         app:iconifiedByDefault="false"
         app:layout_constraintTop_toBottomOf="@id/VHorizontalLine"
@@ -143,6 +147,18 @@
         app:layout_constraintStart_toStartOf="@id/VContainer"
         app:layout_constraintEnd_toEndOf="@id/VContainer"
         app:layout_constraintBottom_toBottomOf="@+id/VContainer"/>
+
+    <TextView
+        android:id="@+id/TVNoUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/TNoUsers"
+        style="@style/TextAppearance.TitleMedium"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/RVView_users"
+        app:layout_constraintBottom_toBottomOf="@id/RVView_users"
+        app:layout_constraintStart_toStartOf="@id/VContainer"
+        app:layout_constraintEnd_toEndOf="@id/VContainer" />
 
     <View
         android:id="@+id/vNavBar"

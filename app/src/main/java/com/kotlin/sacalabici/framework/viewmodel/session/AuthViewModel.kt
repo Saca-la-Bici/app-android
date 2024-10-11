@@ -44,30 +44,19 @@ class AuthViewModel : ViewModel() {
 
     private lateinit var authStateListener: FirebaseAuth.AuthStateListener
 
-    // Inicializar Firebase Auth cuando el ViewModel es creado
-    init {
-        firebaseAuth = FirebaseAuth.getInstance()
-    }
-
     fun initialize(firebaseAuthInstance: FirebaseAuth, googleOptions: GoogleSignInOptions, activity: AppCompatActivity) {
         firebaseAuth = firebaseAuthInstance
         googleSignInClient = GoogleSignIn.getClient(activity, googleOptions)
         callbackManager = CallbackManager.Factory.create()
 
-        // Iniciar listener de estado de autenticación
         initializeAuthStateListener()
     }
 
-    // Inicializa el listener de estado de autenticación
     private fun initializeAuthStateListener() {
         authStateListener = FirebaseAuth.AuthStateListener { auth ->
             val user = auth.currentUser
             if (user != null) {
-                // Usuario autenticado, verifica si los datos están completos
                 checkUserProfile()
-            } else {
-                // Usuario no autenticado
-                _authState.postValue(AuthState.Unauthenticated)
             }
         }
     }
@@ -129,7 +118,6 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val currentUser = firebaseAuth.currentUser
                     if (currentUser != null) {
-                        // Notifica a la actividad que debe redirigir a LoginFinishActivity
                         checkUserProfile()
                     } else {
                         _authState.postValue(AuthState.Error("Usuario actual no disponible"))
@@ -155,7 +143,6 @@ class AuthViewModel : ViewModel() {
             if (task.isSuccessful) {
                 val currentUser = firebaseAuth.currentUser
                 if (currentUser != null) {
-                    // Notifica a la actividad que debe redirigir a LoginFinishActivity
                     checkUserProfile()
                 } else {
                     _authState.postValue(AuthState.Error("Usuario actual no disponible"))
@@ -190,11 +177,6 @@ class AuthViewModel : ViewModel() {
         } else {
             _authState.postValue(AuthState.Error("Por favor, ingrese un correo electrónico y una contraseña"))
         }
-    }
-
-    fun getCurrentUserId(): String? {
-        val currentUser = firebaseAuth.currentUser
-        return currentUser?.uid
     }
 
 

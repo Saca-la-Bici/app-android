@@ -1,83 +1,106 @@
 package com.kotlin.sacalabici.framework.views.activities
-
 import android.app.Application
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
+import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
+import com.kotlin.sacalabici.framework.views.activities.session.LoginFinishActivity
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import com.kotlin.sacalabici.framework.views.fragments.ActivitiesFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.AnnouncementsFragment
+import com.kotlin.sacalabici.framework.views.fragments.AnnouncementsFragment
 import com.kotlin.sacalabici.framework.views.fragments.MapFragment
-import com.kotlin.sacalabici.framework.adapters.views.fragments.ProfileFragment
+import com.kotlin.sacalabici.framework.views.fragments.ProfileFragment
 import com.kotlin.sacalabici.utils.Constants
-
-
 class MainActivity: AppCompatActivity() {
     private lateinit var currentFragment: Fragment
-
     private var currentMenuOption:String?= null
-
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var firebaseAuth: FirebaseAuth
-
     private lateinit var tokenManager: FirebaseTokenManager
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initializeBinding()
         initializeObservers()
         initializeListeners()
         exchangeCurrentFragment(ActivitiesFragment(), Constants.MENU_ACTIVITIES)
         moveHighlightToButton(binding.appBarMain.btnActividades)
-
         firebaseAuth = FirebaseAuth.getInstance()
         tokenManager = FirebaseTokenManager(firebaseAuth)
         tokenManager.getIdToken()
-
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(applicationContext as Application)
+
+        authViewModel.initialize(
+            FirebaseAuth.getInstance(),
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(Constants.REQUEST_ID_TOKEN)
+                .requestEmail()
+                .build(),
+            this
+        )
 
         if (firebaseAuth.currentUser == null) {
             // Usuario no está autenticado, redirige a SessionActivity
             startActivity(Intent(this, SessionActivity::class.java))
             finish() // Opcional: Termina la actividad actual para que el usuario no pueda volver a ella con el botón "Atrás"
         }
-    }
 
+        // Observe registration state
+        authViewModel.authState.observe(this) { authState ->
+            Log.d("SessionActivity", "Observando")
+            when (authState) {
+                is AuthState.Success -> {
+                    // Registration successful
+                }
+                is AuthState.Error -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
+                }
+                is AuthState.IncompleteProfile -> {
+                    val intent = Intent(this, SessionActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+                is AuthState.CompleteProfile -> {
+                }
+                AuthState.Cancel -> TODO()
+                AuthState.SignedOut -> TODO()
+            }
+        }
+    }
     private fun initializeBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-
     private fun initializeObservers(){
-
     }
-
     private fun exchangeCurrentFragment(newFragment: Fragment, newMenuOption:String){
         currentFragment = newFragment
-
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment_content_main,currentFragment)
             .commit()
-
         currentMenuOption = newMenuOption
-
         if (currentMenuOption == Constants.MENU_PROFILE ||
             currentMenuOption == Constants.MENU_MAP) {
             binding.topAppBar.clTopBar.visibility = View.GONE
@@ -85,36 +108,28 @@ class MainActivity: AppCompatActivity() {
             binding.topAppBar.clTopBar.visibility = View.VISIBLE
         }
     }
-
     private fun initializeListeners(){
-
         binding.appBarMain.btnActividades.setOnClickListener {
             selectMenuOption(Constants.MENU_ACTIVITIES)
             moveHighlightToButton(binding.appBarMain.btnActividades)
         }
-
         binding.appBarMain.btnMapa.setOnClickListener {
             selectMenuOption(Constants.MENU_MAP)
             moveHighlightToButton(binding.appBarMain.btnMapa)
         }
-
         binding.appBarMain.btnAnuncios.setOnClickListener {
             selectMenuOption(Constants.MENU_ANNOUNCEMENTS)
             moveHighlightToButton(binding.appBarMain.btnAnuncios)
         }
-
         binding.appBarMain.btnPerfil.setOnClickListener {
             selectMenuOption(Constants.MENU_PROFILE)
             moveHighlightToButton(binding.appBarMain.btnPerfil)
         }
-
     }
-
     private fun selectMenuOption(menuOption:String){
         if(menuOption == currentMenuOption){
             return
         }
-
         when(menuOption){
             Constants.MENU_ACTIVITIES -> {
                 exchangeCurrentFragment(ActivitiesFragment(),Constants.MENU_ACTIVITIES)
@@ -142,13 +157,11 @@ class MainActivity: AppCompatActivity() {
             }
         }
     }
-
     private fun highlightCurrentActivity(
         currentMenuOption: String,
         buttonClicked: ImageButton,
         textClicked: TextView,
     ) {
-
         // Restablecer todos los botones a su estado original
         resetButtonState(
             binding.appBarMain.btnActividades,
@@ -166,7 +179,6 @@ class MainActivity: AppCompatActivity() {
             binding.appBarMain.btnAnuncios,
             binding.appBarMain.tvAnuncios,
             R.drawable.ic_anuncios)
-
         // Aplicar animaciones y cambiar el color según el botón seleccionado
         when (currentMenuOption) {
             Constants.MENU_ACTIVITIES -> {
@@ -181,35 +193,32 @@ class MainActivity: AppCompatActivity() {
             }
         }
     }
-
     // Función para resetear el estado de un botón
     private fun resetButtonState(button: ImageButton, textView: TextView, defaultIcon: Int) {
         button.setImageResource(defaultIcon)
         textView.setTextColor(Color.GRAY)
     }
-
     // Función para seleccionar un botón y aplicar el estado seleccionado
     private fun selectButtonState(button: ImageButton, textView: TextView, selectedIcon: Int) {
         button.setImageResource(selectedIcon)
         textView.setTextColor(Color.BLACK)
     }
-
     private fun moveHighlightToButton(targetButton: ImageButton) {
         val constraintLayout = binding.appBarMain.clAppBar
         val constraintSet = ConstraintSet()
-
         constraintSet.clone(constraintLayout)
-
         // Conectar el highlightView al botón seleccionado
         constraintSet.connect(R.id.vHighlightView, ConstraintSet.START, targetButton.id, ConstraintSet.START)
         constraintSet.connect(R.id.vHighlightView, ConstraintSet.END, targetButton.id, ConstraintSet.END)
-
         // Aplicar la transición
         val transition = ChangeBounds()
         transition.duration = 300 // Cambiar duración si es necesario para debugging
         TransitionManager.beginDelayedTransition(constraintLayout, transition)
-
         // Aplicar el ConstraintSet
         constraintSet.applyTo(constraintLayout)
+    }
+    override fun onStart() {
+        super.onStart()
+        authViewModel.startAuthStateListener()
     }
 }

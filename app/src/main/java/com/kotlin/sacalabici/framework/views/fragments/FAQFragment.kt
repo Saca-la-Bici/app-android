@@ -23,8 +23,9 @@ import kotlinx.coroutines.launch
 class FAQFragment : Fragment() {
     private var _binding: FragmentFaqsBinding? = null
     private lateinit var recyclerView: RecyclerView
-    private val adapter: FAQAdapter = FAQAdapter()
     private lateinit var viewModel: FAQViewModel
+    private val adapter: FAQAdapter = FAQAdapter()
+    private var permissions: List<String> = emptyList()
 
     private var faqList: ArrayList<FAQBase> = ArrayList()
 
@@ -60,6 +61,12 @@ class FAQFragment : Fragment() {
     }
 
     private fun initializeObservers() {
+        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            this.permissions = permissions
+            if (permissions.contains("Registrar pregunta frecuente")) {
+                binding.BAgregarPregunta.visibility = View.VISIBLE
+            }
+        }
         // Observing the FAQ list data from the ViewModel
         viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
             lifecycleScope.launch {

@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 
 class FAQViewModel : ViewModel() {
     val faqObjectLiveData = MutableLiveData<List<FAQBase>>()
+    val permissionsLiveData = MutableLiveData<List<String>>()
     private val faqListRequirement = FAQListRequirement()
     private val postFAQRequirement = PostFAQRequirement()
 
@@ -21,12 +22,14 @@ class FAQViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result: FAQObjectBase? = faqListRequirement()
+
                 val faqresult = result!!.faqs
 
                 if (faqresult.isEmpty()) {
                     errorMessage.postValue("No se encontraron preguntas frecuentes")
                 } else {
                     faqObjectLiveData.postValue(faqresult)
+                    permissionsLiveData.postValue(result.permissions)
                     errorMessage.postValue(null)
                 }
             } catch (e: Exception) {

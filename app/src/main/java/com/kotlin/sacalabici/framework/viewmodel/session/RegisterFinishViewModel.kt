@@ -17,7 +17,7 @@ import java.util.regex.Pattern
 class RegisterFinishViewModel : ViewModel() {
 
     // Lista de tipos de sangre válidos
-    private val validBloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+    private val validBloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "No especificado")
     private val _authState = MutableLiveData<AuthState>()
     private val userClient = UserClient()
     val authState: LiveData<AuthState> get() = _authState

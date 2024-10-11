@@ -4,8 +4,10 @@ import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
 import com.kotlin.sacalabici.data.models.activities.EventosBase
+import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
+import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
@@ -179,6 +181,7 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         }
     }
 
+
     suspend fun PostJoinActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
         val token = firebaseTokenManager.getTokenSynchronously()
 
@@ -205,9 +208,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             Pair(false, "Error de autenticación. Por favor, inicia sesión.")
         }
     }
-
-
-
 
     suspend fun PostCancelActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
         val token = firebaseTokenManager.getTokenSynchronously()
@@ -251,4 +251,55 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             null
         }
     }
+
+    suspend fun postLocation(id: String, location: LocationR): Boolean {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                val response = api.postLocation(id,location)
+                response.isSuccessful
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        } else {
+            false
+        }
+    }
+
+    suspend fun getRodadaInfo(id: String): RodadaInfoBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.getRodadaInfo(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    suspend fun getUbicacion(id: String): List<LocationR>? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.getUbicacion(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+
+
 }

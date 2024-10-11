@@ -1,9 +1,7 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,44 +11,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import com.kotlin.sacalabici.BuildConfig
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.routes.CoordenatesBase
 import com.kotlin.sacalabici.data.models.routes.RouteBase
-import com.kotlin.sacalabici.data.models.routes.RouteObjectBase
 import com.kotlin.sacalabici.databinding.ActivityMapBinding
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.activities.AddRouteActivity
 import com.kotlin.sacalabici.helpers.MapHelper
-import com.mapbox.geojson.Feature
-import com.mapbox.geojson.FeatureCollection
-import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
-import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
-import com.mapbox.maps.extension.style.layers.addLayer
-import com.mapbox.maps.extension.style.layers.generated.LineLayer
 import com.mapbox.maps.extension.style.layers.getLayer
-import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.getSourceAs
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
 
-class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
+class MapFragment: Fragment(), RouteFragment.OnRutaSelectedListener {
 
     // Variable para vincular el archivo de diseño XML
     private var _binding: ActivityMapBinding? = null
@@ -161,7 +137,7 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
 
                 if (rutasFragment == null) {
                     // Si el fragmento no está visible, lo añadimos
-                    val newRutasFragment = RutasFragment.newInstance(rutasList, viewModel.lastSelectedRuta)
+                    val newRutasFragment = RouteFragment.newInstance(rutasList, viewModel.lastSelectedRuta)
                     childFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, newRutasFragment) // Reemplazamos el fragmento existente
                         .addToBackStack(null)
@@ -214,7 +190,7 @@ class MapFragment: Fragment(), RutasFragment.OnRutaSelectedListener {
             viewModel.getRouteList()
             viewModel.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
                 if (!rutasList.isNullOrEmpty()) {
-                    val newRutasFragment = RutasFragment.newInstance(rutasList, viewModel.lastSelectedRuta)
+                    val newRutasFragment = RouteFragment.newInstance(rutasList, viewModel.lastSelectedRuta)
                     childFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, newRutasFragment)
                         .addToBackStack(null)

@@ -93,6 +93,7 @@ class TalleresFragment : Fragment() {
         }
     }
 
+    // Iniciar activity con detalles acorde al ID del taller seleccionado
     private fun passDetailsActivity(tallerId: String){
         val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
             putExtra("ACTIVITY_ID", tallerId)

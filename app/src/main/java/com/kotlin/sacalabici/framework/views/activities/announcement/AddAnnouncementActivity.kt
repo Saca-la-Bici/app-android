@@ -71,13 +71,13 @@ class AddAnnouncementActivity: AppCompatActivity() {
     }
 
     private fun validateFields(): Boolean {
-        if (binding.etAddAnnouncementTitle.text.isNullOrEmpty()) {
+        if (binding.etAddAnnouncementTitle.text.isNullOrBlank()) {
             binding.etAddAnnouncementTitle.error = "El título no puede estar vacío"
             return false
         } else {
             binding.etAddAnnouncementTitle.error = null
         }
-        if (binding.etAddAnnouncementDescription.text.isNullOrEmpty()) {
+        if (binding.etAddAnnouncementDescription.text.isNullOrBlank()) {
             binding.etAddAnnouncementDescription.error = "La descripción no puede estar vacía"
             return false
         } else {

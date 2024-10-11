@@ -15,7 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentProfileBinding
-import com.kotlin.sacalabici.framework.adapters.ProfileAdapter
+import com.kotlin.sacalabici.framework.adapters.ProfilePagerAdapter
 import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
 
@@ -34,7 +34,7 @@ class ProfileFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java) // Inicializa ViewModel
 
         // Configura el adaptador para ViewPager2
-        val pagerAdapter = ProfileAdapter(this)
+        val pagerAdapter = ProfilePagerAdapter(this)
         binding.vFragment.adapter = pagerAdapter
 
         // Configura el TabLayout con ViewPager2

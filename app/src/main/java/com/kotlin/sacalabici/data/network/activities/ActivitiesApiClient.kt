@@ -3,7 +3,6 @@ package com.kotlin.sacalabici.data.network.activities
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
@@ -271,40 +270,32 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
 
     suspend fun getRodadaInfo(id: String): RodadaInfoBase? {
         val token = firebaseTokenManager.getTokenSynchronously()
-        Log.d("ActivitiesRepository", "Token retrieved: $token")
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                Log.d("ActivitiesRepository", "Calling API to get Rodada info with id: $id")
                 api.getRodadaInfo(id)
             } catch (e: Exception) {
-                Log.e("ActivitiesRepository", "Error fetching Rodada info: ${e.message}")
                 e.printStackTrace()
                 null
             }
         } else {
-            Log.w("ActivitiesRepository", "Token is null, cannot proceed")
             null
         }
     }
 
     suspend fun getUbicacion(id: String): List<LocationR>? {
         val token = firebaseTokenManager.getTokenSynchronously()
-        Log.d("ActivitiesRepository", "Token retrieved: $token")
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                Log.d("ActivitiesRepository", "Calling API to get Ubicacion info with id: $id")
                 api.getUbicacion(id)
             } catch (e: Exception) {
-                Log.e("ActivitiesRepository", "Error fetching Ubicacion info: ${e.message}")
                 e.printStackTrace()
                 null
             }
         } else {
-            Log.w("ActivitiesRepository", "Token is null, cannot proceed")
             null
         }
     }

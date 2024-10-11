@@ -43,6 +43,7 @@ class FAQFragment : Fragment() {
         viewModel.getFAQList()
 
         initializeObservers()
+        setupRegisterFAQsButton()
 
         // Listener for search filter
         binding.etFilter.addTextChangedListener { query ->
@@ -120,4 +121,17 @@ class FAQFragment : Fragment() {
             }
             filteredList
         }
+
+    // Función para que el botón de Agregar FAQ de lleve a RegisterFAQFragment
+    private fun setupRegisterFAQsButton() {
+        val btnFAQs = binding.BAgregarPregunta
+        btnFAQs.setOnClickListener {
+            // Navegar a RegisterFAQsFragment y reemplazar el contenido en el contenedor principal de MainActivity
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, RegisterFAQFragment())
+                .addToBackStack(null) // Para permitir navegar hacia atrás
+                .commit()
+        }
+    }
 }

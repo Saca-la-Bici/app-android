@@ -11,6 +11,7 @@ import com.kotlin.sacalabici.data.models.profile.Profile
 import com.kotlin.sacalabici.domain.profile.GetActivitiesRequirement
 import com.kotlin.sacalabici.domain.profile.GetProfileRequirement
 import com.kotlin.sacalabici.domain.profile.PatchProfileRequirement
+import com.kotlin.sacalabici.domain.profile.DeleteProfileRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,6 +76,18 @@ class ProfileViewModel : ViewModel() {
             true
         } catch (e: Exception) {
             Log.e("ViewModel", "Error al actualizar el perfil: ${e.message}", e)
+            false
+        }
+    }
+
+    suspend fun deleteProfile(): Boolean{
+        return try{
+            withContext(Dispatchers.IO) {
+                DeleteProfileRequirement()
+            }
+            true
+        } catch (e: Exception) {
+            Log.e("ViewModel", "Error al eliminar el perfil: ${e.message}", e)
             false
         }
     }

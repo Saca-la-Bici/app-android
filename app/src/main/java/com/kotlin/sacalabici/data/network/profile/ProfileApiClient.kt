@@ -71,4 +71,15 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
             null
         }
     }
+
+    suspend fun deleteProfile(): Profile?{
+        val token = firebaseTokenManager.getTokenSynchronously()
+        api = ProfileNetworkModuleDI(token)
+        return try {
+            api.deleteProfile()
+        } catch (e: Exception){
+            e.printStackTrace()
+            null
+        }
+    }
 }

@@ -1,39 +1,30 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
-import androidx.fragment.app.Fragment
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import androidx.fragment.app.Fragment
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.profile.Profile
 import com.kotlin.sacalabici.databinding.FragmentAccountBinding
+import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.viewmodel.ProfileViewModel
-import java.io.File
-import kotlinx.coroutines.*
-import okhttp3.internal.threadName
+import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
+import kotlinx.coroutines.launch
 
 class AccountFragment: Fragment() {
 
     private var _binding: FragmentAccountBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
-    private var selectedImageUri: Uri? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
 
@@ -42,169 +33,57 @@ class AccountFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentProfileEditBinding.inflate(inflater, container, false)
+        _binding = FragmentAccountBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         val root: View = binding.root
-
-        setupGenderDropdown()
-        setupBloodDropdown()
-        setupBackButton()
-        setupUploadButton()
-        setUpEditImageButton()
-        registerImagePicker()
-
-        editProfileLauncher=registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK){
-                viewModel.getProfile()
-            }
-        }
+        setUpBackButton()
+        setUpEliminateButton()
 
         return root
     }
 
-//    fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
-            profile?.let {
-                binding.username.setText(profile.user)
-                binding.name.setText(profile.name)
-//                binding.genderDropDown.setText(profile.activitiesCompleted, false)
-                binding.bloodDropDown.setText(profile.bloodtype, false)
-                binding.emergencyNumber.setText(profile.emergencyNumber)
-                val profileImageUrl = profile.pImage
-
-                if (!profileImageUrl.isNullOrEmpty()) {
-                    Glide
-                        .with(requireContext())
-                        .load(profileImageUrl) // Cargar la imagen desde la URL
-                        .diskCacheStrategy(DiskCacheStrategy.ALL) // Cachear la imagen
-                        .placeholder(R.drawable.baseline_person_24) // Imagen por defecto mientras se carga
-                        .error(R.drawable.baseline_person_24) // Imagen por defecto en caso de error
-                        .into(binding.profileImage) // Colocar la imagen en el ImageView
-                } else {
-                    // Si la URL es nula o vacía, usar la imagen por defecto
-                    binding.profileImage.setImageResource(R.drawable.baseline_person_24)
-                }
-            }
-        }
-    }
-
-
-    private fun setupGenderDropdown() {
-        val genderDropdownConfig = binding.genderDropDown
-        val genders = resources.getStringArray(R.array.genders)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, genders)
-        genderDropdownConfig.setAdapter(arrayAdapter)
-
-        val defaultValue = "Masculino"
-        genderDropdownConfig.setText(defaultValue, false)
-
-        val index = arrayAdapter.getPosition(defaultValue)
-        if (index >= 0) {
-            genderDropdownConfig.setSelection(index)
-        }
-    }
-
-    private fun setupBloodDropdown() {
-        val bloodDropdownConfig = binding.bloodDropDown
-        val bloodTypes = resources.getStringArray(R.array.bloodTypes)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, bloodTypes)
-        bloodDropdownConfig.setAdapter(arrayAdapter)
-    }
-
-
-    private fun setupBackButton() {
-        val backButton = binding.btnBack
-        backButton.setOnClickListener {
-            val profileFragment = ProfileFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, profileFragment)
+    private fun setUpBackButton() {
+        val btnFAQs = binding.BBack
+        btnFAQs.setOnClickListener {
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, SettingsFragment())
                 .addToBackStack(null)
                 .commit()
         }
     }
 
-    private fun setupUploadButton() {
-        val saveButton = binding.btnSave
-        saveButton.setOnClickListener {
-            val valid = inputValidation()
-            val image = selectedImageUri
-            val name = binding.name.text.toString()
-            val username = binding.username.text.toString()
-            val blood = binding.bloodDropDown.text.toString()
-            val emergencyNum = binding.emergencyNumber.text.toString()
-            val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, image)
-            val context: Context = requireContext()
+    private fun setUpEliminateButton() {
+        val btnEliminate = binding.BEraseAccount
+        btnEliminate.setOnClickListener {
+            lifecycleScope.launch {
+                val success = viewModel.deleteProfile()
+                if (success) {
+                    // Sign out the user from Firebase
+                    Firebase.auth.signOut()
 
-            if(valid){
-                lifecycleScope.launch {
-                    val success = viewModel.patchProfile(profile, context)
-                    if (success) {
-                        val profileFragment = ProfileFragment()
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.nav_host_fragment_content_main, profileFragment)
-                            .addToBackStack(null)
-                            .commit()
+                    // Check if the user is signed out successfully
+                    if (Firebase.auth.currentUser == null) {
+                        // User is signed out, navigate to activity_session
+                        val intent = Intent(
+                            activity,
+                            SessionActivity::class.java
+                        ) // Replace with the correct class name for your activity
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK) // Clear the back stack
+                        startActivity(intent)
+                        activity?.finish() // Finish the current activity if necessary
                     } else {
-                        Toast.makeText(context, "Error al actualizar perfil", Toast.LENGTH_SHORT).show()
+                        // Handle the case where sign-out failed (optional)
+                        Toast.makeText(context, "Error al eliminar cuenta", Toast.LENGTH_SHORT)
+                            .show()
                     }
+                } else {
+                    Toast.makeText(context, "Error al eliminar cuenta", Toast.LENGTH_SHORT).show()
                 }
+
             }
         }
     }
-
-    private fun setUpEditImageButton(){
-        val imageButton = binding.profileImageLayout
-        imageButton.setOnClickListener{
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            pickImageLauncher.launch(intent)
-        }
-    }
-
-    private fun registerImagePicker() {
-        pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                selectedImageUri = result.data?.data
-                binding.profileImage.setImageURI(selectedImageUri)
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cleanTemporaryFiles()
-    }
-
-    private fun cleanTemporaryFiles() {
-        val cacheDir = getActivity()?.getCacheDir()
-        val tempFile = File(cacheDir, "tempFile")
-        if (tempFile.exists()) {
-            tempFile.delete()
-        }
-    }
-
-    private fun inputValidation(): Boolean{
-        val nameBinding = binding.name
-        val usernameBinding = binding.username
-
-        val name = nameBinding.getText().toString();
-        if (name.trim().isEmpty()){
-            Toast.makeText(activity, "Nombre no debe estar vacío", Toast.LENGTH_LONG).show()
-            return false
-        }
-
-        val username = usernameBinding.getText().toString();
-        if (username.trim().isEmpty()){
-            Toast.makeText(activity, "Nombre de usuario no debe estar vacío", Toast.LENGTH_LONG).show()
-            return false
-        }
-        return true
-    }
-
 }
 

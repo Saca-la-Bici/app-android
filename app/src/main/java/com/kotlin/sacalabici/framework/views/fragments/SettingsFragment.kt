@@ -76,6 +76,7 @@ class SettingsFragment : Fragment() {
                 // Handle the case where sign-out failed (optional)
                 Toast.makeText(context, "Sign out failed", Toast.LENGTH_SHORT).show()
             }
+
         }
 
         binding.BRentaBici.setOnClickListener{
@@ -88,6 +89,9 @@ class SettingsFragment : Fragment() {
 
         // Botón para abrir FAQFragment
         setupFAQsButton()
+
+        // Botón para abrir AccountFragment
+        setupMyAccountButton()
 
         return binding.root
     }

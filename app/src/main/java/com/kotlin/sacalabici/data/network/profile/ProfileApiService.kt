@@ -7,6 +7,7 @@ import com.kotlin.sacalabici.data.models.activities.ActivityBase
 
 import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -29,6 +30,9 @@ interface ProfileApiService {
 
     @GET("perfil/consultarActividadesInscritas/")
     suspend fun getActividades(): ActivitiesBase
+
+    @DELETE("perfil/eliminar/")
+    suspend fun deleteProfile(): Profile
 
 }
 

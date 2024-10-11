@@ -113,11 +113,11 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
     }
 
     private fun validateFields(): Boolean {
-        if (binding.etModifyAnnouncementTitle.text.isNullOrEmpty()) {
+        if (binding.etModifyAnnouncementTitle.text.isNullOrBlank()) {
             binding.etModifyAnnouncementTitle.error = "El título no puede estar vacío"
             return false
         }
-        if (binding.etModifyAnnouncementDescription.text.isNullOrEmpty()) {
+        if (binding.etModifyAnnouncementDescription.text.isNullOrBlank()) {
             binding.etModifyAnnouncementDescription.error = "La descripción no puede estar vacía"
             return false
         }

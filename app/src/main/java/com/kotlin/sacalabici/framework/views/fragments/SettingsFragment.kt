@@ -23,6 +23,7 @@ import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import com.kotlin.sacalabici.framework.views.fragments.ProfileFragment
 
 import com.kotlin.sacalabici.framework.views.fragments.FAQFragment
+import com.kotlin.sacalabici.framework.views.fragments.AccountFragment
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
@@ -100,6 +101,17 @@ class SettingsFragment : Fragment() {
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, FAQFragment())
                 .addToBackStack(null) // Para permitir navegar hacia atrás
+                .commit()
+        }
+    }
+
+    private fun setupMyAccountButton(){
+        val btnAcc = binding.BMyAccount
+        btnAcc.setOnClickListener {
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, AccountFragment())
+                .addToBackStack(null)
                 .commit()
         }
     }

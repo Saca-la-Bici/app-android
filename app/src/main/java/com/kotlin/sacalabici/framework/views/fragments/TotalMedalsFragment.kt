@@ -23,6 +23,7 @@ class TotalMedalsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private val adapter: TotalMedalsAdapter = TotalMedalsAdapter()
     private lateinit var viewModel: TotalMedalsViewModel
+    private var medalsList: ArrayList<MedalBase> = ArrayList()
 
     private val binding get() = _binding!!
 
@@ -36,10 +37,13 @@ class TotalMedalsFragment : Fragment() {
         val root: View = binding.root
         initializeComponents(root)
         viewModel.getMedalsList()
+
         initializeObservers()
 
         return root
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

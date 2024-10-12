@@ -34,7 +34,7 @@ class RegisterFinishActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initializeBinding()
         // Opciones de tipo de sangre
-        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "No especificado")
+        val bloodTypes = resources.getStringArray(R.array.bloodTypes)
         // Configurar el adaptador para el AutoCompleteTextView
         val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
         val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)

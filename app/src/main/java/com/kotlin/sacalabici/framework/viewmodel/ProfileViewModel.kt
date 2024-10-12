@@ -24,6 +24,7 @@ class ProfileViewModel : ViewModel() {
     private val getProfileRequirement = GetProfileRequirement()
     private val patchProfileRequirement = PatchProfileRequirement()
     private val getActivitiesRequirement = GetActivitiesRequirement()
+    private val deleteProfileRequirement= DeleteProfileRequirement()
 
     // LiveData para mensajes de error
     val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos
@@ -80,15 +81,15 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
-    suspend fun deleteProfile(): Boolean{
-        return try{
-            withContext(Dispatchers.IO) {
-                DeleteProfileRequirement()
+    fun deleteProfile( callback: (Result<Unit>) -> Unit){
+        viewModelScope.launch {
+            try{
+                deleteProfileRequirement()
+                callback(Result.success(Unit))
+            }catch (e: Exception) {
+                callback(Result.failure(e))
+                Log.e("ViewModel", "Error al eliminar el perfil: ${e.message}", e)
             }
-            true
-        } catch (e: Exception) {
-            Log.e("ViewModel", "Error al eliminar el perfil: ${e.message}", e)
-            false
         }
     }
 

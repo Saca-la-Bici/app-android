@@ -8,6 +8,7 @@ import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.models.profile.Profile
 import com.kotlin.sacalabici.data.network.MultipartManager
+import com.kotlin.sacalabici.data.network.announcements.AnnouncementNetworkModuleDI
 
 
 class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
@@ -72,14 +73,22 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         }
     }
 
-    suspend fun deleteProfile(): Profile?{
-        val token = firebaseTokenManager.getTokenSynchronously()
+    suspend fun deleteProfile(): Boolean {
+        val token: String?
+        try{
+            token = firebaseTokenManager.getTokenSynchronously()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
         api = ProfileNetworkModuleDI(token)
         return try {
-            api.deleteProfile()
-        } catch (e: Exception){
+            api.deleteProfile().isSuccessful
+        } catch (e: Exception) {
             e.printStackTrace()
-            null
+            false
         }
     }
+
+
 }

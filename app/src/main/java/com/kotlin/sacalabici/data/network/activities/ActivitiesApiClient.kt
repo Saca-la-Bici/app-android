@@ -302,13 +302,13 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
     }
 
 
-    suspend fun postValidateAttendance(actividadId: String, code: String): Pair<Boolean, String> {
+    suspend fun postValidateAttendance(IDRodada: String, codigo: Int): Pair<Boolean, String> {
         val token = firebaseTokenManager.getTokenSynchronously()
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                val request = AttendanceRequest(actividadId, code)
+                val request = AttendanceRequest(IDRodada, codigo)
 
                 // Usa runCatching para manejar el resultado
                 val result = runCatching { api.PostValidateAttendance(request) }

@@ -16,7 +16,8 @@ data class ActivityBase(
     @SerializedName("tipo") val type: String,
     // Elementos específicos de rodada
     @SerializedName("nivel") val nivel: String? = null,
-    @SerializedName("distancia") val distancia: String? = null
+    @SerializedName("distancia") val distancia: String? = null,
+    @SerializedName("codigo") val codigoAsistencia: String? = null
 )
 data class DefaultActivityBase(
     @SerializedName("_id") val id: String,

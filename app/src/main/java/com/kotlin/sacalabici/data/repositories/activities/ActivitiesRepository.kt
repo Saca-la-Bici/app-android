@@ -94,7 +94,7 @@ class ActivitiesRepository {
         return apiActivities.PostCancelActivity(actividadId, tipo)
     }
 
-    suspend fun postValidateAttendance(actividadId: String, code: String): Pair<Boolean, String> {
-        return apiActivities.postValidateAttendance(actividadId, code)
+    suspend fun postValidateAttendance(IDRodada: String, codigo: Int): Pair<Boolean, String> {
+        return apiActivities.postValidateAttendance(IDRodada, codigo)
     }
 }

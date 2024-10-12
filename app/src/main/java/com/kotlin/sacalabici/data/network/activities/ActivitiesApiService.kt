@@ -21,8 +21,8 @@ import retrofit2.http.Query
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.LocationR
-import com.kotlin.sacalabici.domain.activities.PostValidateAttendance
 import retrofit2.Response
+import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -88,8 +88,9 @@ interface ActivitiesApiService {
     @POST("actividades/cancelarAsistencia/cancelar")
     suspend fun PostCancelActivity(@Body request: CancelActivityRequest)
 
-    @POST("actividades/")
+    @PATCH("actividades/verificarAsistencia")
     suspend fun PostValidateAttendance(@Body request: AttendanceRequest)
+
 
     @PUT("rodadas/iniciarRodada/{id}")
     suspend fun postLocation(

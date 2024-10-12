@@ -170,7 +170,8 @@ class DetailsViewHolder(
             val code = editText.text.toString()
             if (code.length == 4) {
                 dialog.dismiss()
-                handleValidationCode(code)
+                val codeInt = code.toInt() // Convertir a Int
+                handleValidationCode(codeInt)
             } else {
                 Toast.makeText(context, "Por favor ingrese un código de 4 números.", Toast.LENGTH_SHORT).show()
             }
@@ -179,7 +180,7 @@ class DetailsViewHolder(
         dialog.show()
     }
 
-    private fun handleValidationCode(code: String) {
+    private fun handleValidationCode(code: Int) {
         Toast.makeText(binding.root.context, "Código ingresado: $code", Toast.LENGTH_SHORT).show()
 
         // Llamada a la función del ViewModel para validar la asistencia

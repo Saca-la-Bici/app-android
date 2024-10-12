@@ -32,6 +32,7 @@ import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.views.activities.LookRouteActivity
 import com.kotlin.sacalabici.framework.views.activities.StartRouteActivity
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class DetailsViewHolder(
@@ -107,6 +108,25 @@ class DetailsViewHolder(
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         val firebaseUID = firebaseUser?.uid
         activity.id = activityID
+
+        // Combinar la fecha y la hora utilizando Calendar
+        val calendar = Calendar.getInstance().apply {
+            time = activity.date
+            val timeParts = activity.time.split(":")
+            set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
+            set(Calendar.MINUTE, timeParts[1].toInt())
+            set(Calendar.SECOND, 0)
+        }
+
+        // Obtener la fecha y hora actual
+        val currentTime = Calendar.getInstance()
+
+        // Verificar si ha pasado más de una hora desde la hora de la actividad
+        if (currentTime.timeInMillis > calendar.timeInMillis + 3600000) {
+            // Ocultar el botón si ha pasado más de una hora
+            binding.btnJoin.visibility = View.GONE
+            return
+        }
 
         if (firebaseUID != null) {
             val usuarioInscrito = activity.register?.contains(firebaseUID) == true

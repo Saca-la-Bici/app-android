@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -44,11 +46,11 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
         originalImageUrl = intent.getStringExtra("url")
-        val imagen = originalImageUrl
 
         populateUI(id, title, content, originalImageUrl)
         initializeListeners()
         registerImagePicker()
+        setupTextWatchers()
     }
 
     private fun populateUI(id: String?, title: String?, content: String?, url: String?) {
@@ -178,4 +180,24 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         binding.ibAddImage.setImageResource(R.drawable.ic_add_image)
     }
 
+    private fun setupTextWatchers() {
+        binding.etModifyAnnouncementDescription.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 500) {
+                    Toast.makeText(this@ModifyAnnouncementActivity, "Has alcanzado el límite de 500 caracteres", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+        binding.etModifyAnnouncementTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 100) {
+                    Toast.makeText(this@ModifyAnnouncementActivity, "Has alcanzado el límite de 100 caracteres", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
 }

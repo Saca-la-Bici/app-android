@@ -1,19 +1,27 @@
 package com.kotlin.sacalabici.framework.views.activities
 import android.app.Application
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import android.Manifest
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
@@ -29,6 +37,7 @@ class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var tokenManager: FirebaseTokenManager
+    private lateinit var notificationPermissionLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
@@ -47,6 +56,7 @@ class MainActivity: AppCompatActivity() {
             finish() // Opcional: Termina la actividad actual para que el usuario no pueda volver a ella con el botón "Atrás"
         }
     }
+
     private fun initializeBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -82,6 +82,7 @@ class ActionButtonDialogFragment : DialogFragment() {
 
         tvDelete.setOnClickListener {
             showDeleteConfirmationDialog()
+            dismiss()
         }
         tvModify.setOnClickListener {
             val intent = Intent(requireContext(), ModifyAnnouncementActivity::class.java).apply {

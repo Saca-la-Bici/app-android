@@ -91,6 +91,18 @@
         app:layout_constraintTop_toBottomOf="@+id/ibAddImage"
         app:layout_constraintVertical_bias="0.15" />
 
+    <TextView
+        android:id="@+id/tvModifyAnnouncementTitleCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/100"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ibAddImage"
+        app:layout_constraintVertical_bias="0.15" />
+
     <EditText
         android:id="@+id/etModifyAnnouncementTitle"
         android:layout_width="0dp"
@@ -123,6 +135,19 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@+id/tvModifyAnnouncementTitle"
         app:layout_constraintTop_toBottomOf="@+id/etModifyAnnouncementTitle"
+        app:layout_constraintVertical_bias="0.06" />
+
+    <TextView
+        android:id="@+id/tvModifyAnnouncementDescriptionCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/500"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etModifyAnnouncementTitle"
         app:layout_constraintVertical_bias="0.06" />
 
     <EditText

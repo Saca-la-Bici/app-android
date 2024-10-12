@@ -15,7 +15,6 @@ class MedalsRepository {
         try{
             // Realizar la consulta
             val response = apiMedals.getMedalsList()
-            Log.d("MedalsRepository", "Consulta exitosa: $response")
             response
         } catch (e: Exception){
             Log.e("Falla en getMedalsList", "Error en la consulta de getMedalsList: ${e.message}")

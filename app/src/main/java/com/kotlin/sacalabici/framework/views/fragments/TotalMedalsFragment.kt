@@ -64,7 +64,6 @@ class TotalMedalsFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(dataForList: ArrayList<MedalBase>) {
-        Log.d("MedalsFragment", dataForList.size.toString())
         recyclerView.setHasFixedSize(true)
 
         val gridLayoutManager =

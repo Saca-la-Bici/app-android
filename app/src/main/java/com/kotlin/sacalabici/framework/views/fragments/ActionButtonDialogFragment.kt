@@ -82,7 +82,6 @@ class ActionButtonDialogFragment : DialogFragment() {
 
         tvDelete.setOnClickListener {
             showDeleteConfirmationDialog()
-            dismiss()
         }
         tvModify.setOnClickListener {
             val intent = Intent(requireContext(), ModifyAnnouncementActivity::class.java).apply {
@@ -119,6 +118,7 @@ class ActionButtonDialogFragment : DialogFragment() {
                 // Si la eliminación fue exitosa, cerrar el diálogo
                 if (success) {
                     alertDialog.dismiss()
+                    this@ActionButtonDialogFragment.dismiss()
                 } else {
                     // Si hubo un error, volver a habilitar el botón
                     button.isEnabled = true

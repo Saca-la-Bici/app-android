@@ -134,4 +134,7 @@ dependencies {
     implementation("com.hbb20:ccp:2.7.0")
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.52")
 
+    // ThreeTenABP para formatear fechas
+    implementation ("com.jakewharton.threetenabp:threetenabp:1.3.1")
+
 }

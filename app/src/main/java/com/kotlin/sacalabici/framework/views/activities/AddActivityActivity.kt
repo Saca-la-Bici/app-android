@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
@@ -18,11 +17,9 @@ import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment
-import com.kotlin.sacalabici.framework.views.fragments.RutasFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 class AddActivityActivity: AppCompatActivity(),
     AddActivityInfoFragment.OnFragmentInteractionListener,
@@ -88,10 +85,6 @@ class AddActivityActivity: AppCompatActivity(),
         val info = ActivityInfo(title, date, hour, minutes, hourDur, minutesDur, ubi, description)
         viewModel.activityInfo.value = info
 
-        // Formato para parsear y generar un objeto Date desde yyyy-MM-dd
-        //val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        //val dateAct: Date = dateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
-
         // Formato para parsear la fecha de entrada (dd/MM/yyyy)
         val inputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
@@ -108,8 +101,8 @@ class AddActivityActivity: AppCompatActivity(),
         println(formattedDate)  // Esto imprimirá: 2024-10-22
 
 
-        val hourAct = "$hour horas $minutes minutos"
-        val duration = "$hourDur:$minutesDur"
+        val hourAct = "$hour:$minutes"
+        val duration = "$hourDur horas $minutesDur minutos"
 
         if (type == "Rodada") {
             val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, image, "Rodada")
@@ -138,7 +131,7 @@ class AddActivityActivity: AppCompatActivity(),
             // Si el fragmento ya está visible, lo eliminamos
             if (addActivityRouteFragment != null) {
                 fragmentManager.beginTransaction()
-                    .remove(addActivityRouteFragment)
+                    .replace(R.id.fragmentAddActivity, addActivityRouteFragment)
                     .addToBackStack(null)
                     .commit()
             }

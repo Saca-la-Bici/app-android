@@ -26,9 +26,10 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivAnnouncement"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:src="@drawable/image_empty"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:layout_gravity="center"
                 android:visibility="gone"
                 app:shapeAppearanceOverlay="@style/RoundedImageLess"/>

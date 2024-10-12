@@ -19,19 +19,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FirebaseMessageReceiver : FirebaseMessagingService() {
-    private lateinit var api: FCMApiService
     val firebaseAuth = FirebaseAuth.getInstance()
     val firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
 
-    override fun onCreate() {
-        super.onCreate()
-        Log.d("FCM", "FirebaseMessageReceiver service started")
-    }
-
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        // Manejar el mensaje recibido
-        Log.d("FCM", "From: ${remoteMessage.from}")
 
         remoteMessage.notification?.let { notification ->
             val title = notification.title ?: "Default Title"
@@ -60,9 +52,5 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
         notificationManager.notify(0, notificationBuilder.build())
-    }
-
-    override fun onNewToken(token: String) {
-
     }
 }

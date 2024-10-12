@@ -3,6 +3,7 @@ package com.kotlin.sacalabici.data.network.activities
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
+import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
@@ -299,6 +300,35 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             null
         }
     }
+
+
+    suspend fun postValidateAttendance(actividadId: String, code: String): Pair<Boolean, String> {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                val request = AttendanceRequest(actividadId, code)
+
+                // Usa runCatching para manejar el resultado
+                val result = runCatching { api.PostValidateAttendance(request) }
+
+                result.fold(
+                    onSuccess = {
+                        Pair(true, "Se ha verificado tu asistencia")
+                    },
+                    onFailure = { exception ->
+                        Pair(false, "Error: ${exception.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                Pair(false, "Error de red o conexión. Intenta más tarde.")
+            }
+        } else {
+            Pair(false, "Error de autenticación. Por favor, inicia sesión.")
+        }
+    }
+
 
 
 

@@ -161,9 +161,17 @@ class DetailsViewHolder(
 
     private fun handleValidationCode(code: String) {
         Toast.makeText(binding.root.context, "Código ingresado: $code", Toast.LENGTH_SHORT).show()
-        // Implementa la lógica para enviar el código al backend si es necesario
-        // viewModel.validateAttendance(activityID, code)
+
+        // Llamada a la función del ViewModel para validar la asistencia
+        viewModel.validateAttendance(activityID, code) { success: Boolean, message: String ->
+            if (success) {
+                Toast.makeText(binding.root.context, "Asistencia validada con éxito.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(binding.root.context, "Error al validar la asistencia: $message", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
 
     private fun animateButtonVisibility(button: View, show: Boolean) {
         if (show) {

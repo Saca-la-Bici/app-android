@@ -73,3 +73,8 @@ data class CancelActivityRequest(
     val actividadId: String,
     val tipo: String
 )
+
+data class AttendanceRequest(
+    val actividadId: String,
+    val code: String
+)

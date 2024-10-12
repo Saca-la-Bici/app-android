@@ -18,6 +18,7 @@ import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -28,6 +29,8 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.databinding.ActivityDetailsBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.views.activities.LookRouteActivity
+import com.kotlin.sacalabici.framework.views.activities.StartRouteActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -35,7 +38,8 @@ import java.util.Locale
 class DetailsViewHolder(
     private val binding: ActivityDetailsBinding,
     private val viewModel: ActivitiesViewModel,
-    private val activityID: String
+    private val activityID: String,
+    private val permissions: List<String>
 ) {
 
     fun bind(activity: Activity) {
@@ -204,7 +208,7 @@ class DetailsViewHolder(
     }
 
     private fun setButtonForSubscription(activity: Activity) {
-        binding.btnJoin.text = "Inscribirse"
+        binding.btnJoin.text = binding.root.context.getString(R.string.activity_join)
         binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
 
         binding.btnJoin.setOnClickListener {
@@ -220,7 +224,7 @@ class DetailsViewHolder(
                     setButtonForUnsubscription(activity)
                     setupValidateAttendanceButton(activity, true)
                 } else {
-                    binding.btnJoin.text = "Inscribirse"
+                    binding.btnJoin.text = binding.root.context.getString(R.string.activity_join)
                     binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
                 }
             }
@@ -228,7 +232,7 @@ class DetailsViewHolder(
     }
 
     private fun setButtonForUnsubscription(activity: Activity) {
-        binding.btnJoin.text = "Cancelar inscripción"
+        binding.btnJoin.text = binding.root.context.getString(R.string.activity_unsubscribe)
         binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
 
         binding.btnJoin.setOnClickListener {
@@ -244,7 +248,7 @@ class DetailsViewHolder(
                     setButtonForSubscription(activity)
                     setupValidateAttendanceButton(activity, false)
                 } else {
-                    binding.btnJoin.text = "Cancelar inscripción"
+                    binding.btnJoin.text = binding.root.context.getString(R.string.activity_unsubscribe)
                     binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
                 }
             }
@@ -272,10 +276,13 @@ class DetailsViewHolder(
     }
 
     private fun setupStartButton(activity: Activity) {
-        if (activity.type == "Rodada") {
+        if (permissions.contains("Iniciar rodada")) {
             binding.btnStart.visibility = View.VISIBLE
             binding.btnStart.setOnClickListener {
-                // Lógica para iniciar la actividad
+                val intent = Intent(binding.root.context, StartRouteActivity::class.java)
+                intent.putExtra("ID",activity.id)
+                intent.putExtra("IDRUTA",activity.idRouteBase)
+                binding.root.context.startActivity(intent)
             }
         } else {
             binding.btnStart.visibility = View.GONE
@@ -286,7 +293,9 @@ class DetailsViewHolder(
         if (activity.type == "Rodada") {
             binding.btnRuta.visibility = View.VISIBLE
             binding.btnRuta.setOnClickListener {
-                // Lógica para ver la ruta de la actividad
+                val intent = Intent(binding.root.context, LookRouteActivity::class.java)
+                intent.putExtra("ID",activity.id)
+                binding.root.context.startActivity(intent)
             }
         } else {
             binding.btnRuta.visibility = View.GONE

@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Sacalabici.NoActionBar"
+        android:theme="@style/Theme.Sacalabici.Light"
         tools:targetApi="tiramisu">
 
         <meta-data
@@ -36,7 +36,7 @@
         <activity
             android:name=".framework.views.activities.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:theme="@style/Theme.Sacalabici.Light"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -85,7 +85,7 @@
         <activity
             android:name=".framework.views.activities.AddActivityActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:theme="@style/Theme.Sacalabici.Light"
             android:screenOrientation="portrait"/>
 
 
@@ -98,18 +98,29 @@
         <activity
             android:name=".framework.views.activities.ModifyRouteActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"
+            android:theme="@style/Theme.Sacalabici.Light"
             android:screenOrientation="portrait"/>
 
         <activity
             android:name=".framework.adapters.views.fragments.SettingsFragment"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.NoActionBar"/>
+            android:theme="@style/Theme.Sacalabici.Light"/>
 
         <activity
             android:name=".framework.views.activities.activities.DetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".framework.views.activities.StartRouteActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".framework.views.activities.LookRouteActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
 
     </application>
     <queries>

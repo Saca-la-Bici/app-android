@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
@@ -18,11 +17,9 @@ import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment
-import com.kotlin.sacalabici.framework.views.fragments.RutasFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 class AddActivityActivity: AppCompatActivity(),
     AddActivityInfoFragment.OnFragmentInteractionListener,

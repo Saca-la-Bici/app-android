@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,14 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.databinding.FragmentActivityRouteBinding
-import com.kotlin.sacalabici.framework.RutasAdapter
-import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import com.kotlin.sacalabici.framework.RouteAdapter
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
-import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment.OnFragmentInteractionListener
 
 class AddActivityRouteFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
-    private lateinit var rutasAdapter: RutasAdapter
+    private lateinit var rutasAdapter: RouteAdapter
 
     private var onRutaSelectedListener: OnRutaSelectedListener? = null
     private var onRutaConfirmListener: OnRutaConfirmListener? = null
@@ -57,7 +53,7 @@ class AddActivityRouteFragment: Fragment() {
         recyclerView = binding.RVRutas
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        rutasAdapter = RutasAdapter(emptyList()) { ruta ->
+        rutasAdapter = RouteAdapter(emptyList()) { ruta ->
             onRutaSelected(ruta)
         }
         recyclerView.adapter = rutasAdapter

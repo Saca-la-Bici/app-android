@@ -290,10 +290,12 @@
                     android:layout_marginTop="8dp">
 
                     <Button
+                        android:visibility="gone"
                         android:id="@+id/btnStart"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
                         android:backgroundTint="@color/yellow"
                         android:text="@string/activity_start"
                         android:fontFamily="@font/roboto_regular"
@@ -301,11 +303,11 @@
                         android:textColor="@color/semiWhite"/>
 
                     <Button
+                        android:visibility="gone"
                         android:id="@+id/btnRuta"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
                         android:backgroundTint="@color/darkGreen"
                         android:text="@string/activity_route"
                         android:fontFamily="@font/roboto_regular"

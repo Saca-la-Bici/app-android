@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.data.repositories
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.preguntasFrecuentes.FAQAPIClient
@@ -23,5 +24,5 @@ class FAQRepository {
             null
         }
 
-    // suspend fun postFAQ(announcement: FAQ): FAQ? = apiFAQ.postFAQ(announcement)
+    suspend fun postFAQ(faq: FAQBase): FAQBase? = apiFAQ.postFAQ(faq)
 }

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -29,6 +31,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
         initializeListeners()
         registerImagePicker()
+        setupTextWatchers()
     }
 
     private fun initializeListeners() {
@@ -115,5 +118,26 @@ class AddAnnouncementActivity: AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.ibCheck.isEnabled = !isLoading
+    }
+
+    private fun setupTextWatchers() {
+        binding.etAddAnnouncementDescription.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 500) {
+                    Toast.makeText(this@AddAnnouncementActivity, "Has alcanzado el límite de 500 caracteres", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+        binding.etAddAnnouncementTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 100) {
+                    Toast.makeText(this@AddAnnouncementActivity, "Has alcanzado el límite de 100 caracteres", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 }

@@ -1,7 +1,6 @@
-//Consultar Usuario View Holder
+// Consultar Usuario View Holder
 package com.kotlin.sacalabici.framework.viewholders
 
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -10,11 +9,13 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.profile.ConsultarUsuariosBase
 import com.kotlin.sacalabici.databinding.ItemUserBinding
 import com.kotlin.sacalabici.framework.adapters.viewmodel.modifyRole.ModifyRoleViewModel
+import com.kotlin.sacalabici.framework.viewmodel.profile.ConsultarUsuariosViewModel
 
 class ConsultarUsuariosViewHolder(
     val binding: ItemUserBinding,
     private val modifyRoleViewModel: ModifyRoleViewModel, // ViewModel para cambiar el rol
     private val currentFragmentRole: String, // Rol del fragmento actual
+    private val getUsuariosViewModel: ConsultarUsuariosViewModel,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ConsultarUsuariosBase) {
         binding.RVuserName.text = item.usuario.username
@@ -36,21 +37,22 @@ class ConsultarUsuariosViewHolder(
             val nuevoRol =
                 if (item.rol.nombreRol == "Usuario") {
                     // Cambiar al rol del fragmento actual
-                    Log.d("ConsultarUsuariosViewHolder", "Cambiando rol a: $currentFragmentRole")
+                    binding.btnChangerol.text = "Eliminar"
+                    binding.btnChangerol.setBackgroundColor(itemView.context.getColor(R.color.lightGray))
                     currentFragmentRole
                 } else {
                     // Cambiar a "Usuario"
-                    Log.d("ConsultarUsuariosViewHolder", "Cambiando rol a: Usuario")
+                    binding.btnChangerol.text = "Agregar"
+                    binding.btnChangerol.setBackgroundColor(itemView.context.getColor(R.color.yellow))
                     "66e882740f14ea86304fa973"
                 }
 
             // Llamar al ViewModel para cambiar el rol del usuario
             modifyRoleViewModel.patchRole(item.usuario, nuevoRol)
 
-            // Deshabilitar el botón y cambiar su apariencia
-            binding.btnChangerol.isEnabled = false
-            binding.btnChangerol.setBackgroundColor(itemView.context.getColor(R.color.gray))
             Toast.makeText(itemView.context, "Rol cambiado exitosamente", Toast.LENGTH_SHORT).show()
+            binding.btnChangerol.isEnabled = false
+            getUsuariosViewModel.getUsuarios(reset = true)
         }
 
         // Cargar imagen de perfil usando Glide

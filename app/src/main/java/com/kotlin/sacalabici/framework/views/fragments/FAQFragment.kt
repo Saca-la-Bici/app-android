@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +45,6 @@ class FAQFragment : Fragment() {
     private fun initializeObservers() {
         viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqList ->
             lifecycleScope.launch {
-                delay(50)
                 _binding?.let {
                     setUpRecyclerView(ArrayList(faqList))
                 }
@@ -57,6 +57,7 @@ class FAQFragment : Fragment() {
 
         viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
             faq?.let {
+                Log.d("FAQFragment", "Selected FAQ: ${faq.IdPregunta}")
                 // Navega solo si no está ya en el BackStack
                 if (parentFragmentManager.findFragmentByTag("FAQDetailFragment") == null) {
                     val transaction = parentFragmentManager.beginTransaction()

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.DeleteFaqRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.FAQListRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +40,17 @@ class FAQViewModel : ViewModel() {
 
     fun selectFAQ(faq: FAQBase) {
         selectedFAQ.postValue(faq)
+    }
+
+    fun deleteFAQ(faq: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                DeleteFaqRequirement()(faq)
+                getFAQList()
+            } catch (e: Exception) {
+                throw e
+            }
+        }
     }
 }
 

@@ -1,14 +1,15 @@
+<!-- fragment_faq_modify.xml -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageButton
-        android:id="@+id/BRegresar"
+        android:id="@+id/BCancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:src="@drawable/ic_back"
+        android:src="@drawable/ic_close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
@@ -31,11 +32,11 @@
         app:layout_constraintVertical_bias="0.035" />
 
     <ImageButton
-        android:id="@+id/BAlter"
+        android:id="@+id/BConfirmar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:src="@drawable/more_vert"
+        android:src="@drawable/ic_check_selected"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
@@ -43,30 +44,39 @@
         android:paddingEnd="15sp"
         app:layout_constraintVertical_bias="0.035" />
 
-    <TextView
-        android:id="@+id/preguntaTextView"
+    <EditText
+        android:id="@+id/preguntaEditText"
+        android:inputType="text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Título"
+        app:layout_constraintTop_toBottomOf="@id/BCancelar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <EditText
+        android:id="@+id/respuestaEditText"
+        android:inputType="textMultiLine"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Descripción"
+        app:layout_constraintTop_toBottomOf="@id/preguntaEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <Button
+        android:id="@+id/BEliminar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:background="@color/red"
+        android:text="Eliminar"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="28sp"
-        android:fontFamily="@font/roboto_black"
-        android:layout_marginTop="76sp"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/respuestaEditText" />
 
-    <TextView
-        android:id="@+id/respuestaTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/preguntaTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16sp"
-        android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/black"
-        android:background="@drawable/bg_rounded_gray_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.data.network.preguntasFrecuentes
 
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 
@@ -20,16 +21,15 @@ class FAQAPIClient(
         }
     }
 
-    /*
-    suspend fun postFAQ(announcement: FAQ): FAQ? {
+    suspend fun postFAQ(faq: FAQBase): FAQBase? {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = FAQModuleDI(token)
+
         return try {
-            api.postFAQ(announcement)
+            api.postFAQ(faq)
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
-     */
 }

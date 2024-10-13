@@ -1,5 +1,6 @@
 package com.kotlin.sacalabici.framework.viewholders
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -18,7 +19,6 @@ import android.view.animation.Animation
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -31,6 +31,9 @@ import com.kotlin.sacalabici.databinding.ActivityDetailsBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.views.activities.LookRouteActivity
 import com.kotlin.sacalabici.framework.views.activities.StartRouteActivity
+
+
+
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -42,12 +45,15 @@ class DetailsViewHolder(
     private val permissions: List<String>
 ) {
 
+    @SuppressLint("SimpleDateFormat")
     fun bind(activity: Activity) {
+        // Formatear solo la parte de la fecha (día, mes, año)
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(activity.date)
         val context = binding.root.context
 
         binding.tvActivityTitle.text = activity.title
 
+        // Mostrar el nivel si está presente
         if (activity.nivel != null) {
             binding.tvActivityLevel.visibility = View.VISIBLE
             binding.tvActivityLevel.text = activity.nivel
@@ -289,8 +295,8 @@ class DetailsViewHolder(
             binding.btnStart.visibility = View.VISIBLE
             binding.btnStart.setOnClickListener {
                 val intent = Intent(binding.root.context, StartRouteActivity::class.java)
-                intent.putExtra("ID",activity.id)
-                intent.putExtra("IDRUTA",activity.idRouteBase)
+                intent.putExtra("ID", activity.id)
+                intent.putExtra("IDRUTA", activity.idRouteBase)
                 binding.root.context.startActivity(intent)
             }
         } else {
@@ -303,7 +309,7 @@ class DetailsViewHolder(
             binding.btnRuta.visibility = View.VISIBLE
             binding.btnRuta.setOnClickListener {
                 val intent = Intent(binding.root.context, LookRouteActivity::class.java)
-                intent.putExtra("ID",activity.id)
+                intent.putExtra("ID", activity.id)
                 binding.root.context.startActivity(intent)
             }
         } else {

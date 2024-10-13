@@ -115,6 +115,10 @@ class RodadasFragment: Fragment() {
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(rodada.date)
 
+        // Convertir lista de usuarios en ArrayList<String>
+        val registerArrayList = ArrayList<String>()
+        rodada.register?.let { registerArrayList.addAll(it) }
+
         if (storedPermissions?.contains("Modificar actividad") == true) {
             val dialogFragment = ActivityActionDialogFragment.newInstance(
                 rodada.id,
@@ -126,6 +130,10 @@ class RodadasFragment: Fragment() {
                 rodada.duration,
                 rodada.imageURL,
                 "Rodada",
+                rodada.peopleEnrolled,
+                rodada.state,
+                rodada.foro,
+                registerArrayList,
                 rodada.idRouteBase,
                 storedPermissions
             )

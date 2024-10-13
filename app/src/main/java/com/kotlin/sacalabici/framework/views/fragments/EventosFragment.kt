@@ -120,6 +120,10 @@ class EventosFragment : Fragment() {
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(evento.date)
 
+        // Convertir lista de usuarios en ArrayList<String>
+        val registerArrayList = ArrayList<String>()
+        evento.register?.let { registerArrayList.addAll(it) }
+
         if (storedPermissions?.contains("Modificar actividad") == true) {
             val dialogFragment = ActivityActionDialogFragment.newInstance(
                 evento.id,
@@ -131,6 +135,10 @@ class EventosFragment : Fragment() {
                 evento.duration,
                 evento.imageURL,
                 "Evento",
+                evento.peopleEnrolled,
+                evento.state,
+                evento.foro,
+                registerArrayList,
                 null,
                 storedPermissions
             )

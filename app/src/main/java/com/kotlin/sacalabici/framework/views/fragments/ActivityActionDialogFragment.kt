@@ -33,6 +33,10 @@ class ActivityActionDialogFragment: DialogFragment() {
     private lateinit var desc: String
     private lateinit var hourDur: String
     private var url: String? = null
+    private var peopleEnrolled: Int = 0
+    private var state: Boolean = true
+    private var foro: String? = null
+    private var register: ArrayList<String>? = null
     private lateinit var typeAct: String
     private var idRoute: String? = null
 
@@ -50,6 +54,10 @@ class ActivityActionDialogFragment: DialogFragment() {
             hourDur = it.getString("hourDur") ?: throw IllegalArgumentException("Hour duration is required")
             typeAct = it.getString("typeAct") ?: throw IllegalArgumentException("Type duration is required")
             url = it.getString("url")
+            peopleEnrolled = it.getInt("peopleEnrolled")
+            state = it.getBoolean("state")
+            foro = it.getString("foro")
+            register = it.getStringArrayList("register")
             idRoute = it.getString("idRoute")
             permissions = it.getStringArrayList("permissions") ?: emptyList()
         } ?: throw IllegalArgumentException("Arguments are required")
@@ -85,6 +93,7 @@ class ActivityActionDialogFragment: DialogFragment() {
         tvDelete.visibility = View.GONE
         tvModify.text = "Modificar actividad"
 
+
         tvModify.setOnClickListener {
             val intent = Intent(requireContext(), ModifyActivityActivity::class.java).apply {
                 putExtra("id", id)
@@ -96,6 +105,10 @@ class ActivityActionDialogFragment: DialogFragment() {
                 putExtra("hourDur", hourDur)
                 putExtra("url", url)
                 putExtra("typeAct", typeAct)
+                putExtra("peopleEnrolled", peopleEnrolled)
+                putExtra("state", state)
+                putExtra("foro", foro)
+                putExtra("register", register)
                 putExtra("idRoute", idRoute)
             }
             Log.d("ActivityActionDialogFragment", "typeAct: $typeAct")
@@ -116,6 +129,10 @@ class ActivityActionDialogFragment: DialogFragment() {
             hourDur: String,
             url: String?,
             typeAct: String,
+            peopleEnrolled: Int,
+            state: Boolean,
+            foro: String?,
+            register: ArrayList<String>?,
             idRoute: String?,
             permissions: List<String>
         ): ActivityActionDialogFragment {
@@ -130,6 +147,10 @@ class ActivityActionDialogFragment: DialogFragment() {
             args.putString("hourDur", hourDur)
             args.putString("url", url)
             args.putString("typeAct", typeAct)
+            args.putInt("peopleEnrolled", peopleEnrolled)
+            args.putBoolean("state", state)
+            args.putString("foro", foro)
+            args.putStringArrayList("register", register)
             args.putString("idRoute", idRoute)
             args.putStringArrayList("permissions", ArrayList(permissions))
             fragment.arguments = args

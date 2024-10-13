@@ -13,6 +13,7 @@ import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.data.network.MultipartManager
+import com.kotlin.sacalabici.data.network.model.ActivityData
 
 
 class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
@@ -237,20 +238,23 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
     }
 
 
-    suspend fun patchActivityTaller(id: String, taller: ActivityModel, context: Context): ActivityModel? {
+    suspend fun patchActivityTaller(taller: ActivityData, context: Context): ActivityData? {
         val token = firebaseTokenManager.getTokenSynchronously()
 
-        val informacion = taller.informacion
-        val id = id
-        val titulo = informacion[0].titulo
-        val fecha = informacion[0].fecha
-        val hora = informacion[0].hora
-        val duracion = informacion[0].duracion
-        val ubicacion = informacion[0].ubicacion
-        val descripcion = informacion[0].descripcion
-        val tipo = informacion[0].tipo
+        val id = taller.id
+        val titulo = taller.title
+        val fecha = taller.date
+        val hora = taller.time
+        val duracion = taller.duration
+        val ubicacion = taller.location
+        val descripcion = taller.description
+        val tipo = taller.type
+        val peopleEnrolled = taller.peopleEnrolled
+        val state = taller.state
+        val foro = taller.foro
+        val register = taller.register
 
-        val file = taller.informacion[0].imagen?.let { multipartManager.uriToFile(context, it) }
+        val file = taller.imageURL?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
 
         return if (token != null) {
@@ -265,7 +269,11 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
                     ubicacion,
                     descripcion,
                     tipo,
-                    img
+                    img,
+                    peopleEnrolled,
+                    state,
+                    foro,
+                    register
                 )
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -276,26 +284,30 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         }
     }
 
-    suspend fun patchActivityEvento(id: String, evento: ActivityModel, context: Context): ActivityModel? {
+    suspend fun patchActivityEvento(evento: ActivityData, context: Context): ActivityData? {
         val token = firebaseTokenManager.getTokenSynchronously()
 
-        val informacion = evento.informacion
+        val id = evento.id
+        val titulo = evento.title
+        val fecha = evento.date
+        val hora = evento.time
+        val duracion = evento.duration
+        val ubicacion = evento.location
+        val descripcion = evento.description
+        val tipo = evento.type
+        val peopleEnrolled = evento.peopleEnrolled
+        val state = evento.state
+        val foro = evento.foro
+        val register = evento.register
 
-        val titulo = informacion[0].titulo
-        val fecha = informacion[0].fecha
-        val hora = informacion[0].hora
-        val duracion = informacion[0].duracion
-        val ubicacion = informacion[0].ubicacion
-        val descripcion = informacion[0].descripcion
-        val tipo = informacion[0].tipo
-
-        val file = evento.informacion[0].imagen?.let { multipartManager.uriToFile(context, it) }
+        val file = evento.imageURL?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                api.patchActivityEvento(id, titulo, fecha, hora, duracion, ubicacion, descripcion, tipo, img)
+                api.patchActivityEvento(id, titulo, fecha, hora, duracion, ubicacion,
+                    descripcion, tipo, img, peopleEnrolled, state, foro, register)
             } catch (e: java.lang.Exception){
                 e.printStackTrace()
                 null
@@ -305,27 +317,31 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         }
     }
 
-    suspend fun patchActivityRodada(id: String, rodada: Rodada, context: Context): Rodada? {
+    suspend fun patchActivityRodada(rodada: ActivityData, context: Context): ActivityData? {
         val token = firebaseTokenManager.getTokenSynchronously()
 
-        val informacion = rodada.informacion
+        val id = rodada.id
+        val titulo = rodada.title
+        val fecha = rodada.date
+        val hora = rodada.time
+        val duracion = rodada.duration
+        val ubicacion = rodada.location
+        val descripcion = rodada.description
+        val tipo = rodada.type
+        val peopleEnrolled = rodada.peopleEnrolled
+        val state = rodada.state
+        val foro = rodada.foro
+        val register = rodada.register
+        val ruta = rodada.idRouteBase
 
-        val titulo = informacion[0].titulo
-        val fecha = informacion[0].fecha
-        val hora = informacion[0].hora
-        val duracion = informacion[0].duracion
-        val ubicacion = informacion[0].ubicacion
-        val descripcion = informacion[0].descripcion
-        val tipo = informacion[0].tipo
-        val ruta = rodada.ruta
-
-        val file = rodada.informacion[0].imagen?.let { multipartManager.uriToFile(context, it) }
+        val file = rodada.imageURL?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                api.patchActivityRodada(id, titulo, fecha, hora, duracion, ubicacion, descripcion, tipo, ruta, img)
+                api.patchActivityRodada(id, titulo, fecha, hora, duracion, ubicacion,
+                    descripcion, tipo, img, peopleEnrolled, state, foro, register, ruta)
             } catch (e: java.lang.Exception){
                 e.printStackTrace()
                 null

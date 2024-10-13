@@ -4,22 +4,18 @@ import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
+import com.kotlin.sacalabici.data.network.model.ActivityData
 import com.kotlin.sacalabici.data.network.model.ActivityInfo
-import com.kotlin.sacalabici.data.network.model.ActivityModel
-import com.kotlin.sacalabici.data.network.model.Informacion
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.databinding.ActivityAddactivityBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
-import com.kotlin.sacalabici.framework.views.fragments.AddActivityInfoFragment
-import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment
 import com.kotlin.sacalabici.framework.views.fragments.ModifyActivityInfoFragment
 import com.kotlin.sacalabici.framework.views.fragments.ModifyActivityRouteFragment
 import kotlinx.coroutines.Dispatchers
@@ -52,12 +48,16 @@ class ModifyActivityActivity: AppCompatActivity(),
     private lateinit var desc: String
     private lateinit var hourDur: String
     private lateinit var typeAct: String
+    private var peopleEnrolled: Int = 0
+    private var state: Boolean = true
+    private var foro: String? = null
+    private var register: ArrayList<String>? = null
     private var idRoute: String? = null
 
     private var selectedImageUri: Uri? = null
     private var originalImageUrl: String? = null
 
-    private lateinit var rodadaInformation: Informacion
+    private lateinit var rodadaInformation: ActivityData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +77,10 @@ class ModifyActivityActivity: AppCompatActivity(),
         hourDur = intent.getStringExtra("hourDur").toString()
         originalImageUrl = intent.getStringExtra("url")
         typeAct = intent.getStringExtra("typeAct").toString()
+        peopleEnrolled = intent.getIntExtra("peopleEnrolled", 0)
+        state = intent.getBooleanExtra("state", true)
+        foro = intent.getStringExtra("foro")
+        register = intent.getStringArrayListExtra("register")
         idRoute = intent.getStringExtra("idRoute")
 
         Log.d("ModifyActivity onCreate", "typeAct: $typeAct")
@@ -149,13 +153,14 @@ class ModifyActivityActivity: AppCompatActivity(),
             Log.d("ModifyActivity", "Tipo: $typeAct")
 
             if (typeAct == "Rodada") {
-                val rodadaInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Rodada")
+                val rodadaInfo = ActivityData(id, title, formattedDate, hourAct, ubi, description,
+                    duration, imageUri, "Rodada", peopleEnrolled, state, foro, register, idRoute)
                 rodadaInformation = rodadaInfo
 
             } else if (typeAct == "Taller") {
-                val tallerInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Taller")
-                val taller = ActivityModel(listOf(tallerInfo))
-                viewModel.patchActivityTaller(id, taller, this@ModifyActivityActivity) { result ->
+                val taller = ActivityData(id, title, formattedDate, hourAct, ubi, description,
+                    duration, imageUri, "Taller", peopleEnrolled, state, foro, register, idRoute)
+                viewModel.patchActivityTaller(taller, this@ModifyActivityActivity) { result ->
                     result.fold(
                         onSuccess = {
                             showToast("Taller modificado exitosamente")
@@ -169,10 +174,10 @@ class ModifyActivityActivity: AppCompatActivity(),
                 }
 
             } else if (typeAct == "Evento") {
-                val eventoInfo = Informacion(title, formattedDate, hourAct, ubi, description, duration, imageUri, "Evento")
-                val evento = ActivityModel(listOf(eventoInfo))
+                val evento = ActivityData(id, title, formattedDate, hourAct, ubi, description,
+                    duration, imageUri, "Evento", peopleEnrolled, state, foro, register, idRoute)
                 Log.d("ModifyActivity", "Entra a if de evento")
-                viewModel.patchActivityEvento(id, evento, this@ModifyActivityActivity) { result ->
+                viewModel.patchActivityEvento(evento, this@ModifyActivityActivity) { result ->
                     result.fold(
                         onSuccess = {
                             Log.d("ModifyActivity", "Entra a onSuccess")
@@ -261,8 +266,8 @@ class ModifyActivityActivity: AppCompatActivity(),
     * Recibe la ruta seleccionada por el usuario
     * */
     override fun onRutaConfirmed(rutaID: String) {
-        val rodada = Rodada(listOf(rodadaInformation), rutaID)
-        viewModel.patchActivityRodada(id, rodada, this@ModifyActivityActivity) { result ->
+        rodadaInformation.idRouteBase = rutaID
+        viewModel.patchActivityRodada(rodadaInformation, this@ModifyActivityActivity) { result ->
             result.fold(
                 onSuccess = {
                     showToast("Rodada modificada exitosamente")

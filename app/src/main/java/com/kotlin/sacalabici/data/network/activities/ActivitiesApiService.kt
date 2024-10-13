@@ -11,6 +11,7 @@ import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import retrofit2.http.Body
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
+import com.kotlin.sacalabici.data.network.model.ActivityData
 import okhttp3.MultipartBody
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -92,8 +93,12 @@ interface ActivitiesApiService {
         @Part("informacion[ubicacion]") ubicacion: String,
         @Part("informacion[descripcion]") descripcion: String,
         @Part("informacion[tipo]") tipo: String,
-        @Part imagen: MultipartBody.Part?
-    ): ActivityModel
+        @Part imagen: MultipartBody.Part?,
+        @Part("peopleEnrolled") peopleEnrolled: Int,
+        @Part("state") state: Boolean,
+        @Part("foro") foro: String?,
+        @Part("register") register: List<String>?
+    ): ActivityData
 
     @Multipart
     @PATCH("actividades/modificar/evento")
@@ -106,8 +111,12 @@ interface ActivitiesApiService {
         @Part("informacion[ubicacion]") ubicacion: String,
         @Part("informacion[descripcion]") descripcion: String,
         @Part("informacion[tipo]") tipo: String,
-        @Part imagen: MultipartBody.Part?
-    ): ActivityModel
+        @Part imagen: MultipartBody.Part?,
+        @Part("peopleEnrolled") peopleEnrolled: Int,
+        @Part("state") state: Boolean,
+        @Part("foro") foro: String?,
+        @Part("register") register: List<String>?
+    ): ActivityData
 
     @Multipart
     @PATCH("actividades/modificar/rodada")
@@ -120,8 +129,12 @@ interface ActivitiesApiService {
         @Part("informacion[ubicacion]") ubicacion: String,
         @Part("informacion[descripcion]") descripcion: String,
         @Part("informacion[tipo]") tipo: String,
-        @Part("ruta") ruta: String,
-        @Part imagen: MultipartBody.Part?
-    ): Rodada
+        @Part imagen: MultipartBody.Part?,
+        @Part("peopleEnrolled") peopleEnrolled: Int,
+        @Part("state") state: Boolean,
+        @Part("foro") foro: String?,
+        @Part("register") register: List<String>?,
+        @Part("ruta") ruta: String?
+    ): ActivityData
 
 }

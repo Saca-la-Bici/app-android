@@ -14,7 +14,7 @@ data class Informacion(
     val tipo: String
 )
 
-// Modelo de datos para almacenar información de actividad (POST)
+// Modelo de datos para almacenar información de actividad ( POST & PATCH)
 data class ActivityInfo(
     val title: String,
     val date: String,
@@ -35,4 +35,23 @@ data class ActivityModel(
 data class Rodada(
     val informacion: List<Informacion>,
     val ruta: String
+)
+
+
+// Modelo de datos para todas las actividades (PATCH)
+data class ActivityData(
+    val id: String,
+    val title: String,
+    val date: String,
+    val time: String,
+    val location: String,
+    val description: String,
+    val duration: String,
+    val imageURL: Uri?,
+    val type: String,
+    val peopleEnrolled: Int,
+    val state: Boolean,
+    val foro: String?,
+    val register: List<String>?,
+    var idRouteBase: String?
 )

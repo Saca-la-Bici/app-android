@@ -115,6 +115,10 @@ class TalleresFragment : Fragment() {
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
         val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(taller.date)
 
+        // Convertir lista de usuarios en ArrayList<String>
+        val registerArrayList = ArrayList<String>()
+        taller.register?.let { registerArrayList.addAll(it) }
+
         if (storedPermissions?.contains("Modificar actividad") == true) {
             val dialogFragment = ActivityActionDialogFragment.newInstance(
                 taller.id,
@@ -126,6 +130,10 @@ class TalleresFragment : Fragment() {
                 taller.duration,
                 taller.imageURL,
                 "Taller",
+                taller.peopleEnrolled,
+                taller.state,
+                taller.foro,
+                registerArrayList,
                 null,
                 storedPermissions
             )

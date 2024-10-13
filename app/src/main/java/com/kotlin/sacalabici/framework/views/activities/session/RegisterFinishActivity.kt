@@ -33,7 +33,13 @@ class RegisterFinishActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
-        setupBloodDropdown()
+        // Opciones de tipo de sangre
+        val bloodTypes = resources.getStringArray(R.array.bloodTypes)
+        // Configurar el adaptador para el AutoCompleteTextView
+        val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
+        val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+        autoCompleteTextView.setAdapter(adapter)
+
         val email = intent.getStringExtra("email")
         val username = intent.getStringExtra("username")
         val name = intent.getStringExtra("name")
@@ -65,14 +71,10 @@ class RegisterFinishActivity : AppCompatActivity() {
                     finish()
                 }
                 is AuthState.CompleteProfile -> {
-                    Toast.makeText(this, "Bienvenido!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                     finish()
-                }
-                is AuthState.Unauthenticated -> {
-                    Log.d("LoginFinishActivity", "Usuario no autenticado")
                 }
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
@@ -88,7 +90,7 @@ class RegisterFinishActivity : AppCompatActivity() {
         }
         binding.BFinish.setOnClickListener {
             val birthdate = binding.BDate.text.toString()
-            val bloodType = binding.bloodDropDown.text.toString()
+            val bloodType = binding.autoCompleteTextView.toString()
             val phoneNumber = phoneNumberEditText.text.toString()
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.BFinish.isEnabled = true
@@ -102,7 +104,7 @@ class RegisterFinishActivity : AppCompatActivity() {
                     Toast.makeText(this@RegisterFinishActivity, errorMessage, Toast.LENGTH_SHORT).show()
                     when {
                         errorMessage.contains("tipo de sangre") -> {
-                            binding.bloodDropDown.error = errorMessage
+                            binding.autoCompleteTextView.error = errorMessage
                         }
                         errorMessage.contains("número de teléfono") -> {
                             phoneNumberEditText.error = errorMessage
@@ -121,13 +123,6 @@ class RegisterFinishActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun setupBloodDropdown() {
-        val bloodDropdownConfig = binding.bloodDropDown
-        val bloodTypes = resources.getStringArray(R.array.bloodTypes)
-        val arrayAdapter = ArrayAdapter(this, R.layout.drop_down_item, bloodTypes)
-        bloodDropdownConfig.setAdapter(arrayAdapter)
     }
 
     private fun initializeBinding() {

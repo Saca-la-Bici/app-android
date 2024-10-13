@@ -3,6 +3,7 @@ package com.kotlin.sacalabici.data.network.profile
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.kotlin.sacalabici.data.models.activities.ActivitiesBase
 import com.kotlin.sacalabici.data.models.profile.ProfileBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.models.profile.Profile
@@ -53,4 +54,41 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
             null
         }
     }
+
+    suspend fun getActividades(): ActivitiesBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ProfileNetworkModuleDI(token)
+            try {
+                val activitiesBase = api.getActividades()
+                Log.d("ProfileApiClient", "ActivitiesBase: $activitiesBase")
+                activitiesBase
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    suspend fun deleteProfile(): Boolean {
+        val token: String?
+        try{
+            token = firebaseTokenManager.getTokenSynchronously()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+        api = ProfileNetworkModuleDI(token)
+        return try {
+            api.deleteProfile().isSuccessful
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+
 }

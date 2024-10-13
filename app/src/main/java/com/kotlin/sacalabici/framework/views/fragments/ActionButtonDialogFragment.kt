@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.announcements.model.AnnouncementBase
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
@@ -108,33 +109,51 @@ class ActionButtonDialogFragment : DialogFragment() {
             alertDialog.dismiss()
         }
 
-        dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener {
-            alertDialog.dismiss()
-            deleteAnnouncement()
+        dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener { button ->
+            // Desactivar el botón para evitar múltiples clics
+            button.isEnabled = false
+
+            // Ejecutar la acción de eliminar y esperar su finalización
+            deleteAnnouncement { success ->
+                // Si la eliminación fue exitosa, cerrar el diálogo
+                if (success) {
+                    alertDialog.dismiss()
+                    this@ActionButtonDialogFragment.dismiss()
+                } else {
+                    // Si hubo un error, volver a habilitar el botón
+                    button.isEnabled = true
+                    Toast.makeText(requireContext(), "Error al eliminar el anuncio", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         alertDialog.show()
     }
 
-    private fun deleteAnnouncement() {
-
-        viewModel.deleteAnnouncement(announcement.id) { result ->
-            viewLifecycleOwner.lifecycleScope.launch {
+    private fun deleteAnnouncement(onComplete: (Boolean) -> Unit) {
+        viewModel.viewModelScope.launch {
+            viewModel.deleteAnnouncement(announcement.id) { result ->
                 result.fold(
                     onSuccess = {
-                        Toast.makeText(requireContext(), "Anuncio eliminado exitosamente", Toast.LENGTH_SHORT).show()
-                        setFragmentResult("actionButtonDialogResult", Bundle().apply {
-                            putInt("resultCode", RESULT_OK)
-                        })
-                        dismiss()
+                        if (isAdded) {
+                            Toast.makeText(requireContext(), "Anuncio eliminado exitosamente", Toast.LENGTH_SHORT).show()
+                            setFragmentResult("actionButtonDialogResult", Bundle().apply {
+                                putInt("resultCode", RESULT_OK)
+                            })
+                            onComplete(true) // Llamar onComplete con éxito
+                        }
                     },
                     onFailure = { error ->
-                        Toast.makeText(requireContext(), "Error al eliminar el anuncio: ${error.message}", Toast.LENGTH_LONG).show()
+                        if (isAdded) {
+                            Toast.makeText(requireContext(), "Error al eliminar el anuncio: ${error.message}", Toast.LENGTH_LONG).show()
+                        }
+                        onComplete(false) // Llamar onComplete con fallo
                     }
                 )
             }
         }
     }
+
 
     companion object {
         const val TAG = "ActionButtonDialogFragment"

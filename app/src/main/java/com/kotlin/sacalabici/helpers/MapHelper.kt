@@ -168,6 +168,8 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                     referencePoint1 = point
                     onReferencePoint1Set(point)  // Llama al callback para el punto de inicio
                     Toast.makeText(context, "Punto de referencia 1 establecido.", Toast.LENGTH_SHORT).show()
+
+                    addMarker(point, "reference-point-symbol", "reference_icon", map)
                 }
                 stopoverPoint == null -> {
 
@@ -185,6 +187,8 @@ class MapHelper(private val context: Context) : AppCompatActivity() {
                     referencePoint2 = point
                     onReferencePoint2Set(point)  // Llama al callback para el punto de inicio
                     Toast.makeText(context, "Punto de referencia 2 establecido.", Toast.LENGTH_SHORT).show()
+
+                    addMarker(point, "reference-point-symbol-2", "reference_icon", map)
                 }
                 endPoint == null -> {
 

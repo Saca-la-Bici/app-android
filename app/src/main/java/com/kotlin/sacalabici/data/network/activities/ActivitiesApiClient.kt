@@ -3,6 +3,7 @@ package com.kotlin.sacalabici.data.network.activities
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
@@ -304,7 +305,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
 
     suspend fun postValidateAttendance(IDRodada: String, codigo: Int): Pair<Boolean, String> {
         val token = firebaseTokenManager.getTokenSynchronously()
-
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {

@@ -279,13 +279,13 @@ class ActivitiesViewModel(): ViewModel() {
             }
         }
     }
+
     fun validateAttendance(
         IDRodada: String,
         codigo: Int,
         callback: (Boolean, String) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Reemplaza esto con la función correcta para validar asistencia
                 val (success, message) = postValidateAttendance(IDRodada, codigo)
 
                 withContext(Dispatchers.Main) {

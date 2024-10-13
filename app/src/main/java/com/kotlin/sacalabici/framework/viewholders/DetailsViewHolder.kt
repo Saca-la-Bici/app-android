@@ -13,6 +13,7 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -194,7 +195,8 @@ class DetailsViewHolder(
             if (success) {
                 Toast.makeText(binding.root.context, "Asistencia validada con éxito.", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(binding.root.context, "Error al validar la asistencia: $message", Toast.LENGTH_SHORT).show()
+                Toast.makeText(binding.root.context, "Error: Asistencia ya verificada para esta rodada", Toast.LENGTH_SHORT).show()
+                Log.d("errer","$message")
             }
         }
     }

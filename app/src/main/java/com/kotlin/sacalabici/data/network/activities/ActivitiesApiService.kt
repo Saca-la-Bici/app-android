@@ -88,7 +88,7 @@ interface ActivitiesApiService {
     @POST("actividades/cancelarAsistencia/cancelar")
     suspend fun PostCancelActivity(@Body request: CancelActivityRequest)
 
-    @PATCH("actividades/verificarAsistencia")
+    @PATCH("rodadas/verificarAsistencia")
     suspend fun PostValidateAttendance(@Body request: AttendanceRequest)
 
 

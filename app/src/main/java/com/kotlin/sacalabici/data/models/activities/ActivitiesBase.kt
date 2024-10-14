@@ -1,6 +1,8 @@
 package com.kotlin.sacalabici.data.models.activities
 
+
 import com.google.gson.annotations.SerializedName
+import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import java.util.Date
 
@@ -48,14 +50,21 @@ data class Activity(
     // Elementos específicos de rodada
     @SerializedName("nivel") val nivel: String? = null,
     @SerializedName("distancia") val distancia: String? = null,
-    @SerializedName("id") val idRouteBase: String? = null
+    @SerializedName("id") val idRouteBase: String? = null,
+    @SerializedName("codigo") val codigoAsistencia: String? = null
 )
 
+data class LocationR(
+    @SerializedName("_id") val id: String,
+    @SerializedName("latitud") val latitude: Double,
+    @SerializedName("longitud") val longitude: Double
+)
 
 data class Location(
     @SerializedName("latitud") val latitude: Double,
     @SerializedName("longitud") val longitude: Double
 )
+
 data class JoinActivityRequest(
     val actividadId: String,
     val tipo: String
@@ -64,4 +73,9 @@ data class JoinActivityRequest(
 data class CancelActivityRequest(
     val actividadId: String,
     val tipo: String
+)
+
+data class AttendanceRequest(
+    val IDRodada: String,
+    val codigo: Int
 )

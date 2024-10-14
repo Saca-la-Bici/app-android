@@ -4,9 +4,12 @@ import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
+import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
 import com.kotlin.sacalabici.data.models.activities.OneActivityBase
+import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
@@ -106,16 +109,8 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                api.postActivityTaller(
-                    titulo,
-                    fecha,
-                    hora,
-                    duracion,
-                    ubicacion,
-                    descripcion,
-                    tipo,
-                    img
-                )
+                api.postActivityTaller(titulo, fecha, hora, duracion,
+                    ubicacion, descripcion, tipo, img)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
                 null
@@ -184,6 +179,7 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         }
     }
 
+
     suspend fun PostJoinActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
         val token = firebaseTokenManager.getTokenSynchronously()
 
@@ -210,9 +206,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             Pair(false, "Error de autenticación. Por favor, inicia sesión.")
         }
     }
-
-
-
 
     suspend fun PostCancelActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
         val token = firebaseTokenManager.getTokenSynchronously()
@@ -267,21 +260,9 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                api.patchActivityTaller(
-                    id,
-                    titulo,
-                    fecha,
-                    hora,
-                    duracion,
-                    ubicacion,
-                    descripcion,
-                    tipo,
-                    img,
-                    peopleEnrolled,
-                    state,
-                    foro,
-                    registerParts
-                )
+                api.patchActivityTaller(id,
+                    titulo, fecha, hora, duracion, ubicacion, descripcion,
+                    tipo, img, peopleEnrolled, state, foro, registerParts)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
                 null
@@ -382,4 +363,83 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             null
         }
     }
+
+    suspend fun postLocation(id: String, location: LocationR): Boolean {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                val response = api.postLocation(id,location)
+                response.isSuccessful
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        } else {
+            false
+        }
+    }
+
+    suspend fun getRodadaInfo(id: String): RodadaInfoBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.getRodadaInfo(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    suspend fun getUbicacion(id: String): List<LocationR>? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.getUbicacion(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+
+    suspend fun postValidateAttendance(IDRodada: String, codigo: Int): Pair<Boolean, String> {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                val request = AttendanceRequest(IDRodada, codigo)
+
+                // Usa runCatching para manejar el resultado
+                val result = runCatching { api.PostValidateAttendance(request) }
+
+                result.fold(
+                    onSuccess = {
+                        Pair(true, "Se ha verificado tu asistencia")
+                    },
+                    onFailure = { exception ->
+                        Pair(false, "Error: ${exception.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                Pair(false, "Error de red o conexión. Intenta más tarde.")
+            }
+        } else {
+            Pair(false, "Error de autenticación. Por favor, inicia sesión.")
+        }
+    }
+
+
+
+
 }

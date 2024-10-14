@@ -245,8 +245,8 @@ class ModifyActivityActivity: AppCompatActivity(),
         // Observa los LiveData del ViewModel
         viewModelRoute.routeObjectLiveData.observe(this, Observer { rutasList ->
             rutasList?.let {
-                // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment
-                val routeFragment = ModifyActivityRouteFragment.newInstance(it, viewModelRoute.lastSelectedRuta)
+                // Si la lista de rutas se ha obtenido, crea el fragmento RutasFragment con el ID de la ruta
+                val routeFragment = ModifyActivityRouteFragment.newInstance(it, idRoute)
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentAddActivity, routeFragment)
                     .addToBackStack(null)

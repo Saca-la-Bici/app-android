@@ -64,7 +64,7 @@ class TalleresFragment : Fragment() {
         adapter = ActivitiesAdapter(mutableListOf(), { taller ->
             passDetailsActivity(taller.id)
         }, { taller ->
-            // Dialogo
+            showDialog(taller)
         }, activitiesViewModel)
 
         binding.recyclerViewTalleres.adapter = adapter

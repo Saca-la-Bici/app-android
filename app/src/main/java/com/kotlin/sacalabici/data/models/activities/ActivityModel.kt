@@ -52,6 +52,6 @@ data class ActivityData(
     val peopleEnrolled: Int,
     val state: Boolean,
     val foro: String?,
-    val register: List<String>?,
+    val register: ArrayList<String>?,
     var idRouteBase: String?
 )

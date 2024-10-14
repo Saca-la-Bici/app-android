@@ -74,7 +74,8 @@ class ModifyActivityRouteFragment: Fragment() {
         // Observa los LiveData del ViewModel
         viewModelRoute.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
             rutasList?.let {
-                val selectedRuta = viewModelRoute.lastSelectedRuta
+                val idRoute = arguments?.getString("idRoute")
+                val selectedRuta = it.find { ruta -> ruta.id == idRoute }
                 updateRutasList(it, selectedRuta)
             }
         })
@@ -102,11 +103,11 @@ class ModifyActivityRouteFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance(rutasList: List<RouteBase>?, selectedRuta: RouteBase?): AddActivityRouteFragment {
-            val fragment = AddActivityRouteFragment()
+        fun newInstance(rutasList: List<RouteBase>?, idRoute: String?): ModifyActivityRouteFragment {
+            val fragment = ModifyActivityRouteFragment()
             val args = Bundle()
             args.putParcelableArrayList("rutasList", rutasList?.let { ArrayList(it) })
-            args.putParcelable("selectedRuta", selectedRuta)
+            args.putString("idRoute", idRoute)
             fragment.arguments = args
             return fragment
         }

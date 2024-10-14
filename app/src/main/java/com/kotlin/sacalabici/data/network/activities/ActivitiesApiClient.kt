@@ -253,16 +253,20 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         val file = taller.imageURL?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
 
-        val registerParts = taller.register?.mapIndexed { index, user ->
-            MultipartBody.Part.createFormData("register[$index]", user)
+        val usuariosInscritos = taller.register?.mapIndexed { index, user ->
+            MultipartBody.Part.createFormData("usuariosInscritos[$index]", user)
         }
+
+        Log.d("ActivitiesApiClient", "patchActivityTaller: $usuariosInscritos")
+        Log.d("ActivitiesApiClient", "$titulo, $fecha, $hora, $duracion, $ubicacion, $descripcion," +
+                "$tipo, $peopleEnrolled, $state, $foro, $img, $usuariosInscritos")
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
                 api.patchActivityTaller(id,
                     titulo, fecha, hora, duracion, ubicacion, descripcion,
-                    tipo, img, peopleEnrolled, state, foro, registerParts)
+                    tipo, img, peopleEnrolled, state, foro, usuariosInscritos)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
                 null
@@ -293,15 +297,20 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
 
         // Procesar la lista register como MultipartBody.Part
-        val registerParts = evento.register?.mapIndexed { index, user ->
-            MultipartBody.Part.createFormData("register[$index]", user)
+        val usuariosInscritos = evento.register?.mapIndexed { index, user ->
+            MultipartBody.Part.createFormData("usuariosInscritos[$index]", user.toString())
         }
+
+
+        Log.d("ActivitiesApiClient", "$titulo, $fecha, $hora, $duracion, $ubicacion, $descripcion," +
+                "$tipo, $peopleEnrolled, $state, $foro, $img, $usuariosInscritos")
+        Log.d("ActivitiesApiClient", "patchActivityEvento: $usuariosInscritos")
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
                 api.patchActivityEvento(id, titulo, fecha, hora, duracion, ubicacion,
-                    descripcion, tipo, img, peopleEnrolled, state, foro, registerParts)
+                    descripcion, tipo, img, peopleEnrolled, state, foro, usuariosInscritos)
             } catch (e: java.lang.Exception){
                 e.printStackTrace()
                 null
@@ -330,15 +339,17 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         val file = rodada.imageURL?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
 
-        val registerParts = rodada.register?.mapIndexed { index, user ->
-            MultipartBody.Part.createFormData("register[$index]", user)
+        val usuariosInscritos = rodada.register?.mapIndexed { index, user ->
+            MultipartBody.Part.createFormData("usuariosInscritos[$index]",
+                user.toRequestBody("text/plain".toMediaTypeOrNull()).toString()
+            )
         }
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
                 api.patchActivityRodada(id, titulo, fecha, hora, duracion, ubicacion,
-                    descripcion, tipo, img, peopleEnrolled, state, foro, registerParts, ruta)
+                    descripcion, tipo, img, peopleEnrolled, state, foro, usuariosInscritos, ruta)
             } catch (e: java.lang.Exception){
                 e.printStackTrace()
                 null

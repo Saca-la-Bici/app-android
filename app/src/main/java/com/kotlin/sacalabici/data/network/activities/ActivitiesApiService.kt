@@ -101,10 +101,10 @@ interface ActivitiesApiService {
         @Part("informacion[descripcion]") descripcion: RequestBody,
         @Part("informacion[tipo]") tipo: RequestBody,
         @Part imagen: MultipartBody.Part?,
-        @Part("peopleEnrolled") peopleEnrolled: RequestBody,
-        @Part("state") state: RequestBody,
-        @Part("foro") foro: RequestBody?,
-        @Part("register") register: List<MultipartBody.Part>?
+        @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
+        @Part("informacion[estado]") state: RequestBody,
+        @Part("informacion[foro]") foro: RequestBody?,
+        @Part usuariosInscritos: List<MultipartBody.Part>?
     ): ActivityData
 
     @Multipart
@@ -122,7 +122,7 @@ interface ActivitiesApiService {
         @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
         @Part("informacion[estado]") state: RequestBody,
         @Part("informacion[foro]") foro: RequestBody?,
-        @Part("usuariosInscritos") registerParts: List<MultipartBody.Part>?
+        @Part usuariosInscritos: List<MultipartBody.Part>?
     ): ActivityData
 
     @Multipart
@@ -137,10 +137,10 @@ interface ActivitiesApiService {
         @Part("informacion[descripcion]") descripcion: RequestBody,
         @Part("informacion[tipo]") tipo: RequestBody,
         @Part imagen: MultipartBody.Part?,
-        @Part("peopleEnrolled") peopleEnrolled: RequestBody,
-        @Part("state") state: RequestBody,
-        @Part("foro") foro: RequestBody?,
-        @Part("register") registerParts: List<MultipartBody.Part>?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
+        @Part("informacion[estado]") state: RequestBody,
+        @Part("informacion[foro]") foro: RequestBody?,
+        @Part usuariosInscritos: List<MultipartBody.Part>?,
         @Part("ruta") ruta: RequestBody?
     ): ActivityData
 

@@ -148,6 +148,8 @@
 
     <!-- Strings de inscribir actividad -->
     <string name="Verificar">Verificar Asistencia</string>
+    <string name="approved_notification_permission">Permiso para notificaciones concedido</string>
+    <string name="denied_notification_permission">Permiso para notificaciones denegado</string>
 
 </resources>
 

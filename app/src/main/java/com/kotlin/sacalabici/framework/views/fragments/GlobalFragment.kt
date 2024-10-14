@@ -67,7 +67,8 @@ class GlobalFragment : Fragment() {
 
                 // Configuración de los valores para el progreso y texto
                 binding.progressAgua.progress = percentageWater.toInt()
-                binding.textResultWater.text = "$water L"
+                binding.textResultWater.text = String.format("%.2f L", water)
+
 
                 binding.progressCO2.progress = percentageCO2.toInt()
                 binding.textResultCO2.text = String.format("%.2f kg", co2)
@@ -76,7 +77,7 @@ class GlobalFragment : Fragment() {
                 binding.textResultAir.text = String.format("%.2f g", air)
 
                 binding.progressGas.progress = percentageGas.toInt()
-                binding.textResultGas.text = "$gas L"
+                binding.textResultGas.text = String.format("%.2f L", gas)
             }
         }
     }

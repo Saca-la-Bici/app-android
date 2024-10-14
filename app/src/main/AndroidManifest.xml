@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <queries>
         <package android:name="com.facebook.katana" /> <!-- Facebook App -->
@@ -12,6 +13,7 @@
     </queries>
 
     <application
+        android:name=".framework.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -39,6 +41,14 @@
             android:name="com.mapbox.AccessToken"
             android:resource="@string/mapbox_access_token" />
 
+        <service
+            android:name=".data.network.FirebaseMessageReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".framework.views.activities.MainActivity"
             android:exported="true"
@@ -50,10 +60,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".framework.views.activities.announcement.AddAnnouncementActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".framework.views.activities.announcement.ModifyAnnouncementActivity"
             android:exported="false"
@@ -86,6 +98,7 @@
             android:name=".framework.views.activities.session.RegisterUserActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".framework.views.activities.AddActivityActivity"
             android:exported="false"
@@ -108,7 +121,20 @@
         <activity
             android:name=".framework.views.activities.activities.DetailsActivity"
             android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".framework.views.activities.StartRouteActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".framework.views.activities.LookRouteActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+
     </application>
 
 </manifest>

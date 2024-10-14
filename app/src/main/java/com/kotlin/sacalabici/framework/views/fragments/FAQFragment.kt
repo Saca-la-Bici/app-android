@@ -23,8 +23,9 @@ import kotlinx.coroutines.launch
 class FAQFragment : Fragment() {
     private var _binding: FragmentFaqsBinding? = null
     private lateinit var recyclerView: RecyclerView
-    private val adapter: FAQAdapter = FAQAdapter()
     private lateinit var viewModel: FAQViewModel
+    private val adapter: FAQAdapter = FAQAdapter()
+    private var permissions: List<String> = emptyList()
 
     private var faqList: ArrayList<FAQBase> = ArrayList()
 
@@ -43,6 +44,7 @@ class FAQFragment : Fragment() {
         viewModel.getFAQList()
 
         initializeObservers()
+        setupRegisterFAQsButton()
 
         // Listener for search filter
         binding.etFilter.addTextChangedListener { query ->
@@ -59,6 +61,12 @@ class FAQFragment : Fragment() {
     }
 
     private fun initializeObservers() {
+        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            this.permissions = permissions
+            if (permissions.contains("Registrar pregunta frecuente")) {
+                binding.BAgregarPregunta.visibility = View.VISIBLE
+            }
+        }
         // Observing the FAQ list data from the ViewModel
         viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
             lifecycleScope.launch {
@@ -120,4 +128,17 @@ class FAQFragment : Fragment() {
             }
             filteredList
         }
+
+    // Función para que el botón de Agregar FAQ de lleve a RegisterFAQFragment
+    private fun setupRegisterFAQsButton() {
+        val btnFAQs = binding.BAgregarPregunta
+        btnFAQs.setOnClickListener {
+            // Navegar a RegisterFAQsFragment y reemplazar el contenido en el contenedor principal de MainActivity
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, RegisterFAQFragment())
+                .addToBackStack(null) // Para permitir navegar hacia atrás
+                .commit()
+        }
+    }
 }

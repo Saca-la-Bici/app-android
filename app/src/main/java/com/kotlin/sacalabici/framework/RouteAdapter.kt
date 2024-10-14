@@ -78,12 +78,6 @@ class RouteAdapter(
             notifyItemChanged(rutasList.indexOf(previousRuta))
             notifyItemChanged(rutasList.indexOf(selectedRuta))
 
-            Log.d("Ruta Seleccionada", ruta.titulo)
-            Log.d("Ruta Seleccionada", ruta.nivel)
-            Log.d("Ruta Seleccionada", ruta.tiempo)
-            Log.d("Ruta Seleccionada", ruta.distancia)
-            Log.d("Ruta Seleccionada", ruta.coordenadas.toString())
-
             onRutaSelected(ruta)
             viewModelRoute.selectRuta(ruta)
             viewModelRoute.lastSelectedRuta = ruta
@@ -93,12 +87,21 @@ class RouteAdapter(
         holder.btnModificar.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, ModifyRouteActivity::class.java)
+            // Imprimir el valor exacto de la cadena
+            Log.d("Ruta Seleccionada", "Valor de ruta.tiempo: '${ruta.tiempo}'")
 
-            // Agrega datos adicionales al Intent como extras
+            // Limpiar la cadena y dividirla por espacios
+            val tiempoLimpio = ruta.tiempo.trim().replace("\\s+".toRegex(), " ")
+            val partes = tiempoLimpio.split(" ")
+            val horas = partes[0]
+            val minutos = partes[2]
+
             intent.putExtra("ID", ruta.id)
             intent.putExtra("TITULO", ruta.titulo)
             intent.putExtra("DISTANCIA", ruta.distancia)
             intent.putExtra("TIEMPO", ruta.tiempo)
+            intent.putExtra("HORAS", horas)
+            intent.putExtra("MINUTOS", minutos)
             intent.putExtra("NIVEL", ruta.nivel)  // Si es necesario
             val coordenadasJson = Gson().toJson(ruta.coordenadas)
             intent.putExtra("COORDENADAS", coordenadasJson)

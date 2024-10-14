@@ -5,13 +5,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.announcements.model.announcement.Announcement
 import com.kotlin.sacalabici.databinding.ActivityRegisterannouncementBinding
 import com.kotlin.sacalabici.framework.viewmodel.AnnouncementsViewModel
@@ -22,6 +26,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
     private lateinit var viewModel: AnnouncementsViewModel
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private var selectedImageUri: Uri? = null
+    private var isImageErased: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +34,15 @@ class AddAnnouncementActivity: AppCompatActivity() {
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
         initializeListeners()
         registerImagePicker()
+        setupTextWatchers()
     }
 
     private fun initializeListeners() {
         binding.ibClose.setOnClickListener {
             finish()
+        }
+        binding.tvEraseImage.setOnClickListener {
+            eraseImage()
         }
 
         binding.ibCheck.setOnClickListener {
@@ -95,7 +104,11 @@ class AddAnnouncementActivity: AppCompatActivity() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
-                binding.ibAddImage.setImageURI(selectedImageUri)
+                binding.ibAddImage.apply{
+                    setImageURI(selectedImageUri)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                    adjustViewBounds = true
+                }
             }
         }
     }
@@ -115,5 +128,44 @@ class AddAnnouncementActivity: AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.ibCheck.isEnabled = !isLoading
+    }
+
+    private fun eraseImage() {
+        selectedImageUri = null
+        isImageErased = true
+        binding.ibAddImage.apply{
+            setImageResource(R.drawable.ic_add_image)
+            scaleType = ImageView.ScaleType.CENTER
+            adjustViewBounds = false
+        }
+    }
+
+    private fun setupTextWatchers() {
+        binding.etAddAnnouncementDescription.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                binding.tvAddAnnouncementDescriptionCounter.text = "${s?.length ?: 0}/500"
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tvAddAnnouncementDescriptionCounter.text = "${s?.length ?: 0}/500"
+            }
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 500) {
+                    Toast.makeText(this@AddAnnouncementActivity, "Has alcanzado el límite de 500 caracteres", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+        binding.etAddAnnouncementTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                binding.tvAddAnnouncementTitleCounter.text = "${s?.length ?: 0}/100"
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tvAddAnnouncementTitleCounter.text = "${s?.length ?: 0}/100"
+            }
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 100) {
+                    Toast.makeText(this@AddAnnouncementActivity, "Has alcanzado el límite de 100 caracteres", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 }

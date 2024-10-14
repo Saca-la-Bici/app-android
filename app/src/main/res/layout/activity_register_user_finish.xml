@@ -239,7 +239,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                android:text="@string/TFinish"
+                android:text="@string/TVerifyEmail"
                 android:textAllCaps="false"
                 android:textSize="14sp"
                 android:layout_marginTop="40dp"

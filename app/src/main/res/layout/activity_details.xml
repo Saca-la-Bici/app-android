@@ -6,7 +6,6 @@
     android:id="@+id/clDetailActivity"
     android:padding="20dp">
 
-    <!-- LinearLayout fijo en la parte superior -->
     <LinearLayout
         android:id="@+id/topRow"
         android:layout_width="match_parent"
@@ -80,7 +79,6 @@
         app:layout_constraintTop_toBottomOf="@id/topRow"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- ScrollView para el contenido desplazable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -272,6 +270,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
+
+
                 <Button
                     android:id="@+id/btnJoin"
                     android:layout_width="match_parent"
@@ -282,6 +282,8 @@
                     android:textSize="14sp"
                     android:textColor="@color/semiWhite"/>
 
+
+
                 <LinearLayout
                     android:id="@+id/btnSecondaryContainer"
                     android:layout_width="match_parent"
@@ -290,10 +292,12 @@
                     android:layout_marginTop="8dp">
 
                     <Button
+                        android:visibility="gone"
                         android:id="@+id/btnStart"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
                         android:backgroundTint="@color/yellow"
                         android:text="@string/activity_start"
                         android:fontFamily="@font/roboto_regular"
@@ -301,11 +305,11 @@
                         android:textColor="@color/semiWhite"/>
 
                     <Button
+                        android:visibility="gone"
                         android:id="@+id/btnRuta"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
                         android:backgroundTint="@color/darkGreen"
                         android:text="@string/activity_route"
                         android:fontFamily="@font/roboto_regular"
@@ -313,6 +317,17 @@
                         android:textColor="@color/semiWhite"/>
                 </LinearLayout>
 
+                <!-- Botón de Validar Asistencia -->
+                <Button
+                    android:id="@+id/btnValidateAttendance"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/verifyBlue"
+                    android:text="@string/Verificar"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/semiWhite"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

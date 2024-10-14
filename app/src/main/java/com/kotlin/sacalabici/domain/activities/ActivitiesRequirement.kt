@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.domain.activities
 
 import com.kotlin.sacalabici.data.models.activities.Activity
+import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.repositories.activities.ActivitiesRepository
 
 class GetRodadasRequirement {
@@ -24,6 +25,11 @@ class GetTalleresRequirement {
 class GetActivityByIdRequirement {
     private val repository = ActivitiesRepository()
     suspend operator fun invoke(id: String): Activity? = repository.getActivityById(id)
+}
+
+class PostLocationRequirement {
+    private val repository = ActivitiesRepository()
+    suspend operator fun invoke(id: String, location: LocationR): Boolean = repository.postLocation(id, location)
 }
 
 class PostJoinActivity {
@@ -51,4 +57,14 @@ class PostCancelActivity {
     }
 }
 
+class PostValidateAttendance{
+    private val repository = ActivitiesRepository()
 
+    suspend operator fun invoke(IDRodada: String, codigo: Int): Pair<Boolean, String> {
+        return try {
+            repository.postValidateAttendance(IDRodada, codigo)
+        } catch (e: Exception) {
+            Pair(false, "Error al intentar cancelar la actividad. Por favor, intenta más tarde.")
+        }
+    }
+}

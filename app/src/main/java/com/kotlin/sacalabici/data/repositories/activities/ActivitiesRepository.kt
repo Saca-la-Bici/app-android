@@ -5,6 +5,8 @@ import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.network.activities.ActivitiesApiClient
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.models.activities.EventosBase
+import com.kotlin.sacalabici.data.models.activities.LocationR
+import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 
@@ -72,6 +74,18 @@ class ActivitiesRepository {
         return permissionsObject?.permisos ?: emptyList()
     }
 
+    suspend fun postLocation(id: String, location: LocationR): Boolean {
+        return apiActivities.postLocation(id,location)
+    }
+
+    suspend fun getInfoRodada(id: String): RodadaInfoBase? {
+        return apiActivities.getRodadaInfo(id)
+    }
+
+    suspend fun getUbicacion(id: String): List<LocationR>? {
+        return apiActivities.getUbicacion(id)
+    }
+
     suspend fun postJoinActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
         return apiActivities.PostJoinActivity(actividadId, tipo)
     }
@@ -80,5 +94,7 @@ class ActivitiesRepository {
         return apiActivities.PostCancelActivity(actividadId, tipo)
     }
 
-
+    suspend fun postValidateAttendance(IDRodada: String, codigo: Int): Pair<Boolean, String> {
+        return apiActivities.postValidateAttendance(IDRodada, codigo)
+    }
 }

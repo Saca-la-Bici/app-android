@@ -5,7 +5,7 @@ import com.kotlin.sacalabici.data.models.routes.Route
 data class ActivityBase(
     @SerializedName("_id") var id: String,
     @SerializedName("titulo") val title: String,
-    @SerializedName("fecha") val date: String,
+    @SerializedName("fecha") val date: String?= null,
     @SerializedName("hora") val time: String,
     @SerializedName("personasInscritas") val peopleEnrolled: Int,
     @SerializedName("estado") val state: Boolean,
@@ -14,9 +14,12 @@ data class ActivityBase(
     @SerializedName("duracion") val duration: String,
     @SerializedName("imagen") val imageURL: String? = null,  // El valor null es opcional ya que la imagen no es obligatoria
     @SerializedName("tipo") val type: String,
+    @SerializedName("foro") val foro: String? = null,
     // Elementos específicos de rodada
     @SerializedName("nivel") val nivel: String? = null,
-    @SerializedName("distancia") val distancia: String? = null
+    @SerializedName("id") val idRouteBase: String? = null,
+    @SerializedName("distancia") val distancia: String? = null,
+    @SerializedName("codigo") val codigoAsistencia: String? = null
 )
 data class DefaultActivityBase(
     @SerializedName("_id") val id: String,

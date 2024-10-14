@@ -148,6 +148,20 @@
 
     <!-- Strings de inscribir actividad -->
     <string name="Verificar">Verificar Asistencia</string>
+    <string name="TPasswordInstructions">La contraseaña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número</string>
+    <string name="TConfigPrivacy">Configuración y privacidad</string>
+    <string name="TMoreInfo">Más información y asistencia</string>
+    <string name="THelp">Ayuda</string>
+    <string name="TInfo">Información</string>
+    <string name="THowtoUse">Cómo usar la app</string>
+    <string name="TRoles">Asignación de roles y permisos</string>
+    <string name="TDeactivate">Desactivar Usuarios</string>
+    <string name="TAdminAccount">Administra tu cuenta</string>
+    <string name="TAccount">Tu cuenta</string>
+    <string name="TOtherPlatforms">Otras Plataformas</string>
+    <string name="TSacalaBici">Saca la Bici</string>
+    <string name="TRentabici">Rentabici</string>
+    <string name="TCloseSession">Cerrar Sesión</string>
 
 </resources>
 

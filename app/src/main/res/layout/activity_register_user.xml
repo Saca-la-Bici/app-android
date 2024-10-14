@@ -113,6 +113,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="48"
                     android:padding="24dp"
                     android:textSize="14sp"
                     android:hint="@string/TEmail"
@@ -137,6 +138,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="20"
                     android:padding="24dp"
                     android:layout_marginTop="5dp"
                     android:textSize="14sp"
@@ -163,6 +165,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="50"
                     android:padding="24dp"
                     android:layout_marginTop="5dp"
                     android:textSize="14sp"

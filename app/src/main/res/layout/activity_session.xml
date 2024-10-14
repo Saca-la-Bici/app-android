@@ -134,7 +134,7 @@
         app:layout_constraintEnd_toStartOf="@+id/TVContinue"
         app:layout_constraintStart_toStartOf="@+id/VWhiteBackground"
         app:layout_constraintTop_toBottomOf="@+id/BLogin"
-        app:layout_constraintWidth_percent="0.3" />
+        app:layout_constraintWidth_percent="0.2" />
 
     <TextView
         android:id="@+id/TVContinue"
@@ -158,7 +158,7 @@
         app:layout_constraintEnd_toEndOf="@+id/VWhiteBackground"
         app:layout_constraintStart_toEndOf="@+id/TVContinue"
         app:layout_constraintTop_toBottomOf="@+id/BLogin"
-        app:layout_constraintWidth_percent="0.3" />
+        app:layout_constraintWidth_percent="0.2" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/BGoogle"

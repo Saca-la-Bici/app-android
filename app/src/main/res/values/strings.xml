@@ -109,6 +109,7 @@
     <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
     <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
     <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
+    <string name="Modificar">Modificar</string>
 
     <!-- Strings para Agregar ruta -->
     <string name="TituloRuta">Título</string>

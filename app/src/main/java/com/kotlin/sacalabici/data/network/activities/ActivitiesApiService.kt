@@ -21,7 +21,9 @@ import retrofit2.http.Query
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.LocationR
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -91,7 +93,6 @@ interface ActivitiesApiService {
     @PATCH("rodadas/verificarAsistencia")
     suspend fun PostValidateAttendance(@Body request: AttendanceRequest)
 
-
     @PUT("rodadas/iniciarRodada/{id}")
     suspend fun postLocation(
         @Path("id") id: String,
@@ -103,4 +104,7 @@ interface ActivitiesApiService {
 
     @GET("rodadas/obtenerUbicacion/{id}")
     suspend fun getUbicacion(@Path("id") id: String): List<LocationR>
+
+    @DELETE("rodadas/eliminarUbicacion/{id}")
+    suspend fun eliminarUbicacion(@Path("id") id: String): RouteBase
 }

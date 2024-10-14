@@ -26,6 +26,7 @@ import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
 import com.kotlin.sacalabici.data.network.model.ActivityInfo
+import com.kotlin.sacalabici.domain.activities.DeleteLocationRequirement
 import com.kotlin.sacalabici.domain.activities.PostCancelActivity
 import com.kotlin.sacalabici.domain.activities.PostJoinActivity
 import com.kotlin.sacalabici.domain.activities.PostValidateAttendance
@@ -66,6 +67,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val postLocationRequirement = PostLocationRequirement()
     private val routeRequirement = RouteRequirement()
     private val getUbicacionRequirement = UbicacionRequirement()
+    private val deleteUbicacionRequirement = DeleteLocationRequirement()
 
     init {
         getPermissions()
@@ -295,6 +297,16 @@ class ActivitiesViewModel(): ViewModel() {
                 withContext(Dispatchers.Main) {
                     callback(false, "Error desconocido. Por favor, intenta más tarde.")
                 }
+            }
+        }
+    }
+
+    fun deleteUbicacion(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                deleteUbicacionRequirement(id)
+            } catch (e: Exception) {
+                throw e
             }
         }
     }

@@ -148,6 +148,7 @@
 
     <!-- Strings de inscribir actividad -->
     <string name="Verificar">Verificar Asistencia</string>
+    <string name="TPasswordInstructions">La contraseaña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número</string>
 
 </resources>
 

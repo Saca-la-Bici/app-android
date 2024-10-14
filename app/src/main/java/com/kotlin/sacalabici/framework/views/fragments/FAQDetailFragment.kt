@@ -18,6 +18,7 @@ class FAQDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: FAQViewModel by activityViewModels()
     lateinit var selectedFAQ: FAQBase
+    private var permissions: List<String> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +27,7 @@ class FAQDetailFragment : Fragment() {
         _binding = FragmentFaqDetailBinding.inflate(inflater, container, false)
         setupBackButton()
         setupMoreVertButton()
+        viewModel.getFAQList()
 
         return binding.root
     }
@@ -39,6 +41,13 @@ class FAQDetailFragment : Fragment() {
                 binding.respuestaTextView.text = it.Respuesta
                 selectedFAQ = it
 
+            }
+        }
+        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            this.permissions = permissions
+            Log.d("FAQDetailFragment", "Permissions: $permissions")
+            if (permissions.contains("Modificar pregunta frecuente")) {
+                binding.BAlter.visibility = View.VISIBLE
             }
         }
     }
@@ -57,24 +66,24 @@ class FAQDetailFragment : Fragment() {
 
     private fun setupMoreVertButton() {
         binding.BAlter.setOnClickListener {
-            var selectedFAQ = selectedFAQ.IdPregunta
-            if (selectedFAQ == null) {
-            Log.d("FAQDetailFragment", "selectedFAQ es nulo, lo dejo así")
-            }
-            if (selectedFAQ != null) {
-                Log.d("FAQDetailFragment", "MoreVert button clicked")
-                Log.d("FAQDetailFragment", "IdPregunta: $selectedFAQ")
-                val bundle = Bundle()
-                bundle.putInt("IdPregunta", selectedFAQ)
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment_content_main, FAQModifyFragment().apply {
-                        arguments = bundle
-                    })
-                    .addToBackStack(null)
-                    .commit()
-            } else {
-                Log.d("FAQDetailFragment", "selectedFAQ is null")
-            }
+            val selectedFAQ = selectedFAQ
+            val id = selectedFAQ.IdPregunta
+            val pregunta = selectedFAQ.Pregunta
+            val respuesta = selectedFAQ.Respuesta
+
+
+            Log.d("FAQDetailFragment", "MoreVert button clicked")
+            Log.d("FAQDetailFragment", "IdPregunta: $selectedFAQ")
+            val bundle = Bundle()
+            bundle.putInt("IdPregunta", id)
+            bundle.putString("Pregunta", pregunta)
+            bundle.putString("Respuesta", respuesta)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, FAQModifyFragment().apply {
+                    arguments = bundle
+                })
+                .addToBackStack(null)
+                .commit()
         }
     }
 }

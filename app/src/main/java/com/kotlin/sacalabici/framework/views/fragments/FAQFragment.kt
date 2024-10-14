@@ -15,6 +15,7 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.FragmentFaqsBinding
 import com.kotlin.sacalabici.framework.adapters.FAQAdapter
+import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 import kotlinx.coroutines.launch
 
@@ -117,7 +118,11 @@ class FAQFragment : Fragment() {
     private fun setupBackButton() {
         binding.BRegresar.setOnClickListener {
             viewModel.selectedFAQ.postValue(null)  // Limpiar el valor seleccionado
-            parentFragmentManager.popBackStack()
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, SettingsFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 

@@ -12,10 +12,15 @@ import androidx.fragment.app.activityViewModels
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 import android.util.Log
+import com.kotlin.sacalabici.databinding.FragmentFaqModifyBinding
 
 class FAQModifyFragment : Fragment() {
     private val viewModel: FAQViewModel by activityViewModels()
     private var idPregunta: Int? = null
+    private var _binding: FragmentFaqModifyBinding? = null
+    private val binding get() = _binding!!
+    private var permissions: List<String> = emptyList()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +43,13 @@ class FAQModifyFragment : Fragment() {
             faq?.let {
                 preguntaEditText.setText(it.Pregunta)
                 respuestaEditText.setText(it.Respuesta)
+            }
+        }
+        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            this.permissions = permissions
+            Log.d("FAQDetailFragment", "Permissions: $permissions")
+            if (permissions.contains("Eliminar pregunta frecuente")) {
+                binding.BEliminar.visibility = View.VISIBLE
             }
         }
 

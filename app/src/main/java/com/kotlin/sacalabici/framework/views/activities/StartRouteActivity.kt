@@ -63,6 +63,7 @@ class StartRouteActivity : AppCompatActivity() {
         var mapHelper = MapHelper(this)
 
         binding.stopTrackingButton.setOnClickListener {
+            viewModel.deleteUbicacion(id)
             isTracking = !isTracking // Cambia entre iniciar y detener cuando pinta la ruta
             if (isTracking) {
                 binding.stopTrackingButton.text = "Detener Ruta"

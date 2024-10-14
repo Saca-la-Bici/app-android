@@ -78,17 +78,37 @@
         <item>O-</item>
         <item>AB+</item>
         <item>AB-</item>
+        <item>No especificado</item>
     </string-array>
     
     <!--String para Descripción de botones-->
     <string name="back_button_desc">Pestaña anterior</string>
 
-    <!-- strings de Consultar faqs -->
+    <!-- String de Registrar Pregunta Frecuente -->
+    <string name="NuevaPregunta">Añadir Pregunta</string>
+
+    <string name="Categoria">Categoria</string>
+
+    <string name="Categoria1FAQ">Lugares y tiempos de las rodadas</string>
+    <string name="Categoria2FAQ">Niveles</string>
+    <string name="Categoria3FAQ">Equipamiento</string>
+    <string name="Categoria4FAQ">Medidas de Seguridad</string>
+    <string name="Categoria5FAQ">Condiciones de Participación y Asistencia</string>
+
+    <string name="TuSeguridad">Tu seguridad</string>
+    <string name="AcercaBici">Acerca de la bici</string>
+    <string name="InfoGeneral">Información general</string>
+
+    <string name="Titulo">Titulo</string>
+    <string name="TituloPregunta">¿Qué pregunta vas a responder?</string>
+    <string name="Descripcion">Descripción</string>
+    <string name="DescripcionRespuesta">Escribe la respuesta aquí...</string>
+    <string name="AgregarImagen">Agregar imagen</string>
+
+    <!-- strings de Consultar FAQ -->
     <string name="Ayuda">Ayuda</string>
     <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
     <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
-
-    <!-- Strings para preguntas frecuentes -->
     <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
 
     <!-- Strings para Agregar ruta -->
@@ -117,10 +137,31 @@
     <string name="ImportanteUnaVezEliminadaLaRutaNoSePodraRecuperar">¡Importante! Una vez eliminada la ruta no se podrá recuperar.</string>
     <string name="CancelarEliminarRuta">Cancelar</string>
     <string name="ConfirmarEliminarRuta">Confirmar</string>
+    <string name="TVerifyEmail">Verificar Correo</string>
+    <string name="puede_cambiar_en_el_momento_de_la_rodada">puede cambiar en el momento de la rodada</string>
+    <string name="importante_la_ruta_es_solo_de_referencia">¡IMPORTANTE! La ruta es solo de referencia</string>
+    <string name="eliminar_ruta">EliminarRuta</string>
 
-    <!-- Strings para Eliminar ruta -->
+    <!-- Strings para Nuevo mensaje de Agregar Ruta -->
 
 
+
+    <!-- Strings de inscribir actividad -->
+    <string name="Verificar">Verificar Asistencia</string>
+    <string name="TPasswordInstructions">La contraseaña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número</string>
+    <string name="TConfigPrivacy">Configuración y privacidad</string>
+    <string name="TMoreInfo">Más información y asistencia</string>
+    <string name="THelp">Ayuda</string>
+    <string name="TInfo">Información</string>
+    <string name="THowtoUse">Cómo usar la app</string>
+    <string name="TRoles">Asignación de roles y permisos</string>
+    <string name="TDeactivate">Desactivar Usuarios</string>
+    <string name="TAdminAccount">Administra tu cuenta</string>
+    <string name="TAccount">Tu cuenta</string>
+    <string name="TOtherPlatforms">Otras Plataformas</string>
+    <string name="TSacalaBici">Saca la Bici</string>
+    <string name="TRentabici">Rentabici</string>
+    <string name="TCloseSession">Cerrar Sesión</string>
 
 </resources>
 

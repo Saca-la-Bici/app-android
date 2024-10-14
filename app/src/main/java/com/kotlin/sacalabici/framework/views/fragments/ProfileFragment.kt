@@ -79,7 +79,7 @@ class ProfileFragment : Fragment() {
                 binding.profileName.text = it.name
                 binding.profileBlood.text = it.bloodtype
                 binding.textRodadas.text = it.activitiesCompleted.toString()
-                binding.textKilometros.text = "${it.KmCompleted}km"
+                binding.textKilometros.text = String.format("%.1f km", it.KmCompleted)
                 // Cargar imagen de perfil usando Glide
                 val profileImageUrl = it.pImage
 

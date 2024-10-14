@@ -11,6 +11,7 @@ import com.kotlin.sacalabici.data.models.profile.Profile
 import com.kotlin.sacalabici.domain.profile.GetActivitiesRequirement
 import com.kotlin.sacalabici.domain.profile.GetProfileRequirement
 import com.kotlin.sacalabici.domain.profile.PatchProfileRequirement
+import com.kotlin.sacalabici.domain.profile.DeleteProfileRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,6 +24,7 @@ class ProfileViewModel : ViewModel() {
     private val getProfileRequirement = GetProfileRequirement()
     private val patchProfileRequirement = PatchProfileRequirement()
     private val getActivitiesRequirement = GetActivitiesRequirement()
+    private val deleteProfileRequirement= DeleteProfileRequirement()
 
     // LiveData para mensajes de error
     val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos
@@ -55,8 +57,8 @@ class ProfileViewModel : ViewModel() {
                 birthdate = "",
                 bloodtype = "",
                 email = "",
-                KmCompleted = 0,
-                TimeCompleted = 0,
+                KmCompleted = 0.00,
+                TimeCompleted = 0.00,
                 activitiesCompleted = 0,
                 fireUID = "",
                 emergencyNumber = "",
@@ -76,6 +78,18 @@ class ProfileViewModel : ViewModel() {
         } catch (e: Exception) {
             Log.e("ViewModel", "Error al actualizar el perfil: ${e.message}", e)
             false
+        }
+    }
+
+    fun deleteProfile( callback: (Result<Unit>) -> Unit){
+        viewModelScope.launch {
+            try{
+                deleteProfileRequirement()
+                callback(Result.success(Unit))
+            }catch (e: Exception) {
+                callback(Result.failure(e))
+                Log.e("ViewModel", "Error al eliminar el perfil: ${e.message}", e)
+            }
         }
     }
 

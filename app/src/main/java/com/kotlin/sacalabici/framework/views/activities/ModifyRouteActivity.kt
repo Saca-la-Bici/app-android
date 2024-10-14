@@ -13,11 +13,17 @@ package com.kotlin.sacalabici.framework.views.activities
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageButton
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -50,6 +56,8 @@ class ModifyRouteActivity : AppCompatActivity() {
     private lateinit var tvNivel: TextView
     private lateinit var btnEliminarRuta: ImageButton
     private lateinit var btnEnviar: Button
+    private lateinit var spinnerHoras: Spinner
+    private lateinit var spinnerMinutos: Spinner
 
     // Puntos de la ruta (inicio, descanso, final)
     private var startPoint: Point? = null
@@ -63,7 +71,6 @@ class ModifyRouteActivity : AppCompatActivity() {
     private val niveles = arrayOf("Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5") // Opciones de nivel
 
     private lateinit var etTitulo: EditText
-    private lateinit var etTiempo: EditText
     private lateinit var etID: String
     /**
      * Se ejecuta al crear la actividad. Inicializa los elementos de UI, el mapa y la lógica de validación de inputs.
@@ -85,24 +92,26 @@ class ModifyRouteActivity : AppCompatActivity() {
         val btnBack: ImageButton = findViewById(R.id.btnBack)
 
         // Inicializa la clase MapHelper para manejar el mapa y los puntos de ruta
-        var mapHelper = MapHelper(this)
+        val mapHelper = MapHelper(this)
 
         // Inicialización de otros elementos de UI (título, tiempo y botón de enviar)
         etTitulo = findViewById(R.id.etTitulo)
-        etTiempo = findViewById(R.id.etTiempo)
+
+        spinnerHoras = findViewById(R.id.spinnerHoras)
+        spinnerMinutos = findViewById(R.id.spinnerMinutos)
+
+        setupSpinners()
 
         val extras = intent.extras
         if (extras != null) {
             val id = extras.getString("ID") ?: ""
             val titulo = extras.getString("TITULO")
             val distancia = extras.getString("DISTANCIA")
-            val tiempo = extras.getString("TIEMPO")
             val nivel = extras.getString("NIVEL")
 
             // Rellena los campos con los datos recibidos
             etTitulo.setText(titulo)
             etDistancia.setText(distancia)
-            etTiempo.setText(tiempo)
             tvNivel.text = nivel
             nivelSeleccionado = nivel
             etID = id
@@ -141,7 +150,6 @@ class ModifyRouteActivity : AppCompatActivity() {
             referencePoint2 = null
 
             mapHelper.clearPreviousRoutes()
-            etTiempo.text.clear()
             etDistancia.text.clear()
             tvNivel.text = "" // Esto limpia el nivel seleccionado
 
@@ -167,25 +175,53 @@ class ModifyRouteActivity : AppCompatActivity() {
             ).show()
         }
 
-        // Crea un validador de entradas para activar el botón de enviar si los campos están completos
-        val inputValidator = InputValidator { verifyInputs() }
+        // Configurar TextWatcher para los EditTexts
+        etTitulo.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                verifyInputs()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
-        // Agrega listeners para validar los campos conforme el usuario ingresa datos
-        etTitulo.addTextChangedListener(inputValidator)
-        etDistancia.addTextChangedListener(inputValidator)
-        etTiempo.addTextChangedListener(inputValidator)
+        etDistancia.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                verifyInputs()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
+        spinnerHoras.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                verifyInputs() // Llama a la función para verificar entradas
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Puedes manejar acciones cuando no se selecciona nada, si es necesario
+            }
+        }
+
+        spinnerMinutos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                verifyInputs() // Llama a la función para verificar entradas
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Puedes manejar acciones cuando no se selecciona nada, si es necesario
+            }
+        }
         // Al hacer clic en el TextView del nivel, se abre un diálogo para seleccionar el nivel
         tvNivel.setOnClickListener {
             showlevelDialogue()  // Abre el diálogo de selección de nivel
         }
 
-        verifyInputs()
-
         binding.btnEnviar.setOnClickListener {
             val titulo = etTitulo.text.toString()
             val distancia = etDistancia.text.toString()
-            val tiempo = etTiempo.text.toString()
+            val selectedHours = spinnerHoras.selectedItem.toString()
+            val selectedMinutes = spinnerMinutos.selectedItem.toString()
+            val tiempo = selectedHours + " horas " + selectedMinutes + " minutos"
             val nivel = nivelSeleccionado.toString()
             val id = etID
 
@@ -216,6 +252,49 @@ class ModifyRouteActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    private fun setupHourSpinner(horas: String?) {
+        // Genera una lista de 0 a 100
+        val hours = (0..100).map { it.toString() }
+        val hourAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, hours)
+        hourAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerHoras.adapter = hourAdapter
+
+        // Establece el valor inicial en el Spinner según el valor de horas
+        horas?.let {
+            val hourPosition = hours.indexOf(it)
+            if (hourPosition >= 0) {
+                spinnerHoras.setSelection(hourPosition)
+            }
+        }
+    }
+
+    private fun setupMinuteSpinner(minutos: String?) {
+        // Genera una lista de 0 a 59
+        val minutes = (0..59).map { it.toString() }
+        val minuteAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, minutes)
+        minuteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerMinutos.adapter = minuteAdapter
+
+        // Establece el valor inicial en el Spinner según el valor de minutos
+        minutos?.let {
+            val minutePosition = minutes.indexOf(it)
+            if (minutePosition >= 0) {
+                spinnerMinutos.setSelection(minutePosition)
+            }
+        }
+    }
+
+    private fun setupSpinners() {
+        val extras = intent.extras
+        val horas = extras?.getString("HORAS").toString()
+        val minutos = extras?.getString("MINUTOS").toString()
+
+        // Configura los spinners con los valores iniciales
+        setupHourSpinner(horas)
+        setupMinuteSpinner(minutos)
+    }
+
+
     /**
      * Verifica si los campos de entrada (título, distancia, tiempo) están completos, si se ha seleccionado
      * un nivel, y si la ruta (puntos de inicio, descanso y final) está completa. Habilita o deshabilita el
@@ -225,24 +304,28 @@ class ModifyRouteActivity : AppCompatActivity() {
         // Obtiene los valores de los campos de texto, eliminando espacios al inicio y final
         val titulo = findViewById<EditText>(R.id.etTitulo).text.toString().trim()
         val distancia = etDistancia.text.toString().trim()
-        val tiempo = findViewById<EditText>(R.id.etTiempo).text.toString().trim()
+
+        // Referencia a los Spinners de horas y minutos
+        val spinnerHoras: Spinner = findViewById(R.id.spinnerHoras)
+        val spinnerMinutos: Spinner = findViewById(R.id.spinnerMinutos)
+
+        // Obtiene los valores seleccionados de los Spinners
+        val horasSeleccionadas = spinnerHoras.selectedItem.toString().toInt()
+        val minutosSeleccionados = spinnerMinutos.selectedItem.toString().toInt()
 
         // Referencia al botón de enviar
         val btnEnviar: Button = findViewById(R.id.btnEnviar)
 
         // Verificaciones de los campos
-        val todosCamposLlenos = titulo.isNotEmpty() && distancia.isNotEmpty() && tiempo.isNotEmpty() // Verifica si todos los campos están llenos
+        val todosCamposLlenos = titulo.isNotEmpty() && distancia.isNotEmpty() // Verifica si todos los campos están llenos
         val nivelSeleccionado = nivelSeleccionado != null // Verifica si se ha seleccionado un nivel
         val rutaCompleta = startPoint != null && stopoverPoint != null && endPoint != null // Verifica si la ruta está completa (todos los puntos establecidos)
 
-        // Registra el estado de los puntos de la ruta para debugging
-        Log.d("VerifyRuta", "Start: $startPoint, Stopover: $stopoverPoint, End: $endPoint")
+        // Verifica si ambos tiempos son cero
+        val tiemposSonCero = horasSeleccionadas == 0 && minutosSeleccionados == 0
 
-        // Registra los datos ingresados por el usuario y el estado de las verificaciones para debugging
-        Log.d("VerifyInputs", "Titulo: $titulo, Distancia: $distancia, Tiempo: $tiempo, Nivel Seleccionado: $nivelSeleccionado, Ruta Completa: $rutaCompleta")
-
-        // Si todos los campos están llenos, el nivel está seleccionado y la ruta está completa, habilita el botón de enviar
-        if (todosCamposLlenos && nivelSeleccionado && rutaCompleta) {
+        // Si todos los campos están llenos, el nivel está seleccionado, la ruta está completa, y los tiempos no son cero
+        if (todosCamposLlenos && nivelSeleccionado && rutaCompleta && !tiemposSonCero) {
             btnEnviar.isEnabled = true
             btnEnviar.backgroundTintList = ContextCompat.getColorStateList(this, R.color.yellow_able) // Cambia el color del botón a habilitado
         } else {
@@ -258,8 +341,6 @@ class ModifyRouteActivity : AppCompatActivity() {
      * El nivel seleccionado se guarda en una variable y se actualiza el TextView correspondiente.
      */
     private fun showlevelDialogue() {
-        // Registra la lista de niveles para debugging
-        Log.d("Niveles", niveles.joinToString())
 
         // Variable temporal para almacenar la selección del nivel
         var nivelSeleccionadoTemporal = -1 // Valor inicial de -1 indica que ningún nivel ha sido seleccionado
@@ -269,7 +350,6 @@ class ModifyRouteActivity : AppCompatActivity() {
         builder.setTitle("Selecciona el nivel") // Título del diálogo
         builder.setSingleChoiceItems(niveles, -1) { _, which ->
             nivelSeleccionadoTemporal = which // Guarda el índice del nivel seleccionado temporalmente
-            Log.d("NivelSeleccionado", nivelSeleccionadoTemporal.toString()) // Registra el índice seleccionado para debugging
         }
 
         // Botón de confirmación "Listo"

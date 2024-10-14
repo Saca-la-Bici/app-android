@@ -44,7 +44,7 @@ class LoginFinishActivity : AppCompatActivity() {
         countryCodePicker.setCountryForNameCode("MX")
         phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
         // Opciones de tipo de sangre
-        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "No especificado")
+        val bloodTypes = resources.getStringArray(R.array.bloodTypes).toList()
         // Configurar el adaptador para el AutoCompleteTextView
         val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
         val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
@@ -71,6 +71,9 @@ class LoginFinishActivity : AppCompatActivity() {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                     finish()
+                }
+                is AuthState.VerificationSent -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()

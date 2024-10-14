@@ -3,6 +3,8 @@ package com.kotlin.sacalabici.data.network.activities
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
+import android.util.Log
+import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
@@ -11,6 +13,7 @@ import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
@@ -299,6 +302,50 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             null
         }
     }
+
+
+    suspend fun postValidateAttendance(IDRodada: String, codigo: Int): Pair<Boolean, String> {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                val request = AttendanceRequest(IDRodada, codigo)
+
+                // Usa runCatching para manejar el resultado
+                val result = runCatching { api.PostValidateAttendance(request) }
+
+                result.fold(
+                    onSuccess = {
+                        Pair(true, "Se ha verificado tu asistencia")
+                    },
+                    onFailure = { exception ->
+                        Pair(false, "Error: ${exception.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                Pair(false, "Error de red o conexión. Intenta más tarde.")
+            }
+        } else {
+            Pair(false, "Error de autenticación. Por favor, inicia sesión.")
+        }
+    }
+
+    suspend fun eliminarUbicacion(id: String): RouteBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.eliminarUbicacion(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
 
 
 

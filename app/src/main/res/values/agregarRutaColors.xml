@@ -10,6 +10,7 @@
     <color name="whitesmoke">#F3F0EB</color>
     <color name="sacaLaBiciYellow">#FFCC00</color>
     <color name= "red">#F54444</color>
+    <color name= "verifyBlue">#4444aa</color>
 
     <color name="yellow">#F6CD0B</color>
     <color name="neonYellow">#FFFF00</color>
@@ -18,7 +19,7 @@
     <color name="lightGray">#EFEFEF</color>
     <color name="lightGray2">#ECECEC</color>
     <color name="semiBlack">#1C1B1F</color>
-    <color name="semiWhite">#EDEDED</color>
+    <color name="semiWhite">#FDFFFF</color>
     <color name="beige">#F3F0EB</color>
     <color name="green">#9BC7AC</color>
     <color name="darkGreen">#7DA68D</color>

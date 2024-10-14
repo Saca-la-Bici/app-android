@@ -22,20 +22,23 @@ class DetailsActivity : AppCompatActivity() {
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList() ?: emptyList()
+        val storedPermissions = sharedPreferences.getStringSet("permissions", emptySet())?.toList() ?: emptyList()
 
         val activityId = intent.getStringExtra("ACTIVITY_ID")
-        // Pasar el viewModel al crear DetailsViewHolder
-        detailsViewHolder = DetailsViewHolder(binding, activitiesViewModel, activityId!!, storedPermissions)
 
-        activityId?.let {
-            activitiesViewModel.getActivityById(it)
+        if (activityId != null) {
+            // Pasar el viewModel al crear DetailsViewHolder
+            detailsViewHolder = DetailsViewHolder(binding, activitiesViewModel, activityId, storedPermissions)
+
+            activitiesViewModel.getActivityById(activityId)
+        } else {
+            // Manejo del caso nulo, por ejemplo, mostrando un mensaje o terminando la actividad
+            finish()
         }
 
         activitiesViewModel.selectedActivityLiveData.observe(this) { activity ->
-            activity?.let { detailsViewHolder.bind(it) }
+            activity?.let(detailsViewHolder::bind)
         }
-
         binding.btnBack.setOnClickListener {
             finish() // Regresar a la actividad anterior
         }

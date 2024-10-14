@@ -50,7 +50,8 @@ data class Activity(
     // Elementos específicos de rodada
     @SerializedName("nivel") val nivel: String? = null,
     @SerializedName("distancia") val distancia: String? = null,
-    @SerializedName("id") val idRouteBase: String? = null
+    @SerializedName("id") val idRouteBase: String? = null,
+    @SerializedName("codigo") val codigoAsistencia: String? = null
 )
 
 data class LocationR(
@@ -72,4 +73,9 @@ data class JoinActivityRequest(
 data class CancelActivityRequest(
     val actividadId: String,
     val tipo: String
+)
+
+data class AttendanceRequest(
+    val IDRodada: String,
+    val codigo: Int
 )

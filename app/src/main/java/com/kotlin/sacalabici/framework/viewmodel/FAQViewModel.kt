@@ -7,16 +7,19 @@ import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.DeleteFaqRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.FAQListRequirement
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.PostFAQRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FAQViewModel : ViewModel() {
     val faqObjectLiveData = MutableLiveData<List<FAQBase>>()
     private val faqListRequirement = FAQListRequirement()
+    val selectedFAQ = MutableLiveData<FAQBase?>()
+    private val postFAQRequirement = PostFAQRequirement()
+    val permissionsLiveData = MutableLiveData<List<String>>()
     // private val postFAQRequirement = PostFAQRequirement()
 
     val errorMessage = MutableLiveData<String?>()
-    val selectedFAQ = MutableLiveData<FAQBase?>()
 
     fun getFAQList() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -52,17 +55,44 @@ class FAQViewModel : ViewModel() {
             }
         }
     }
-}
-
-/*
-    fun postFAQ(FAQ: FAQ) {
+    fun postFAQ(
+        pregunta: String,
+        respuesta: String,
+        tema: String,
+        imagen: String?,
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                postFAQRequirement(FAQ)
+                // Obtener el número de preguntas existentes desde el backend
+                val result = faqListRequirement()
+                val size = result?.faqs?.size ?: 0
+
+                // Generar el siguiente IdPregunta basado en el tamaño
+                val idPregunta = size + 1
+
+                // Crear el objeto FAQBase para el POST
+                val nuevaFAQ =
+                    FAQBase(
+                        id = "",
+                        IdPregunta = idPregunta,
+                        Pregunta = pregunta,
+                        Respuesta = respuesta,
+                        Tema = tema,
+                        Imagen = imagen,
+                    )
+
+                // Llamada para registrar la FAQ
+                postFAQRequirement(nuevaFAQ)
+
+                // Notificar que la operación fue exitosa o manejar el resultado si es necesario
+                errorMessage.postValue(null)
             } catch (e: Exception) {
-                throw e
+                e.printStackTrace()
+                errorMessage.postValue("Error al registrar la pregunta frecuente")
             }
         }
     }
 
- */
+}
+
+

@@ -18,7 +18,7 @@
     <color name="lightGray">#EFEFEF</color>
     <color name="lightGray2">#ECECEC</color>
     <color name="semiBlack">#1C1B1F</color>
-    <color name="semiWhite">#FFFFFD</color>
+    <color name="semiWhite">#EDEDED</color>
     <color name="beige">#F3F0EB</color>
     <color name="green">#9BC7AC</color>
     <color name="darkGreen">#7DA68D</color>
@@ -33,4 +33,5 @@
     <color name="level3">#FDD835</color>
     <color name="level4">#FF9800</color>
     <color name="level5">#F44336</color>
+
 </resources>

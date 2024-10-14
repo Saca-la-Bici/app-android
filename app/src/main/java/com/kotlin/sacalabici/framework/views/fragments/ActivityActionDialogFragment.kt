@@ -18,6 +18,7 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.views.activities.activities.ModifyActivityActivity
+import kotlin.properties.Delegates
 
 class ActivityActionDialogFragment: DialogFragment() {
 
@@ -33,8 +34,8 @@ class ActivityActionDialogFragment: DialogFragment() {
     private lateinit var desc: String
     private lateinit var hourDur: String
     private var url: String? = null
-    private var peopleEnrolled: Int = 0
-    private var state: Boolean = true
+    private var peopleEnrolled: Int by Delegates.notNull()
+    private var state: Boolean by Delegates.notNull()
     private var foro: String? = null
     private var register: ArrayList<String>? = null
     private lateinit var typeAct: String
@@ -54,8 +55,8 @@ class ActivityActionDialogFragment: DialogFragment() {
             hourDur = it.getString("hourDur") ?: throw IllegalArgumentException("Hour duration is required")
             typeAct = it.getString("typeAct") ?: throw IllegalArgumentException("Type duration is required")
             url = it.getString("url")
-            peopleEnrolled = it.getInt("peopleEnrolled")
-            state = it.getBoolean("state")
+            peopleEnrolled = it.getInt("peopleEnrolled") ?: throw IllegalArgumentException("People enrolled is required")
+            state = it.getBoolean("state") ?: throw IllegalArgumentException("State is required")
             foro = it.getString("foro")
             register = it.getStringArrayList("register")
             idRoute = it.getString("idRoute")

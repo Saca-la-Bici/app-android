@@ -43,6 +43,7 @@ class FAQModifyFragment : Fragment() {
 
         cancelarButton.setOnClickListener {
             parentFragmentManager.popBackStack()
+
         }
 
         eliminarButton.setOnClickListener {
@@ -60,6 +61,7 @@ class FAQModifyFragment : Fragment() {
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error == null) {
                 Log.d("FAQModifyFragment", "Pregunta frecuente eliminada correctamente")
+                parentFragmentManager.popBackStack()
                 parentFragmentManager.popBackStack()
             } else {
                 Log.e("FAQModifyFragment", "Error: $error")

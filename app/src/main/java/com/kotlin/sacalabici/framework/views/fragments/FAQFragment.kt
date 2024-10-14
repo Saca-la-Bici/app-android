@@ -139,6 +139,7 @@ class FAQFragment : Fragment() {
     // Función para que el botón de Agregar FAQ de lleve a RegisterFAQFragment
     private fun setupRegisterFAQsButton() {
         val btnFAQs = binding.BAgregarPregunta
+        btnFAQs.visibility = View.VISIBLE // Ensure the button is visible
         btnFAQs.setOnClickListener {
             // Navegar a RegisterFAQsFragment y reemplazar el contenido en el contenedor principal de MainActivity
             parentFragmentManager

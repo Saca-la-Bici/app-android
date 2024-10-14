@@ -1,7 +1,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <ImageButton
         android:id="@+id/BRegresar"
@@ -31,7 +32,7 @@
         app:layout_constraintVertical_bias="0.035" />
 
     <ImageButton
-        android:id="@+id/BModify"
+        android:id="@+id/BAlter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -47,12 +48,14 @@
         android:id="@+id/preguntaTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/BRegresar"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:textSize="28sp"
         android:fontFamily="@font/roboto_black"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"/>
+        android:layout_marginTop="76sp"
+        />
 
     <TextView
         android:id="@+id/respuestaTextView"
@@ -62,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@id/preguntaTextView"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16sp"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_medium"
         android:textColor="@color/black"
         android:background="@drawable/bg_rounded_gray_button"
         app:layout_constraintEnd_toEndOf="parent"

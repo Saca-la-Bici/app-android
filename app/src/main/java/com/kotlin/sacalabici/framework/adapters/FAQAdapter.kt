@@ -56,7 +56,7 @@ class FAQAdapter(
         } else {
             (holder as FAQViewHolder).bind((item as FAQItem.FAQ).faqBase)
             holder.itemView.setOnClickListener {
-                viewModel.selectFAQ((item as FAQItem.FAQ).faqBase)
+                viewModel.selectFAQ(item.faqBase)
             }
         }
     }
@@ -81,4 +81,15 @@ class FAQAdapter(
         } else {
             VIEW_TYPE_FAQ
         }
+
+    fun updateList(filteredData: ArrayList<FAQBase>) {
+        data.clear() // Clear current data
+        // Group filtered data by category and rebuild the list
+        val groupedData = filteredData.groupBy { it.Tema }
+        for ((category, faqs) in groupedData) {
+            data.add(FAQItem.Category(category)) // Add category
+            faqs.forEach { faq -> data.add(FAQItem.FAQ(faq)) } // Add filtered FAQs
+        }
+        notifyDataSetChanged() // Notify the adapter to refresh the RecyclerView
+    }
 }

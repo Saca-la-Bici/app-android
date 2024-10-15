@@ -92,56 +92,56 @@ interface ActivitiesApiService {
     @Multipart
     @PATCH("actividades/modificar/taller")
     suspend fun patchActivityTaller(
-        @Query("id") id: RequestBody,
-        @Part("informacion[titulo]") titulo: RequestBody,
-        @Part("informacion[fecha]") fecha: RequestBody,
-        @Part("informacion[hora]") hora: RequestBody,
-        @Part("informacion[duracion]") duracion: RequestBody,
-        @Part("informacion[ubicacion]") ubicacion: RequestBody,
-        @Part("informacion[descripcion]") descripcion: RequestBody,
-        @Part("informacion[tipo]") tipo: RequestBody,
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
         @Part imagen: MultipartBody.Part?,
-        @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
-        @Part("informacion[estado]") state: RequestBody,
-        @Part("informacion[foro]") foro: RequestBody?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
         @Part usuariosInscritos: List<MultipartBody.Part>?
     ): ActivityData
 
     @Multipart
     @PATCH("actividades/modificar/evento")
     suspend fun patchActivityEvento(
-        @Query("id") id: RequestBody,
-        @Part("informacion[titulo]") titulo: RequestBody,
-        @Part("informacion[fecha]") fecha: RequestBody,
-        @Part("informacion[hora]") hora: RequestBody,
-        @Part("informacion[duracion]") duracion: RequestBody,
-        @Part("informacion[ubicacion]") ubicacion: RequestBody,
-        @Part("informacion[descripcion]") descripcion: RequestBody,
-        @Part("informacion[tipo]") tipo: RequestBody,
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
         @Part imagen: MultipartBody.Part?,
-        @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
-        @Part("informacion[estado]") state: RequestBody,
-        @Part("informacion[foro]") foro: RequestBody?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
         @Part usuariosInscritos: List<MultipartBody.Part>?
     ): ActivityData
 
     @Multipart
     @PATCH("actividades/modificar/rodada")
     suspend fun patchActivityRodada(
-        @Query("id") id: RequestBody,
-        @Part("informacion[titulo]") titulo: RequestBody,
-        @Part("informacion[fecha]") fecha: RequestBody,
-        @Part("informacion[hora]") hora: RequestBody,
-        @Part("informacion[duracion]") duracion: RequestBody,
-        @Part("informacion[ubicacion]") ubicacion: RequestBody,
-        @Part("informacion[descripcion]") descripcion: RequestBody,
-        @Part("informacion[tipo]") tipo: RequestBody,
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
         @Part imagen: MultipartBody.Part?,
-        @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
-        @Part("informacion[estado]") state: RequestBody,
-        @Part("informacion[foro]") foro: RequestBody?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
         @Part usuariosInscritos: List<MultipartBody.Part>?,
-        @Part("ruta") ruta: RequestBody?
+        @Part("ruta") ruta: String?
     ): ActivityData
 
 

@@ -2,8 +2,8 @@
 package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,12 +15,15 @@ import com.kotlin.sacalabici.databinding.ActivitySessionBinding
 import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import com.kotlin.sacalabici.framework.views.activities.MainActivity
 import com.kotlin.sacalabici.utils.Constants
+
 class SessionActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySessionBinding
     private val authViewModel: AuthViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
+
         // Inicializa el ViewModel con Firebase y GoogleSignInOptions
         authViewModel.initialize(
             FirebaseAuth.getInstance(),
@@ -30,6 +33,7 @@ class SessionActivity : AppCompatActivity() {
                 .build(),
             this
         )
+
         // Observe registration state
         authViewModel.authState.observe(this) { authState ->
             when (authState) {
@@ -62,6 +66,15 @@ class SessionActivity : AppCompatActivity() {
                 AuthState.SignedOut -> TODO()
             }
         }
+
+        // Listener para el TextView de política de privacidad
+        binding.TVPrivacyPolicy.setOnClickListener {
+            val url = "http://18.220.205.53:8080/politicasAplicacion/politicaPrivacidad"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+        }
+
         // Listeners para los botones
         binding.BGoogle.setOnClickListener {
             authViewModel.signInWithGoogle(this)
@@ -78,10 +91,12 @@ class SessionActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
     private fun initializeBinding() {
         binding = ActivitySessionBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -91,6 +106,7 @@ class SessionActivity : AppCompatActivity() {
             authViewModel.handleGoogleSignInResult(task)
         }
     }
+
     override fun onStart() {
         super.onStart()
         authViewModel.startAuthStateListener()

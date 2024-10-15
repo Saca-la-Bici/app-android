@@ -113,6 +113,8 @@
     <string name="SiguienteMod">Siguiente</string>
     <string name="ModRutaBtn">Modificar Ruta</string>
     <string name="noAnnouncements">No se encuentran anuncios disponibles</string>
+    <string name="noActivities">No se encuentran actividades disponibles</string>
+    <string name="noActivity">La actividad fue modificada o ya no está disponible</string>
     <string name="QuieresEliminarEstaRuta">¿Quieres eliminar esta ruta?</string>
     <string name="ImportanteUnaVezEliminadaLaRutaNoSePodraRecuperar">¡Importante! Una vez eliminada la ruta no se podrá recuperar.</string>
     <string name="CancelarEliminarRuta">Cancelar</string>

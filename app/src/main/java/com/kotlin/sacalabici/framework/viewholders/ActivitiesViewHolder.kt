@@ -19,7 +19,6 @@ import java.util.Locale
 class ActivitiesViewHolder(
     private val binding: ItemActivityBinding,
     private val clickListener: (Activity) -> Unit,
-    private val viewModel: ActivitiesViewModel
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Activity) {

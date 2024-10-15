@@ -17,7 +17,9 @@ import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.data.network.MultipartManager
+import com.kotlin.sacalabici.data.network.announcements.AnnouncementNetworkModuleDI
 import com.kotlin.sacalabici.data.network.model.ActivityData
+import com.kotlin.sacalabici.data.network.model.DeleteActivityRequest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -356,6 +358,25 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             }
         } else {
             null
+        }
+    }
+
+
+    suspend fun deleteActivity(id: String, tipo: String): Boolean {
+        val token: String?
+        val act = DeleteActivityRequest(id, tipo)
+        try{
+            token = firebaseTokenManager.getTokenSynchronously()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+        api = ActivitiesNetworkModuleDI(token)
+        return try {
+            api.deleteActivity(act).isSuccessful
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
         }
     }
 

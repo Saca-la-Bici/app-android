@@ -1,5 +1,7 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
+import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -11,13 +13,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.views.activities.activities.ModifyActivityActivity
+import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 class ActivityActionDialogFragment: DialogFragment() {
@@ -91,9 +98,12 @@ class ActivityActionDialogFragment: DialogFragment() {
         val tvDelete: TextView = view.findViewById(R.id.TVDelete)
         val tvModify: TextView = view.findViewById(R.id.TVModify)
 
-        tvDelete.visibility = View.GONE
+        tvDelete.text = "Eliminar actividad"
         tvModify.text = "Modificar actividad"
 
+        tvDelete.setOnClickListener {
+            showDeleteConfirmationDialog()
+        }
 
         tvModify.setOnClickListener {
             val intent = Intent(requireContext(), ModifyActivityActivity::class.java).apply {
@@ -115,6 +125,64 @@ class ActivityActionDialogFragment: DialogFragment() {
             Log.d("ActivityActionDialogFragment", "typeAct: $typeAct")
             startActivity(intent)
             dismiss()
+        }
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.item_delete_activity, null)
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(dialogView)
+
+        val alertDialog = builder.create()
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogView.findViewById<Button>(R.id.btn_cancel).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.btn_confirm).setOnClickListener { button ->
+            // Desactivar el botón para evitar múltiples clics
+            button.isEnabled = false
+
+            deleteActivity { success ->
+                // Si la eliminación fue exitosa, cerrar el diálogo
+                if (success) {
+                    alertDialog.dismiss()
+                    this@ActivityActionDialogFragment.dismiss()
+                } else {
+                    // Si hubo un error, volver a habilitar el botón
+                    button.isEnabled = true
+                    Toast.makeText(requireContext(), "Error al eliminar el anuncio", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        alertDialog.show()
+    }
+
+    private fun deleteActivity(onComplete: (Boolean) -> Unit) {
+        viewModel.viewModelScope.launch {
+            viewModel.deleteActivity(id, typeAct) { result ->
+                result.fold(
+                    onSuccess = {
+                        if (isAdded) {
+                            Toast.makeText(requireContext(), "Actividad eliminada exitosamente", Toast.LENGTH_SHORT).show()
+                            setFragmentResult("activityActionDialogResult", Bundle().apply {
+                                putInt("resultCode", RESULT_OK)
+                            })
+                            onComplete(true) // Llamar onComplete con éxito
+                        }
+                    },
+                    onFailure = { error ->
+                        if (isAdded) {
+                            Toast.makeText(requireContext(), "Error al eliminar la actividad: ${error.message}", Toast.LENGTH_LONG).show()
+                        }
+                        onComplete(false) // Llamar onComplete con fallo
+                    }
+                )
+            }
         }
     }
 

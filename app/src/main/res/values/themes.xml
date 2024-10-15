@@ -22,6 +22,8 @@
         <!-- Status bar color -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
+
         <!-- Customize your theme -->
     </style>
 </resources>

@@ -292,8 +292,6 @@ class AddRouteActivity : AppCompatActivity() {
      * El nivel seleccionado se guarda en una variable y se actualiza el TextView correspondiente.
      */
     private fun showlevelDialogue() {
-        // Registra la lista de niveles para debugging
-        Log.d("Niveles", niveles.joinToString())
 
         // Variable temporal para almacenar la selección del nivel
         var nivelSeleccionadoTemporal = -1 // Valor inicial de -1 indica que ningún nivel ha sido seleccionado
@@ -303,7 +301,6 @@ class AddRouteActivity : AppCompatActivity() {
         builder.setTitle("Selecciona el nivel") // Título del diálogo
         builder.setSingleChoiceItems(niveles, -1) { _, which ->
             nivelSeleccionadoTemporal = which // Guarda el índice del nivel seleccionado temporalmente
-            Log.d("NivelSeleccionado", nivelSeleccionadoTemporal.toString()) // Registra el índice seleccionado para debugging
         }
 
         // Botón de confirmación "Listo"
@@ -311,7 +308,6 @@ class AddRouteActivity : AppCompatActivity() {
             if (nivelSeleccionadoTemporal in niveles.indices) {
                 // Si el nivel seleccionado es válido, se guarda como nivel final y se actualiza el TextView
                 nivelSeleccionado = niveles[nivelSeleccionadoTemporal] // Asigna el nivel seleccionado
-                Log.d("Nivel", nivelSeleccionado.toString()) // Registra el nivel seleccionado
                 tvNivel.text = nivelSeleccionado // Actualiza el TextView con el nivel seleccionado
             } else {
                 // Si no se seleccionó un nivel válido, muestra un mensaje al usuario

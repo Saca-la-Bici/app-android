@@ -25,24 +25,16 @@ class FAQDetailFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqDetailBinding.inflate(inflater, container, false)
-        setupBackButton()
-        setupMoreVertButton()
-        viewModel.getFAQList()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
-            faq?.let {
-                binding.preguntaTextView.text = it.Pregunta
-                binding.respuestaTextView.text = it.Respuesta
-                selectedFAQ = it
+        selectedFAQ = arguments?.getSerializable("selectedFAQ") as FAQBase
+        binding.preguntaTextView.text = selectedFAQ.Pregunta
+        binding.respuestaTextView.text = selectedFAQ.Respuesta
 
-            }
-        }
         viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
             Log.d("FAQDetailFragment", "Permissions: $permissions")
@@ -50,34 +42,15 @@ class FAQDetailFragment : Fragment() {
                 binding.BAlter.visibility = View.VISIBLE
             }
         }
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-        viewModel.selectedFAQ.removeObservers(viewLifecycleOwner)
-    }
-
-    private fun setupBackButton() {
         binding.BRegresar.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
-    }
 
-    private fun setupMoreVertButton() {
         binding.BAlter.setOnClickListener {
-            val selectedFAQ = selectedFAQ
-            val id = selectedFAQ.IdPregunta
-            val pregunta = selectedFAQ.Pregunta
-            val respuesta = selectedFAQ.Respuesta
-
-
-            Log.d("FAQDetailFragment", "MoreVert button clicked")
-            Log.d("FAQDetailFragment", "IdPregunta: $selectedFAQ")
-            val bundle = Bundle()
-            bundle.putInt("IdPregunta", id)
-            bundle.putString("Pregunta", pregunta)
-            bundle.putString("Respuesta", respuesta)
+            val bundle = Bundle().apply {
+                putSerializable("faqToEdit", selectedFAQ)
+            }
             parentFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, FAQModifyFragment().apply {
                     arguments = bundle
@@ -85,5 +58,17 @@ class FAQDetailFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Actualizar los datos de la pregunta frecuente
+        binding.preguntaTextView.text = selectedFAQ.Pregunta
+        binding.respuestaTextView.text = selectedFAQ.Respuesta
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

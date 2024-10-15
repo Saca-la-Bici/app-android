@@ -76,17 +76,21 @@ class FAQFragment : Fragment() {
             binding.errorMessageFAQ.text = errorMessage
         }
 
+        // FAQFragment.kt
+        // FAQFragment.kt
         viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
             faq?.let {
                 Log.d("FAQFragment", "Selected FAQ: ${faq.IdPregunta}")
-                // Navega solo si no está ya en el BackStack
                 if (parentFragmentManager.findFragmentByTag("FAQDetailFragment") == null) {
                     val transaction = parentFragmentManager.beginTransaction()
-                    transaction.replace(R.id.nav_host_fragment_content_main, FAQDetailFragment(), "FAQDetailFragment")
+                    val fragment = FAQDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putSerializable("selectedFAQ", faq)
+                        }
+                    }
+                    transaction.replace(R.id.nav_host_fragment_content_main, fragment, "FAQDetailFragment")
                     transaction.addToBackStack(null)
                     transaction.commit()
-
-                    // Limpia el valor de `selectedFAQ` para evitar que se dispare nuevamente al regresar
                     viewModel.selectedFAQ.postValue(null)
                 }
             }

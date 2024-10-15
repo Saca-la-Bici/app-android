@@ -1,4 +1,4 @@
-package com.kotlin.sacalabici.framework.views.activities
+package com.kotlin.sacalabici.framework.views.activities.activities
 
 import android.app.Activity
 import android.net.Uri
@@ -89,7 +89,7 @@ class AddActivityActivity: AppCompatActivity(),
         val inputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
         // Parsear la cadena de fecha en el formato de entrada
-        val parsedDate: Date = inputDateFormat.parse("22/10/2024") ?: throw IllegalArgumentException("Fecha inválida")
+        val parsedDate: Date = inputDateFormat.parse(date) ?: throw IllegalArgumentException("Fecha inválida")
 
         // Formato para la salida (yyyy-MM-dd)
         val outputDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

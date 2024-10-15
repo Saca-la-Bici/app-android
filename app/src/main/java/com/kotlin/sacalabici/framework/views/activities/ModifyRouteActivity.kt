@@ -357,7 +357,6 @@ class ModifyRouteActivity : AppCompatActivity() {
             if (nivelSeleccionadoTemporal in niveles.indices) {
                 // Si el nivel seleccionado es válido, se guarda como nivel final y se actualiza el TextView
                 nivelSeleccionado = niveles[nivelSeleccionadoTemporal] // Asigna el nivel seleccionado
-                Log.d("Nivel", nivelSeleccionado.toString()) // Registra el nivel seleccionado
                 tvNivel.text = nivelSeleccionado // Actualiza el TextView con el nivel seleccionado
             } else {
                 // Si no se seleccionó un nivel válido, muestra un mensaje al usuario

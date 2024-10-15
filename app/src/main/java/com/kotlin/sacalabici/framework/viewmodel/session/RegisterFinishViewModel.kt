@@ -79,7 +79,7 @@ class RegisterFinishViewModel : ViewModel() {
         if (currentUser != null && currentUser.isEmailVerified) {
             registerUserInDatabase(currentUser, username, name, birthdate, bloodType, phoneNumber)
         } else {
-            _authState.postValue(AuthState.VerificationSent("Por favor verifica tu correo electrónico para completar el registro."))
+            _authState.postValue(AuthState.VerificationSent("Verifica tu correo o vuelve a intentarlo."))
         }
     }
 

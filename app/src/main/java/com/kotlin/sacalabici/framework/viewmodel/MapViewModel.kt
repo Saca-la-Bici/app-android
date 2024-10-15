@@ -37,13 +37,6 @@ class MapViewModel : ViewModel() {
         if (result != null) {
             this@MapViewModel.roleLiveData.postValue(result.permission.toString())
         } // Publicar los permisos en LiveData
-
-        // Iterar sobre la lista de permisos y mostrar cada uno en Logcat
-        if (result != null) {
-            for (permission in result.permission) {
-                Log.d("Permisos", "Permiso encontrado: $permission")
-            }
-        }
     }
 
     fun getRouteList() {

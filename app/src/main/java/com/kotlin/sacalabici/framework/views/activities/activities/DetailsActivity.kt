@@ -2,8 +2,11 @@ package com.kotlin.sacalabici.framework.views.activities.activities
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.ActivityDetailsBinding
 import com.kotlin.sacalabici.framework.viewholders.DetailsViewHolder
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
@@ -23,19 +26,33 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList() ?: emptyList()
-
         val activityId = intent.getStringExtra("ACTIVITY_ID")
-        // Pasar el viewModel al crear DetailsViewHolder
-        detailsViewHolder = DetailsViewHolder(binding, activitiesViewModel, activityId!!, storedPermissions)
 
-        activityId?.let {
-            activitiesViewModel.getActivityById(it)
-        }
+        initializeViewHolder(activityId!!, storedPermissions)
+        observeLiveData()
+        setupClickListeners()
 
+        // Obtener actividad por ID
+        activitiesViewModel.getActivityById(activityId)
+    }
+
+    private fun initializeViewHolder(activityId: String, storedPermissions: List<String>) {
+        detailsViewHolder = DetailsViewHolder(binding, activitiesViewModel, activityId, storedPermissions)
+    }
+
+    private fun observeLiveData() {
         activitiesViewModel.selectedActivityLiveData.observe(this) { activity ->
-            activity?.let { detailsViewHolder.bind(it) }
+            if (activity != null) {
+                detailsViewHolder.bind(activity)
+                binding.clDetailActivity.visibility = View.VISIBLE // Mostrar vista después del binding
+            } else {
+                Toast.makeText(this, getString(R.string.noActivity), Toast.LENGTH_SHORT).show()
+                finish() // Regresar a la actividad anterior si no hay actividad
+            }
         }
+    }
 
+    private fun setupClickListeners() {
         binding.btnBack.setOnClickListener {
             finish() // Regresar a la actividad anterior
         }

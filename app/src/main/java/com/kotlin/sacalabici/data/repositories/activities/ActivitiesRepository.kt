@@ -9,7 +9,7 @@ import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
-import com.kotlin.sacalabici.data.models.routes.Route
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 
 class ActivitiesRepository {
     val firebaseAuth = FirebaseAuth.getInstance()
@@ -94,4 +94,13 @@ class ActivitiesRepository {
     suspend fun postCancelActivity(actividadId: String, tipo: String): Pair<Boolean, String> {
         return apiActivities.PostCancelActivity(actividadId, tipo)
     }
+
+    suspend fun postValidateAttendance(IDRodada: String, codigo: Int): Pair<Boolean, String> {
+        return apiActivities.postValidateAttendance(IDRodada, codigo)
+    }
+
+    suspend fun deleteLocation(id: String): RouteBase? {
+        return apiActivities.eliminarUbicacion(id)
+    }
+
 }

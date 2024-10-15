@@ -106,6 +106,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="48"
                     android:padding="24dp"
                     android:layout_marginTop="5dp"
                     android:textSize="14sp"
@@ -132,6 +133,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="24"
                     android:padding="24dp"
                     android:layout_marginTop="5dp"
                     android:textSize="14sp"

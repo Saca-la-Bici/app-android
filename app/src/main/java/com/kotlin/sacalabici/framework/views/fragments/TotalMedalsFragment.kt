@@ -36,10 +36,13 @@ class TotalMedalsFragment : Fragment() {
         val root: View = binding.root
         initializeComponents(root)
         viewModel.getMedalsList()
+
         initializeObservers()
 
         return root
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -62,7 +65,6 @@ class TotalMedalsFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(dataForList: ArrayList<MedalBase>) {
-        Log.d("MedalsFragment", dataForList.size.toString())
         recyclerView.setHasFixedSize(true)
 
         val gridLayoutManager =

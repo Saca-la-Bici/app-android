@@ -60,10 +60,23 @@ class MainActivity: AppCompatActivity() {
             this
         )
 
-        if (firebaseAuth.currentUser == null) {
-            // Usuario no está autenticado, redirige a SessionActivity
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user != null && !user.isEmailVerified) {
+            user.delete().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("Auth", "Usuario eliminado por falta de verificación.")
+                    startActivity(Intent(this, SessionActivity::class.java))
+                    finish()
+                } else {
+                    Log.e("Auth", "Error al eliminar usuario: ${task.exception?.message}")
+                }
+            }
+        }
+
+        if (user == null) {
             startActivity(Intent(this, SessionActivity::class.java))
-            finish() // Opcional: Termina la actividad actual para que el usuario no pueda volver a ella con el botón "Atrás"
+            finish()
         }
 
         // Observe registration state
@@ -83,6 +96,9 @@ class MainActivity: AppCompatActivity() {
                     finish()
                 }
                 is AuthState.CompleteProfile -> {
+                }
+                is AuthState.VerificationSent -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()

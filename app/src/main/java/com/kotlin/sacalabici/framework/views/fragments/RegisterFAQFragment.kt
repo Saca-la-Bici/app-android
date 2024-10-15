@@ -81,6 +81,11 @@ class RegisterFAQFragment : Fragment() {
                 // Mostrar mensaje de error si faltan datos
                 Toast.makeText(requireContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             }
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment_content_main, FAQFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 

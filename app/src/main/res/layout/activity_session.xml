@@ -256,21 +256,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- WebView for displaying content -->
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone" />
 
-        <Button
-            android:id="@+id/closeWebView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/TClose"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone" />
+        <!-- Close WebView Button -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/closeWebView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_button"
+        android:contentDescription="@string/TClose"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"
+        android:padding="12dp"
+        android:layout_marginTop="5dp"/>
+
     </RelativeLayout>
+
 
 
 

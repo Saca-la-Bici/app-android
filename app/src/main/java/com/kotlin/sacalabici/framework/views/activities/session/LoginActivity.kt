@@ -56,6 +56,9 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
+                is AuthState.VerificationSent -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
+                }
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
             }

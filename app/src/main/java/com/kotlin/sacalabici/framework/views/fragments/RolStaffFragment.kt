@@ -45,6 +45,7 @@ class RolStaffFragment : Fragment() {
         adapter =
             ConsultarUsuariosAdapter(
                 modifyRoleViewModel = ModifyRoleViewModel(),
+                consultarUsuariosViewModel = viewModel, // Pasar el ViewModel aquí
                 currentFragmentRole = currentFragmentRole,
             )
 

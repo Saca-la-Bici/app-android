@@ -5,8 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,16 +47,18 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
         originalImageUrl = intent.getStringExtra("url")
-        val imagen = originalImageUrl
 
         populateUI(id, title, content, originalImageUrl)
         initializeListeners()
         registerImagePicker()
+        setupTextWatchers()
     }
 
     private fun populateUI(id: String?, title: String?, content: String?, url: String?) {
         binding.etModifyAnnouncementTitle.setText(title)
         binding.etModifyAnnouncementDescription.setText(content)
+        binding.tvModifyAnnouncementDescriptionCounter.text = "${content?.length ?: 0}/500"
+        binding.tvModifyAnnouncementTitleCounter.text = "${title?.length ?: 0}/100"
         if (!url.isNullOrEmpty()) {
             Glide.with(this)
                 .load(url)
@@ -129,7 +134,12 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
-                binding.ibAddImage.setImageURI(selectedImageUri)
+                isImageErased = false // Restablecer isImageErased a false cuando se selecciona una nueva imagen
+                binding.ibAddImage.apply {
+                    setImageURI(selectedImageUri)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                    adjustViewBounds = true
+                }
             }
         }
     }
@@ -175,7 +185,35 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
     private fun eraseImage() {
         selectedImageUri = null
         isImageErased = true
-        binding.ibAddImage.setImageResource(R.drawable.ic_add_image)
+        binding.ibAddImage.apply{
+            setImageResource(R.drawable.ic_add_image)
+            scaleType = ImageView.ScaleType.CENTER
+            adjustViewBounds = false
+        }
     }
 
+    private fun setupTextWatchers() {
+        binding.etModifyAnnouncementDescription.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tvModifyAnnouncementDescriptionCounter.text = "${s?.length ?: 0}/500"
+            }
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 500) {
+                    Toast.makeText(this@ModifyAnnouncementActivity, "Has alcanzado el límite de 500 caracteres", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+        binding.etModifyAnnouncementTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tvModifyAnnouncementTitleCounter.text = "${s?.length ?: 0}/100"
+            }
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 100) {
+                    Toast.makeText(this@ModifyAnnouncementActivity, "Has alcanzado el límite de 100 caracteres", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
 }

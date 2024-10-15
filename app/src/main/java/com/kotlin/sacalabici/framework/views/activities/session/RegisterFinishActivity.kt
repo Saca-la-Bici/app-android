@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
@@ -34,7 +35,7 @@ class RegisterFinishActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initializeBinding()
         // Opciones de tipo de sangre
-        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "No especificado")
+        val bloodTypes = resources.getStringArray(R.array.bloodTypes).toList()
         // Configurar el adaptador para el AutoCompleteTextView
         val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
         val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
@@ -76,6 +77,10 @@ class RegisterFinishActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
+                is AuthState.VerificationSent -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
+                    binding.BFinish.text = getString(R.string.TFinish)
+                }
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
             }
@@ -84,13 +89,23 @@ class RegisterFinishActivity : AppCompatActivity() {
             showDatePickerDialog()
         }
         binding.BBack.setOnClickListener {
-            val intent = Intent(this@RegisterFinishActivity, SessionActivity::class.java)
-            startActivity(intent)
-            finish()
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            currentUser?.delete()?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("RegisterFinishActivity", "Usuario eliminado correctamente")
+                    val intent = Intent(this@RegisterFinishActivity, SessionActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Log.d("RegisterFinishActivity", "Error al eliminar usuario: ${task.exception?.message}")
+                    Toast.makeText(this, "Error al eliminar usuario", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
         binding.BFinish.setOnClickListener {
+            binding.BFinish.isEnabled = false
             val birthdate = binding.BDate.text.toString()
-            val bloodType = binding.autoCompleteTextView.toString()
+            val bloodType = binding.autoCompleteTextView.text.toString()
             val phoneNumber = phoneNumberEditText.text.toString()
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.BFinish.isEnabled = true
@@ -100,7 +115,6 @@ class RegisterFinishActivity : AppCompatActivity() {
                     registerFinishViewModel.validate(birthdate, bloodType, phoneNumber)
                 Log.d("RegisterFinishActivity", "errorMessage: $errorMessage")
                 if (errorMessage != null) {
-                    binding.BFinish.isEnabled = false
                     Toast.makeText(this@RegisterFinishActivity, errorMessage, Toast.LENGTH_SHORT).show()
                     when {
                         errorMessage.contains("tipo de sangre") -> {
@@ -111,15 +125,12 @@ class RegisterFinishActivity : AppCompatActivity() {
                         }
                     }
                 } else {
-                    registerFinishViewModel.registerUser(
-                        email!!,
-                        username!!,
-                        name!!,
-                        password!!,
-                        birthdate,
-                        bloodType,
-                        phoneNumber
-                    )
+                    if (registerFinishViewModel.authState.value is AuthState.VerificationSent) {
+                        registerFinishViewModel.verifyEmailAndRegister(username!!, name!!, birthdate, bloodType, phoneNumber)
+                    } else {
+                        registerFinishViewModel.registerUser(email!!, username!!, name!!, password!!, birthdate, bloodType, phoneNumber)
+                    }
+
                 }
             }
         }
@@ -149,5 +160,22 @@ class RegisterFinishActivity : AppCompatActivity() {
         maxDate.add(Calendar.YEAR, -18)
         datePickerDialog.datePicker.maxDate = maxDate.timeInMillis
         datePickerDialog.show()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser?.delete()?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d("RegisterFinishActivity", "Usuario eliminado correctamente")
+                // Redirigir a la pantalla de sesión o inicio
+                val intent = Intent(this, SessionActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                Log.d("RegisterFinishActivity", "Error al eliminar usuario: ${task.exception?.message}")
+                Toast.makeText(this, "Error al eliminar usuario", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

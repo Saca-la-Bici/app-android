@@ -35,4 +35,8 @@ class   ProfileRepository {
         return listActivities
     }
 
+    suspend fun deleteProfile(): Boolean{
+        return apiProfile.deleteProfile()
+    }
+
 }

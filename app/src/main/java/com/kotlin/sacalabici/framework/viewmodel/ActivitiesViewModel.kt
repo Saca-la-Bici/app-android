@@ -24,7 +24,9 @@ import kotlinx.coroutines.launch
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
+import com.kotlin.sacalabici.domain.activities.PostValidateAttendance
 import com.kotlin.sacalabici.data.network.model.ActivityInfo
+import com.kotlin.sacalabici.domain.activities.DeleteLocationRequirement
 import com.kotlin.sacalabici.domain.activities.PostCancelActivity
 import com.kotlin.sacalabici.domain.activities.PostJoinActivity
 import com.kotlin.sacalabici.utils.SingleLiveEvent
@@ -59,6 +61,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val postLocationRequirement = PostLocationRequirement()
     private val routeRequirement = RouteRequirement()
     private val getUbicacionRequirement = UbicacionRequirement()
+    private val deleteUbicacionRequirement = DeleteLocationRequirement()
 
     init {
         getPermissions()
@@ -66,6 +69,7 @@ class ActivitiesViewModel(): ViewModel() {
 
     private val postJoinActivity = PostJoinActivity()
     private val postCancelActivity = PostCancelActivity()
+    private val postValidateAttendance= PostValidateAttendance()
 
     // Función para cargar rodadas
     fun getRodadas() {
@@ -109,7 +113,7 @@ class ActivitiesViewModel(): ViewModel() {
             try {
                 requirement.postActivityEvento(evento, context)
             } catch (e: Exception) {
-                 null
+                null
             }
         }
     }
@@ -141,7 +145,6 @@ class ActivitiesViewModel(): ViewModel() {
             try {
                 val result = getActivityByIdRequirement(id)
                 selectedActivityLiveData.postValue(result)
-                Log.d("ActivityOne", "$result")
             } catch (e: Exception) {
                 selectedActivityLiveData.postValue(null)
             }
@@ -162,7 +165,8 @@ class ActivitiesViewModel(): ViewModel() {
     fun getRodadaInfo(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val rodadaInfoBase = getRodadaInfoRequirement(id) // Supongo que este método devuelve un RodadaInfoBase
+                val rodadaInfoBase =
+                    getRodadaInfoRequirement(id) // Supongo que este método devuelve un RodadaInfoBase
                 _rodadaInfoLiveData.postValue(rodadaInfoBase) // Actualiza el valor del LiveData
             } catch (e: Exception) {
                 // Maneja el error, podrías enviar un mensaje de error a otro LiveData si es necesario
@@ -183,7 +187,8 @@ class ActivitiesViewModel(): ViewModel() {
     fun getRoute(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val routeInfoBase = routeRequirement(id) // Supongo que este método devuelve un RodadaInfoBase
+                val routeInfoBase =
+                    routeRequirement(id) // Supongo que este método devuelve un RodadaInfoBase
                 _routeInfoLiveData.postValue(routeInfoBase) // Actualiza el valor del LiveData
             } catch (e: Exception) {
                 // Maneja el error, podrías enviar un mensaje de error a otro LiveData si es necesario
@@ -194,7 +199,8 @@ class ActivitiesViewModel(): ViewModel() {
     fun getLocation(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val locationInfoBase = getUbicacionRequirement(id) // Supongo que este método devuelve un RodadaInfoBase
+                val locationInfoBase =
+                    getUbicacionRequirement(id) // Supongo que este método devuelve un RodadaInfoBase
                 _locationInfoLiveData.postValue(locationInfoBase) // Actualiza el valor del LiveData
             } catch (e: Exception) {
                 // Maneja el error, podrías enviar un mensaje de error a otro LiveData si es necesario
@@ -203,7 +209,11 @@ class ActivitiesViewModel(): ViewModel() {
     }
 
     // Función para inscribir al usuario en una actividad
-    fun postInscribirActividad(actividadId: String, tipo: String, callback: (Boolean, String) -> Unit) {
+    fun postInscribirActividad(
+        actividadId: String,
+        tipo: String,
+        callback: (Boolean, String) -> Unit
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val (success, message) = postJoinActivity(actividadId, tipo)
@@ -219,7 +229,11 @@ class ActivitiesViewModel(): ViewModel() {
     }
 
 
-    fun postCancelarInscripcion(actividadId: String, tipo: String, callback: (Boolean, String) -> Unit) {
+    fun postCancelarInscripcion(
+        actividadId: String,
+        tipo: String,
+        callback: (Boolean, String) -> Unit
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val (success, message) = postCancelActivity(actividadId, tipo)
@@ -233,4 +247,34 @@ class ActivitiesViewModel(): ViewModel() {
             }
         }
     }
+
+    fun validateAttendance(
+        IDRodada: String,
+        codigo: Int,
+        callback: (Boolean, String) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val (success, message) = postValidateAttendance(IDRodada, codigo)
+
+                withContext(Dispatchers.Main) {
+                    callback(success, message)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    callback(false, "Error desconocido. Por favor, intenta más tarde.")
+                }
+            }
+        }
+    }
+
+    fun deleteUbicacion(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                deleteUbicacionRequirement(id)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
 }

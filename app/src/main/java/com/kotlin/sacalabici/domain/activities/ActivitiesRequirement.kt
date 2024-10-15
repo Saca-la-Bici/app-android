@@ -56,3 +56,15 @@ class PostCancelActivity {
         }
     }
 }
+
+class PostValidateAttendance{
+    private val repository = ActivitiesRepository()
+
+    suspend operator fun invoke(IDRodada: String, codigo: Int): Pair<Boolean, String> {
+        return try {
+            repository.postValidateAttendance(IDRodada, codigo)
+        } catch (e: Exception) {
+            Pair(false, "Error al intentar cancelar la actividad. Por favor, intenta más tarde.")
+        }
+    }
+}

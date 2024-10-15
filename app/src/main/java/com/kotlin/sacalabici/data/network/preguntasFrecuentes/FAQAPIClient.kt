@@ -1,5 +1,7 @@
 package com.kotlin.sacalabici.data.network.preguntasFrecuentes
 
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.DeleteResponse
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 
@@ -20,16 +22,27 @@ class FAQAPIClient(
         }
     }
 
-    /*
-    suspend fun postFAQ(announcement: FAQ): FAQ? {
+    suspend fun deleteFAQ(IdPregunta: Int): DeleteResponse {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = FAQModuleDI(token)
         return try {
-            api.postFAQ(announcement)
+            val response = api.deleteFAQ(IdPregunta)
+            response
+        } catch (e: Exception) {
+            e.printStackTrace()
+            DeleteResponse(false, 0)
+        }
+    }
+
+    suspend fun postFAQ(faq: FAQBase): FAQBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        api = FAQModuleDI(token)
+
+        return try {
+            api.postFAQ(faq)
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
-     */
 }

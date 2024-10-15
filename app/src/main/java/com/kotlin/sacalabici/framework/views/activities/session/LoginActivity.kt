@@ -23,38 +23,25 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
-        // Initialize ViewModel
-        authViewModel.initialize(
-            FirebaseAuth.getInstance(),
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(Constants.REQUEST_ID_TOKEN)
-                .requestEmail()
-                .build(),
-            this
-        )
-        // Observe registration state
+        initializeAuthViewModel()
+        setupButtonListeners()
+        observeAuthState()
+    }
+
+    private fun observeAuthState() {
         authViewModel.authState.observe(this) { authState ->
             when (authState) {
                 is AuthState.Success -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish() // Optional: Finish RegisteerContinueActivity to prevent going back
+                    navigateTo(MainActivity::class.java)
                 }
                 is AuthState.Error -> {
                     Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
                 is AuthState.IncompleteProfile -> {
-                    val intent = Intent(this, LoginFinishActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
+                    navigateTo(LoginFinishActivity::class.java)
                 }
                 is AuthState.CompleteProfile -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
+                    navigateTo(MainActivity::class.java)
                 }
                 is AuthState.VerificationSent -> {
                     Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
@@ -63,8 +50,32 @@ class LoginActivity : AppCompatActivity() {
                 AuthState.SignedOut -> TODO()
             }
         }
-        // Listeners para los botones
-        binding.TVForgotPassword.setOnClickListener{
+    }
+
+    private fun navigateTo(activity: Class<*>) {
+        val intent = Intent(this, activity).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    private fun initializeAuthViewModel() {
+        authViewModel.initialize(
+            FirebaseAuth.getInstance(),
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(Constants.REQUEST_ID_TOKEN)
+                .requestEmail()
+                .build(),
+            this
+        )
+    }
+
+    private fun setupButtonListeners() {
+        binding.BGoogle.setOnClickListener { authViewModel.signInWithGoogle(this) }
+        binding.BFacebook.setOnClickListener { authViewModel.signInWithFacebook(this) }
+        binding.BBack.setOnClickListener { navigateTo(SessionActivity::class.java) }
+        binding.TVForgotPassword.setOnClickListener {
             val intent=Intent(this, RecoverPasswordActivity::class.java)
             startActivity(intent)
         }
@@ -86,25 +97,13 @@ class LoginActivity : AppCompatActivity() {
             }
             authViewModel.signInWithEmailAndPassword(email, password)
         }
-        binding.BGoogle.setOnClickListener {
-            authViewModel.signInWithGoogle(this)
-        }
-        binding.BFacebook.setOnClickListener {
-            authViewModel.signInWithFacebook(this)
-        }
-        binding.BBack.setOnClickListener {
-            val intent = Intent(this, SessionActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
     }
+
     private fun initializeBinding() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-    private fun isValidEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -113,5 +112,9 @@ class LoginActivity : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             authViewModel.handleGoogleSignInResult(task)
         }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }

@@ -152,6 +152,10 @@ class ModifyActivityActivity: AppCompatActivity(),
                 result.fold(
                     onSuccess = {
                         showToast("Taller modificado exitosamente")
+                        val sharedPreferences = getSharedPreferences("activity_prefs", MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putBoolean("activity_updated", true)
+                        editor.apply()
                         setResult(Activity.RESULT_OK)
                         finish()
                     },
@@ -170,6 +174,10 @@ class ModifyActivityActivity: AppCompatActivity(),
                     onSuccess = {
                         Log.d("ModifyActivity", "Entra a onSuccess")
                         showToast("Evento modificado exitosamente")
+                        val sharedPreferences = getSharedPreferences("activity_prefs", MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putBoolean("activity_updated", true)
+                        editor.apply()
                         setResult(Activity.RESULT_OK)
                         finish()
                     },
@@ -257,6 +265,10 @@ class ModifyActivityActivity: AppCompatActivity(),
             result.fold(
                 onSuccess = {
                     showToast("Rodada modificada exitosamente")
+                    val sharedPreferences = getSharedPreferences("activity_prefs", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putBoolean("activity_updated", true)
+                    editor.apply()
                     setResult(Activity.RESULT_OK)
                     finish()
                 },

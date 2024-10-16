@@ -112,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        tools:text="No se encuentras preguntas frecuentes disponibles"
+        tools:text="No se encontraron preguntas frecuentes."
         android:layout_gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/tituloPreguntasFrecuentes"
         app:layout_constraintStart_toStartOf="parent"

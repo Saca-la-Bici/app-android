@@ -47,7 +47,6 @@ class ProfileEditFragment: Fragment() {
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         val root: View = binding.root
 
-        setupGenderDropdown()
         setupBloodDropdown()
         setupBackButton()
         setupUploadButton()
@@ -96,20 +95,20 @@ class ProfileEditFragment: Fragment() {
     }
 
 
-    private fun setupGenderDropdown() {
-        val genderDropdownConfig = binding.genderDropDown
-        val genders = resources.getStringArray(R.array.genders)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, genders)
-        genderDropdownConfig.setAdapter(arrayAdapter)
-
-        val defaultValue = "Masculino"
-        genderDropdownConfig.setText(defaultValue, false)
-
-        val index = arrayAdapter.getPosition(defaultValue)
-        if (index >= 0) {
-            genderDropdownConfig.setSelection(index)
-        }
-    }
+//    private fun setupGenderDropdown() {
+//        val genderDropdownConfig = binding.genderDropDown
+//        val genders = resources.getStringArray(R.array.genders)
+//        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, genders)
+//        genderDropdownConfig.setAdapter(arrayAdapter)
+//
+//        val defaultValue = "Masculino"
+//        genderDropdownConfig.setText(defaultValue, false)
+//
+//        val index = arrayAdapter.getPosition(defaultValue)
+//        if (index >= 0) {
+//            genderDropdownConfig.setSelection(index)
+//        }
+//    }
 
     private fun setupBloodDropdown() {
         val bloodDropdownConfig = binding.bloodDropDown
@@ -192,6 +191,7 @@ class ProfileEditFragment: Fragment() {
     private fun inputValidation(): Boolean{
         val nameBinding = binding.name
         val usernameBinding = binding.username
+        val numberBinding = binding.emergencyNumber
 
         val name = nameBinding.getText().toString();
         if (name.trim().isEmpty()){
@@ -204,6 +204,13 @@ class ProfileEditFragment: Fragment() {
             Toast.makeText(activity, "Nombre de usuario no debe estar vacío", Toast.LENGTH_LONG).show()
             return false
         }
+
+        val number = numberBinding.getText().toString();
+        if (number.trim().isEmpty()){
+            Toast.makeText(activity, "Número de emergencia no debe estar vacío", Toast.LENGTH_LONG).show()
+            return false
+        }
+
         return true
     }
 

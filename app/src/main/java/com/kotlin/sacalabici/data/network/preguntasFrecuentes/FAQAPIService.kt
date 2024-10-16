@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface FAQAPIService {
@@ -15,10 +16,18 @@ interface FAQAPIService {
     suspend fun getFAQList(): FAQObjectBase
 
     @DELETE("preguntasFrecuentes/eliminar/{IdPregunta}")
-    suspend fun deleteFAQ(@Path("IdPregunta") IdPregunta: Int): DeleteResponse
+    suspend fun deleteFAQ(
+        @Path("IdPregunta") IdPregunta: Int,
+    ): DeleteResponse
 
     @POST("preguntasFrecuentes/registrar")
     suspend fun postFAQ(
+        @Body faq: FAQBase,
+    ): FAQBase
+
+    @PUT("preguntasFrecuentes/modificar/{IdPregunta}")
+    suspend fun putFAQ(
+        @Path("IdPregunta") IdPregunta: Int,
         @Body faq: FAQBase,
     ): FAQBase
 }

@@ -31,7 +31,8 @@ class FAQFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
@@ -76,18 +77,18 @@ class FAQFragment : Fragment() {
             binding.errorMessageFAQ.text = errorMessage
         }
 
-        // FAQFragment.kt
-        // FAQFragment.kt
         viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
             faq?.let {
                 Log.d("FAQFragment", "Selected FAQ: ${faq.IdPregunta}")
                 if (parentFragmentManager.findFragmentByTag("FAQDetailFragment") == null) {
                     val transaction = parentFragmentManager.beginTransaction()
-                    val fragment = FAQDetailFragment().apply {
-                        arguments = Bundle().apply {
-                            putSerializable("selectedFAQ", faq)
+                    val fragment =
+                        FAQDetailFragment().apply {
+                            arguments =
+                                Bundle().apply {
+                                    putSerializable("selectedFAQ", faq)
+                                }
                         }
-                    }
                     transaction.replace(R.id.nav_host_fragment_content_main, fragment, "FAQDetailFragment")
                     transaction.addToBackStack(null)
                     transaction.commit()
@@ -121,7 +122,7 @@ class FAQFragment : Fragment() {
     // Function to handle back button, navigating to SettingsFragment
     private fun setupBackButton() {
         binding.BRegresar.setOnClickListener {
-            viewModel.selectedFAQ.postValue(null)  // Limpiar el valor seleccionado
+            viewModel.selectedFAQ.postValue(null) // Limpiar el valor seleccionado
             parentFragmentManager
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, SettingsFragment())

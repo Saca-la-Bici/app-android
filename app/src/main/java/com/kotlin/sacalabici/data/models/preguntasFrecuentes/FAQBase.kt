@@ -9,6 +9,6 @@ data class FAQBase(
     @SerializedName("IdPregunta") val IdPregunta: Int,
     @SerializedName("Pregunta") var Pregunta: String,
     @SerializedName("Respuesta") var Respuesta: String,
-    @SerializedName("Tema") val Tema: String,
+    @SerializedName("Tema") var Tema: String,
     @SerializedName("Imagen") val Imagen: String?,
 ) : Serializable

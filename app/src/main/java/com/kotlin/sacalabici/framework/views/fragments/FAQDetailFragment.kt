@@ -17,18 +17,22 @@ class FAQDetailFragment : Fragment() {
     private var _binding: FragmentFaqDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FAQViewModel by activityViewModels()
-    lateinit var selectedFAQ: FAQBase
+    private lateinit var selectedFAQ: FAQBase
     private var permissions: List<String> = emptyList()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         selectedFAQ = arguments?.getSerializable("selectedFAQ") as FAQBase
@@ -48,14 +52,19 @@ class FAQDetailFragment : Fragment() {
         }
 
         binding.BAlter.setOnClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("faqToEdit", selectedFAQ)
-            }
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, FAQModifyFragment().apply {
-                    arguments = bundle
-                })
-                .addToBackStack(null)
+            val bundle =
+                Bundle().apply {
+                    putSerializable("faqToEdit", selectedFAQ)
+                    putString("temaToEdit", selectedFAQ.Tema)
+                }
+            parentFragmentManager
+                .beginTransaction()
+                .replace(
+                    R.id.nav_host_fragment_content_main,
+                    FAQModifyFragment().apply {
+                        arguments = bundle
+                    },
+                ).addToBackStack(null)
                 .commit()
         }
     }

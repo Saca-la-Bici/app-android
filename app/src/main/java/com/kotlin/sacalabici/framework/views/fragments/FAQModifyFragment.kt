@@ -1,16 +1,17 @@
-// FAQModifyFragment.kt
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
-import android.util.Log
+import com.google.android.material.snackbar.Snackbar
+import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.FragmentFaqModifyBinding
+import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 
 class FAQModifyFragment : Fragment() {
     private val viewModel: FAQViewModel by activityViewModels()
@@ -20,20 +21,26 @@ class FAQModifyFragment : Fragment() {
     private var permissions: List<String> = emptyList()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqModifyBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         faq = arguments?.getSerializable("faqToEdit") as FAQBase
+        val tema = arguments?.getString("temaToEdit")
 
         binding.preguntaEditText.setText(faq.Pregunta)
         binding.respuestaEditText.setText(faq.Respuesta)
+        setTemaRadioButton(tema)
 
         viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
@@ -53,11 +60,41 @@ class FAQModifyFragment : Fragment() {
         }
 
         binding.BConfirmar.setOnClickListener {
-            faq.Pregunta = binding.preguntaEditText.text.toString()
-            faq.Respuesta = binding.respuestaEditText.text.toString()
-            parentFragmentManager.popBackStack()
+            val newPregunta = binding.preguntaEditText.text.toString()
+            val newRespuesta = binding.respuestaEditText.text.toString()
+            val newTema = getSelectedTema()
+
+            if (newPregunta == faq.Pregunta && newRespuesta == faq.Respuesta && newTema == faq.Tema) {
+                Snackbar.make(binding.root, "No se hicieron modificaciones", Snackbar.LENGTH_SHORT).show()
+            } else {
+                faq.Pregunta = newPregunta
+                faq.Respuesta = newRespuesta
+                faq.Tema = newTema
+                viewModel.modifyFAQ(faq)
+                parentFragmentManager.popBackStack()
+            }
         }
     }
+
+    private fun setTemaRadioButton(tema: String?) {
+        when (tema) {
+            getString(R.string.Categoria1FAQ) -> binding.radioGroup.check(R.id.categoria1)
+            getString(R.string.Categoria2FAQ) -> binding.radioGroup.check(R.id.categoria2)
+            getString(R.string.Categoria3FAQ) -> binding.radioGroup.check(R.id.categoria3)
+            getString(R.string.Categoria4FAQ) -> binding.radioGroup.check(R.id.categoria4)
+            getString(R.string.Categoria5FAQ) -> binding.radioGroup.check(R.id.categoria5)
+        }
+    }
+
+    private fun getSelectedTema(): String =
+        when (binding.radioGroup.checkedRadioButtonId) {
+            R.id.categoria1 -> getString(R.string.Categoria1FAQ)
+            R.id.categoria2 -> getString(R.string.Categoria2FAQ)
+            R.id.categoria3 -> getString(R.string.Categoria3FAQ)
+            R.id.categoria4 -> getString(R.string.Categoria4FAQ)
+            R.id.categoria5 -> getString(R.string.Categoria5FAQ)
+            else -> ""
+        }
 
     private fun deleteFAQ(IdPregunta: Int) {
         Log.d("FAQModifyFragment", "Calling deleteFAQ with Id: $IdPregunta")

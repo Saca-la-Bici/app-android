@@ -45,4 +45,16 @@ class FAQAPIClient(
             null
         }
     }
+
+    suspend fun putFAQ(faq: FAQBase): FAQBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        api = FAQModuleDI(token)
+
+        return try {
+            api.putFAQ(faq.IdPregunta, faq)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 }

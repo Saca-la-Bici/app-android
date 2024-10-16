@@ -9,11 +9,11 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -21,10 +21,17 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentActivityInfoBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -41,7 +48,7 @@ class ModifyActivityInfoFragment: Fragment() {
     private var ubi: String? = null
     private var desc: String? = null
     private var hourDur: String? = null
-    private var url: String? = null
+    private var originalImageUrl: String? = null
     private var type: String? = null
 
 
@@ -61,6 +68,7 @@ class ModifyActivityInfoFragment: Fragment() {
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private var selectedImageUri: Uri? = null
+    private var isImageErased: Boolean = false
 
     /*
     * Permite que el fragmento se comunique con la actividad
@@ -100,7 +108,7 @@ class ModifyActivityInfoFragment: Fragment() {
         ubi = savedInstanceState?.getString("ubi") ?: arguments?.getString("ubi")
         desc = savedInstanceState?.getString("desc") ?: arguments?.getString("desc")
         hourDur = savedInstanceState?.getString("hourDur") ?: arguments?.getString("hourDur")
-        url = savedInstanceState?.getString("url") ?: arguments?.getString("url")
+        originalImageUrl = savedInstanceState?.getString("url") ?: arguments?.getString("url")
         type = savedInstanceState?.getString("typeAct") ?: arguments?.getString("typeAct")
 
         registerImagePicker()
@@ -115,6 +123,8 @@ class ModifyActivityInfoFragment: Fragment() {
         _binding = FragmentActivityInfoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.tvTitle.text = "Modificar actividad"
+
         // Variables de EditTexts y TextViews para conteo de caracteres e ingresar texto
         etTitle = binding.etAddActivityTitle
         tvTitleWC = binding.tvTitleWordCount
@@ -128,7 +138,7 @@ class ModifyActivityInfoFragment: Fragment() {
         minutesDurSpin = binding.minutesSpinnerDur
 
         // Al crearse, llenar los campos con la información
-        populateUI(title, date, hour, ubi, desc, hourDur, url)
+        populateUI(title, date, hour, ubi, desc, hourDur, originalImageUrl)
 
         // En caso de que se haya retrocedido, recuperar información
         viewModel.activityInfo.value?.let { info ->
@@ -152,25 +162,26 @@ class ModifyActivityInfoFragment: Fragment() {
                            ubi: String?, desc: String?, hourDur: String?, url: String?
     ) {
         etTitle.setText(title)
+        tvTitleWC.text = "${title?.length ?: 0}/${maxTitle}"
         binding.BDate.text = date
         etUbi.setText(ubi)
+        tvUbiWC.text = "${ubi?.length ?: 0}/${maxUbi}"
         etDesc.setText(desc)
+        tvDescWC.text = "${desc?.length ?: 0}/${maxDesc}"
 
-        // Extraer las horas y los minutos
         val (hours, minutes) = extractTime(hour)
 
-        // Asignar directamente las horas y minutos al Spinner (sin buscar el índice manualmente)
+        // Asignar directamente las horas y minutos al Spinner
         setSpinnerSelection(hourSpin, hours)
         setSpinnerSelection(minutesSpin, minutes)
 
         // Extraer la duración de horas y minutos
         val (hoursDur, minutesDur) = extractHoursAndMinutes(hourDur)
-
-        // Asignar directamente la duración de horas y minutos al Spinner
         setSpinnerSelection(hourDurSpin, hoursDur)
         setSpinnerSelection(minutesDurSpin, minutesDur)
 
         if (!url.isNullOrEmpty()) {
+            binding.tvEraseImage.visibility = View.VISIBLE
             Glide.with(requireContext())
                 .load(url)
                 .into(binding.imageButton)
@@ -190,7 +201,7 @@ class ModifyActivityInfoFragment: Fragment() {
             val minutes = matchResult.groupValues[2].padStart(2, '0')
             Pair(hours, minutes)
         } else {
-            Pair("00", "00") // Valor por defecto si no coincide con el formato esperado
+            Pair("0", "00") // Valor por defecto si no coincide con el formato esperado
         }
     }
 
@@ -207,7 +218,7 @@ class ModifyActivityInfoFragment: Fragment() {
             val minutes = matchResult.groupValues[2].padStart(2, '0')
             Pair(hours, minutes)
         } else {
-            Pair("00", "00") // Valor por defecto si no coincide con el formato esperado
+            Pair("0", "00") // Valor por defecto si no coincide con el formato esperado
         }
     }
 
@@ -222,7 +233,6 @@ class ModifyActivityInfoFragment: Fragment() {
         }
         spinner.setSelection(0)
     }
-
 
 
     private fun initializeListeners() {
@@ -257,6 +267,10 @@ class ModifyActivityInfoFragment: Fragment() {
             pickImageLauncher.launch(intent)
         }
 
+        binding.tvEraseImage.setOnClickListener {
+            eraseImage()
+        }
+
         /*
         * Si el usuario ha terminado con esa vista, manda la información al viewModel
         * Si es rodada, llama al siguiente fragmento
@@ -264,101 +278,91 @@ class ModifyActivityInfoFragment: Fragment() {
         binding.btnNext.setOnClickListener {
             // Valida que los campos tengan contenido
             if (validateFields()) {
-                // Captura los datos
-                val title = binding.etAddActivityTitle.text.toString()
-                val date = binding.BDate.text.toString()
-                val hour = binding.hourSpinner.selectedItem.toString()
-                val minutes = binding.minutesSpinner.selectedItem.toString()
-                val hourDur = binding.hourSpinnerDur.selectedItem.toString()
-                val minutesDur = binding.minutesSpinnerDur.selectedItem.toString()
-                val ubi = binding.etAddActivityUbi.text.toString()
-                val description = binding.etAddActivityDescription.text.toString()
-                val image = selectedImageUri
+                lifecycleScope.launch {
+                    // Si se ha seleccionado una nueva imagen, usamos ese Uri.
+                    // De lo contrario, descargamos la imagen original.
+                    val imageUri = when {
+                        isImageErased -> null
+                        selectedImageUri != null -> selectedImageUri
+                        !originalImageUrl.isNullOrEmpty() && !isImageErased -> downloadImageToFile(originalImageUrl!!)
+                        else -> null
+                    }
 
-                // Enviar información al ViewModel
-                Log.d("InfoFragment", "Enviando información al Activity")
-                listener.receiveInformation(title, date, hour, minutes, hourDur, minutesDur, ubi, description, image)
-                listener.onNextClicked(type.toString())
+                    // Captura los datos
+                    val title = binding.etAddActivityTitle.text.toString()
+                    val date = binding.BDate.text.toString()
+                    val hour = binding.hourSpinner.selectedItem.toString()
+                    val minutes = binding.minutesSpinner.selectedItem.toString()
+                    val hourDur = binding.hourSpinnerDur.selectedItem.toString()
+                    val minutesDur = binding.minutesSpinnerDur.selectedItem.toString()
+                    val ubi = binding.etAddActivityUbi.text.toString()
+                    val description = binding.etAddActivityDescription.text.toString()
+
+                    listener.receiveInformation(title, date, hour, minutes, hourDur, minutesDur, ubi, description, imageUri)
+                    listener.onNextClicked(type.toString())
+                }
             }
         }
     }
 
     private fun initializeWordListeners() {
         etTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Contar los caracteres
                 val charCount = s?.length ?: 0
 
                 // Actualizar el contador en el TextView
                 tvTitleWC.text = getString(R.string.char_count, charCount, maxTitle)
-
+            }
+            override fun afterTextChanged(s: Editable?) {
                 // Validar si se excede el límite de caracteres
-                if (charCount > maxTitle) {
+                if (s != null && s.length > maxTitle) {
                     etTitle.error = "Has excedido el límite de $maxTitle caracteres."
                     // Prevenir que se sigan escribiendo caracteres
-                    etTitle.setText(s?.substring(0, maxTitle))
+                    etTitle.setText(s.substring(0, maxTitle))
                     etTitle.setSelection(maxTitle)
                 }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No aplica, pero debe llamarse
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // No aplica, pero debe llamarse
             }
         })
 
         etUbi.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Contar los caracteres
                 val charCount = s?.length ?: 0
 
                 // Actualizar el contador en el TextView
                 tvUbiWC.text = getString(R.string.char_count, charCount, maxUbi)
-
+            }
+            override fun afterTextChanged(s: Editable?) {
                 // Validar si se excede el límite de caracteres
-                if (charCount > maxUbi) {
+                if (s != null && s.length > maxUbi) {
                     etUbi.error = "Has excedido el límite de $maxUbi caracteres."
                     // Prevenir que se sigan escribiendo caracteres
-                    etUbi.setText(s?.substring(0, maxUbi))
+                    etUbi.setText(s.substring(0, maxUbi))
                     etUbi.setSelection(maxUbi)
                 }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No aplica, pero debe llamarse
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // No aplica, pero debe llamarse
             }
         })
 
         etDesc.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Contar los caracteres
                 val charCount = s?.length ?: 0
 
                 // Actualizar el contador en el TextView
                 tvDescWC.text = getString(R.string.char_count, charCount, maxDesc)
-
+            }
+            override fun afterTextChanged(s: Editable?) {
                 // Validar si se excede el límite de caracteres
-                if (charCount > maxDesc) {
+                if (s != null && s.length > maxDesc) {
                     etDesc.error = "Has excedido el límite de $maxDesc caracteres."
                     // Prevenir que se sigan escribiendo caracteres
-                    etDesc.setText(s?.substring(0, maxDesc))
-                    etDesc.setSelection(maxDesc) // Mover el cursor al final del texto permitido
+                    etDesc.setText(s.substring(0, maxDesc))
+                    etDesc.setSelection(maxDesc)
                 }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No aplica, pero debe llamarse
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // No aplica, pero debe llamarse
             }
         })
     }
@@ -373,8 +377,46 @@ class ModifyActivityInfoFragment: Fragment() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
-                binding.imageButton.setImageURI(selectedImageUri)
+                isImageErased = false // Restablecer isImageErased a false cuando se selecciona una nueva imagen
+                binding.tvEraseImage.visibility = View.VISIBLE
+                binding.imageButton.apply {
+                    setImageURI(selectedImageUri)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                    adjustViewBounds = true
+                }
             }
+        }
+    }
+
+    private suspend fun downloadImageToFile(url: String): Uri? {
+        return withContext(Dispatchers.IO) {
+            try {
+                // Abrimos un stream para la URL remota
+                val input = URL(url).openStream()
+                // Creamos un archivo temporal en el directorio de caché
+                val file = File(requireContext().cacheDir, "temp_image.jpg")
+                val output = FileOutputStream(file)
+                // Copiamos los bytes de la imagen al archivo local
+                input.copyTo(output)
+                // Cerramos el stream de salida
+                output.close()
+                // Devolvemos el Uri del archivo local
+                Uri.fromFile(file)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        }
+    }
+
+    private fun eraseImage() {
+        selectedImageUri = null
+        isImageErased = true
+        binding.tvEraseImage.visibility = View.GONE
+        binding.imageButton.apply {
+            setImageResource(R.drawable.ic_add_image)
+            scaleType = ImageView.ScaleType.CENTER
+            adjustViewBounds = false
         }
     }
 
@@ -403,7 +445,7 @@ class ModifyActivityInfoFragment: Fragment() {
             isValid = false
         }
 
-        if (binding.BDate.text.isNullOrEmpty()) {
+        if (binding.BDate.text == "Año-Mes-Día") {
             Toast.makeText(requireContext(), "Por favor, selecciona una fecha", Toast.LENGTH_SHORT).show()
             isValid = false
         }
@@ -427,5 +469,13 @@ class ModifyActivityInfoFragment: Fragment() {
     override fun onDetach() {
         super.onDetach()
         _binding = null
+        cleanTemporaryFiles()
+    }
+
+    private fun cleanTemporaryFiles() {
+        val tempFile = File(requireContext().cacheDir, "tempFile")
+        if (tempFile.exists()) {
+            tempFile.delete()
+        }
     }
 }

@@ -48,15 +48,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <TextView
+            android:id="@+id/tvEraseImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_delete"
+            android:fontFamily="@font/roboto_regular"
+            app:layout_constraintTop_toBottomOf="@id/imageButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.05"
+            android:textColor="@color/red"
+            android:visibility="gone" />
+
         <!-- Input título -->
         <TextView
             android:id="@+id/tvAddActivityTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_activity_title"
+            android:fontFamily="@font/roboto_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageButton"
+            app:layout_constraintTop_toBottomOf="@id/tvEraseImage"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintVertical_bias="0.05" />
@@ -71,6 +86,7 @@
             android:layout_marginEnd="28dp"
             android:background="@drawable/edit_text_border"
             android:hint="@string/add_activity_title"
+            android:fontFamily="@font/roboto_regular"
             android:paddingStart="15dp"
             android:paddingTop="12dp"
             android:paddingEnd="15dp"
@@ -81,7 +97,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvAddActivityTitle"
             app:layout_constraintVertical_bias="0.01"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
         <!-- Contador de palabras -->
         <TextView
@@ -89,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0/50"
+            android:fontFamily="@font/roboto_regular"
             android:textSize="12sp"
             android:textColor="@android:color/darker_gray"
             android:gravity="end"
@@ -103,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_date"
+            android:fontFamily="@font/roboto_medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
             app:layout_constraintHorizontal_bias="0"
@@ -116,20 +134,19 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/BDate"
             android:text="@string/activity_dateLabel"
+            android:fontFamily="@font/roboto_regular"
             app:backgroundTint="@color/semiWhite"
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:padding="12dp"
             app:strokeColor="#D9D9D9"
             app:strokeWidth="1dp"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvAddActivityDate"
-            app:layout_constraintWidth_percent="0.83"/>
+            app:layout_constraintEnd_toEndOf="@id/etAddActivityTitle"
+            app:layout_constraintStart_toStartOf="@id/etAddActivityTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvAddActivityDate" />
 
         <!--    Título de hora actividad-->
         <TextView
@@ -137,12 +154,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_hour"
+            android:fontFamily="@font/roboto_medium"
             app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
             app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
             app:layout_constraintTop_toBottomOf="@+id/BDate"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintVertical_bias="0.1"
+            app:layout_constraintVertical_bias="0.05"
             android:textSize="15sp" />
 
         <!-- Botón de hora -->
@@ -174,12 +192,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_duration"
+            android:fontFamily="@font/roboto_medium"
             app:layout_constraintEnd_toEndOf="@+id/tvAddActivityTitle"
             app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
             app:layout_constraintTop_toBottomOf="@+id/hourSpinner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintVertical_bias="0.1"
+            app:layout_constraintVertical_bias="0.05"
             android:textSize="15sp"/>
 
         <!-- Botón de hora de duración -->
@@ -213,11 +232,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_ubi"
-            android:textSize="15dp"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tvAddActivityTitle"
             app:layout_constraintHorizontal_bias="0.093"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvAddActivityTitle"
             app:layout_constraintTop_toBottomOf="@id/hourSpinnerDur"
             app:layout_constraintVertical_bias="0.04" />
 
@@ -230,6 +250,7 @@
             android:layout_marginEnd="28dp"
             android:background="@drawable/edit_text_border"
             android:hint="@string/activity_ubi"
+            android:fontFamily="@font/roboto_regular"
             android:paddingStart="15dp"
             android:paddingTop="12dp"
             android:paddingEnd="15dp"
@@ -240,7 +261,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvAddActivityUbi"
             app:layout_constraintVertical_bias="0.01"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
         <!-- Contador de palabras -->
         <TextView
@@ -248,6 +269,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0/150"
+            android:fontFamily="@font/roboto_regular"
             android:textSize="12sp"
             android:textColor="@android:color/darker_gray"
             android:gravity="end"
@@ -262,6 +284,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_desc"
+            android:fontFamily="@font/roboto_medium"
             android:textSize="15sp"
             android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -269,7 +292,7 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@+id/tvAddActivityTitle"
             app:layout_constraintTop_toBottomOf="@+id/etAddActivityUbi"
-            app:layout_constraintVertical_bias="0.06" />
+            app:layout_constraintVertical_bias="0.05" />
 
         <EditText
             android:id="@+id/etAddActivityDescription"
@@ -280,6 +303,7 @@
             android:layout_marginStart="28dp"
             android:layout_marginEnd="28dp"
             android:hint="@string/activity_desc"
+            android:fontFamily="@font/roboto_regular"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:paddingTop="12dp"
@@ -301,6 +325,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0/450"
+            android:fontFamily="@font/roboto_regular"
             android:textSize="12sp"
             android:textColor="@android:color/darker_gray"
             android:gravity="end"
@@ -313,7 +338,7 @@
             android:id="@+id/btnNext"
             android:layout_width="346dp"
             android:layout_height="45dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="28dp"
             android:backgroundTint="@color/yellow"
             android:text="@string/activity_ready"
             android:textColor="@color/white"
@@ -343,6 +368,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Añadir actividad"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_bold"
         app:layout_anchor="@+id/constraintLayout"
         app:layout_anchorGravity="center" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

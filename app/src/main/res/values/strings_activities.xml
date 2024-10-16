@@ -30,6 +30,7 @@
     <string name="activity_description">Lorem ipsum dolor sit amet.</string>
     <string name="copy_location" >Copiar ubicación al portapales</string>
     <string name="activity_value">valor</string>
+    <string name="activity_delete">Eliminar imagen</string>
 
     <string-array name="hours">
         <item>0</item>

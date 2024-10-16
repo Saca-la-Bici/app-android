@@ -3,13 +3,17 @@ package com.kotlin.sacalabici.framework.views.activities.session
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.databinding.ActivitySessionBinding
 import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
@@ -24,6 +28,38 @@ class SessionActivity : AppCompatActivity() {
         initializeAuthViewModel()
         setupButtonListeners()
         observeAuthState()
+        // Setup WebView and close button (ShapeableImageView)
+        val webView: WebView = findViewById(R.id.webView)
+        val closeWebView: ShapeableImageView = findViewById(R.id.closeWebView)  // Cast as ShapeableImageView
+
+        // Configure WebView to open links within the app
+        webView.webViewClient = WebViewClient()
+        webView.settings.javaScriptEnabled = true // Enable JavaScript if necessary
+        webView.settings.domStorageEnabled = true
+        webView.settings.allowFileAccess = true
+
+
+        // Listener for Privacy Policy link
+        binding.TVPrivacyPolicy.setOnClickListener {
+            val url = "http://18.220.205.53:8080/politicasAplicacion/politicaPrivacidad"
+            webView.loadUrl(url)
+            webView.visibility = View.VISIBLE
+            closeWebView.visibility = View.VISIBLE
+        }
+
+        // Listener for Privacy Policy link
+        binding.TVTermsAndConditions.setOnClickListener {
+            val url = "http://18.220.205.53:8080/politicasAplicacion/terminosCondiciones"
+            webView.loadUrl(url)
+            webView.visibility = View.VISIBLE
+            closeWebView.visibility = View.VISIBLE
+        }
+
+        // Listener for closing the WebView
+        closeWebView.setOnClickListener {
+            webView.visibility = View.GONE
+            closeWebView.visibility = View.GONE
+        }
     }
 
     private fun observeAuthState() {
@@ -49,6 +85,7 @@ class SessionActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun navigateTo(activity: Class<*>) {
         val intent = Intent(this, activity).apply {

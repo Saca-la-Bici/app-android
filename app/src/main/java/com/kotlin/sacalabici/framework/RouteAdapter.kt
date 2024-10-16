@@ -21,7 +21,8 @@ import com.kotlin.sacalabici.framework.views.fragments.DeleteRouteItemFragment
 
 class RouteAdapter(
     private var rutasList: List<RouteBase>,
-    private val onRutaSelected: (RouteBase) -> Unit // Add the callback as a second parameter
+    private val onRutaSelected: (RouteBase) -> Unit,
+    private val permit: Boolean
 ) : RecyclerView.Adapter<RouteAdapter.RutasViewHolder>() {
 
     private var selectedRuta: RouteBase? = null
@@ -53,6 +54,10 @@ class RouteAdapter(
 
     override fun onBindViewHolder(holder: RutasViewHolder, position: Int) {
         val ruta = rutasList[position]
+        if (!permit) {
+            holder.btnModificar.visibility = View.GONE
+            holder.btnEliminar.visibility = View.GONE
+        }
         holder.tituloTextView.text = ruta.titulo
         holder.distanciaTextView.text = "Distancia: ${ruta.distancia}"
         holder.tiempoTextView.text = "Tiempo Promedio: ${ruta.tiempo}"

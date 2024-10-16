@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -85,7 +86,10 @@ class FAQModifyFragment : Fragment() {
             val newRespuesta = binding.respuestaEditText.text.toString()
             val newTema = getSelectedTema()
 
-            if (newPregunta == faq.Pregunta && newRespuesta == faq.Respuesta && newTema == faq.Tema) {
+            // Verificar si los campos están vacíos o en blanco
+            if (newPregunta.isBlank() || newRespuesta.isBlank() || newTema.isBlank()) {
+                Snackbar.make(binding.root, "Ingrese todos los campos para continuar", Snackbar.LENGTH_SHORT).show()
+            } else if (newPregunta == faq.Pregunta && newRespuesta == faq.Respuesta && newTema == faq.Tema) {
                 Snackbar.make(binding.root, "No se hicieron modificaciones", Snackbar.LENGTH_SHORT).show()
             } else {
                 val alertDialog =
@@ -99,6 +103,8 @@ class FAQModifyFragment : Fragment() {
                             faq.Tema = newTema
                             viewModel.modifyFAQ(faq)
                             parentFragmentManager.popBackStack()
+                            // Mostrar mensaje de éxito
+                            Toast.makeText(requireContext(), "Pregunta modificada con éxito", Toast.LENGTH_SHORT).show()
                         }.setNegativeButton("No", null)
                         .create()
 

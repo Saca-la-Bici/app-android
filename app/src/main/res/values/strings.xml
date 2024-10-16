@@ -80,7 +80,7 @@
         <item>AB-</item>
         <item>No especificado</item>
     </string-array>
-    
+
     <!--String para Descripción de botones-->
     <string name="back_button_desc">Pestaña anterior</string>
 
@@ -166,6 +166,14 @@
     <string name="TSacalaBici">Saca la Bici</string>
     <string name="TRentabici">Rentabici</string>
     <string name="TCloseSession">Cerrar Sesión</string>
+    <string name="TPrivacity">Política de Privacidad</string>
+    <string name="TTerms">Términos y Condiciones</string>
+    <string name="TClose">Cerrar</string>
+    <string name="TRecoverPassw">Recupera tu contraseña</string>
+    <string name="TInfoRemain">Entendemos que estas cosas pasan. Enviaremos un enlace de recuperación a tu correo.Tú no te preocupes.</string>
+    <string name="TSendLink">Enviar enlace</string>
+    <string name="TDoyouhaveanaccount">Ya tienes una cuenta?</string>
+    <string name="TLoginhere">Inicia sesión aquí</string>
 
 </resources>
 

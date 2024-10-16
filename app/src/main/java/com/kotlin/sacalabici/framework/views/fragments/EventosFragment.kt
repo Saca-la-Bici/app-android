@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -122,8 +121,6 @@ class EventosFragment : Fragment() {
         // Convertir lista de usuarios en ArrayList<String>
         val registerArrayList = ArrayList<String>()
         evento.register?.let { registerArrayList.addAll(it) }
-
-        Log.d("EventosFragment", evento.toString())
 
         if (storedPermissions?.contains("Modificar actividad") == true) {
             val dialogFragment = ActivityActionDialogFragment.newInstance(

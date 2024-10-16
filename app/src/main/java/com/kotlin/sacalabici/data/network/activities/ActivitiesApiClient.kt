@@ -3,7 +3,6 @@ package com.kotlin.sacalabici.data.network.activities
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
@@ -258,10 +257,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             MultipartBody.Part.createFormData("usuariosInscritos[$index]", user)
         }
 
-        Log.d("ActivitiesApiClient", "patchActivityTaller: $usuariosInscritos")
-        Log.d("ActivitiesApiClient", "$titulo, $fecha, $hora, $duracion, $ubicacion, $descripcion," +
-                "$tipo, $peopleEnrolled, $state, $foro, $img, $usuariosInscritos")
-
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
@@ -279,8 +274,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
 
     suspend fun patchActivityEvento(evento: ActivityData, context: Context): ActivityData? {
         val token = firebaseTokenManager.getTokenSynchronously()
-
-        Log.d("ActivitiesApiClient", "patchActivityEvento: $evento")
 
         val id = evento.id
         val titulo = evento.title
@@ -301,11 +294,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         val usuariosInscritos = evento.register?.mapIndexed { index, user ->
             MultipartBody.Part.createFormData("usuariosInscritos[$index]", user.toString())
         }
-
-
-        Log.d("ActivitiesApiClient", "$titulo, $fecha, $hora, $duracion, $ubicacion, $descripcion," +
-                "$tipo, $peopleEnrolled, $state, $foro, $img, $usuariosInscritos")
-        Log.d("ActivitiesApiClient", "patchActivityEvento: $usuariosInscritos")
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)

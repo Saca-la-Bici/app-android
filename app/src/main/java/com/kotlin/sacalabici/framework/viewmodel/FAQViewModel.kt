@@ -7,6 +7,7 @@ import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.DeleteFaqRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.FAQListRequirement
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.ModifyFaqRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.PostFAQRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,8 +17,8 @@ class FAQViewModel : ViewModel() {
     private val faqListRequirement = FAQListRequirement()
     val selectedFAQ = MutableLiveData<FAQBase?>()
     private val postFAQRequirement = PostFAQRequirement()
+    private val modifyFaqRequirement = ModifyFaqRequirement()
     val permissionsLiveData = MutableLiveData<List<String>>()
-    // private val postFAQRequirement = PostFAQRequirement()
 
     val errorMessage = MutableLiveData<String?>()
 
@@ -31,6 +32,7 @@ class FAQViewModel : ViewModel() {
                     errorMessage.postValue("No se encontraron preguntas frecuentes")
                 } else {
                     faqObjectLiveData.postValue(faqresult)
+                    permissionsLiveData.postValue(result.permissions)
                     errorMessage.postValue(null)
                 }
             } catch (e: Exception) {
@@ -55,6 +57,7 @@ class FAQViewModel : ViewModel() {
             }
         }
     }
+
     fun postFAQ(
         pregunta: String,
         respuesta: String,
@@ -93,6 +96,15 @@ class FAQViewModel : ViewModel() {
         }
     }
 
+    fun modifyFAQ(faq: FAQBase) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                modifyFaqRequirement.invoke(faq)
+                errorMessage.postValue(null)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                errorMessage.postValue("Error al modificar la pregunta frecuente")
+            }
+        }
+    }
 }
-
-

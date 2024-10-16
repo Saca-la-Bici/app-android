@@ -22,11 +22,11 @@ class FAQAPIClient(
         }
     }
 
-    suspend fun deleteFAQ(IdPregunta: Int): DeleteResponse {
+    suspend fun deleteFAQ(idPregunta: Int): DeleteResponse {
         val token = firebaseTokenManager.getTokenSynchronously()
         api = FAQModuleDI(token)
         return try {
-            val response = api.deleteFAQ(IdPregunta)
+            val response = api.deleteFAQ(idPregunta)
             response
         } catch (e: Exception) {
             e.printStackTrace()
@@ -40,6 +40,18 @@ class FAQAPIClient(
 
         return try {
             api.postFAQ(faq)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    suspend fun putFAQ(faq: FAQBase): FAQBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+        api = FAQModuleDI(token)
+
+        return try {
+            api.putFAQ(faq.IdPregunta, faq)
         } catch (e: Exception) {
             e.printStackTrace()
             null

@@ -1,71 +1,137 @@
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.snackbar.Snackbar
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
-import android.util.Log
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.databinding.FragmentFaqModifyBinding
+import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 
 class FAQModifyFragment : Fragment() {
     private val viewModel: FAQViewModel by activityViewModels()
-    private var idPregunta: Int? = null
     private var _binding: FragmentFaqModifyBinding? = null
     private val binding get() = _binding!!
+    private lateinit var faq: FAQBase
     private var permissions: List<String> = emptyList()
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return inflater.inflate(R.layout.fragment_faq_modify, container, false)
+        _binding = FragmentFaqModifyBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
-        idPregunta = arguments?.getInt("IdPregunta")
+        faq = arguments?.getSerializable("faqToEdit") as FAQBase
+        val tema = arguments?.getString("temaToEdit")
 
-        val preguntaEditText: EditText = view.findViewById(R.id.preguntaEditText)
-        val respuestaEditText: EditText = view.findViewById(R.id.respuestaEditText)
-        val cancelarButton: ImageButton = view.findViewById(R.id.BCancelar)
-        val eliminarButton: Button = view.findViewById(R.id.BEliminar)
+        binding.preguntaEditText.setText(faq.Pregunta)
+        binding.respuestaEditText.setText(faq.Respuesta)
+        setTemaRadioButton(tema)
 
-        viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
-            faq?.let {
-                preguntaEditText.setText(it.Pregunta)
-                respuestaEditText.setText(it.Respuesta)
-            }
-        }
         viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
-            Log.d("FAQDetailFragment", "Permissions: $permissions")
+            Log.d("FAQModifyFragment", "Permissions: $permissions")
             if (permissions.contains("Eliminar pregunta frecuente")) {
                 binding.BEliminar.visibility = View.VISIBLE
             }
         }
 
-        cancelarButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+        binding.BCancelar.setOnClickListener {
+            val alertDialog =
+                AlertDialog
+                    .Builder(requireContext())
+                    .setTitle("Confirmación")
+                    .setMessage("¿Estás seguro de que deseas cancelar los cambios?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        parentFragmentManager.popBackStack()
+                    }.setNegativeButton("No", null)
+                    .create()
 
+            alertDialog.show()
         }
 
-        eliminarButton.setOnClickListener {
-            Log.d("FAQModifyFragment", "Delete button clicked")
-            idPregunta?.let { id ->
-                deleteFAQ(id)
-                Log.d("FAQModifyFragment", "Calling deleteFAQ with Id: $id")
+        binding.BEliminar.setOnClickListener {
+            val alertDialog =
+                AlertDialog
+                    .Builder(requireContext())
+                    .setTitle("Confirmación")
+                    .setMessage("¿Estás seguro de que deseas eliminar esta pregunta?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        Log.d("FAQModifyFragment", "Delete button confirmed")
+                        deleteFAQ(faq.IdPregunta)
+                    }.setNegativeButton("No", null)
+                    .create()
+
+            alertDialog.show()
+        }
+
+        binding.BConfirmar.setOnClickListener {
+            val newPregunta = binding.preguntaEditText.text.toString()
+            val newRespuesta = binding.respuestaEditText.text.toString()
+            val newTema = getSelectedTema()
+
+            // Verificar si los campos están vacíos o en blanco
+            if (newPregunta.isBlank() || newRespuesta.isBlank() || newTema.isBlank()) {
+                Snackbar.make(binding.root, "Ingrese todos los campos para continuar", Snackbar.LENGTH_SHORT).show()
+            } else if (newPregunta == faq.Pregunta && newRespuesta == faq.Respuesta && newTema == faq.Tema) {
+                Snackbar.make(binding.root, "No se hicieron modificaciones", Snackbar.LENGTH_SHORT).show()
+            } else {
+                val alertDialog =
+                    AlertDialog
+                        .Builder(requireContext())
+                        .setTitle("Confirmación")
+                        .setMessage("¿Estás seguro de que deseas guardar los cambios?")
+                        .setPositiveButton("Sí") { _, _ ->
+                            faq.Pregunta = newPregunta
+                            faq.Respuesta = newRespuesta
+                            faq.Tema = newTema
+                            viewModel.modifyFAQ(faq)
+                            parentFragmentManager.popBackStack()
+                            // Mostrar mensaje de éxito
+                            Toast.makeText(requireContext(), "Pregunta modificada con éxito", Toast.LENGTH_SHORT).show()
+                        }.setNegativeButton("No", null)
+                        .create()
+
+                alertDialog.show()
             }
         }
     }
+
+    private fun setTemaRadioButton(tema: String?) {
+        when (tema) {
+            getString(R.string.Categoria1FAQ) -> binding.radioGroup.check(R.id.categoria1)
+            getString(R.string.Categoria2FAQ) -> binding.radioGroup.check(R.id.categoria2)
+            getString(R.string.Categoria3FAQ) -> binding.radioGroup.check(R.id.categoria3)
+            getString(R.string.Categoria4FAQ) -> binding.radioGroup.check(R.id.categoria4)
+            getString(R.string.Categoria5FAQ) -> binding.radioGroup.check(R.id.categoria5)
+        }
+    }
+
+    private fun getSelectedTema(): String =
+        when (binding.radioGroup.checkedRadioButtonId) {
+            R.id.categoria1 -> getString(R.string.Categoria1FAQ)
+            R.id.categoria2 -> getString(R.string.Categoria2FAQ)
+            R.id.categoria3 -> getString(R.string.Categoria3FAQ)
+            R.id.categoria4 -> getString(R.string.Categoria4FAQ)
+            R.id.categoria5 -> getString(R.string.Categoria5FAQ)
+            else -> ""
+        }
 
     private fun deleteFAQ(IdPregunta: Int) {
         Log.d("FAQModifyFragment", "Calling deleteFAQ with Id: $IdPregunta")
@@ -79,5 +145,10 @@ class FAQModifyFragment : Fragment() {
                 Log.e("FAQModifyFragment", "Error: $error")
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

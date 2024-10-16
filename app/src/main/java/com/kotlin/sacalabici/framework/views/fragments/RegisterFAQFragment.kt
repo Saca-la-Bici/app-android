@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.databinding.FragmentRegisterFaqBinding
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
@@ -17,7 +18,7 @@ class RegisterFAQFragment : Fragment() {
     private val binding get() = _binding!!
 
     // Instancia del ViewModel
-    private val faqViewModel: FAQViewModel by viewModels()
+    private val faqViewModel: FAQViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,27 +66,35 @@ class RegisterFAQFragment : Fragment() {
 
             // Validar que los campos no estén vacíos
             if (pregunta.isNotBlank() && respuesta.isNotBlank() && tema != null) {
-                // Hacer la llamada al ViewModel para registrar la pregunta
-                faqViewModel.postFAQ(pregunta, respuesta, tema, "")
+                // Mostrar diálogo de confirmación antes de registrar la pregunta
+                AlertDialog
+                    .Builder(requireContext())
+                    .setTitle("Confirmación")
+                    .setMessage("¿Estás seguro de que deseas registrar esta pregunta frecuente?")
+                    .setPositiveButton("Sí") { dialog, _ ->
+                        // Hacer la llamada al ViewModel para registrar la pregunta
+                        faqViewModel.postFAQ(pregunta, respuesta, tema, "")
 
-                // Mostrar mensaje de éxito
-                Toast.makeText(requireContext(), "Pregunta registrada con éxito", Toast.LENGTH_SHORT).show()
+                        // Actualizar la lista de FAQs después de registrar una nueva
+                        faqViewModel.getFAQList()
 
-                // Navegar de vuelta a FAQFragment tras registrar la pregunta
-                parentFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.nav_host_fragment_content_main, FAQFragment())
-                    .addToBackStack(null)
-                    .commit()
+                        // Mostrar mensaje de éxito
+                        Toast.makeText(requireContext(), "Pregunta registrada con éxito", Toast.LENGTH_SHORT).show()
+
+                        // Navegar de vuelta a FAQFragment tras registrar la pregunta
+                        parentFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.nav_host_fragment_content_main, FAQFragment())
+                            .commit()
+
+                        dialog.dismiss()
+                    }.setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss() // Cerrar el diálogo si el usuario cancela
+                    }.show()
             } else {
                 // Mostrar mensaje de error si faltan datos
                 Toast.makeText(requireContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             }
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, FAQFragment())
-                .addToBackStack(null)
-                .commit()
         }
     }
 

@@ -92,6 +92,9 @@ class ModifyActivityRouteFragment: Fragment() {
         rutasAdapter.updateRutas(rutasList)
         this.lastSelectedRuta = selectedRuta
         rutasAdapter.setSelectedRuta(selectedRuta)
+        if (selectedRuta != null) {
+            viewModelRoute.selectRuta(selectedRuta)
+        }
     }
 
     private fun onRutaSelected(ruta: RouteBase) {

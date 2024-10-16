@@ -10,6 +10,7 @@ data class Profile(
     val rodadasCompletadas: Int,
     val tiempoRecorrido: Int,
     val kilometrosRecorridos: Double,
-    val imagen: Uri?
+    val imagen: Uri?,
+    val kilometrosMes: Int
 )
 

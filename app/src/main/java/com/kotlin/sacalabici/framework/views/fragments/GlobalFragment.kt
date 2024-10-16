@@ -41,6 +41,7 @@ class GlobalFragment : Fragment() {
             if (profile != null) {
                 // Obtener los kilómetros recorridos del perfil
                 val kilometers = profile.KmCompleted
+                val kilometersMonth = profile.kilometrosMes.toFloat()
 
                 // Datos máximos
                 val maxWater = 80
@@ -66,6 +67,9 @@ class GlobalFragment : Fragment() {
                 val percentageGas = (gas.toFloat() / maxGas) * 100
 
                 // Configuración de los valores para el progreso y texto
+                binding.progressKilometrosMes.progress = kilometersMonth.toInt()
+                binding.textResultKilometrosMes.text = String.format("%.2f km", kilometersMonth)
+
                 binding.progressAgua.progress = percentageWater.toInt()
                 binding.textResultWater.text = String.format("%.2f L", water)
 

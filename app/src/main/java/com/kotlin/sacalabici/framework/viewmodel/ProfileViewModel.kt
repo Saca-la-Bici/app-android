@@ -36,6 +36,7 @@ class ProfileViewModel : ViewModel() {
             try {
                 val result: ProfileBase? = getProfileRequirement()
                 if (result != null) {
+                    Log.d("ProfileViewModel", "Kilómetros mensuales recibidos: ${result.kilometrosMes}")
                     _profileObjectLiveData.postValue(result)
                 } else {
                     postErrorProfile(result.toString())
@@ -64,7 +65,8 @@ class ProfileViewModel : ViewModel() {
                 emergencyNumber = "",
                 date = "",
                 url = 0,
-                pImage =""
+                pImage ="",
+                kilometrosMes = 0,
             )
         )
     }

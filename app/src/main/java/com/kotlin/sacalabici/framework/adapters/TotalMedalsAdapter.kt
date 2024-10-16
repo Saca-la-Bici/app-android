@@ -19,7 +19,7 @@ class TotalMedalsAdapter : RecyclerView.Adapter<TotalMedalsViewHolder>() {
 
     override fun onBindViewHolder(holder: TotalMedalsViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(item, context)
+        holder.bind(item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TotalMedalsViewHolder {

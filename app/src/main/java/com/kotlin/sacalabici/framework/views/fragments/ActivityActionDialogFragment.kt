@@ -15,6 +15,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -165,6 +166,10 @@ class ActivityActionDialogFragment: DialogFragment() {
                     onSuccess = {
                         if (isAdded) {
                             Toast.makeText(requireContext(), "Actividad eliminada exitosamente", Toast.LENGTH_SHORT).show()
+                            val sharedPreferences = requireContext().getSharedPreferences("activity_prefs", MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putBoolean("activity_updated", true)
+                            editor.apply()
                             setFragmentResult("activityActionDialogResult", Bundle().apply {
                                 putInt("resultCode", RESULT_OK)
                             })

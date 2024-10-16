@@ -48,7 +48,7 @@ class GlobalFragment : Fragment() {
                 val maxCO2 = 30
                 val maxAir = 5
                 val maxGas = 30
-                val maxKilometrosMes = 1000
+                val maxKilometrosMes = 250
 
                 // Valores de referencia
                 val versaGasConsume = 9 // km por litro

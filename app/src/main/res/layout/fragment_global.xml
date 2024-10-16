@@ -40,7 +40,7 @@
             android:id="@+id/maxkilometrosMes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1000 km"
+            android:text="250 km"
             android:textColor="#ADADAD"
             app:layout_constraintTop_toBottomOf="@+id/TitleKilometrosMes"
             app:layout_constraintEnd_toEndOf="@+id/progressAgua"

@@ -169,19 +169,21 @@ class DetailsViewHolder(
         if (show && activity.type == "Rodada" && permissions.contains("Iniciar rodada")) {
             animateButtonVisibility(binding.btnCheckCode, true)
             binding.btnCheckCode.setOnClickListener {
-                showDialogCode(activity.code)
+                activity.code?.let { it1 -> showDialogCode(it1) }
+                animateButtonVisibility(binding.btnValidateAttendance, false)
             }
-        }
-        if (show && activity.type == "Rodada" ) {
+        } else if (show && activity.type == "Rodada") {
             animateButtonVisibility(binding.btnValidateAttendance, true)
             binding.btnValidateAttendance.setOnClickListener {
                 showValidationDialog()
+                animateButtonVisibility(binding.btnCheckCode, false)
             }
         } else {
             animateButtonVisibility(binding.btnValidateAttendance, false)
             animateButtonVisibility(binding.btnCheckCode, false)
         }
     }
+
 
     private fun showValidationDialog() {
         val context = binding.root.context
@@ -212,7 +214,7 @@ class DetailsViewHolder(
 
         dialog.show()
     }
-    private fun showDialogCode(code: Int?) {
+    private fun showDialogCode(code: Int) {
         val context = binding.root.context
         val dialogViewCode = View.inflate(context, R.layout.dialog_code, null)
         val codeTextView = dialogViewCode.findViewById<TextView>(R.id.tvValidationCode)
@@ -227,6 +229,7 @@ class DetailsViewHolder(
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialogViewCode.findViewById<View>(R.id.btnValidateAttendance).setOnClickListener {
             dialog.dismiss()  // Cierra el diálogo
+            handleValidationCode(code)
         }
         dialog.show()
     }

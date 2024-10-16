@@ -139,7 +139,7 @@ class ProfileEditFragment: Fragment() {
             val username = binding.username.text.toString()
             val blood = binding.bloodDropDown.text.toString()
             val emergencyNum = binding.emergencyNumber.text.toString()
-            val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, image)
+            val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, image, 0,)
             val context: Context = requireContext()
 
             if(valid){

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
@@ -51,12 +52,32 @@ class FAQModifyFragment : Fragment() {
         }
 
         binding.BCancelar.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            val alertDialog =
+                AlertDialog
+                    .Builder(requireContext())
+                    .setTitle("Confirmación")
+                    .setMessage("¿Estás seguro de que deseas cancelar los cambios?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        parentFragmentManager.popBackStack()
+                    }.setNegativeButton("No", null)
+                    .create()
+
+            alertDialog.show()
         }
 
         binding.BEliminar.setOnClickListener {
-            Log.d("FAQModifyFragment", "Delete button clicked")
-            deleteFAQ(faq.IdPregunta)
+            val alertDialog =
+                AlertDialog
+                    .Builder(requireContext())
+                    .setTitle("Confirmación")
+                    .setMessage("¿Estás seguro de que deseas eliminar esta pregunta?")
+                    .setPositiveButton("Sí") { _, _ ->
+                        Log.d("FAQModifyFragment", "Delete button confirmed")
+                        deleteFAQ(faq.IdPregunta)
+                    }.setNegativeButton("No", null)
+                    .create()
+
+            alertDialog.show()
         }
 
         binding.BConfirmar.setOnClickListener {
@@ -67,11 +88,21 @@ class FAQModifyFragment : Fragment() {
             if (newPregunta == faq.Pregunta && newRespuesta == faq.Respuesta && newTema == faq.Tema) {
                 Snackbar.make(binding.root, "No se hicieron modificaciones", Snackbar.LENGTH_SHORT).show()
             } else {
-                faq.Pregunta = newPregunta
-                faq.Respuesta = newRespuesta
-                faq.Tema = newTema
-                viewModel.modifyFAQ(faq)
-                parentFragmentManager.popBackStack()
+                val alertDialog =
+                    AlertDialog
+                        .Builder(requireContext())
+                        .setTitle("Confirmación")
+                        .setMessage("¿Estás seguro de que deseas guardar los cambios?")
+                        .setPositiveButton("Sí") { _, _ ->
+                            faq.Pregunta = newPregunta
+                            faq.Respuesta = newRespuesta
+                            faq.Tema = newTema
+                            viewModel.modifyFAQ(faq)
+                            parentFragmentManager.popBackStack()
+                        }.setNegativeButton("No", null)
+                        .create()
+
+                alertDialog.show()
             }
         }
     }

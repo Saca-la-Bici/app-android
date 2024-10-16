@@ -105,12 +105,13 @@
     <string name="DescripcionRespuesta">Escribe la respuesta aquí...</string>
     <string name="AgregarImagen">Agregar imagen</string>
 
-    <!-- strings de Consultar FAQ -->
+    <!-- strings de FAQ -->
     <string name="Ayuda">Ayuda</string>
     <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
     <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
     <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
     <string name="Modificar">Modificar</string>
+    <string name="Editar">Editar</string>
 
     <!-- Strings para Agregar ruta -->
     <string name="TituloRuta">Título</string>

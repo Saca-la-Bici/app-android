@@ -32,6 +32,7 @@ class FAQViewModel : ViewModel() {
                     errorMessage.postValue("No se encontraron preguntas frecuentes")
                 } else {
                     faqObjectLiveData.postValue(faqresult)
+                    permissionsLiveData.postValue(result.permissions)
                     errorMessage.postValue(null)
                 }
             } catch (e: Exception) {

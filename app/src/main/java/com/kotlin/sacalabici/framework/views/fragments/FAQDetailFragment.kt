@@ -1,8 +1,6 @@
-// FAQDetailFragment.kt
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,31 +24,21 @@ class FAQDetailFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqDetailBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
-        super.onViewCreated(view, savedInstanceState)
-
+        // Obtener la FAQ seleccionada
         selectedFAQ = arguments?.getSerializable("selectedFAQ") as FAQBase
         binding.preguntaTextView.text = selectedFAQ.Pregunta
         binding.respuestaTextView.text = selectedFAQ.Respuesta
 
-        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
-            this.permissions = permissions
-            Log.d("FAQDetailFragment", "Permissions: $permissions")
-            if (permissions.contains("Modificar pregunta frecuente")) {
-                binding.BAlter.visibility = View.VISIBLE
-            }
-        }
+        // Inicializar observadores
+        initializeObservers()
 
+        // Configurar botón de regresar
         binding.BRegresar.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
+        // Configurar botón de modificar
         binding.BAlter.setOnClickListener {
             val bundle =
                 Bundle().apply {
@@ -61,11 +49,20 @@ class FAQDetailFragment : Fragment() {
                 .beginTransaction()
                 .replace(
                     R.id.nav_host_fragment_content_main,
-                    FAQModifyFragment().apply {
-                        arguments = bundle
-                    },
+                    FAQModifyFragment().apply { arguments = bundle },
                 ).addToBackStack(null)
                 .commit()
+        }
+
+        return binding.root
+    }
+
+    private fun initializeObservers() {
+        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+            this.permissions = permissions
+            if (permissions.contains("Modificar pregunta frecuente")) {
+                binding.BAlter.visibility = View.VISIBLE
+            }
         }
     }
 

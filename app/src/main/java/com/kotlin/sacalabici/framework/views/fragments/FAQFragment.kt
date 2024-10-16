@@ -50,7 +50,6 @@ class FAQFragment : Fragment() {
             val filteredList = filterFAQs(query.toString())
             adapter.updateList(filteredList)
         }
-
         return root
     }
 
@@ -62,8 +61,10 @@ class FAQFragment : Fragment() {
     private fun initializeObservers() {
         viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
-            if (permissions.contains("Registrar pregunta frecuente")) {
+            if (permissions.contains("Modificar pregunta frecuente")) {
                 binding.BAgregarPregunta.visibility = View.VISIBLE
+            } else {
+                binding.BAgregarPregunta.visibility = View.GONE
             }
         }
         // Observing the FAQ list data from the ViewModel

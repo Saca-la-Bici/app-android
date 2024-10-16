@@ -48,6 +48,7 @@ class GlobalFragment : Fragment() {
                 val maxCO2 = 30
                 val maxAir = 5
                 val maxGas = 30
+                val maxKilometrosMes = 1000
 
                 // Valores de referencia
                 val versaGasConsume = 9 // km por litro
@@ -65,10 +66,11 @@ class GlobalFragment : Fragment() {
                 val percentageCO2 = (co2.toFloat() / maxCO2) * 100
                 val percentageAir = (air.toFloat() / maxAir) * 100
                 val percentageGas = (gas.toFloat() / maxGas) * 100
+                val percentageKilometrosMes = (kilometersMonth / maxKilometrosMes) * 100
 
                 // Configuración de los valores para el progreso y texto
-                binding.progressKilometrosMes.progress = kilometersMonth.toInt()
-                binding.textResultKilometrosMes.text = String.format("%.2f km", kilometersMonth)
+                binding.progressKilometrosMes.progress = percentageKilometrosMes.toInt()
+                binding.textResultKilometrosMes.text = String.format("%.2f km", percentageKilometrosMes)
 
                 binding.progressAgua.progress = percentageWater.toInt()
                 binding.textResultWater.text = String.format("%.2f L", water)

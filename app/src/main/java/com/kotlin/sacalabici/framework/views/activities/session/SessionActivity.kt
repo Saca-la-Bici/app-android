@@ -21,7 +21,44 @@ class SessionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
-        // Inicializa el ViewModel con Firebase y GoogleSignInOptions
+        initializeAuthViewModel()
+        setupButtonListeners()
+        observeAuthState()
+    }
+
+    private fun observeAuthState() {
+        authViewModel.authState.observe(this) { authState ->
+            when (authState) {
+                is AuthState.Success -> {
+                    navigateTo(MainActivity::class.java)
+                }
+                is AuthState.Error -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
+                }
+                is AuthState.IncompleteProfile -> {
+                    navigateTo(LoginFinishActivity::class.java)
+                }
+                is AuthState.CompleteProfile -> {
+                    navigateTo(MainActivity::class.java)
+                }
+                is AuthState.VerificationSent -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
+                }
+                AuthState.Cancel -> TODO()
+                AuthState.SignedOut -> TODO()
+            }
+        }
+    }
+
+    private fun navigateTo(activity: Class<*>) {
+        val intent = Intent(this, activity).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    private fun initializeAuthViewModel() {
         authViewModel.initialize(
             FirebaseAuth.getInstance(),
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -30,55 +67,16 @@ class SessionActivity : AppCompatActivity() {
                 .build(),
             this
         )
-        // Observe registration state
-        authViewModel.authState.observe(this) { authState ->
-            when (authState) {
-                is AuthState.Success -> {
-                    // Registration successful
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish() // Optional: Finish RegisteerContinueActivity to prevent going back
-                }
-                is AuthState.Error -> {
-                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
-                }
-                is AuthState.IncompleteProfile -> {
-                    val intent = Intent(this, LoginFinishActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
-                }
-                is AuthState.CompleteProfile -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
-                }
-                AuthState.Cancel -> TODO()
-                AuthState.SignedOut -> TODO()
-            }
-        }
-        // Listeners para los botones
-        binding.BGoogle.setOnClickListener {
-            authViewModel.signInWithGoogle(this)
-        }
-        binding.BFacebook.setOnClickListener {
-            authViewModel.signInWithFacebook(this)
-        }
-        binding.BLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
-        binding.BRegister.setOnClickListener {
-            val intent = Intent(this, RegisterUserActivity::class.java)
-            startActivity(intent)
-        }
     }
-    private fun initializeBinding() {
-        binding = ActivitySessionBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+    private fun setupButtonListeners() {
+        binding.BGoogle.setOnClickListener { authViewModel.signInWithGoogle(this) }
+        binding.BFacebook.setOnClickListener { authViewModel.signInWithFacebook(this) }
+        binding.BLogin.setOnClickListener { navigateTo(LoginActivity::class.java) }
+        binding.BRegister.setOnClickListener { navigateTo(RegisterUserActivity::class.java) }
     }
+
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -88,6 +86,12 @@ class SessionActivity : AppCompatActivity() {
             authViewModel.handleGoogleSignInResult(task)
         }
     }
+
+    private fun initializeBinding() {
+        binding = ActivitySessionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
     override fun onStart() {
         super.onStart()
         authViewModel.startAuthStateListener()

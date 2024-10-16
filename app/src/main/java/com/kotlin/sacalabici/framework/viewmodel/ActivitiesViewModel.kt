@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
-import com.kotlin.sacalabici.data.models.routes.Route
 import com.kotlin.sacalabici.data.models.routes.RouteInfoObjectBase
 import com.kotlin.sacalabici.domain.activities.GetActivityByIdRequirement
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
@@ -21,15 +21,15 @@ import com.kotlin.sacalabici.domain.activities.UbicacionRequirement
 import com.kotlin.sacalabici.domain.routes.RouteRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
+import com.kotlin.sacalabici.domain.activities.PostValidateAttendance
 import com.kotlin.sacalabici.data.network.model.ActivityInfo
+import com.kotlin.sacalabici.domain.activities.DeleteLocationRequirement
 import com.kotlin.sacalabici.domain.activities.PostCancelActivity
 import com.kotlin.sacalabici.domain.activities.PostJoinActivity
-import com.kotlin.sacalabici.domain.activities.PostValidateAttendance
-import kotlinx.coroutines.launch
+import com.kotlin.sacalabici.utils.SingleLiveEvent
 import kotlinx.coroutines.withContext
 
 class ActivitiesViewModel(): ViewModel() {
@@ -48,12 +48,7 @@ class ActivitiesViewModel(): ViewModel() {
     val activityInfo = MutableLiveData<ActivityInfo>()
 
     // LiveData para observar una actividad por ID
-    val selectedActivityLiveData = MutableLiveData<Activity?>()
-
-    // LiveData para mensajes de error
-    val errorMessageLiveData = MutableLiveData<String?>() // Permitir valores nulos
-    val emptyListActs = "Aún no hay datos para mostrar"
-    val errorDB = "Error al obtener los datos"
+    val selectedActivityLiveData = SingleLiveEvent<Activity?>()
 
     // Requisitos para obtener los datos
     private val getRodadasRequirement = GetRodadasRequirement()
@@ -66,6 +61,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val postLocationRequirement = PostLocationRequirement()
     private val routeRequirement = RouteRequirement()
     private val getUbicacionRequirement = UbicacionRequirement()
+    private val deleteUbicacionRequirement = DeleteLocationRequirement()
 
     init {
         getPermissions()
@@ -80,14 +76,8 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getRodadasRequirement()
-                if (result.isEmpty()) {
-                    errorMessageLiveData.postValue(emptyListActs)
-                } else {
-                    errorMessageLiveData.postValue(null) // Limpiar mensaje de error
-                }
                 rodadasLiveData.postValue(result)
             } catch (e: Exception) {
-                errorMessageLiveData.postValue(errorDB)
                 rodadasLiveData.postValue(emptyList())
             }
         }
@@ -98,14 +88,8 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getEventosRequirement()
-                if (result.isEmpty()) {
-                    errorMessageLiveData.postValue(emptyListActs)
-                } else {
-                    errorMessageLiveData.postValue(null) // Limpiar mensaje de error
-                }
                 eventosLiveData.postValue(result)
             } catch (e: Exception) {
-                errorMessageLiveData.postValue(errorDB)
                 eventosLiveData.postValue(emptyList())
             }
         }
@@ -116,14 +100,8 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getTalleresRequirement()
-                if (result.isEmpty()) {
-                    errorMessageLiveData.postValue(emptyListActs)
-                } else {
-                    errorMessageLiveData.postValue(null) // Limpiar mensaje de error
-                }
                 talleresLiveData.postValue(result)
             } catch (e: Exception) {
-                errorMessageLiveData.postValue(errorDB)
                 talleresLiveData.postValue(emptyList())
             }
         }
@@ -166,14 +144,8 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = getActivityByIdRequirement(id)
-                if (result == null) {
-                    errorMessageLiveData.postValue("Actividad no encontrada")
-                } else {
-                    errorMessageLiveData.postValue(null)
-                }
                 selectedActivityLiveData.postValue(result)
             } catch (e: Exception) {
-                errorMessageLiveData.postValue("Error al obtener la actividad")
                 selectedActivityLiveData.postValue(null)
             }
         }
@@ -183,13 +155,9 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = permissionsRequirement.getPermissions()
-                if (result.isEmpty()) {
-                    errorMessageLiveData.postValue(emptyListActs)
-                } else {
-                    _permissionsLiveData.postValue(result)
-                }
+                _permissionsLiveData.postValue(result)
             } catch (e: Exception) {
-                errorMessageLiveData.postValue(errorDB)
+                _permissionsLiveData.postValue(emptyList())
             }
         }
     }
@@ -295,6 +263,16 @@ class ActivitiesViewModel(): ViewModel() {
                 withContext(Dispatchers.Main) {
                     callback(false, "Error desconocido. Por favor, intenta más tarde.")
                 }
+            }
+        }
+    }
+
+    fun deleteUbicacion(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                deleteUbicacionRequirement(id)
+            } catch (e: Exception) {
+                throw e
             }
         }
     }

@@ -68,17 +68,14 @@ class TalleresFragment : Fragment() {
 
     private fun setupObservers() {
         activitiesViewModel.talleresLiveData.observe(viewLifecycleOwner) { talleres ->
-            adapter.updateData(talleres)
-            binding.swipeRefreshLayout.isRefreshing = false
-        }
-
-        activitiesViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { errorMessage ->
-            if (errorMessage != null) {
-                binding.errorMessageTalleres.text = errorMessage
-                binding.errorMessageTalleres.visibility = View.VISIBLE
-            } else {
+            if (talleres.isNotEmpty()) {
+                adapter.updateData(talleres)
                 binding.errorMessageTalleres.visibility = View.GONE
+            } else {
+                binding.errorMessageTalleres.visibility = View.VISIBLE
             }
+
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -95,8 +92,9 @@ class TalleresFragment : Fragment() {
 
     // Iniciar activity con detalles acorde al ID del taller seleccionado
     private fun passDetailsActivity(tallerId: String){
-        val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
+        val intent = Intent(requireContext(), DetailsActivity::class.java).apply {
             putExtra("ACTIVITY_ID", tallerId)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
     }

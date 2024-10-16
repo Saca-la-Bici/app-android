@@ -13,6 +13,7 @@ import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
@@ -326,6 +327,22 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             }
         } else {
             Pair(false, "Error de autenticación. Por favor, inicia sesión.")
+        }
+    }
+
+    suspend fun eliminarUbicacion(id: String): RouteBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.eliminarUbicacion(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
         }
     }
 

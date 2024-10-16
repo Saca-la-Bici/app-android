@@ -384,7 +384,7 @@ class DetailsViewHolder(
     }
 
     private fun setupStartButton(activity: Activity) {
-        if (permissions.contains("Iniciar rodada")) {
+        if ((activity.type == "Rodada") && permissions.contains("Iniciar rodada")) {
             binding.btnStart.visibility = View.VISIBLE
             binding.btnStart.setOnClickListener {
                 val intent = Intent(binding.root.context, StartRouteActivity::class.java)

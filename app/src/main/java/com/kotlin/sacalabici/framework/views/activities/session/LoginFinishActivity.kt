@@ -34,31 +34,22 @@ class LoginFinishActivity : AppCompatActivity() {
     private lateinit var phoneNumberEditText: TextInputEditText
     private lateinit var phoneNumberUtil: PhoneNumberUtil
     private lateinit var countryCodePicker: CountryCodePicker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
-        // Inicializa el utilitario de PhoneNumber
-        phoneNumberUtil = PhoneNumberUtil.getInstance()
-        // Encuentra el CountryCodePicker en el layout
-        countryCodePicker = findViewById(R.id.ccp)
-        countryCodePicker.setCountryForNameCode("MX")
-        phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
-        // Opciones de tipo de sangre
-        val bloodTypes = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "No especificado")
-        // Configurar el adaptador para el AutoCompleteTextView
-        val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
-        val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
-        autoCompleteTextView.setAdapter(adapter)
-        // Initialize ViewModel
-        loginFinishViewModel.initialize(FirebaseAuth.getInstance())
-        // Observe registration state
+        initializeViewModel()
+        observeAuthState()
+        setupCountryCodePicker()
+        setupBloodTypeDropdown()
+        setupButtonListeners()
+    }
+
+    private fun observeAuthState() {
         loginFinishViewModel.authState.observe(this) { authState ->
             when (authState) {
                 is AuthState.Success -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish() // Optional: Finish RegisteerContinueActivity to prevent going back
+                    navigateTo(MainActivity::class.java)
                 }
                 is AuthState.Error -> {
                     Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
@@ -67,24 +58,39 @@ class LoginFinishActivity : AppCompatActivity() {
                     Log.d("LoginFinishActivity", "Usuario incompleto")
                 }
                 is AuthState.CompleteProfile -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
+                    navigateTo(MainActivity::class.java)
+                }
+                is AuthState.VerificationSent -> {
+                    Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
-                else -> {}
             }
         }
-        binding.BDate.setOnClickListener {
-            showDatePickerDialog()
+    }
+
+    private fun navigateTo(activity: Class<*>) {
+        val intent = Intent(this, activity).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
+        startActivity(intent)
+        finish()
+    }
+
+    private fun initializeViewModel() {
+        loginFinishViewModel.initialize(FirebaseAuth.getInstance())
+    }
+
+    private fun initializeBinding() {
+        binding = ActivityLoginFinishBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    private fun setupButtonListeners() {
+        binding.BDate.setOnClickListener { showDatePickerDialog() }
         binding.BBack.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            val intent = Intent(this@LoginFinishActivity, SessionActivity::class.java)
-            startActivity(intent)
-            finish()
+            navigateTo(SessionActivity::class.java)
         }
         binding.BFinish.setOnClickListener {
             val birthdate = binding.BDate.text.toString()
@@ -123,10 +129,21 @@ class LoginFinishActivity : AppCompatActivity() {
             }
         }
     }
-    private fun initializeBinding() {
-        binding = ActivityLoginFinishBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+    private fun setupCountryCodePicker() {
+        phoneNumberUtil = PhoneNumberUtil.getInstance()
+        countryCodePicker = findViewById(R.id.ccp)
+        countryCodePicker.setCountryForNameCode("MX")
+        phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
     }
+
+    private fun setupBloodTypeDropdown() {
+        val bloodTypes = resources.getStringArray(R.array.bloodTypes).toList()
+        val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
+        val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+        autoCompleteTextView.setAdapter(adapter)
+    }
+
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)

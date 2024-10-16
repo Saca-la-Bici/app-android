@@ -162,12 +162,12 @@ class ModifyActivityInfoFragment: Fragment() {
                            ubi: String?, desc: String?, hourDur: String?, url: String?
     ) {
         etTitle.setText(title)
-        tvTitleWC.text = "${title?.length ?: 0}/${maxTitle}"
+        tvTitleWC.text = "${title?.length}/${maxTitle}"
         binding.BDate.text = date
         etUbi.setText(ubi)
-        tvUbiWC.text = "${ubi?.length ?: 0}/${maxUbi}"
+        tvUbiWC.text = "${ubi?.length}/${maxUbi}"
         etDesc.setText(desc)
-        tvDescWC.text = "${desc?.length ?: 0}/${maxDesc}"
+        tvDescWC.text = "${desc?.length}/${maxDesc}"
 
         val (hours, minutes) = extractTime(hour)
 
@@ -433,14 +433,14 @@ class ModifyActivityInfoFragment: Fragment() {
             binding.etAddActivityTitle.error = null
         }
 
-        if (binding.hourSpinner.selectedItemPosition == 0 &&
-            binding.minutesSpinner.selectedItemPosition == 0) {
+        if (binding.hourSpinner.selectedItem == "Horas" ||
+            binding.minutesSpinner.selectedItem == "Minutos") {
             Toast.makeText(requireContext(), "Por favor, selecciona una hora", Toast.LENGTH_SHORT).show()
             isValid = false
         }
 
-        if (binding.hourSpinnerDur.selectedItemPosition == 0 &&
-            binding.minutesSpinnerDur.selectedItemPosition == 0) {
+        if (binding.hourSpinnerDur.selectedItem == "Horas" ||
+            binding.minutesSpinnerDur.selectedItem == "Minutos") {
             Toast.makeText(requireContext(), "Por favor, selecciona una duración", Toast.LENGTH_SHORT).show()
             isValid = false
         }

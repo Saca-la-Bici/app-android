@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.databinding.FragmentActivityRouteBinding
-import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.RouteAdapter
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
+import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment.OnRutaConfirmListener
+import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment.OnRutaSelectedListener
 
-class AddActivityRouteFragment: Fragment() {
+
+class ModifyActivityRouteFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var rutasAdapter: RouteAdapter
 
@@ -72,7 +74,8 @@ class AddActivityRouteFragment: Fragment() {
         // Observa los LiveData del ViewModel
         viewModelRoute.routeObjectLiveData.observe(viewLifecycleOwner, Observer { rutasList ->
             rutasList?.let {
-                val selectedRuta = viewModelRoute.lastSelectedRuta
+                val idRoute = arguments?.getString("idRoute")
+                val selectedRuta = it.find { ruta -> ruta.id == idRoute }
                 updateRutasList(it, selectedRuta)
             }
         })
@@ -89,6 +92,9 @@ class AddActivityRouteFragment: Fragment() {
         rutasAdapter.updateRutas(rutasList)
         this.lastSelectedRuta = selectedRuta
         rutasAdapter.setSelectedRuta(selectedRuta)
+        if (selectedRuta != null) {
+            viewModelRoute.selectRuta(selectedRuta)
+        }
     }
 
     private fun onRutaSelected(ruta: RouteBase) {
@@ -100,11 +106,11 @@ class AddActivityRouteFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance(rutasList: List<RouteBase>?, selectedRuta: RouteBase?): AddActivityRouteFragment {
-            val fragment = AddActivityRouteFragment()
+        fun newInstance(rutasList: List<RouteBase>?, idRoute: String?): ModifyActivityRouteFragment {
+            val fragment = ModifyActivityRouteFragment()
             val args = Bundle()
             args.putParcelableArrayList("rutasList", rutasList?.let { ArrayList(it) })
-            args.putParcelable("selectedRuta", selectedRuta)
+            args.putString("idRoute", idRoute)
             fragment.arguments = args
             return fragment
         }

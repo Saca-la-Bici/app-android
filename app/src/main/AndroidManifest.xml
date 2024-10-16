@@ -102,8 +102,14 @@
         <activity
             android:name=".framework.views.activities.activities.AddActivityActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Sacalabici.Light" /> <!-- Otras actividades relevantes -->
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".framework.views.activities.activities.ModifyActivityActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <!-- Otras actividades relevantes -->
         <activity
             android:name=".framework.views.activities.AddRouteActivity"
             android:configChanges="orientation|screenSize"

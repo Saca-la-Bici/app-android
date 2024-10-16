@@ -1,12 +1,13 @@
 package com.kotlin.sacalabici.framework.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.activities.Activity
+import com.kotlin.sacalabici.data.network.model.ActivityData
+import com.kotlin.sacalabici.data.network.model.ActivityInfo
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.routes.RouteInfoObjectBase
@@ -14,6 +15,7 @@ import com.kotlin.sacalabici.domain.activities.GetActivityByIdRequirement
 import com.kotlin.sacalabici.domain.activities.GetEventosRequirement
 import com.kotlin.sacalabici.domain.activities.GetRodadasRequirement
 import com.kotlin.sacalabici.domain.activities.GetTalleresRequirement
+import com.kotlin.sacalabici.domain.activities.PatchActivityRequirement
 import com.kotlin.sacalabici.domain.activities.PermissionsRequirement
 import com.kotlin.sacalabici.domain.activities.PostLocationRequirement
 import com.kotlin.sacalabici.domain.activities.RodadaInfoRequirement
@@ -25,7 +27,6 @@ import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
 import com.kotlin.sacalabici.domain.activities.PostValidateAttendance
-import com.kotlin.sacalabici.data.network.model.ActivityInfo
 import com.kotlin.sacalabici.domain.activities.DeleteLocationRequirement
 import com.kotlin.sacalabici.domain.activities.PostCancelActivity
 import com.kotlin.sacalabici.domain.activities.PostJoinActivity
@@ -55,6 +56,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val getEventosRequirement = GetEventosRequirement()
     private val getTalleresRequirement = GetTalleresRequirement()
     private val requirement = PostActivityRequirement()
+    private val patchRequirement = PatchActivityRequirement()
     private val getActivityByIdRequirement = GetActivityByIdRequirement()
     private val permissionsRequirement = PermissionsRequirement()
     private val getRodadaInfoRequirement = RodadaInfoRequirement()
@@ -255,7 +257,6 @@ class ActivitiesViewModel(): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val (success, message) = postValidateAttendance(IDRodada, codigo)
-
                 withContext(Dispatchers.Main) {
                     callback(success, message)
                 }
@@ -267,6 +268,42 @@ class ActivitiesViewModel(): ViewModel() {
         }
     }
 
+    // Modificar evento
+    fun patchActivityEvento(evento: ActivityData, context: Context, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                patchRequirement.patchActivityEvento(evento, context)
+                callback(Result.success(Unit))
+            } catch (e: Exception) {
+                callback(Result.failure(e))
+            }
+        }
+    }
+
+    // Modificar rodada
+    fun patchActivityRodada(rodada: ActivityData, context: Context, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                patchRequirement.patchActivityRodada(rodada, context)
+                callback(Result.success(Unit))
+            } catch (e: Exception) {
+                callback(Result.failure(e))
+            }
+        }
+    }
+
+    // Modificar taller
+    fun patchActivityTaller(taller: ActivityData, context: Context, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                patchRequirement.patchActivityTaller(taller, context)
+                callback(Result.success(Unit))
+            } catch (e: Exception) {
+                callback(Result.failure(e))
+            }
+        }
+    }
+    
     fun deleteUbicacion(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {

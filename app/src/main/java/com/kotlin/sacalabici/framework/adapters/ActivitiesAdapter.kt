@@ -11,7 +11,8 @@ import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 class ActivitiesAdapter(
     private var data: List<Activity>,
     private val clickListener: (Activity) -> Unit,
-    private val viewModel: ActivitiesViewModel
+    private val longClickListener: (Activity) -> Unit,
+    private val viewModel: ActivitiesViewModel  // Se añade el viewModel al constructor
 ) : RecyclerView.Adapter<ActivitiesViewHolder>() {
 
     // Actualizar lista de actividades y notificar al adaptador del cambio
@@ -29,7 +30,7 @@ class ActivitiesAdapter(
     // Inflar diseño del elemento actividad y crear nuevo ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivitiesViewHolder {
         val binding = ItemActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ActivitiesViewHolder(binding, clickListener)
+        return ActivitiesViewHolder(binding, clickListener, longClickListener) 
     }
 
     // Indicar al RecyclerViewcuantos elementos mostrar

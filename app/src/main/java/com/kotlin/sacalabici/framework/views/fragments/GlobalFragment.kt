@@ -70,7 +70,7 @@ class GlobalFragment : Fragment() {
 
                 // Configuración de los valores para el progreso y texto
                 binding.progressKilometrosMes.progress = percentageKilometrosMes.toInt()
-                binding.textResultKilometrosMes.text = String.format("%.2f km", percentageKilometrosMes)
+                binding.textResultKilometrosMes.text = String.format("%.2f km", kilometersMonth)
 
                 binding.progressAgua.progress = percentageWater.toInt()
                 binding.textResultWater.text = String.format("%.2f L", water)

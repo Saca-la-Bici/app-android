@@ -64,7 +64,6 @@ class ProfileEditFragment: Fragment() {
         return root
     }
 
-//    fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,21 +93,6 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
-
-//    private fun setupGenderDropdown() {
-//        val genderDropdownConfig = binding.genderDropDown
-//        val genders = resources.getStringArray(R.array.genders)
-//        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, genders)
-//        genderDropdownConfig.setAdapter(arrayAdapter)
-//
-//        val defaultValue = "Masculino"
-//        genderDropdownConfig.setText(defaultValue, false)
-//
-//        val index = arrayAdapter.getPosition(defaultValue)
-//        if (index >= 0) {
-//            genderDropdownConfig.setSelection(index)
-//        }
-//    }
 
     private fun setupBloodDropdown() {
         val bloodDropdownConfig = binding.bloodDropDown

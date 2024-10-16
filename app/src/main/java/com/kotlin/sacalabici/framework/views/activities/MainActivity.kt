@@ -1,7 +1,10 @@
 package com.kotlin.sacalabici.framework.views.activities
 import android.app.Application
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
@@ -10,6 +13,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintSet
@@ -38,6 +42,14 @@ class MainActivity: AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var tokenManager: FirebaseTokenManager
     private val authViewModel: AuthViewModel by viewModels()
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (!isGranted) {
+            savePermissionDeniedState()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +84,13 @@ class MainActivity: AppCompatActivity() {
                 }
                 AuthState.Cancel -> TODO()
                 AuthState.SignedOut -> TODO()
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (!notificationManager.areNotificationsEnabled() && !isPermissionDenied()) {
+                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
             }
         }
     }
@@ -235,6 +254,17 @@ class MainActivity: AppCompatActivity() {
         TransitionManager.beginDelayedTransition(constraintLayout, transition)
         // Aplicar el ConstraintSet
         constraintSet.applyTo(constraintLayout)
+    }
+    private fun savePermissionDeniedState() {
+        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putBoolean("notification_permission_denied", true)
+            apply()
+        }
+    }
+    private fun isPermissionDenied(): Boolean {
+        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean("notification_permission_denied", false)
     }
     override fun onStart() {
         super.onStart()

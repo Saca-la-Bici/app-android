@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- Guidelines -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline"
         android:layout_width="wrap_content"
@@ -32,6 +34,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.45"/>
 
+    <!-- Logo -->
     <ImageView
         android:id="@+id/IVLogo"
         android:layout_width="150dp"
@@ -42,8 +45,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1"/>
+        app:layout_constraintVertical_bias="1" />
 
+    <!-- Yellow Background View -->
+
+    <!-- White Background View -->
     <View
         android:id="@+id/VYellowBackground"
         android:layout_width="0dp"
@@ -51,10 +57,13 @@
         android:background="@drawable/rounded_top_yellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/middle_guideline" />
+        app:layout_constraintTop_toTopOf="@id/middle_guideline"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <View android:id="@+id/VWhiteBackground"
+    <View
+        android:id="@+id/VWhiteBackground"
         android:layout_width="0dp"
         android:layout_height="350dp"
         android:background="@drawable/login_white_background"
@@ -64,6 +73,7 @@
         app:layout_constraintStart_toStartOf="@id/start_guideline"
         />
 
+    <!-- Title and Subtitle -->
     <TextView
         android:id="@+id/TVTitle"
         android:layout_width="wrap_content"
@@ -89,6 +99,7 @@
         app:layout_constraintEnd_toEndOf="@+id/VWhiteBackground"
         app:layout_constraintStart_toStartOf="@+id/VWhiteBackground"/>
 
+    <!-- Register and Login Buttons -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/BRegister"
         android:layout_width="270dp"
@@ -125,6 +136,7 @@
         app:strokeColor="#D9D9D9"
         app:strokeWidth="1dp" />
 
+    <!-- Separator Lines and Continue With Text -->
     <View
         android:id="@+id/VLeftLine"
         android:layout_width="0dp"
@@ -160,6 +172,7 @@
         app:layout_constraintTop_toBottomOf="@+id/BLogin"
         app:layout_constraintWidth_percent="0.2" />
 
+    <!-- Google and Facebook Buttons -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/BGoogle"
         android:layout_width="270dp"
@@ -202,5 +215,71 @@
         app:strokeWidth="1dp"
         app:icon="@drawable/ic_facebook"
         app:iconTint="@color/semi_transparent_black"/>
+
+    <TextView
+        android:id="@+id/TVTermsAndConditions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/TTerms"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/BGoogle"
+        app:layout_constraintStart_toStartOf="@id/VWhiteBackground"
+        app:layout_constraintEnd_toStartOf="@id/VSeparator" />
+
+    <View
+        android:id="@+id/VSeparator"
+        android:layout_width="1dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="0dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toStartOf="@id/TVPrivacyPolicy"
+        app:layout_constraintStart_toEndOf="@id/TVTermsAndConditions"
+        app:layout_constraintTop_toTopOf="@id/TVTermsAndConditions" />
+
+    <TextView
+        android:id="@+id/TVPrivacyPolicy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/TPrivacity"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/BGoogle"
+        app:layout_constraintStart_toEndOf="@id/VSeparator"
+        app:layout_constraintEnd_toEndOf="@id/VWhiteBackground" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- WebView for displaying content -->
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!-- Close WebView Button -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/closeWebView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_button"
+        android:contentDescription="@string/TClose"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"
+        android:padding="12dp"
+        android:layout_marginTop="5dp"/>
+
+    </RelativeLayout>
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -80,7 +80,7 @@
         <item>AB-</item>
         <item>No especificado</item>
     </string-array>
-    
+
     <!--String para Descripción de botones-->
     <string name="back_button_desc">Pestaña anterior</string>
 
@@ -165,6 +165,9 @@
     <string name="TSacalaBici">Saca la Bici</string>
     <string name="TRentabici">Rentabici</string>
     <string name="TCloseSession">Cerrar Sesión</string>
+    <string name="TPrivacity">Política de Privacidad</string>
+    <string name="TTerms">Términos y Condiciones</string>
+    <string name="TClose">Cerrar</string>
 
 </resources>
 

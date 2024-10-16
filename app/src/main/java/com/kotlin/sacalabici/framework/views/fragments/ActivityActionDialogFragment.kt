@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,6 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.kotlin.sacalabici.R
-import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.views.activities.activities.ModifyActivityActivity
 import kotlin.properties.Delegates
@@ -23,7 +21,6 @@ import kotlin.properties.Delegates
 class ActivityActionDialogFragment: DialogFragment() {
 
     private lateinit var viewModel: ActivitiesViewModel
-    private lateinit var activity: Activity
     private var permissions: List<String> = emptyList()
 
     private lateinit var id: String
@@ -112,7 +109,6 @@ class ActivityActionDialogFragment: DialogFragment() {
                 putExtra("register", register)
                 putExtra("idRoute", idRoute)
             }
-            Log.d("ActivityActionDialogFragment", "typeAct: $typeAct")
             startActivity(intent)
             dismiss()
         }

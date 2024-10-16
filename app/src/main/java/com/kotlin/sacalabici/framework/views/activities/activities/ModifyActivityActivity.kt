@@ -3,27 +3,18 @@ package com.kotlin.sacalabici.framework.views.activities.activities
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.model.ActivityData
 import com.kotlin.sacalabici.data.network.model.ActivityInfo
-import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.databinding.ActivityAddactivityBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.fragments.ModifyActivityInfoFragment
 import com.kotlin.sacalabici.framework.views.fragments.ModifyActivityRouteFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -83,7 +74,6 @@ class ModifyActivityActivity: AppCompatActivity(),
         register = intent.getStringArrayListExtra("register")
         idRoute = intent.getStringExtra("idRoute")
 
-        Log.d("ModifyActivity onCreate", "typeAct: $typeAct")
         // Observa los cambios en los LiveData del ViewModel
         observeViewModel()
 
@@ -168,11 +158,10 @@ class ModifyActivityActivity: AppCompatActivity(),
         } else if (typeAct == "Evento") {
             val evento = ActivityData(id, title, formattedDate, hourAct, ubi, description,
                 duration, imageUri, "Evento", peopleEnrolled, state, foro, register, idRoute)
-            Log.d("ModifyActivity", "Entra a if de evento")
+
             viewModel.patchActivityEvento(evento, this@ModifyActivityActivity) { result ->
                 result.fold(
                     onSuccess = {
-                        Log.d("ModifyActivity", "Entra a onSuccess")
                         showToast("Evento modificado exitosamente")
                         val sharedPreferences = getSharedPreferences("activity_prefs", MODE_PRIVATE)
                         val editor = sharedPreferences.edit()

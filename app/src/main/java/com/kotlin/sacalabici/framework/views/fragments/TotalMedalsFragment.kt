@@ -23,7 +23,6 @@ class TotalMedalsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private val adapter: TotalMedalsAdapter = TotalMedalsAdapter()
     private lateinit var viewModel: TotalMedalsViewModel
-    private var medalsList: ArrayList<MedalBase> = ArrayList()
 
     private val binding get() = _binding!!
 
@@ -52,9 +51,11 @@ class TotalMedalsFragment : Fragment() {
 
     private fun initializeObservers() {
         viewModel.medalsObjectLiveData.observe(viewLifecycleOwner) { medalsList ->
-            lifecycleScope.launch {
-                delay(50)
-                setUpRecyclerView(ArrayList(medalsList))
+            medalsList?.let{
+                lifecycleScope.launch {
+                    delay(50)
+                    setUpRecyclerView(ArrayList(medalsList))
+                }
             }
         }
     }

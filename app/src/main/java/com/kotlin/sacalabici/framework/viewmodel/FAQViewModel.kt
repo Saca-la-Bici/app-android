@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.DeleteFaqRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.FAQListRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.PostFAQRequirement
 import kotlinx.coroutines.Dispatchers
@@ -12,9 +13,11 @@ import kotlinx.coroutines.launch
 
 class FAQViewModel : ViewModel() {
     val faqObjectLiveData = MutableLiveData<List<FAQBase>>()
-    val permissionsLiveData = MutableLiveData<List<String>>()
     private val faqListRequirement = FAQListRequirement()
+    val selectedFAQ = MutableLiveData<FAQBase?>()
     private val postFAQRequirement = PostFAQRequirement()
+    val permissionsLiveData = MutableLiveData<List<String>>()
+    // private val postFAQRequirement = PostFAQRequirement()
 
     val errorMessage = MutableLiveData<String?>()
 
@@ -22,14 +25,12 @@ class FAQViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result: FAQObjectBase? = faqListRequirement()
-
                 val faqresult = result!!.faqs
 
                 if (faqresult.isEmpty()) {
                     errorMessage.postValue("No se encontraron preguntas frecuentes")
                 } else {
                     faqObjectLiveData.postValue(faqresult)
-                    permissionsLiveData.postValue(result.permissions)
                     errorMessage.postValue(null)
                 }
             } catch (e: Exception) {
@@ -40,6 +41,20 @@ class FAQViewModel : ViewModel() {
         }
     }
 
+    fun selectFAQ(faq: FAQBase) {
+        selectedFAQ.postValue(faq)
+    }
+
+    fun deleteFAQ(faq: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                DeleteFaqRequirement()(faq)
+                getFAQList()
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
     fun postFAQ(
         pregunta: String,
         respuesta: String,
@@ -77,4 +92,7 @@ class FAQViewModel : ViewModel() {
             }
         }
     }
+
 }
+
+

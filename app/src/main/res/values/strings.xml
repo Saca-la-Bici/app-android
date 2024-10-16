@@ -78,6 +78,7 @@
         <item>O-</item>
         <item>AB+</item>
         <item>AB-</item>
+        <item>No especificado</item>
     </string-array>
     
     <!--String para Descripción de botones-->
@@ -109,6 +110,7 @@
     <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
     <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
     <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
+    <string name="Modificar">Modificar</string>
 
     <!-- Strings para Agregar ruta -->
     <string name="TituloRuta">Título</string>
@@ -132,10 +134,13 @@
     <string name="SiguienteMod">Siguiente</string>
     <string name="ModRutaBtn">Modificar Ruta</string>
     <string name="noAnnouncements">No se encuentran anuncios disponibles</string>
+    <string name="noActivities">No se encuentran actividades disponibles</string>
+    <string name="noActivity">La actividad fue modificada o ya no está disponible</string>
     <string name="QuieresEliminarEstaRuta">¿Quieres eliminar esta ruta?</string>
     <string name="ImportanteUnaVezEliminadaLaRutaNoSePodraRecuperar">¡Importante! Una vez eliminada la ruta no se podrá recuperar.</string>
     <string name="CancelarEliminarRuta">Cancelar</string>
     <string name="ConfirmarEliminarRuta">Confirmar</string>
+    <string name="TVerifyEmail">Verificar Correo</string>
     <string name="puede_cambiar_en_el_momento_de_la_rodada">puede cambiar en el momento de la rodada</string>
     <string name="importante_la_ruta_es_solo_de_referencia">¡IMPORTANTE! La ruta es solo de referencia</string>
     <string name="eliminar_ruta">EliminarRuta</string>
@@ -146,6 +151,20 @@
 
     <!-- Strings de inscribir actividad -->
     <string name="Verificar">Verificar Asistencia</string>
+    <string name="TPasswordInstructions">La contraseaña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número</string>
+    <string name="TConfigPrivacy">Configuración y privacidad</string>
+    <string name="TMoreInfo">Más información y asistencia</string>
+    <string name="THelp">Ayuda</string>
+    <string name="TInfo">Información</string>
+    <string name="THowtoUse">Cómo usar la app</string>
+    <string name="TRoles">Asignación de roles y permisos</string>
+    <string name="TDeactivate">Desactivar Usuarios</string>
+    <string name="TAdminAccount">Administra tu cuenta</string>
+    <string name="TAccount">Tu cuenta</string>
+    <string name="TOtherPlatforms">Otras Plataformas</string>
+    <string name="TSacalaBici">Saca la Bici</string>
+    <string name="TRentabici">Rentabici</string>
+    <string name="TCloseSession">Cerrar Sesión</string>
 
 </resources>
 

@@ -24,6 +24,60 @@
                 <!-- Este ConstraintLayout es innecesario si no vas a poner más elementos dentro de él -->
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <TextView
+            android:id="@+id/TitleKilometrosMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kilómetros al mes"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/maxkilometrosMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="250 km"
+            android:textColor="#ADADAD"
+            app:layout_constraintTop_toBottomOf="@+id/TitleKilometrosMes"
+            app:layout_constraintEnd_toEndOf="@+id/progressAgua"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressKilometrosMes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:indicatorColor="@color/yellow"
+            app:layout_constraintTop_toBottomOf="@id/maxkilometrosMes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <TextView
+            android:id="@+id/textKilometrosMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kilómeros recorridos al mes"
+            app:layout_constraintTop_toBottomOf="@id/progressKilometrosMes"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+        <TextView
+            android:id="@+id/textResultKilometrosMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/progressKilometrosMes"
+            app:layout_constraintEnd_toEndOf="@+id/progressKilometrosMes"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
 
         <TextView
             android:id="@+id/TitleGlobal"
@@ -32,9 +86,9 @@
             android:text="Ahorro de Recursos"
             android:textStyle="bold"
             android:textSize="18sp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textResultKilometrosMes"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="18dp"
             android:layout_marginStart="32dp"/>
 
         <!-- Agua -->

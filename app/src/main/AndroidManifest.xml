@@ -7,6 +7,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <queries>
+        <package android:name="com.facebook.katana" /> <!-- Facebook App -->
+        <package android:name="com.facebook.orca" /> <!-- Messenger -->
+    </queries>
+
     <application
         android:name=".framework.MyApp"
         android:allowBackup="true"
@@ -19,9 +24,12 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Sacalabici.Light"
+        android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
+        <activity
+            android:name=".framework.views.activities.session.TermsAndConditionsActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -44,10 +52,11 @@
         <activity
             android:name=".framework.views.activities.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Sacalabici.Light"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Sacalabici.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -91,13 +100,10 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".framework.views.activities.AddActivityActivity"
+            android:name=".framework.views.activities.activities.AddActivityActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.Light"
-            android:screenOrientation="portrait"/>
-
-
-        <!-- Otras actividades relevantes -->
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Sacalabici.Light" /> <!-- Otras actividades relevantes -->
         <activity
             android:name=".framework.views.activities.AddRouteActivity"
             android:configChanges="orientation|screenSize"
@@ -106,14 +112,12 @@
         <activity
             android:name=".framework.views.activities.ModifyRouteActivity"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.Light"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Sacalabici.Light" />
         <activity
             android:name=".framework.adapters.views.fragments.SettingsFragment"
             android:exported="false"
-            android:theme="@style/Theme.Sacalabici.Light"/>
-
+            android:theme="@style/Theme.Sacalabici.Light" />
         <activity
             android:name=".framework.views.activities.activities.DetailsActivity"
             android:exported="false"
@@ -132,8 +136,5 @@
 
 
     </application>
-    <queries>
-        <package android:name="com.facebook.katana" /> <!-- Facebook App -->
-        <package android:name="com.facebook.orca" />   <!-- Messenger -->
-    </queries>
+
 </manifest>

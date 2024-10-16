@@ -2,6 +2,7 @@ package com.kotlin.sacalabici.data.repositories
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.kotlin.sacalabici.data.models.preguntasFrecuentes.DeleteResponse
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
@@ -24,5 +25,16 @@ class FAQRepository {
             null
         }
 
+    suspend fun deleteFAQ(idPregunta: Int): DeleteResponse =
+        try {
+            val response = apiFAQ.deleteFAQ(idPregunta)
+            response
+        } catch (e: Exception) {
+            Log.e("FAQRepository", "Error in deleteFAQ: ${e.message}")
+            DeleteResponse(false, 0)
+        }
+
     suspend fun postFAQ(faq: FAQBase): FAQBase? = apiFAQ.postFAQ(faq)
+
+    suspend fun putFAQ(faq: FAQBase): FAQBase? = apiFAQ.putFAQ(faq)
 }

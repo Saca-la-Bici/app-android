@@ -26,6 +26,7 @@ import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.models.session.AuthState
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.databinding.ActivityMainBinding
+import com.kotlin.sacalabici.databinding.ActivityRegisterUserFinishBinding
 import com.kotlin.sacalabici.framework.viewmodel.session.AuthViewModel
 import com.kotlin.sacalabici.framework.views.activities.session.LoginFinishActivity
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
@@ -53,8 +54,10 @@ class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeBinding()
-        initializeObservers()
         initializeListeners()
+        initializeViewModel()
+        checkUserSession()
+        observeAuthState()
         exchangeCurrentFragment(ActivitiesFragment(), Constants.MENU_ACTIVITIES)
         moveHighlightToButton(binding.appBarMain.btnActividades)
         firebaseAuth = FirebaseAuth.getInstance()
@@ -62,50 +65,17 @@ class MainActivity: AppCompatActivity() {
         tokenManager.getIdToken()
         FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(applicationContext as Application)
-
-        authViewModel.initialize(
-            FirebaseAuth.getInstance(),
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(Constants.REQUEST_ID_TOKEN)
-                .requestEmail()
-                .build(),
-            this
-        )
-
-        val user = FirebaseAuth.getInstance().currentUser
-
-        if (user != null && !user.isEmailVerified) {
-            user.delete().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("Auth", "Usuario eliminado por falta de verificación.")
-                    startActivity(Intent(this, SessionActivity::class.java))
-                    finish()
-                } else {
-                    Log.e("Auth", "Error al eliminar usuario: ${task.exception?.message}")
-                }
-            }
-        }
-
-        if (user == null) {
-            startActivity(Intent(this, SessionActivity::class.java))
-            finish()
-        }
-
-        // Observe registration state
+    }
+    private fun observeAuthState() {
         authViewModel.authState.observe(this) { authState ->
-            Log.d("SessionActivity", "Observando")
             when (authState) {
                 is AuthState.Success -> {
-                    // Registration successful
                 }
                 is AuthState.Error -> {
                     Toast.makeText(this, authState.message, Toast.LENGTH_SHORT).show()
                 }
                 is AuthState.IncompleteProfile -> {
-                    val intent = Intent(this, SessionActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
+                    navigateTo(SessionActivity::class.java)
                 }
                 is AuthState.CompleteProfile -> {
                 }
@@ -124,11 +94,44 @@ class MainActivity: AppCompatActivity() {
             }
         }
     }
+    private fun navigateTo(activity: Class<*>) {
+        val intent = Intent(this, activity).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        }
+        startActivity(intent)
+        finish()
+    }
+    private fun initializeViewModel() {
+        authViewModel.initialize(
+            FirebaseAuth.getInstance(),
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(Constants.REQUEST_ID_TOKEN)
+                .requestEmail()
+                .build(),
+            this
+        )
+    }
     private fun initializeBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-    private fun initializeObservers(){
+    private fun checkUserSession(){
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user != null && !user.isEmailVerified) {
+            user.delete().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("Auth", "Usuario eliminado por falta de verificación.")
+                    navigateTo(SessionActivity::class.java)
+                } else {
+                    Log.e("Auth", "Error al eliminar usuario: ${task.exception?.message}")
+                }
+            }
+        }
+
+        if (user == null) {
+            navigateTo(SessionActivity::class.java)
+        }
     }
     private fun exchangeCurrentFragment(newFragment: Fragment, newMenuOption:String){
         currentFragment = newFragment

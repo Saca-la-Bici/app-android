@@ -110,30 +110,6 @@
                 app:layout_constraintStart_toEndOf="@+id/VHorizontalLine"
                 app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-            <!-- Campo de texto de nombre completo -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/TILName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/TVTitle"
-                app:layout_constraintStart_toStartOf="@+id/VContainer"
-                app:layout_constraintEnd_toEndOf="@+id/VContainer">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="24dp"
-                    android:layout_marginTop="5dp"
-                    android:textSize="14sp"
-                    android:hint="@string/TNombreCompleto"
-                    android:fontFamily="@font/roboto_regular"
-                    android:maxLines="1"
-                    android:lines="1"
-                    android:singleLine="true"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
             <!-- Fecha de nacimeinto -->
             <TextView
                 android:id="@+id/TVBirthday"
@@ -144,7 +120,7 @@
                 android:textSize="19sp"
                 android:fontFamily="@font/roboto_regular"
                 app:layout_constraintStart_toStartOf="@+id/VContainer"
-                app:layout_constraintTop_toBottomOf="@+id/TILName" />
+                app:layout_constraintTop_toBottomOf="@+id/TVTitle" />
 
             <!-- Advertencia de informacion publica -->
             <TextView
@@ -177,6 +153,32 @@
                 app:strokeColor="#D9D9D9"
                 app:strokeWidth="1dp" />
 
+
+            <!-- Campo de texto de nombre completo -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TILName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/BDate"
+                app:layout_constraintStart_toStartOf="@+id/VContainer"
+                app:layout_constraintEnd_toEndOf="@+id/VContainer">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="50"
+                    android:padding="24dp"
+                    android:layout_marginTop="5dp"
+                    android:textSize="14sp"
+                    android:hint="@string/TNombreCompleto"
+                    android:fontFamily="@font/roboto_regular"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:singleLine="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!-- Advertencia de n[umero de emergencia -->
             <TextView
                 android:id="@+id/TVEmergencyPhoneAdd"
@@ -187,7 +189,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="@+id/VContainer"
-                app:layout_constraintTop_toBottomOf="@+id/BDate" />
+                app:layout_constraintTop_toBottomOf="@+id/TILName" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TILPhoneNumber"
@@ -201,6 +203,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="10"
                     android:padding="24dp"
                     android:layout_marginTop="5dp"
                     android:textSize="14sp"
@@ -217,6 +220,7 @@
                 android:id="@+id/ccp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:ccp_textSize="11dp"
                 app:layout_constraintTop_toBottomOf="@id/TVEmergencyPhoneAdd"
                 app:layout_constraintEnd_toEndOf="@+id/VContainer"

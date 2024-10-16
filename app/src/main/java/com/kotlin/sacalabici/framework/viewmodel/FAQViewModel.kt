@@ -5,16 +5,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQBase
 import com.kotlin.sacalabici.data.models.preguntasFrecuentes.FAQObjectBase
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.DeleteFaqRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.FAQListRequirement
+import com.kotlin.sacalabici.domain.preguntasFrecuentes.ModifyFaqRequirement
 import com.kotlin.sacalabici.domain.preguntasFrecuentes.PostFAQRequirement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FAQViewModel : ViewModel() {
     val faqObjectLiveData = MutableLiveData<List<FAQBase>>()
-    val permissionsLiveData = MutableLiveData<List<String>>()
     private val faqListRequirement = FAQListRequirement()
+    val selectedFAQ = MutableLiveData<FAQBase?>()
     private val postFAQRequirement = PostFAQRequirement()
+    private val modifyFaqRequirement = ModifyFaqRequirement()
+    val permissionsLiveData = MutableLiveData<List<String>>()
 
     val errorMessage = MutableLiveData<String?>()
 
@@ -22,7 +26,6 @@ class FAQViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result: FAQObjectBase? = faqListRequirement()
-
                 val faqresult = result!!.faqs
 
                 if (faqresult.isEmpty()) {
@@ -36,6 +39,21 @@ class FAQViewModel : ViewModel() {
                 e.printStackTrace()
                 errorMessage.postValue("Error al consultar los datos")
                 faqObjectLiveData.postValue(emptyList())
+            }
+        }
+    }
+
+    fun selectFAQ(faq: FAQBase) {
+        selectedFAQ.postValue(faq)
+    }
+
+    fun deleteFAQ(faq: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                DeleteFaqRequirement()(faq)
+                getFAQList()
+            } catch (e: Exception) {
+                throw e
             }
         }
     }
@@ -74,6 +92,18 @@ class FAQViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 errorMessage.postValue("Error al registrar la pregunta frecuente")
+            }
+        }
+    }
+
+    fun modifyFAQ(faq: FAQBase) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                modifyFaqRequirement.invoke(faq)
+                errorMessage.postValue(null)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                errorMessage.postValue("Error al modificar la pregunta frecuente")
             }
         }
     }

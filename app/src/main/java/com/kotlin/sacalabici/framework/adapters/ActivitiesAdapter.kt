@@ -30,7 +30,7 @@ class ActivitiesAdapter(
     // Inflar diseño del elemento actividad y crear nuevo ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivitiesViewHolder {
         val binding = ItemActivityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ActivitiesViewHolder(binding, clickListener, longClickListener, viewModel) // Se pasa el viewModel al ViewHolder
+        return ActivitiesViewHolder(binding, clickListener, longClickListener) 
     }
 
     // Indicar al RecyclerViewcuantos elementos mostrar

@@ -12,7 +12,6 @@ import retrofit2.http.Body
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
 import com.kotlin.sacalabici.data.network.model.ActivityData
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -20,11 +19,12 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import retrofit2.http.Query
-import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.LocationR
 import com.kotlin.sacalabici.data.network.model.DeleteActivityRequest
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -93,56 +93,56 @@ interface ActivitiesApiService {
     @Multipart
     @PATCH("actividades/modificar/taller")
     suspend fun patchActivityTaller(
-        @Query("id") id: RequestBody,
-        @Part("informacion[titulo]") titulo: RequestBody,
-        @Part("informacion[fecha]") fecha: RequestBody,
-        @Part("informacion[hora]") hora: RequestBody,
-        @Part("informacion[duracion]") duracion: RequestBody,
-        @Part("informacion[ubicacion]") ubicacion: RequestBody,
-        @Part("informacion[descripcion]") descripcion: RequestBody,
-        @Part("informacion[tipo]") tipo: RequestBody,
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
         @Part imagen: MultipartBody.Part?,
-        @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
-        @Part("informacion[estado]") state: RequestBody,
-        @Part("informacion[foro]") foro: RequestBody?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
         @Part usuariosInscritos: List<MultipartBody.Part>?
     ): ActivityData
 
     @Multipart
     @PATCH("actividades/modificar/evento")
     suspend fun patchActivityEvento(
-        @Query("id") id: RequestBody,
-        @Part("informacion[titulo]") titulo: RequestBody,
-        @Part("informacion[fecha]") fecha: RequestBody,
-        @Part("informacion[hora]") hora: RequestBody,
-        @Part("informacion[duracion]") duracion: RequestBody,
-        @Part("informacion[ubicacion]") ubicacion: RequestBody,
-        @Part("informacion[descripcion]") descripcion: RequestBody,
-        @Part("informacion[tipo]") tipo: RequestBody,
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
         @Part imagen: MultipartBody.Part?,
-        @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
-        @Part("informacion[estado]") state: RequestBody,
-        @Part("informacion[foro]") foro: RequestBody?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
         @Part usuariosInscritos: List<MultipartBody.Part>?
     ): ActivityData
 
     @Multipart
     @PATCH("actividades/modificar/rodada")
     suspend fun patchActivityRodada(
-        @Query("id") id: RequestBody,
-        @Part("informacion[titulo]") titulo: RequestBody,
-        @Part("informacion[fecha]") fecha: RequestBody,
-        @Part("informacion[hora]") hora: RequestBody,
-        @Part("informacion[duracion]") duracion: RequestBody,
-        @Part("informacion[ubicacion]") ubicacion: RequestBody,
-        @Part("informacion[descripcion]") descripcion: RequestBody,
-        @Part("informacion[tipo]") tipo: RequestBody,
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
         @Part imagen: MultipartBody.Part?,
-        @Part("informacion[personasInscritas]") peopleEnrolled: RequestBody,
-        @Part("informacion[estado]") state: RequestBody,
-        @Part("informacion[foro]") foro: RequestBody?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
         @Part usuariosInscritos: List<MultipartBody.Part>?,
-        @Part("ruta") ruta: RequestBody?
+        @Part("ruta") ruta: String?
     ): ActivityData
 
     @PATCH("actividades/eliminar")
@@ -153,7 +153,6 @@ interface ActivitiesApiService {
 
     @PATCH("rodadas/verificarAsistencia")
     suspend fun PostValidateAttendance(@Body request: AttendanceRequest)
-
 
     @PUT("rodadas/iniciarRodada/{id}")
     suspend fun postLocation(
@@ -166,4 +165,7 @@ interface ActivitiesApiService {
 
     @GET("rodadas/obtenerUbicacion/{id}")
     suspend fun getUbicacion(@Path("id") id: String): List<LocationR>
+
+    @DELETE("rodadas/eliminarUbicacion/{id}")
+    suspend fun eliminarUbicacion(@Path("id") id: String): RouteBase
 }

@@ -3,27 +3,18 @@ package com.kotlin.sacalabici.framework.views.activities.activities
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.kotlin.sacalabici.R
 import com.kotlin.sacalabici.data.network.model.ActivityData
 import com.kotlin.sacalabici.data.network.model.ActivityInfo
-import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.databinding.ActivityAddactivityBinding
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.fragments.ModifyActivityInfoFragment
 import com.kotlin.sacalabici.framework.views.fragments.ModifyActivityRouteFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -83,7 +74,6 @@ class ModifyActivityActivity: AppCompatActivity(),
         register = intent.getStringArrayListExtra("register")
         idRoute = intent.getStringExtra("idRoute")
 
-        Log.d("ModifyActivity onCreate", "typeAct: $typeAct")
         // Observa los cambios en los LiveData del ViewModel
         observeViewModel()
 
@@ -126,7 +116,7 @@ class ModifyActivityActivity: AppCompatActivity(),
         minutesDur: String,
         ubi: String,
         description: String,
-        image: Uri?
+        imageUri: Uri?
     ) {
         // Almacenamiento de datos escritos
         val info = ActivityInfo(title, date, hour, minutes, hourDur, minutesDur, ubi, description)
@@ -140,58 +130,51 @@ class ModifyActivityActivity: AppCompatActivity(),
         val hourAct = "$hour:$minutes"
         val duration = "$hourDur horas $minutesDur minutos"
 
-        Log.d("ModifyActivity", "Información recibida")
-        lifecycleScope.launch {
-            Log.d("ModifyActivity", "Entra a lifecycleScope")
-            // Si se ha seleccionado una nueva imagen, usamos ese Uri. De lo contrario, descargamos la imagen original.
-            val imageUri = when {
-                selectedImageUri != null -> selectedImageUri
-                !originalImageUrl.isNullOrEmpty() -> downloadImageToFile(originalImageUrl!!)
-                else -> null
-            }
-            Log.d("ModifyActivity", "Sale de lo de imagen")
-            Log.d("ModifyActivity", "Tipo: $typeAct")
+        if (typeAct == "Rodada") {
+            val rodadaInfo = ActivityData(id, title, formattedDate, hourAct, ubi, description,
+                duration, imageUri, "Rodada", peopleEnrolled, state, foro, register, idRoute)
+            rodadaInformation = rodadaInfo
 
-            if (typeAct == "Rodada") {
-                val rodadaInfo = ActivityData(id, title, formattedDate, hourAct, ubi, description,
-                    duration, imageUri, "Rodada", peopleEnrolled, state, foro, register, idRoute)
-                rodadaInformation = rodadaInfo
-
-            } else if (typeAct == "Taller") {
-                val taller = ActivityData(id, title, formattedDate, hourAct, ubi, description,
-                    duration, imageUri, "Taller", peopleEnrolled, state, foro, register, idRoute)
-                viewModel.patchActivityTaller(taller, this@ModifyActivityActivity) { result ->
-                    result.fold(
-                        onSuccess = {
-                            showToast("Taller modificado exitosamente")
-                            setResult(Activity.RESULT_OK)
-                            finish()
-                        },
-                        onFailure = { error ->
-                            showToast("Error al modificar el taller")
-                        }
-                    )
-                }
-
-            } else if (typeAct == "Evento") {
-                val evento = ActivityData(id, title, formattedDate, hourAct, ubi, description,
-                    duration, imageUri, "Evento", peopleEnrolled, state, foro, register, idRoute)
-                Log.d("ModifyActivity", "Entra a if de evento")
-                viewModel.patchActivityEvento(evento, this@ModifyActivityActivity) { result ->
-                    result.fold(
-                        onSuccess = {
-                            Log.d("ModifyActivity", "Entra a onSuccess")
-                            showToast("Evento modificado exitosamente")
-                            setResult(Activity.RESULT_OK)
-                            finish()
-                        },
-                        onFailure = { error ->
-                            showToast("Error al modificar el evento")
-                        }
-                    )
-                }
+        } else if (typeAct == "Taller") {
+            val taller = ActivityData(id, title, formattedDate, hourAct, ubi, description,
+                duration, imageUri, "Taller", peopleEnrolled, state, foro, register, idRoute)
+            viewModel.patchActivityTaller(taller, this@ModifyActivityActivity) { result ->
+                result.fold(
+                    onSuccess = {
+                        showToast("Taller modificado exitosamente")
+                        val sharedPreferences = getSharedPreferences("activity_prefs", MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putBoolean("activity_updated", true)
+                        editor.apply()
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    },
+                    onFailure = { error ->
+                        showToast("Error al modificar el taller")
+                    }
+                )
             }
 
+        } else if (typeAct == "Evento") {
+            val evento = ActivityData(id, title, formattedDate, hourAct, ubi, description,
+                duration, imageUri, "Evento", peopleEnrolled, state, foro, register, idRoute)
+
+            viewModel.patchActivityEvento(evento, this@ModifyActivityActivity) { result ->
+                result.fold(
+                    onSuccess = {
+                        showToast("Evento modificado exitosamente")
+                        val sharedPreferences = getSharedPreferences("activity_prefs", MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putBoolean("activity_updated", true)
+                        editor.apply()
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    },
+                    onFailure = { error ->
+                        showToast("Error al modificar el evento")
+                    }
+                )
+            }
         }
     }
 
@@ -271,6 +254,10 @@ class ModifyActivityActivity: AppCompatActivity(),
             result.fold(
                 onSuccess = {
                     showToast("Rodada modificada exitosamente")
+                    val sharedPreferences = getSharedPreferences("activity_prefs", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putBoolean("activity_updated", true)
+                    editor.apply()
                     setResult(Activity.RESULT_OK)
                     finish()
                 },
@@ -283,38 +270,5 @@ class ModifyActivityActivity: AppCompatActivity(),
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private suspend fun downloadImageToFile(url: String): Uri? {
-        return withContext(Dispatchers.IO) {
-            try {
-                // Abrimos un stream para la URL remota
-                val input = URL(url).openStream()
-                // Creamos un archivo temporal en el directorio de caché
-                val file = File(cacheDir, "temp_image.jpg")
-                val output = FileOutputStream(file)
-                // Copiamos los bytes de la imagen al archivo local
-                input.copyTo(output)
-                // Cerramos el stream de salida
-                output.close()
-                // Devolvemos el Uri del archivo local
-                Uri.fromFile(file)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cleanTemporaryFiles()
-    }
-
-    private fun cleanTemporaryFiles() {
-        val tempFile = File(cacheDir, "tempFile")
-        if (tempFile.exists()) {
-            tempFile.delete()
-        }
     }
 }

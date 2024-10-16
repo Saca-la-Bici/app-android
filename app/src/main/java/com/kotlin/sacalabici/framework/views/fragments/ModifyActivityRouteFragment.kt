@@ -56,9 +56,9 @@ class ModifyActivityRouteFragment: Fragment() {
         recyclerView = binding.RVRutas
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        rutasAdapter = RouteAdapter(emptyList()) { ruta ->
+        rutasAdapter = RouteAdapter(emptyList(), { ruta ->
             onRutaSelected(ruta)
-        }
+        }, permit = false)
         recyclerView.adapter = rutasAdapter
 
         initializeListeners()
@@ -92,6 +92,9 @@ class ModifyActivityRouteFragment: Fragment() {
         rutasAdapter.updateRutas(rutasList)
         this.lastSelectedRuta = selectedRuta
         rutasAdapter.setSelectedRuta(selectedRuta)
+        if (selectedRuta != null) {
+            viewModelRoute.selectRuta(selectedRuta)
+        }
     }
 
     private fun onRutaSelected(ruta: RouteBase) {

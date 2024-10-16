@@ -79,18 +79,18 @@ class MapFragment: Fragment(), RouteFragment.OnRutaSelectedListener {
         binding.btnDetails.visibility = View.GONE
 
         // Observa cambios en los permisos
-        viewModel.roleLiveData.observe(this) { permisos ->
+        viewModel.roleLiveData.observe(viewLifecycleOwner) { permisos ->
             // Basado en los permisos obtenidos, muestra u oculta botones
             if (permisos.contains("Registrar ruta")) {
-                binding?.btnAdd?.visibility = View.VISIBLE
+                binding.btnAdd.visibility = View.VISIBLE
             } else {
-                binding?.btnAdd?.visibility = View.GONE
+                binding.btnAdd.visibility = View.GONE
             }
 
             if (permisos.contains("Consultar ruta")) {
-                binding?.btnDetails?.visibility = View.VISIBLE
+                binding.btnDetails.visibility = View.VISIBLE
             } else {
-                binding?.btnDetails?.visibility = View.GONE
+                binding.btnDetails.visibility = View.GONE
             }
         }
 
@@ -112,6 +112,19 @@ class MapFragment: Fragment(), RouteFragment.OnRutaSelectedListener {
         // Listener para el botón de detalles de la ruta
         binding.btnDetails.setOnClickListener {
             toggleRutasList()
+        }
+
+        binding.btnMessage.setOnClickListener{
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "message/rfc822"
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("atencion.ciudadana@municipiodequeretaro.gob.mx"))
+                putExtra(Intent.EXTRA_SUBJECT, "Reporte de vialidad")
+            }
+            try {
+                startActivity(Intent.createChooser(intent, "Elige una aplicación de email para enviar el reporte de vialidad"))
+            } catch (ex: android.content.ActivityNotFoundException) {
+                Toast.makeText(requireContext(), "No tienes aplicaciones de email instaladas", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

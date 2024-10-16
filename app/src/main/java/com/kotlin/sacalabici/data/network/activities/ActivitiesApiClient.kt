@@ -3,7 +3,6 @@ package com.kotlin.sacalabici.data.network.activities
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
@@ -13,6 +12,7 @@ import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import com.kotlin.sacalabici.data.models.activities.RodadasBase
 import com.kotlin.sacalabici.data.models.activities.TalleresBase
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
+import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
@@ -240,17 +240,17 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
     suspend fun patchActivityTaller(taller: ActivityData, context: Context): ActivityData? {
         val token = firebaseTokenManager.getTokenSynchronously()
 
-        val id = taller.id.toRequestBody("text/plain".toMediaTypeOrNull())
-        val titulo = taller.title.toRequestBody("text/plain".toMediaTypeOrNull())
-        val fecha = taller.date.toRequestBody("text/plain".toMediaTypeOrNull())
-        val hora = taller.time.toRequestBody("text/plain".toMediaTypeOrNull())
-        val duracion = taller.duration.toRequestBody("text/plain".toMediaTypeOrNull())
-        val ubicacion = taller.location.toRequestBody("text/plain".toMediaTypeOrNull())
-        val descripcion = taller.description.toRequestBody("text/plain".toMediaTypeOrNull())
-        val tipo = taller.type.toRequestBody("text/plain".toMediaTypeOrNull())
-        val peopleEnrolled = taller.peopleEnrolled.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        val state = taller.state.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        val foro = taller.foro?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val id = taller.id
+        val titulo = taller.title
+        val fecha = taller.date
+        val hora = taller.time
+        val duracion = taller.duration
+        val ubicacion = taller.location
+        val descripcion = taller.description
+        val tipo = taller.type
+        val peopleEnrolled = taller.peopleEnrolled.toString()
+        val state = taller.state.toString()
+        val foro = taller.foro
 
         val file = taller.imageURL?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
@@ -258,10 +258,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         val usuariosInscritos = taller.register?.mapIndexed { index, user ->
             MultipartBody.Part.createFormData("usuariosInscritos[$index]", user)
         }
-
-        Log.d("ActivitiesApiClient", "patchActivityTaller: $usuariosInscritos")
-        Log.d("ActivitiesApiClient", "$titulo, $fecha, $hora, $duracion, $ubicacion, $descripcion," +
-                "$tipo, $peopleEnrolled, $state, $foro, $img, $usuariosInscritos")
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
@@ -281,19 +277,17 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
     suspend fun patchActivityEvento(evento: ActivityData, context: Context): ActivityData? {
         val token = firebaseTokenManager.getTokenSynchronously()
 
-        Log.d("ActivitiesApiClient", "patchActivityEvento: $evento")
-
-        val id = evento.id.toRequestBody("text/plain".toMediaTypeOrNull())
-        val titulo = evento.title.toRequestBody("text/plain".toMediaTypeOrNull())
-        val fecha = evento.date.toRequestBody("text/plain".toMediaTypeOrNull())
-        val hora = evento.time.toRequestBody("text/plain".toMediaTypeOrNull())
-        val duracion = evento.duration.toRequestBody("text/plain".toMediaTypeOrNull())
-        val ubicacion = evento.location.toRequestBody("text/plain".toMediaTypeOrNull())
-        val descripcion = evento.description.toRequestBody("text/plain".toMediaTypeOrNull())
-        val tipo = evento.type.toRequestBody("text/plain".toMediaTypeOrNull())
-        val peopleEnrolled = evento.peopleEnrolled.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        val state = evento.state.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        val foro = evento.foro?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val id = evento.id
+        val titulo = evento.title
+        val fecha = evento.date
+        val hora = evento.time
+        val duracion = evento.duration
+        val ubicacion = evento.location
+        val descripcion = evento.description
+        val tipo = evento.type
+        val peopleEnrolled = evento.peopleEnrolled.toString()
+        val state = evento.state.toString()
+        val foro = evento.foro
 
         val file = evento.imageURL?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
@@ -302,11 +296,6 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         val usuariosInscritos = evento.register?.mapIndexed { index, user ->
             MultipartBody.Part.createFormData("usuariosInscritos[$index]", user.toString())
         }
-
-
-        Log.d("ActivitiesApiClient", "$titulo, $fecha, $hora, $duracion, $ubicacion, $descripcion," +
-                "$tipo, $peopleEnrolled, $state, $foro, $img, $usuariosInscritos")
-        Log.d("ActivitiesApiClient", "patchActivityEvento: $usuariosInscritos")
 
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
@@ -325,18 +314,18 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
     suspend fun patchActivityRodada(rodada: ActivityData, context: Context): ActivityData? {
         val token = firebaseTokenManager.getTokenSynchronously()
 
-        val id = rodada.id.toRequestBody("text/plain".toMediaTypeOrNull())
-        val titulo = rodada.title.toRequestBody("text/plain".toMediaTypeOrNull())
-        val fecha = rodada.date.toRequestBody("text/plain".toMediaTypeOrNull())
-        val hora = rodada.time.toRequestBody("text/plain".toMediaTypeOrNull())
-        val duracion = rodada.duration.toRequestBody("text/plain".toMediaTypeOrNull())
-        val ubicacion = rodada.location.toRequestBody("text/plain".toMediaTypeOrNull())
-        val descripcion = rodada.description.toRequestBody("text/plain".toMediaTypeOrNull())
-        val tipo = rodada.type.toRequestBody("text/plain".toMediaTypeOrNull())
-        val peopleEnrolled = rodada.peopleEnrolled.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        val state = rodada.state.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-        val foro = rodada.foro?.toRequestBody("text/plain".toMediaTypeOrNull())
-        val ruta = rodada.idRouteBase?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val id = rodada.id
+        val titulo = rodada.title
+        val fecha = rodada.date
+        val hora = rodada.time
+        val duracion = rodada.duration
+        val ubicacion = rodada.location
+        val descripcion = rodada.description
+        val tipo = rodada.type
+        val peopleEnrolled = rodada.peopleEnrolled.toString()
+        val state = rodada.state.toString()
+        val foro = rodada.foro
+        val ruta = rodada.idRouteBase
 
         val file = rodada.imageURL?.let { multipartManager.uriToFile(context, it) }
         val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
@@ -468,6 +457,22 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             }
         } else {
             Pair(false, "Error de autenticación. Por favor, inicia sesión.")
+        }
+    }
+
+    suspend fun eliminarUbicacion(id: String): RouteBase? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.eliminarUbicacion(id)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
         }
     }
 

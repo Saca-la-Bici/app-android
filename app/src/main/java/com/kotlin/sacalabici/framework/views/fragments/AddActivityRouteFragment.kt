@@ -54,9 +54,9 @@ class AddActivityRouteFragment: Fragment() {
         recyclerView = binding.RVRutas
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        rutasAdapter = RouteAdapter(emptyList()) { ruta ->
+        rutasAdapter = RouteAdapter(emptyList(), { ruta ->
             onRutaSelected(ruta)
-        }
+        }, permit = false)
         recyclerView.adapter = rutasAdapter
 
         initializeListeners()

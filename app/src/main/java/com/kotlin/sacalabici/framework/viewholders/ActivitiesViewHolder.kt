@@ -19,8 +19,7 @@ import java.util.Locale
 class ActivitiesViewHolder(
     private val binding: ItemActivityBinding,
     private val clickListener: (Activity) -> Unit,
-    private val longClickListener: (Activity) -> Unit,
-    private val viewModel: ActivitiesViewModel
+    private val longClickListener: (Activity) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Activity) {

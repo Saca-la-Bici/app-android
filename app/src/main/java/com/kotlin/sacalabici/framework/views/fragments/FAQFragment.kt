@@ -17,14 +17,13 @@ import com.kotlin.sacalabici.databinding.FragmentFaqsBinding
 import com.kotlin.sacalabici.framework.adapters.FAQAdapter
 import com.kotlin.sacalabici.framework.adapters.views.fragments.SettingsFragment
 import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FAQFragment : Fragment() {
     private var _binding: FragmentFaqsBinding? = null
+    private lateinit var adapter: FAQAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: FAQViewModel
-    private val adapter: FAQAdapter = FAQAdapter()
     private var permissions: List<String> = emptyList()
 
     private var faqList: ArrayList<FAQBase> = ArrayList()
@@ -32,12 +31,11 @@ class FAQFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[FAQViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[FAQViewModel::class.java]
         val root: View = binding.root
         setupBackButton()
         initializeComponents(root)
@@ -70,19 +68,34 @@ class FAQFragment : Fragment() {
         // Observing the FAQ list data from the ViewModel
         viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
             lifecycleScope.launch {
-                delay(50)
                 setUpRecyclerView(ArrayList(faqListData))
             }
         }
 
-        // Observer for error messages
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             binding.errorMessageFAQ.text = errorMessage
+        }
+
+        viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
+            faq?.let {
+                Log.d("FAQFragment", "Selected FAQ: ${faq.IdPregunta}")
+                // Navega solo si no está ya en el BackStack
+                if (parentFragmentManager.findFragmentByTag("FAQDetailFragment") == null) {
+                    val transaction = parentFragmentManager.beginTransaction()
+                    transaction.replace(R.id.nav_host_fragment_content_main, FAQDetailFragment(), "FAQDetailFragment")
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+
+                    // Limpia el valor de `selectedFAQ` para evitar que se dispare nuevamente al regresar
+                    viewModel.selectedFAQ.postValue(null)
+                }
+            }
         }
     }
 
     private fun initializeComponents(root: View) {
         recyclerView = root.findViewById(R.id.recyclerFAQ)
+        adapter = FAQAdapter(viewModel) // Initialize the adapter here
     }
 
     private fun setUpRecyclerView(dataForList: ArrayList<FAQBase>) {
@@ -103,13 +116,12 @@ class FAQFragment : Fragment() {
 
     // Function to handle back button, navigating to SettingsFragment
     private fun setupBackButton() {
-        val btnFAQs = binding.BRegresar
-        btnFAQs.setOnClickListener {
-            // Navigate to SettingsFragment and replace content in MainActivity's container
+        binding.BRegresar.setOnClickListener {
+            viewModel.selectedFAQ.postValue(null)  // Limpiar el valor seleccionado
             parentFragmentManager
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, SettingsFragment())
-                .addToBackStack(null) // Allows navigating back
+                .addToBackStack(null)
                 .commit()
         }
     }
@@ -132,6 +144,7 @@ class FAQFragment : Fragment() {
     // Función para que el botón de Agregar FAQ de lleve a RegisterFAQFragment
     private fun setupRegisterFAQsButton() {
         val btnFAQs = binding.BAgregarPregunta
+        btnFAQs.visibility = View.VISIBLE // Ensure the button is visible
         btnFAQs.setOnClickListener {
             // Navegar a RegisterFAQsFragment y reemplazar el contenido en el contenedor principal de MainActivity
             parentFragmentManager

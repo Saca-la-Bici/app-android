@@ -78,17 +78,13 @@ class RodadasFragment: Fragment() {
 
     private fun setupObservers() {
         activitiesViewModel.rodadasLiveData.observe(viewLifecycleOwner) { rodadas ->
-            adapter.updateData(rodadas)
-            binding.swipeRefreshLayout.isRefreshing = false
-        }
-
-        activitiesViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { errorMessage ->
-            if (errorMessage != null) {
-                binding.errorMessageRodadas.text = errorMessage
-                binding.errorMessageRodadas.visibility = View.VISIBLE
-            } else {
+            if (rodadas.isNotEmpty()) {
+                adapter.updateData(rodadas)
                 binding.errorMessageRodadas.visibility = View.GONE
+            } else {
+                binding.errorMessageRodadas.visibility = View.VISIBLE
             }
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -104,9 +100,10 @@ class RodadasFragment: Fragment() {
     }
 
     // Iniciar activity con detalles acorde al ID de la rodada seleccionado
-    private fun passDetailsActivity(rodadaId: String){
-        val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
+    private fun passDetailsActivity(rodadaId: String) {
+        val intent = Intent(requireContext(), DetailsActivity::class.java).apply {
             putExtra("ACTIVITY_ID", rodadaId)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
     }

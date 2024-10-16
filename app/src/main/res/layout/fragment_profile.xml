@@ -75,6 +75,17 @@
         app:layout_constraintEnd_toEndOf="@id/toolbar"
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
+    <ImageButton
+        android:id="@+id/btnhelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_help"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toStartOf="@id/btnSettings"
+        app:layout_constraintTop_toTopOf="@id/toolbar" />
+
     <View
         android:id="@+id/vUser"
         android:layout_width="0dp"
@@ -292,19 +303,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vIcons"
         app:layout_constraintVertical_bias="0.0" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddAnouncement"
-        android:layout_marginBottom="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_help"
-        app:fabSize="normal"
-        app:backgroundTint="@color/sacaLaBiciYellow"
-        app:tint="@color/white"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@id/VContainer"
-        app:layout_constraintBottom_toBottomOf="@id/VContainer"/>
 
     <View
         android:id="@+id/vNavBar"

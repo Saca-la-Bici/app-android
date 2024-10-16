@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,17 +78,14 @@ class EventosFragment : Fragment() {
 
     private fun setupObservers() {
         activitiesViewModel.eventosLiveData.observe(viewLifecycleOwner) { eventos ->
-            adapter.updateData(eventos)
-            binding.swipeRefreshLayout.isRefreshing = false
-        }
-
-        activitiesViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { errorMessage ->
-            if (errorMessage != null) {
-                binding.errorMessageEventos.text = errorMessage
-                binding.errorMessageEventos.visibility = View.VISIBLE
-            } else {
+            if (eventos.isNotEmpty()) {
+                adapter.updateData(eventos)
                 binding.errorMessageEventos.visibility = View.GONE
+            } else {
+                adapter.updateData(eventos)
+                binding.errorMessageEventos.visibility = View.VISIBLE
             }
+            binding.swipeRefreshLayout.isRefreshing = false
         }
 
         activitiesViewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
@@ -109,10 +105,11 @@ class EventosFragment : Fragment() {
         }
     }
 
-    // Iniciar activity con detalles acorde al ID del evento seleccionado
-    private fun passDetailsActivity(eventoId: String){
-        val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
+    // Iniciar ectivity con detalles acorde al ID del evento seleccionado
+    private fun passDetailsActivity(eventoId: String) {
+        val intent = Intent(requireContext(), DetailsActivity::class.java).apply {
             putExtra("ACTIVITY_ID", eventoId)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
     }
@@ -124,8 +121,6 @@ class EventosFragment : Fragment() {
         // Convertir lista de usuarios en ArrayList<String>
         val registerArrayList = ArrayList<String>()
         evento.register?.let { registerArrayList.addAll(it) }
-
-        Log.d("EventosFragment", evento.toString())
 
         if (storedPermissions?.contains("Modificar actividad") == true) {
             val dialogFragment = ActivityActionDialogFragment.newInstance(

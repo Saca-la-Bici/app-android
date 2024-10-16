@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kotlin.sacalabici.databinding.FragmentActivitiesBinding
-import com.kotlin.sacalabici.framework.views.activities.AddActivityActivity
+import com.kotlin.sacalabici.framework.views.activities.activities.AddActivityActivity
 import com.kotlin.sacalabici.framework.adapters.ActivitiesPagerAdapter
 import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 

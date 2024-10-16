@@ -100,7 +100,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".framework.views.activities.AddActivityActivity"
+            android:name=".framework.views.activities.activities.AddActivityActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Sacalabici.Light" /> <!-- Otras actividades relevantes -->

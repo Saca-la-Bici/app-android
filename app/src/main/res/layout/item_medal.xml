@@ -1,50 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_gravity="center"
     android:gravity="center"
-    android:padding="4dp"
-    android:id="@+id/medalInfo"
-    >
+    android:orientation="vertical"
+    android:padding="4dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="8dp"
-        card_view:cardElevation="0dp"
-        >
+        card_view:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@color/semiWhite"
-            >
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:src="@mipmap/ic_launcher"
-                android:layout_gravity="center"
                 android:id="@+id/IVMedal"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="88dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_launcher" />
+
             <TextView
+                android:id="@+id/TVMedalName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="8sp"
-                android:textColor="@color/semiBlack"
-                android:gravity="center"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:gravity="center"
                 android:text="Name"
-                android:id="@+id/TVMedalName"
-                android:textStyle="bold"
-                />
+                android:textColor="@color/semiBlack"
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-</RelativeLayout>
+</LinearLayout>

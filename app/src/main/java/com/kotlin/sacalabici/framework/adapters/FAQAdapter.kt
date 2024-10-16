@@ -9,8 +9,8 @@ import com.kotlin.sacalabici.databinding.ItemFaqBinding
 import com.kotlin.sacalabici.databinding.ItemFaqCategoryBinding
 import com.kotlin.sacalabici.framework.viewholders.CategoryFAQViewHolder
 import com.kotlin.sacalabici.framework.viewholders.FAQViewHolder
+import com.kotlin.sacalabici.framework.viewmodel.FAQViewModel
 
-// Definir FAQItem para manejar categorías y FAQs
 sealed class FAQItem {
     data class Category(
         val name: String,
@@ -21,35 +21,31 @@ sealed class FAQItem {
     ) : FAQItem()
 }
 
-class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var data: ArrayList<FAQItem> = ArrayList() // Holds FAQ items including categories
-    var dataSearch: ArrayList<FAQBase> = ArrayList() // Used for filtering/searching
+class FAQAdapter(
+    private val viewModel: FAQViewModel
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var data: ArrayList<FAQItem> = ArrayList()
     lateinit var context: Context
 
     companion object {
-        // Tipos de vista para el RecyclerView
         const val VIEW_TYPE_CATEGORY = 0
         const val VIEW_TYPE_FAQ = 1
     }
 
-    // Function to set the initial data and organize it by category
     fun setFAQAdapter(
         basicData: ArrayList<FAQBase>,
         context: Context,
     ) {
         this.context = context
-        // Group by the category (Tema field in FAQBase)
         val groupedData = basicData.groupBy { it.Tema }
         data.clear()
         for ((category, faqs) in groupedData) {
-            data.add(FAQItem.Category(category)) // Add the category header
-            faqs.forEach { faq -> data.add(FAQItem.FAQ(faq)) } // Add FAQs under that category
+            data.add(FAQItem.Category(category))
+            faqs.forEach { faq -> data.add(FAQItem.FAQ(faq)) }
         }
-        // Notify the adapter that the data has changed
         notifyDataSetChanged()
     }
 
-    // Binding the view holder based on the item type (category or FAQ)
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
@@ -59,10 +55,12 @@ class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             (holder as CategoryFAQViewHolder).bind((item as FAQItem.Category).name)
         } else {
             (holder as FAQViewHolder).bind((item as FAQItem.FAQ).faqBase)
+            holder.itemView.setOnClickListener {
+                viewModel.selectFAQ(item.faqBase)
+            }
         }
     }
 
-    // Creating the view holder for the item
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -75,10 +73,8 @@ class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             FAQViewHolder(binding)
         }
 
-    // Returns the number of items
     override fun getItemCount(): Int = data.size
 
-    // Determine the view type (Category or FAQ)
     override fun getItemViewType(position: Int): Int =
         if (data[position] is FAQItem.Category) {
             VIEW_TYPE_CATEGORY
@@ -86,7 +82,6 @@ class FAQAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             VIEW_TYPE_FAQ
         }
 
-    // Function to update the list dynamically when search/filter is applied
     fun updateList(filteredData: ArrayList<FAQBase>) {
         data.clear() // Clear current data
         // Group filtered data by category and rebuild the list

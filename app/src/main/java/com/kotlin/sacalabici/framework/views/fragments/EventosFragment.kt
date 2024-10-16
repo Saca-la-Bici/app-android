@@ -68,17 +68,14 @@ class EventosFragment : Fragment() {
 
     private fun setupObservers() {
         activitiesViewModel.eventosLiveData.observe(viewLifecycleOwner) { eventos ->
-            adapter.updateData(eventos)
-            binding.swipeRefreshLayout.isRefreshing = false
-        }
-
-        activitiesViewModel.errorMessageLiveData.observe(viewLifecycleOwner) { errorMessage ->
-            if (errorMessage != null) {
-                binding.errorMessageEventos.text = errorMessage
-                binding.errorMessageEventos.visibility = View.VISIBLE
-            } else {
+            if (eventos.isNotEmpty()) {
+                adapter.updateData(eventos)
                 binding.errorMessageEventos.visibility = View.GONE
+            } else {
+                adapter.updateData(eventos)
+                binding.errorMessageEventos.visibility = View.VISIBLE
             }
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -93,10 +90,11 @@ class EventosFragment : Fragment() {
         }
     }
 
-    // Iniciar activity con detalles acorde al ID del evento seleccionado
-    private fun passDetailsActivity(eventoId: String){
-        val intent = Intent(requireContext(), DetailsActivity::class.java).apply{
+    // Iniciar ectivity con detalles acorde al ID del evento seleccionado
+    private fun passDetailsActivity(eventoId: String) {
+        val intent = Intent(requireContext(), DetailsActivity::class.java).apply {
             putExtra("ACTIVITY_ID", eventoId)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
     }

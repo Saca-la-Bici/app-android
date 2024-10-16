@@ -16,13 +16,13 @@
     <color name="neonYellow">#FFFF00</color>
     <color name="darkGray">#2B2B3B</color>
     <color name="gray">#4A4A4A</color>
-    <color name="lightGray">#737373</color>
+    <color name="lightGray">#EFEFEF</color>
     <color name="lightGray2">#ECECEC</color>
     <color name="semiBlack">#1C1B1F</color>
     <color name="semiWhite">#FDFFFF</color>
     <color name="beige">#F3F0EB</color>
-    <color name="green">#9BC7AC</color>
-    <color name="darkGreen">#7DA68D</color>
+    <color name="green">#6EAF87</color>
+    <color name="darkGreen">#3F7554</color>
     <color name="semi_transparent_black">#80000000</color>
     <color name="yellow_able">#F6CD0B</color>
     <color name="yellow_disabled">#e3e3ac</color>

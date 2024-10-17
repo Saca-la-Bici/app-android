@@ -35,6 +35,7 @@ class ActionButtonDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AnnouncementsViewModel::class.java)
         arguments?.let {
+            // Obtener los argumentos del fragmento
             val id = it.getString("id") ?: throw IllegalArgumentException("ID is required")
             val title = it.getString("title") ?: throw IllegalArgumentException("Title is required")
             val content = it.getString("content") ?: throw IllegalArgumentException("Content is required")
@@ -70,8 +71,8 @@ class ActionButtonDialogFragment : DialogFragment() {
 
         val tvDelete: TextView = view.findViewById(R.id.TVDelete)
         val tvModify: TextView = view.findViewById(R.id.TVModify)
-        Log.d("ActionButtonDialogFragment", "onViewCreated: $permissions")
 
+        // Verificar permisos para eliminar y modificar anuncios
         if (!permissions.contains("Eliminar anuncio")) {
             tvDelete.visibility = View.GONE
         }

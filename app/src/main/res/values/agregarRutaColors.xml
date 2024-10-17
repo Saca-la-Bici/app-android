@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="whitesmoke">#F3F0EB</color>
+    <color name="sacaLaBiciYellow">#FFCC00</color>
+    <color name= "red">#F54444</color>
+    <color name= "verifyBlue">#4444aa</color>
+
+    <color name="yellow">#F6CD0B</color>
+    <color name="neonYellow">#FFFF00</color>
+    <color name="darkGray">#2B2B3B</color>
+    <color name="gray">#4A4A4A</color>
+    <color name="lightGray">#EFEFEF</color>
+    <color name="lightGray2">#ECECEC</color>
+    <color name="semiBlack">#1C1B1F</color>
+    <color name="semiWhite">#FDFFFF</color>
+    <color name="beige">#F3F0EB</color>
+    <color name="green">#6EAF87</color>
+    <color name="darkGreen">#3F7554</color>
+    <color name="semi_transparent_black">#80000000</color>
+    <color name="yellow_able">#F6CD0B</color>
+    <color name="yellow_disabled">#e3e3ac</color>
+    <color name="selected_bg">#D3D3D3</color>
+
+    <!-- Colores de Niveles -->
+    <color name="level1">#81C784</color>
+    <color name="level2">#388E3C</color>
+    <color name="level3">#FDD835</color>
+    <color name="level4">#FF9800</color>
+    <color name="level5">#F44336</color>
+
+</resources>

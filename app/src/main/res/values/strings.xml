@@ -1,3 +1,179 @@
 <resources>
-    <string name="app_name">sacalabici</string>
+    <string name="app_name">Saca la Bici</string>
+    <string name="Actividades">Actividades</string>
+    <string name="Mapa">Mapa</string>
+    <string name="Anuncios">Anuncios</string>
+    <string name="Perfil">Perfil</string>
+    <string name="AnnouncementTitle">Aquí va el título</string>
+    <string name="AnnouncementDescription">Aquí va la descripción del anuncio</string>
+    <string name="addAnnouncement">Añadir anuncio</string>
+    <string name="modifyAnnouncement">Modificar anuncio</string>
+    <string name="add_announcement_title">Título</string>
+    <string name="add_announcement_title_hint">Título del anuncio</string>
+    <string name="add_announcement_description">Descripción</string>
+    <string name="add_announcement_description_hint">¿Qué quieres compartir?</string>
+
+    <!-- String de Logo -->
+    <string name="CDLogo">Logo de Saca la Bici</string>
+
+    <!-- String de Fecha -->
+    <string name="TContinueWithGoogle">Continuar con Google</string>
+    <string name="TContinueWithFacebook">Continuar con Facebook</string>
+    <string name="TSessionTitle">Explora y disfruta Querétaro</string>
+    <string name="TSessionSubtitle">Es genial tenerte aquí</string>
+    <string name="TSignUp">Crea una cuenta</string>
+    <string name="TLogin">Iniciar sesión</string>
+    <string name="TContinueWIth">O continúa con</string>
+
+    <!-- String de Login -->
+    <string name="TPassword">Contraseña</string>
+    <string name="TLoginTitle">Inicia Sesión</string>
+    <string name="TForgotPassword">¿Olvidaste tu contraseña?</string>
+
+    <!-- String de Register -->
+    <string name="TMakeAccount">Crear cuenta</string>
+    <string name="TEmail">Correo electrónico</string>
+    <string name="TUsername">Nombre de usuario</string>
+    <string name="TBirthday">Fecha de Nacimiento</string>
+    <string name="TPrivacityAdd">Esta información no será pública.</string>
+    <string name="TDate">Año-Mes-Día</string>
+    <string name="TContinue">Continuar</string>
+    <string name="TVerifyPassword">Confirmar contraseña</string>
+    <string name="TFinish">Finalizar</string>
+
+    <!-- String de Perfil -->
+    <string name="TProfile">Asignación de roles</string>
+
+    <string name="facebook_app_id">1940390093140800</string>
+    <string name="facebook_client_token">b5daf3a37da479db677c140e79b2268d</string>
+    <string name="PRodadas">Rodadas</string>
+    <string name="PKilometros">Kilómetros</string>
+    <string name="PAmigos">Amigos</string>
+    <string name="PEdit">Editar Perfil</string>
+    <string name="PShareProfile">Compartir perfil</string>
+    <string name="genderPE">Género</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">Confirmar</string>
+    <string name="TNombreCompleto">Nombre completo</string>
+    <string name="TNumeroEmergencia">Número de emergencia</string>
+    <string name="País">País\n</string>
+    <string name="TPhoneNumber">Número de teléfono</string>
+    <string name="TBloodType">Tipo de sangre</string>
+    <string name="TNoUsers">No se encontraron usuarios</string>
+
+
+    <string-array name="genders">
+        <item>Masculino</item>
+        <item>Femenino</item>
+        <item>Otro</item>
+        <item>Prefiero no decirlo</item>
+    </string-array>
+
+    <string-array name="bloodTypes">
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>O+</item>
+        <item>O-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+        <item>No especificado</item>
+    </string-array>
+
+    <!--String para Descripción de botones-->
+    <string name="back_button_desc">Pestaña anterior</string>
+
+    <!-- String de Registrar Pregunta Frecuente -->
+    <string name="NuevaPregunta">Añadir Pregunta</string>
+
+    <string name="Categoria">Categoria</string>
+
+    <string name="Categoria1FAQ">Lugares y tiempos de las rodadas</string>
+    <string name="Categoria2FAQ">Niveles</string>
+    <string name="Categoria3FAQ">Equipamiento</string>
+    <string name="Categoria4FAQ">Medidas de Seguridad</string>
+    <string name="Categoria5FAQ">Condiciones de Participación y Asistencia</string>
+
+    <string name="TuSeguridad">Tu seguridad</string>
+    <string name="AcercaBici">Acerca de la bici</string>
+    <string name="InfoGeneral">Información general</string>
+
+    <string name="Titulo">Titulo</string>
+    <string name="TituloPregunta">¿Qué pregunta vas a responder?</string>
+    <string name="Descripcion">Descripción</string>
+    <string name="DescripcionRespuesta">Escribe la respuesta aquí...</string>
+    <string name="AgregarImagen">Agregar imagen</string>
+
+    <!-- strings de FAQ -->
+    <string name="Ayuda">Ayuda</string>
+    <string name="TituloAyuda">¿Cómo te podemos ayudar hoy?</string>
+    <string name="PreguntaAyuda">¿Cuál es tu duda?</string>
+    <string name="PreguntasFrecuentes">Preguntas Frecuentes</string>
+    <string name="Modificar">Modificar</string>
+    <string name="Editar">Editar</string>
+
+    <!-- Strings para Agregar ruta -->
+    <string name="TituloRuta">Título</string>
+    <string name="TiempoRuta">Tiempo (ej. 4h)</string>
+    <string name="PuntoInicioRuta">Punto de Inicio</string>
+    <string name="PuntoDescansoRuta">Punto de Descanso</string>
+    <string name="PuntoFinRuta">Punto de Fin</string>
+    <string name="DistanciaRuta">Distancia (Se calcula automáticamente)</string>
+    <string name="NivelRuta">Selecciona el nivel</string>
+    <string name="Siguiente">Siguiente</string>
+    <string name="RegistrarRuta">Registrar Ruta</string>
+    <string name="agRutaTit">Agrega una ruta</string>
+    <string name="ModRutaTit">Modifica una ruta</string>
+    <string name="TituloMod">Título</string>
+    <string name="DistanciaMod">Distancia (Se calcula automáticamente)</string>
+    <string name="PuntoInicioMod">Punto de Inicio</string>
+    <string name="PuntoDescansoMod">Punto de Descanso</string>
+    <string name="PuntoFinMod">Punto de Fin</string>
+    <string name="TiempoMod">Tiempo (ej. 4h)</string>
+    <string name="NivelMod">Selecciona el nivel</string>
+    <string name="SiguienteMod">Siguiente</string>
+    <string name="ModRutaBtn">Modificar Ruta</string>
+    <string name="noAnnouncements">No se encuentran anuncios disponibles</string>
+    <string name="noActivities">No se encuentran actividades disponibles</string>
+    <string name="noActivity">La actividad fue modificada o ya no está disponible</string>
+    <string name="QuieresEliminarEstaRuta">¿Quieres eliminar esta ruta?</string>
+    <string name="ImportanteUnaVezEliminadaLaRutaNoSePodraRecuperar">¡Importante! Una vez eliminada la ruta no se podrá recuperar.</string>
+    <string name="CancelarEliminarRuta">Cancelar</string>
+    <string name="ConfirmarEliminarRuta">Confirmar</string>
+    <string name="TVerifyEmail">Verificar Correo</string>
+    <string name="puede_cambiar_en_el_momento_de_la_rodada">puede cambiar en el momento de la rodada</string>
+    <string name="importante_la_ruta_es_solo_de_referencia">¡IMPORTANTE! La ruta es solo de referencia</string>
+    <string name="eliminar_ruta">EliminarRuta</string>
+
+    <!-- Strings para Nuevo mensaje de Agregar Ruta -->
+
+
+
+    <!-- Strings de inscribir actividad -->
+    <string name="Verificar">Verificar Asistencia</string>
+    <string name="TPasswordInstructions">La contraseaña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número</string>
+    <string name="TConfigPrivacy">Configuración y privacidad</string>
+    <string name="TMoreInfo">Más información y asistencia</string>
+    <string name="THelp">Ayuda</string>
+    <string name="TInfo">Información</string>
+    <string name="THowtoUse">Cómo usar la app</string>
+    <string name="TRoles">Asignación de roles y permisos</string>
+    <string name="TDeactivate">Desactivar Usuarios</string>
+    <string name="TAdminAccount">Administra tu cuenta</string>
+    <string name="TAccount">Tu cuenta</string>
+    <string name="TOtherPlatforms">Otras Plataformas</string>
+    <string name="TSacalaBici">Saca la Bici</string>
+    <string name="TRentabici">Rentabici</string>
+    <string name="TCloseSession">Cerrar Sesión</string>
+    <string name="TPrivacity">Política de Privacidad</string>
+    <string name="TTerms">Términos y Condiciones</string>
+    <string name="TClose">Cerrar</string>
+    <string name="TRecoverPassw">Recupera tu contraseña</string>
+    <string name="TInfoRemain">Entendemos que estas cosas pasan. Enviaremos un enlace de recuperación a tu correo.Tú no te preocupes.</string>
+    <string name="TSendLink">Enviar enlace</string>
+    <string name="TDoyouhaveanaccount">Ya tienes una cuenta?</string>
+    <string name="TLoginhere">Inicia sesión aquí</string>
+
 </resources>
+

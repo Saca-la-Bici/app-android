@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="HintStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/roboto_light</item>
+    </style>
+
+    <!-- Estilo para redondear imagenes -->
+    <style name="RoundedImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item> <!-- Para hacerlo completamente circular -->
+    </style>
+
+    <!-- Estilo de fuente LabelSmall -->
+    <style name="TextAppearance.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <!-- Personaliza según los estilos de Figma -->
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
+    <!-- Estilo de fuente TitleMedium -->
+    <style name="TextAppearance.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+    </style>
+
+    <!-- Redonde de bordes para imágenes -->
+    <style name="RoundedImageLess">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@color/black</item>
+        <item name="android:calendarTextColor">@color/black</item>
+        <item name="android:dayOfWeekBackground">@color/black</item>
+    </style>
+
+</resources>

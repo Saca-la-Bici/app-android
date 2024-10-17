@@ -1,16 +1,29 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.Sacalabici" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <!-- Base application theme for light mode -->
+    <style name="Theme.Sacalabici.Light" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/yellow</item>
         <item name="colorOnPrimary">@color/white</item>
+
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+        <item name="colorSecondary">@color/green</item>
+        <item name="colorSecondaryVariant">@color/darkGreen</item>
+        <item name="colorOnSecondary">@color/darkGray</item>
+
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/semiWhite</item>
+        <item name="colorSurface">@color/semiWhite</item>
+
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/darkGray</item>
+
+        <!-- Status bar color -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
+
+        <!-- Customize your theme -->
     </style>
 </resources>

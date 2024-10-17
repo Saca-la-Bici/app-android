@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- Este ConstraintLayout es innecesario si no vas a poner más elementos dentro de él -->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <TextView
+            android:id="@+id/TitleKilometrosMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kilómetros al mes"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/maxkilometrosMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="250 km"
+            android:textColor="#ADADAD"
+            app:layout_constraintTop_toBottomOf="@+id/TitleKilometrosMes"
+            app:layout_constraintEnd_toEndOf="@+id/progressAgua"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressKilometrosMes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:indicatorColor="@color/yellow"
+            app:layout_constraintTop_toBottomOf="@id/maxkilometrosMes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <TextView
+            android:id="@+id/textKilometrosMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kilómeros recorridos al mes"
+            app:layout_constraintTop_toBottomOf="@id/progressKilometrosMes"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+        <TextView
+            android:id="@+id/textResultKilometrosMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/progressKilometrosMes"
+            app:layout_constraintEnd_toEndOf="@+id/progressKilometrosMes"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+
+        <TextView
+            android:id="@+id/TitleGlobal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ahorro de Recursos"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/textResultKilometrosMes"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="32dp"/>
+
+        <!-- Agua -->
+        <TextView
+            android:id="@+id/textTitleWater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agua"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/TitleGlobal"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/maxLitersW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80L"
+            android:textColor="#ADADAD"
+            app:layout_constraintTop_toBottomOf="@+id/TitleGlobal"
+            app:layout_constraintEnd_toEndOf="@+id/progressAgua"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressAgua"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:indicatorColor="@color/yellow"
+            app:layout_constraintTop_toBottomOf="@id/textTitleWater"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+
+        <TextView
+            android:id="@+id/textAgua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ahorro de agua al utilizar la bicicleta"
+            app:layout_constraintTop_toBottomOf="@id/progressAgua"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+        <TextView
+            android:id="@+id/textResultWater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/progressAgua"
+            app:layout_constraintEnd_toEndOf="@+id/progressAgua"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+
+        <!-- CO2 -->
+        <TextView
+            android:id="@+id/textTitleCO2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CO2"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/textAgua"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/maxKilograms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30kg"
+            android:textColor="#ADADAD"
+            app:layout_constraintTop_toBottomOf="@+id/textAgua"
+            app:layout_constraintEnd_toEndOf="@+id/progressAgua"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressCO2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:indicatorColor="@color/yellow"
+            app:layout_constraintTop_toBottomOf="@id/textTitleCO2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <TextView
+            android:id="@+id/textCO2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reducción de emisiones de CO2"
+            app:layout_constraintTop_toBottomOf="@id/progressCO2"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/textResultCO2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/progressCO2"
+            app:layout_constraintEnd_toEndOf="@+id/progressCO2"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+
+        <!-- Air -->
+        <TextView
+            android:id="@+id/textTitleAir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aire"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/textCO2"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/MaxGramsNox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5g"
+            android:textColor="#ADADAD"
+            app:layout_constraintTop_toBottomOf="@+id/textResultCO2"
+            app:layout_constraintEnd_toEndOf="@+id/progressCO2"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressAir"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:indicatorColor="@color/yellow"
+            app:layout_constraintTop_toBottomOf="@id/textTitleAir"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <TextView
+            android:id="@+id/textAir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reducción de contaminantes del aire"
+            app:layout_constraintTop_toBottomOf="@id/progressAir"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/textResultAir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/progressAir"
+            app:layout_constraintEnd_toEndOf="@+id/progressAir"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+
+        <!-- Combustible -->
+        <TextView
+            android:id="@+id/textTitleGas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Combustible"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/textAir"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/maxLitersC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30L"
+            android:textColor="#ADADAD"
+            app:layout_constraintTop_toBottomOf="@+id/textResultAir"
+            app:layout_constraintEnd_toEndOf="@+id/progressAir"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"/>
+
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressGas"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="100"
+            app:layout_constraintTop_toBottomOf="@id/textTitleGas"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:indicatorColor="@color/yellow"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <TextView
+            android:id="@+id/textGas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ahorro de combustible al utilizar \nla bicicleta"
+            app:layout_constraintTop_toBottomOf="@id/progressGas"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/textResultGas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/progressGas"
+            app:layout_constraintEnd_toEndOf="@+id/progressGas"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"/>
+
+        <TextView
+            android:id="@+id/finalGlobal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Todos los resultados se obtuvieron \nutilizando como base un coche Versa"
+            app:layout_constraintTop_toBottomOf="@id/textResultGas"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="32dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

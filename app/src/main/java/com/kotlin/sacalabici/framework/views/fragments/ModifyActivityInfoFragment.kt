@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -37,8 +38,8 @@ import java.util.Calendar
 import java.util.Locale
 
 class ModifyActivityInfoFragment: Fragment() {
+    val viewModel: ActivitiesViewModel by activityViewModels()
     private lateinit var listener: OnNextInteractionListener
-    private lateinit var viewModel: ActivitiesViewModel
     private var _binding: FragmentActivityInfoBinding? = null
     private val binding get() = _binding!!
 
@@ -119,7 +120,6 @@ class ModifyActivityInfoFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this).get(ActivitiesViewModel::class.java)
         _binding = FragmentActivityInfoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -156,6 +156,19 @@ class ModifyActivityInfoFragment: Fragment() {
         initializeWordListeners()
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Animación de carga
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
+        }
     }
 
     private fun populateUI(title: String?, date: String?, hour: String?,

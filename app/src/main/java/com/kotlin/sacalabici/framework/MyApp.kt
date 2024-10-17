@@ -20,11 +20,13 @@ class MyApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Inicializa Firebase
         FirebaseApp.initializeApp(this)
 
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseTokenManager = FirebaseTokenManager(firebaseAuth)
 
+        // Obtiene el token de FCM de Firebase Messaging
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val token = task.result
@@ -37,7 +39,9 @@ class MyApp : Application() {
         }
     }
 
+    // Método para enviar el token de FCM al servidor
     private suspend fun sendRegistrationToServer(FCMToken: String?): Unit? {
+        // Obtiene el token de autenticación
         val authToken = firebaseTokenManager.getTokenSynchronously()
         api = FCMNetworkModuleDI(authToken)
 

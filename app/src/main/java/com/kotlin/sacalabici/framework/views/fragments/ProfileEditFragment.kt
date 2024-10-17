@@ -43,10 +43,11 @@ class ProfileEditFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentProfileEditBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileEditBinding.inflate(inflater, container, false) // Binding de la vista
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         val root: View = binding.root
 
+        // Llamadas a los métodos para dar funcionalidad a los elementos de la visata
         setupBloodDropdown()
         setupBackButton()
         setupUploadButton()
@@ -68,9 +69,9 @@ class ProfileEditFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
+        viewModel.getProfile().observe(viewLifecycleOwner) { profile -> // Al crear la vista se manda a llamar la función para obtener la información del usuario
             profile?.let {
-                binding.username.setText(profile.user)
+                binding.username.setText(profile.user) // Se poblan los campos con la información del usuario.
                 binding.name.setText(profile.name)
 //                binding.genderDropDown.setText(profile.activitiesCompleted, false)
                 binding.bloodDropDown.setText(profile.bloodtype, false)
@@ -94,7 +95,7 @@ class ProfileEditFragment: Fragment() {
     }
 
 
-    private fun setupBloodDropdown() {
+    private fun setupBloodDropdown() {  // Poblar al dropdown de selección de tipo de sangre con las opciones.
         val bloodDropdownConfig = binding.bloodDropDown
         val bloodTypes = resources.getStringArray(R.array.bloodTypes)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.drop_down_item, bloodTypes)
@@ -102,7 +103,7 @@ class ProfileEditFragment: Fragment() {
     }
 
 
-    private fun setupBackButton() {
+    private fun setupBackButton() {     // Dar funcionalidad al botón para regresar a consultar perfil sin publicar los cambios.
         val backButton = binding.btnBack
         backButton.setOnClickListener {
             val profileFragment = ProfileFragment()
@@ -113,22 +114,22 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
-    private fun setupUploadButton() {
+    private fun setupUploadButton() {   // Dar funcionalidad al botón para publicar los cambios.
         val saveButton = binding.btnSave
         saveButton.setOnClickListener {
-            val valid = inputValidation()
-            val image = selectedImageUri
+            val valid = inputValidation() // Varible que define si los campos fueron llenados correctamente.
+            val image = selectedImageUri    // Tomamos el valor actual de cada elemento de la vista y lo guardamos en un avariable
             val name = binding.name.text.toString()
             val username = binding.username.text.toString()
             val blood = binding.bloodDropDown.text.toString()
             val emergencyNum = binding.emergencyNumber.text.toString()
-            val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, image, 0,)
+            val profile = Profile(username, name, blood, emergencyNum, 0, 0, 0.0, image, 0,) //Poblamos el objeto de tipo Profile con el que mandaremos todos los datos.
             val context: Context = requireContext()
 
-            if(valid){
+            if(valid){ // Continuar si los datos son validos
                 lifecycleScope.launch {
-                    val success = viewModel.patchProfile(profile, context)
-                    if (success) {
+                    val success = viewModel.patchProfile(profile, context) // Llama la función de patchProfile del viewmodel con los datos.
+                    if (success) { // Si se publican los cambios de manera exitosa, se devuelve a la vista de consultar perfil.
                         val profileFragment = ProfileFragment()
                         parentFragmentManager.beginTransaction()
                             .replace(R.id.nav_host_fragment_content_main, profileFragment)
@@ -142,7 +143,7 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
-    private fun setUpEditImageButton(){
+    private fun setUpEditImageButton(){ // Funcionalidad para abrir el selector de imagen.
         val imageButton = binding.profileImageLayout
         imageButton.setOnClickListener{
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -150,7 +151,7 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
-    private fun registerImagePicker() {
+    private fun registerImagePicker() { // Funcionalidad para usar la imagen seleccionada.
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 selectedImageUri = result.data?.data
@@ -159,12 +160,12 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
-    override fun onDestroy() {
+    override fun onDestroy() { // Función para borrar la cache con la imagen que se subió al salir de la vista.
         super.onDestroy()
         cleanTemporaryFiles()
     }
 
-    private fun cleanTemporaryFiles() {
+    private fun cleanTemporaryFiles() { // Función para borrar la cache con la imagen que se subió.
         val cacheDir = getActivity()?.getCacheDir()
         val tempFile = File(cacheDir, "tempFile")
         if (tempFile.exists()) {
@@ -172,7 +173,7 @@ class ProfileEditFragment: Fragment() {
         }
     }
 
-    private fun inputValidation(): Boolean{
+    private fun inputValidation(): Boolean{ // Función que se manda a llamar al publicar lso cambios para validar todos los campos que se llenaron.
         val nameBinding = binding.name
         val usernameBinding = binding.username
         val numberBinding = binding.emergencyNumber

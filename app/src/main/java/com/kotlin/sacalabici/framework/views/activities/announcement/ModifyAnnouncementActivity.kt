@@ -54,11 +54,14 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         setupTextWatchers()
     }
 
+    // Método para llenar los campos de la UI con los datos del anuncio
     private fun populateUI(id: String?, title: String?, content: String?, url: String?) {
         binding.etModifyAnnouncementTitle.setText(title)
         binding.etModifyAnnouncementDescription.setText(content)
+        // Muestra el contador de caracteres para la descripción y el título
         binding.tvModifyAnnouncementDescriptionCounter.text = "${content?.length ?: 0}/500"
         binding.tvModifyAnnouncementTitleCounter.text = "${title?.length ?: 0}/100"
+        // Carga la imagen original si existe
         if (!url.isNullOrEmpty()) {
             Glide.with(this)
                 .load(url)
@@ -79,15 +82,15 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
                 val title = binding.etModifyAnnouncementTitle.text.toString()
                 val description = binding.etModifyAnnouncementDescription.text.toString()
 
-                showLoading(true)
+                showLoading(true) // Muestra el progreso de carga
 
                 lifecycleScope.launch {
                     // Si se ha seleccionado una nueva imagen, usamos ese Uri. De lo contrario, descargamos la imagen original.
                     val imageUri = when {
-                        isImageErased -> null
-                        selectedImageUri != null -> selectedImageUri
+                        isImageErased -> null // Si se borró la imagen, se establece a null
+                        selectedImageUri != null -> selectedImageUri // Usa la imagen seleccionada
                         !originalImageUrl.isNullOrEmpty() && !isImageErased -> downloadImageToFile(originalImageUrl!!)
-                        else -> null
+                        else -> null // Si no hay imagen, se establece a null
                     }
 
                     // Creamos el objeto Announcement con el Uri resultante
@@ -129,7 +132,7 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         return true
     }
 
-
+    // Método para registrar el picker de imágenes
     private fun registerImagePicker() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -144,6 +147,7 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         }
     }
 
+    // Método para descargar la imagen de la URL a un archivo local
     private suspend fun downloadImageToFile(url: String): Uri? {
         return withContext(Dispatchers.IO) {
             try {
@@ -165,11 +169,13 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         }
     }
 
+    // Método llamado al destruir la actividad
     override fun onDestroy() {
         super.onDestroy()
         cleanTemporaryFiles()
     }
 
+    // Método para limpiar archivos temporales
     private fun cleanTemporaryFiles() {
         val tempFile = File(cacheDir, "tempFile")
         if (tempFile.exists()) {
@@ -177,11 +183,13 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         }
     }
 
+    // Método para mostrar u ocultar la barra de progreso
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.ibCheck.isEnabled = !isLoading
     }
 
+    // Método para borrar la imagen seleccionada
     private fun eraseImage() {
         selectedImageUri = null
         isImageErased = true
@@ -192,6 +200,7 @@ class ModifyAnnouncementActivity : AppCompatActivity() {
         }
     }
 
+    // Método para configurar los TextWatchers en los campos de texto
     private fun setupTextWatchers() {
         binding.etModifyAnnouncementDescription.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

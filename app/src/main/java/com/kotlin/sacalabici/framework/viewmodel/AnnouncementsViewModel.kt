@@ -25,6 +25,7 @@ class AnnouncementsViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result: AnnouncementObjectBase? = announcementListRequirement()
+                // Invertir la lista de anuncios para mostrar el más reciente primero
                 val reversedResult = result!!.announcements.reversed()
                 announcementObjectLiveData.postValue(reversedResult)
             } catch (e: Exception) {

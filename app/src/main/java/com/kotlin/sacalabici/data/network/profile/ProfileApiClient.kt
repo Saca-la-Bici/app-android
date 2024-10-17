@@ -36,7 +36,7 @@ class ProfileApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
         }
     }
 
-    suspend fun patchProfile(profile: Profile, context: Context): Profile?{
+    suspend fun patchProfile(profile: Profile, context: Context): Profile?{ // Convierte el objeto profile en variables individuales para mandarlo como parámetros en el body del api request
         val token = firebaseTokenManager.getTokenSynchronously()
         api = ProfileNetworkModuleDI(token)
         val username = profile.username

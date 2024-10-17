@@ -56,6 +56,11 @@ class FAQFragment : Fragment() {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        faqViewModel.getFAQList()
+    }
+
     private fun initializeObservers() {
         faqViewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
@@ -70,6 +75,7 @@ class FAQFragment : Fragment() {
         faqViewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
             lifecycleScope.launch {
                 setUpRecyclerView(ArrayList(faqListData))
+                adapter.notifyDataSetChanged()
             }
         }
 

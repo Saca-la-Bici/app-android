@@ -102,9 +102,15 @@ class DetailsViewHolder(
             binding.tvActivityDistance.text = context.getString(R.string.activity_distance, activity.distancia)
             binding.tvActivityRenta.visibility = View.VISIBLE
             setupRentLink()
+            binding.materialesRow.visibility = View.VISIBLE
+            binding.btnMateriales.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://sacalabucket.s3.us-east-2.amazonaws.com/decalogos/Decalogo+%231.jpeg"))
+                context.startActivity(intent)
+            }
         } else {
             binding.tvActivityDistance.visibility = View.GONE
             binding.tvActivityRenta.visibility = View.GONE
+            binding.materialesRow.visibility = View.GONE
         }
 
         setupStartButton(activity)

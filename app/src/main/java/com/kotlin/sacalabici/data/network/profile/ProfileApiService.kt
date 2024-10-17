@@ -20,7 +20,7 @@ interface ProfileApiService {
     suspend fun getUsuario(): ProfileBase
 
     @Multipart
-    @PATCH("perfil/modificar/")
+    @PATCH("perfil/modificar/") // Publica los cambios en el perfil usando la función multipart para mandar todos los parámetros
     suspend fun  patchProfile(
         @Part("username") username: String,
         @Part("nombre") nombre: String,
@@ -32,7 +32,7 @@ interface ProfileApiService {
     @GET("perfil/consultarActividadesInscritas/")
     suspend fun getActividades(): ActivitiesBase
 
-    @DELETE("perfil/eliminar/")
+    @DELETE("perfil/eliminar/") // Manda a llamar el api request para eliminar la cuenta.
     suspend fun deleteProfile(): Response<Void>
 }
 

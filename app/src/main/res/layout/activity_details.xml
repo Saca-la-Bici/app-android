@@ -106,6 +106,7 @@
                 app:shapeAppearanceOverlay="@style/RoundedImageLess"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/materialesRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -279,6 +280,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/yellow"
                     android:text="@string/activity_join"
+                    android:layout_marginTop="30dp"
                     android:fontFamily="@font/roboto_regular"
                     android:textSize="14sp"
                     android:textColor="@color/semiWhite"/>
@@ -324,11 +326,25 @@
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/verifyBlue"
+                    android:backgroundTint="@color/semiBlack"
                     android:text="@string/Verificar"
                     android:fontFamily="@font/roboto_regular"
                     android:textSize="14sp"
                     android:textColor="@color/semiWhite"/>
+
+                <!-- Botón de Validar Asistencia -->
+                <Button
+                    android:id="@+id/btnCheckCode"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/verifyBlue"
+                    android:text="Ver código"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/semiWhite"/>
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -18,7 +18,7 @@ class   ProfileRepository {
     suspend fun getUsuario(): ProfileBase?{
         return apiProfile.getUsuario()
     }
-    suspend fun patchProfile(profile: Profile, context: Context): Profile?{
+    suspend fun patchProfile(profile: Profile, context: Context): Profile?{ // Manda a llamar el api request para modificar perfil
         return apiProfile.patchProfile(profile, context)
     }
     suspend fun getActividades(): List<ActivityBase> {
@@ -35,7 +35,7 @@ class   ProfileRepository {
         return listActivities
     }
 
-    suspend fun deleteProfile(): Boolean{
+    suspend fun deleteProfile(): Boolean{ // Manda a llamar el api request para eliminar cuenta
         return apiProfile.deleteProfile()
     }
 

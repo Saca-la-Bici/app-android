@@ -21,6 +21,7 @@ import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import retrofit2.http.Query
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.LocationR
+import com.kotlin.sacalabici.data.network.model.DeleteActivityRequest
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import retrofit2.Response
 import retrofit2.http.DELETE
@@ -143,6 +144,11 @@ interface ActivitiesApiService {
         @Part usuariosInscritos: List<MultipartBody.Part>?,
         @Part("ruta") ruta: String?
     ): ActivityData
+
+    @PATCH("actividades/eliminar")
+    suspend fun deleteActivity(
+        @Body act: DeleteActivityRequest
+    ): Response<Void>
 
 
     @PATCH("rodadas/verificarAsistencia")

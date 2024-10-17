@@ -55,3 +55,8 @@ data class ActivityData(
     val register: ArrayList<String>?,
     var idRouteBase: String?
 )
+
+data class DeleteActivityRequest(
+    val id: String,
+    val tipo: String
+)

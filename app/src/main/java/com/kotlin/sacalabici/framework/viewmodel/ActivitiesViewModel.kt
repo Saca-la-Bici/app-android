@@ -49,6 +49,9 @@ class ActivitiesViewModel(): ViewModel() {
     val permissionsLiveData: LiveData<List<String>> = _permissionsLiveData
     val activityInfo = MutableLiveData<ActivityInfo>()
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     // LiveData para observar una actividad por ID
     val selectedActivityLiveData = SingleLiveEvent<Activity?>()
 
@@ -274,10 +277,13 @@ class ActivitiesViewModel(): ViewModel() {
     fun patchActivityEvento(evento: ActivityData, context: Context, callback: (Result<Unit>) -> Unit) {
         viewModelScope.launch {
             try {
+                _isLoading.postValue(true)
                 patchRequirement.patchActivityEvento(evento, context)
+                _isLoading.postValue(false)
                 callback(Result.success(Unit))
             } catch (e: Exception) {
                 callback(Result.failure(e))
+                _isLoading.postValue(false)
             }
         }
     }
@@ -286,10 +292,13 @@ class ActivitiesViewModel(): ViewModel() {
     fun patchActivityRodada(rodada: ActivityData, context: Context, callback: (Result<Unit>) -> Unit) {
         viewModelScope.launch {
             try {
+                _isLoading.postValue(true)
                 patchRequirement.patchActivityRodada(rodada, context)
+                _isLoading.postValue(false)
                 callback(Result.success(Unit))
             } catch (e: Exception) {
                 callback(Result.failure(e))
+                _isLoading.postValue(false)
             }
         }
     }
@@ -298,10 +307,13 @@ class ActivitiesViewModel(): ViewModel() {
     fun patchActivityTaller(taller: ActivityData, context: Context, callback: (Result<Unit>) -> Unit) {
         viewModelScope.launch {
             try {
+                _isLoading.postValue(true)
                 patchRequirement.patchActivityTaller(taller, context)
+                _isLoading.postValue(false)
                 callback(Result.success(Unit))
             } catch (e: Exception) {
                 callback(Result.failure(e))
+                _isLoading.postValue(false)
             }
         }
     }

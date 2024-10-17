@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.databinding.FragmentActivityRouteBinding
 import com.kotlin.sacalabici.framework.RouteAdapter
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment.OnRutaConfirmListener
 import com.kotlin.sacalabici.framework.views.fragments.AddActivityRouteFragment.OnRutaSelectedListener
@@ -27,6 +29,7 @@ class ModifyActivityRouteFragment: Fragment() {
     private var lastSelectedRuta: RouteBase? = null
 
     private lateinit var viewModelRoute: MapViewModel
+    private val activitiesViewModel: ActivitiesViewModel by activityViewModels()
 
     private var _binding: FragmentActivityRouteBinding? = null
     private val binding get() = _binding!!
@@ -85,6 +88,15 @@ class ModifyActivityRouteFragment: Fragment() {
 
         rutasList?.let {
             updateRutasList(it, selectedRuta)
+        }
+
+        // Animación de carga
+        activitiesViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
         }
     }
 

@@ -39,8 +39,6 @@ class GlobalFragment : Fragment() {
         // Observar el perfil y actualizar los valores cuando cambien
         viewModel.getProfile().observe(viewLifecycleOwner) { profile ->
             if (profile != null) {
-                // Obtener los kilómetros recorridos del perfil
-                val kilometers = profile.KmCompleted
                 val kilometersMonth = profile.kilometrosMes.toFloat()
 
                 // Datos máximos
@@ -56,10 +54,10 @@ class GlobalFragment : Fragment() {
                 val NOx = 0.05
 
                 // Valores actuales de ahorro
-                val water = (kilometers / versaGasConsume) * 3
-                val co2 = (kilometers / versaGasConsume) * emissionCO2
-                val air = kilometers * NOx
-                val gas = kilometers / versaGasConsume
+                val water = (kilometersMonth / versaGasConsume) * 3
+                val co2 = (kilometersMonth / versaGasConsume) * emissionCO2
+                val air = kilometersMonth * NOx
+                val gas = kilometersMonth / versaGasConsume
 
                 // Cálculo de porcentajes
                 val percentageWater = (water.toFloat() / maxWater) * 100

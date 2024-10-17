@@ -1,3 +1,12 @@
+/**
+ * File: LoginFinishActivity.kt
+ * Description: Esta actividad permite a los usuarios completar su perfil después de iniciar sesión.
+ *              Los usuarios deben proporcionar información adicional como fecha de nacimiento, tipo
+ *              de sangre, número de teléfono y nombre. La información se valida antes de registrarla.
+ * Date: 16/10/2024
+ * Changes:
+ */
+
 package com.kotlin.sacalabici.framework.views.activities.session
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -28,6 +37,12 @@ import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
 @Suppress("NAME_SHADOWING")
+
+/**
+ * Actividad para completar el perfil del usuario. Los usuarios proporcionan información adicional
+ * como fecha de nacimiento, tipo de sangre, número de teléfono y nombre. Incluye validaciones de datos
+ * y la opción de regresar a la pantalla de sesión si se desea cerrar sesión.
+ */
 class LoginFinishActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginFinishBinding
     private val loginFinishViewModel: LoginFinishViewModel by viewModels()
@@ -45,6 +60,10 @@ class LoginFinishActivity : AppCompatActivity() {
         setupButtonListeners()
     }
 
+    /**
+     * Observa los cambios en el estado de autenticación y maneja las acciones correspondientes
+     * dependiendo del estado, como redirigir a la pantalla principal o mostrar mensajes de error.
+     */
     private fun observeAuthState() {
         loginFinishViewModel.authState.observe(this) { authState ->
             when (authState) {
@@ -69,6 +88,10 @@ class LoginFinishActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Navega hacia una actividad específica eliminando las actividades anteriores de la pila de tareas.
+     * @param activity Clase de la actividad a la que se desea navegar.
+     */
     private fun navigateTo(activity: Class<*>) {
         val intent = Intent(this, activity).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -86,6 +109,11 @@ class LoginFinishActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    /**
+     * Configura los listeners para los botones de la interfaz de usuario, incluyendo el botón de
+     * selección de fecha de nacimiento y el botón de finalización del registro. Realiza validaciones
+     * sobre los datos ingresados antes de registrar al usuario.
+     */
     private fun setupButtonListeners() {
         binding.BDate.setOnClickListener { showDatePickerDialog() }
         binding.BBack.setOnClickListener {
@@ -130,6 +158,10 @@ class LoginFinishActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Configura el selector de código de país para el número de teléfono del usuario utilizando
+     * la biblioteca `PhoneNumberUtil`.
+     */
     private fun setupCountryCodePicker() {
         phoneNumberUtil = PhoneNumberUtil.getInstance()
         countryCodePicker = findViewById(R.id.ccp)
@@ -137,6 +169,9 @@ class LoginFinishActivity : AppCompatActivity() {
         phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
     }
 
+    /**
+     * Configura el dropdown de tipos de sangre en el formulario de finalización de perfil.
+     */
     private fun setupBloodTypeDropdown() {
         val bloodTypes = resources.getStringArray(R.array.bloodTypes).toList()
         val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
@@ -144,6 +179,10 @@ class LoginFinishActivity : AppCompatActivity() {
         autoCompleteTextView.setAdapter(adapter)
     }
 
+    /**
+     * Muestra un cuadro de diálogo de selección de fecha para que el usuario ingrese su fecha de nacimiento.
+     * Solo permite fechas que indiquen que el usuario tiene más de 18 años.
+     */
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)

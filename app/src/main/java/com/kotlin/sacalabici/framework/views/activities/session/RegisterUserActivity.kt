@@ -1,3 +1,11 @@
+/**
+ * File: RegisterUserActivity.kt
+ * Description: Actividad de registro inicial de usuario donde se capturan datos como correo electrónico,
+ *              nombre de usuario y nombre completo. Luego, continúa con el proceso de registro.
+ * Date: 16/10/2024
+ * Changes:
+ */
+
 package com.kotlin.sacalabici.framework.views.activities.session
 import android.content.Intent
 import android.os.Build
@@ -23,6 +31,10 @@ class RegisterUserActivity : AppCompatActivity() {
         setupButtonListeners()
     }
 
+    /**
+     * Navega a la actividad especificada y finaliza la actividad actual.
+     * @param activity Clase de la actividad a la que se desea navegar.
+     */
     private fun navigateTo(activity: Class<*>) {
         val intent = Intent(this, activity).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -31,11 +43,21 @@ class RegisterUserActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Configura los listeners para los botones de la interfaz. El botón de retroceso navega a la actividad
+     * de sesión, mientras que el botón de continuar valida la información del usuario y navega a la siguiente
+     * actividad de registro.
+     */
     private fun setupButtonListeners() {
         binding.BBack.setOnClickListener { navigateTo(SessionActivity::class.java) }
         binding.BContinue.setOnClickListener { setupContinueButton() }
     }
 
+    /**
+     * Valida la información proporcionada por el usuario (correo electrónico, nombre de usuario, nombre completo)
+     * y navega a la siguiente pantalla de registro si no hay errores. Si hay errores, se muestran mensajes apropiados
+     * en los campos correspondientes.
+     */
     private fun setupContinueButton() {
         val email = binding.TILEmail.editText?.text.toString()
         val username = binding.TILUsername.editText?.text.toString()

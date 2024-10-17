@@ -1,3 +1,12 @@
+/**
+ * File: ConsultarUsuariosViewModel.kt
+ * Description: Esta clase gestiona la consulta de usuarios desde una base de datos, permitiendo la
+ *              paginación y la búsqueda de usuarios por nombre y rol. Utiliza Firebase para la
+ *              autenticación y obtiene el token necesario para realizar las consultas.
+ * Date: 16/10/2024
+ * Changes:
+ */
+
 package com.kotlin.sacalabici.framework.viewmodel.profile
 
 import androidx.lifecycle.LiveData
@@ -30,7 +39,10 @@ class ConsultarUsuariosViewModel : ViewModel() {
     private var isLastPage = false
     var scrollPosition = 0
 
-    // Función para guardar la posición del scroll
+    /**
+     * Guarda la posición del scroll en la variable `scrollPosition`.
+     * @param position La nueva posición del scroll a guardar.
+     */
     fun updateScrollPosition(position: Int) {
         scrollPosition = position
     }
@@ -43,7 +55,13 @@ class ConsultarUsuariosViewModel : ViewModel() {
         firebaseAuth = FirebaseAuth.getInstance()
     }
 
-    // Función para obtener usuarios con paginación
+    /**
+     * Obtiene usuarios desde la base de datos con paginación.
+     * Si se encuentra en modo búsqueda o ya se han cargado todos los usuarios, no realiza la consulta.
+     * Se reinicia la paginación si el parámetro `reset` es verdadero.
+     * @param roles Roles opcionales para filtrar los usuarios.
+     * @param reset Si es verdadero, reinicia la paginación y la lista de usuarios.
+     */
     fun getUsuarios(
         roles: String? = null,
         reset: Boolean = false,
@@ -94,7 +112,12 @@ class ConsultarUsuariosViewModel : ViewModel() {
         }
     }
 
-    // Función para buscar usuarios con roles opcionales
+    /**
+     * Busca usuarios por nombre y roles opcionales.
+     * Cambia el estado a búsqueda y realiza una consulta a la base de datos.
+     * @param username Nombre del usuario a buscar.
+     * @param roles Roles opcionales para filtrar la búsqueda.
+     */
     fun searchUser(
         username: String,
         roles: String? = null,
@@ -132,6 +155,11 @@ class ConsultarUsuariosViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Obtiene el token de identificación de Firebase para el usuario actual.
+     * @param firebaseAuth La instancia de FirebaseAuth utilizada para obtener el token.
+     * @return El token de identificación de Firebase o null si ocurre un error.
+     */
     private suspend fun getFirebaseIdToken(firebaseAuth: FirebaseAuth): String? =
         try {
             firebaseAuth.currentUser

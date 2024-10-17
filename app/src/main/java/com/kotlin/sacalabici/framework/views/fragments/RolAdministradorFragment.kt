@@ -1,3 +1,12 @@
+/**
+ * File: RolAdministradorFragment.kt
+ * Description: Este fragmento maneja la vista de los usuarios con roles de Administrador y Usuario.
+ *              Permite buscar, visualizar y gestionar la lista de usuarios, integrándose con ViewModel
+ *              para realizar consultas y mantener el estado de la lista paginada.
+ * Date: 16/10/2024
+ * Changes: Ninguno.
+ */
+
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
 import ConsultarUsuariosAdapter
@@ -25,6 +34,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * Fragmento encargado de manejar la lista de usuarios con roles de Administrador y Usuario.
+ * Proporciona funcionalidades de búsqueda, paginación, y modificación de roles a través del ViewModel.
+ */
 class RolAdministradorFragment : Fragment() {
     private var _binding: FragmentRolAdministradorBinding? = null
     private val binding get() = _binding!!
@@ -158,6 +171,10 @@ class RolAdministradorFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Configura el RecyclerView con los usuarios recibidos y define su layout.
+     * @param dataForList Lista de usuarios a mostrar.
+     */
     private fun setUpRecyclerView(dataForList: ArrayList<ConsultarUsuariosBase>) {
         binding.RVViewUsers.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -166,6 +183,10 @@ class RolAdministradorFragment : Fragment() {
         adapter.updateData(dataForList)
     }
 
+    /**
+     * Cambia de vista y resalta el fragmento actual (Administradores o Staff).
+     * @param currentFragment Nombre del fragmento actual.
+     */
     private fun highlightCurrentFragment(currentFragment: String) {
         resetButtonStyles()
 
@@ -189,6 +210,9 @@ class RolAdministradorFragment : Fragment() {
         }
     }
 
+    /**
+     * Restablece los estilos de los botones a sus colores por defecto.
+     */
     private fun resetButtonStyles() {
         binding.btnAdministradores.setTextColor(Color.DKGRAY)
         binding.btnStaff.setTextColor(Color.DKGRAY)

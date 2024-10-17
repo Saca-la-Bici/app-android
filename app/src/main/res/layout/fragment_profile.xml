@@ -75,17 +75,6 @@
         app:layout_constraintEnd_toEndOf="@id/toolbar"
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
-    <ImageButton
-        android:id="@+id/btnhelp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:layout_marginEnd="24dp"
-        android:src="@drawable/ic_help"
-        app:layout_constraintBottom_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toStartOf="@id/btnSettings"
-        app:layout_constraintTop_toTopOf="@id/toolbar" />
-
     <View
         android:id="@+id/vUser"
         android:layout_width="0dp"

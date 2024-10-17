@@ -1,6 +1,7 @@
 package com.kotlin.sacalabici.framework.viewholders
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -17,8 +18,8 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -49,7 +50,8 @@ class DetailsViewHolder(
     @SuppressLint("SimpleDateFormat")
     fun bind(activity: Activity) {
         // Formatear solo la parte de la fecha (día, mes, año)
-        val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(activity.date)
+        val formattedDate =
+            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(activity.date)
         val context = binding.root.context
 
         binding.tvActivityTitle.text = activity.title
@@ -84,8 +86,10 @@ class DetailsViewHolder(
 
         binding.tvActivityDate.text = context.getString(R.string.activity_date_list, formattedDate)
         binding.tvActivityTime.text = context.getString(R.string.activity_time_list, activity.time)
-        binding.tvActivityDuration.text = context.getString(R.string.activity_duration_list, activity.duration)
-        binding.tvActivityLocation.text = context.getString(R.string.activity_location_list, activity.location)
+        binding.tvActivityDuration.text =
+            context.getString(R.string.activity_duration_list, activity.duration)
+        binding.tvActivityLocation.text =
+            context.getString(R.string.activity_location_list, activity.location)
         binding.tvActivityDescription.text = activity.description
 
         setupJoinButton(activity)
@@ -99,7 +103,8 @@ class DetailsViewHolder(
 
         if (activity.type == "Rodada") {
             binding.tvActivityDistance.visibility = View.VISIBLE
-            binding.tvActivityDistance.text = context.getString(R.string.activity_distance, activity.distancia)
+            binding.tvActivityDistance.text =
+                context.getString(R.string.activity_distance, activity.distancia)
             binding.tvActivityRenta.visibility = View.VISIBLE
             setupRentLink()
             binding.materialesRow.visibility = View.VISIBLE
@@ -146,31 +151,50 @@ class DetailsViewHolder(
 
             if (usuarioInscrito) {
                 setButtonForUnsubscription(activity)
-                setupValidateAttendanceButton(activity, true) // Mostrar el botón si ya está inscrito
+                setupValidateAttendanceButton(
+                    activity,
+                    true
+                ) // Mostrar el botón si ya está inscrito
             } else {
                 setButtonForSubscription(activity)
-                setupValidateAttendanceButton(activity, false) // Ocultar el botón si no está inscrito
+                setupValidateAttendanceButton(
+                    activity,
+                    false
+                ) // Ocultar el botón si no está inscrito
             }
         } else {
-            Toast.makeText(binding.root.context, "No se ha autenticado ningún usuario.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                binding.root.context,
+                "No se ha autenticado ningún usuario.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     private fun setupValidateAttendanceButton(activity: Activity, show: Boolean) {
-        if (show && activity.type == "Rodada") {
+        if (show && activity.type == "Rodada" && permissions.contains("Iniciar rodada")) {
+            animateButtonVisibility(binding.btnCheckCode, true)
+            binding.btnCheckCode.setOnClickListener {
+                activity.code?.let { it1 -> showDialogCode(it1) }
+                animateButtonVisibility(binding.btnValidateAttendance, false)
+            }
+        } else if (show && activity.type == "Rodada") {
             animateButtonVisibility(binding.btnValidateAttendance, true)
             binding.btnValidateAttendance.setOnClickListener {
                 showValidationDialog()
+                animateButtonVisibility(binding.btnCheckCode, false)
             }
         } else {
             animateButtonVisibility(binding.btnValidateAttendance, false)
+            animateButtonVisibility(binding.btnCheckCode, false)
         }
     }
+
 
     private fun showValidationDialog() {
         val context = binding.root.context
         val dialogView = View.inflate(context, R.layout.dialog_validate_attendance, null)
-        val editText = dialogView.findViewById<EditText>(R.id.etValidationCode)
+        val editText = dialogView.findViewById<TextView>(R.id.etValidationCode)
 
         val dialog = android.app.AlertDialog.Builder(context)
             .setView(dialogView)
@@ -186,12 +210,36 @@ class DetailsViewHolder(
                 val codeInt = code.toInt() // Convertir a Int
                 handleValidationCode(codeInt)
             } else {
-                Toast.makeText(context, "Por favor ingrese un código de 4 números.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Por favor ingrese un código de 4 números.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
         dialog.show()
     }
+    private fun showDialogCode(code: Int) {
+        val context = binding.root.context
+        val dialogViewCode = View.inflate(context, R.layout.dialog_code, null)
+        val codeTextView = dialogViewCode.findViewById<TextView>(R.id.tvValidationCode)
+
+        codeTextView.text = code.toString()
+
+        val dialog = android.app.AlertDialog.Builder(context)
+            .setView(dialogViewCode)
+            .setCancelable(true)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialogViewCode.findViewById<View>(R.id.btnValidateAttendance).setOnClickListener {
+            dialog.dismiss()  // Cierra el diálogo
+            handleValidationCode(code)
+        }
+        dialog.show()
+    }
+
 
     private fun handleValidationCode(code: Int) {
         Toast.makeText(binding.root.context, "Código ingresado: $code", Toast.LENGTH_SHORT).show()
@@ -199,10 +247,18 @@ class DetailsViewHolder(
         // Llamada a la función del ViewModel para validar la asistencia
         viewModel.validateAttendance(activityID, code) { success: Boolean, message: String ->
             if (success) {
-                Toast.makeText(binding.root.context, "Asistencia validada con éxito.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    binding.root.context,
+                    "Asistencia validada con éxito.",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
-                Toast.makeText(binding.root.context, "Error: Asistencia ya verificada para esta rodada", Toast.LENGTH_SHORT).show()
-                Log.d("errer","$message")
+                Toast.makeText(
+                    binding.root.context,
+                    "Error:$message",
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.d("errer", "$message")
             }
         }
     }
@@ -232,12 +288,20 @@ class DetailsViewHolder(
 
     private fun setButtonForSubscription(activity: Activity) {
         binding.btnJoin.text = binding.root.context.getString(R.string.activity_join)
-        binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
+        binding.btnJoin.setBackgroundTintList(
+            ContextCompat.getColorStateList(
+                binding.root.context,
+                R.color.yellow
+            )
+        )
 
         binding.btnJoin.setOnClickListener {
             binding.btnJoin.isEnabled = false
 
-            viewModel.postInscribirActividad(activity.id, activity.type) { success: Boolean, message: String ->
+            viewModel.postInscribirActividad(
+                activity.id,
+                activity.type
+            ) { success: Boolean, message: String ->
                 binding.btnJoin.isEnabled = true
                 Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
 
@@ -248,7 +312,12 @@ class DetailsViewHolder(
                     setupValidateAttendanceButton(activity, true)
                 } else {
                     binding.btnJoin.text = binding.root.context.getString(R.string.activity_join)
-                    binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.yellow))
+                    binding.btnJoin.setBackgroundTintList(
+                        ContextCompat.getColorStateList(
+                            binding.root.context,
+                            R.color.yellow
+                        )
+                    )
                 }
             }
         }
@@ -256,12 +325,20 @@ class DetailsViewHolder(
 
     private fun setButtonForUnsubscription(activity: Activity) {
         binding.btnJoin.text = binding.root.context.getString(R.string.activity_unsubscribe)
-        binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
+        binding.btnJoin.setBackgroundTintList(
+            ContextCompat.getColorStateList(
+                binding.root.context,
+                R.color.gray
+            )
+        )
 
         binding.btnJoin.setOnClickListener {
             binding.btnJoin.isEnabled = false
 
-            viewModel.postCancelarInscripcion(activity.id, activity.type) { success: Boolean, message: String ->
+            viewModel.postCancelarInscripcion(
+                activity.id,
+                activity.type
+            ) { success: Boolean, message: String ->
                 binding.btnJoin.isEnabled = true
                 Toast.makeText(binding.root.context, message, Toast.LENGTH_SHORT).show()
 
@@ -271,8 +348,14 @@ class DetailsViewHolder(
                     setButtonForSubscription(activity)
                     setupValidateAttendanceButton(activity, false)
                 } else {
-                    binding.btnJoin.text = binding.root.context.getString(R.string.activity_unsubscribe)
-                    binding.btnJoin.setBackgroundTintList(ContextCompat.getColorStateList(binding.root.context, R.color.gray))
+                    binding.btnJoin.text =
+                        binding.root.context.getString(R.string.activity_unsubscribe)
+                    binding.btnJoin.setBackgroundTintList(
+                        ContextCompat.getColorStateList(
+                            binding.root.context,
+                            R.color.gray
+                        )
+                    )
                 }
             }
         }
@@ -285,14 +368,25 @@ class DetailsViewHolder(
 
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://rentabici.sacalabici.org/"))
+                val intent =
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://rentabici.sacalabici.org/"))
                 widget.context.startActivity(intent)
             }
         }
 
-        spannableString.setSpan(clickableSpan, text.length, text.length + linkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(
+            clickableSpan,
+            text.length,
+            text.length + linkText.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         val colorSpan = ForegroundColorSpan(Color.parseColor("#7DA68D"))
-        spannableString.setSpan(colorSpan, text.length, text.length + linkText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(
+            colorSpan,
+            text.length,
+            text.length + linkText.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         binding.tvActivityRenta.text = spannableString
         binding.tvActivityRenta.movementMethod = LinkMovementMethod.getInstance()
@@ -337,4 +431,5 @@ class DetailsViewHolder(
             .apply(requestOptions)
             .into(imageView)
     }
+
 }

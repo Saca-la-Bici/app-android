@@ -25,7 +25,8 @@ data class RodadaActivity(
     @SerializedName("_id") val id: String,
     @SerializedName("informacion") val activities: List<Activity>,
     @SerializedName("ruta") val route: RouteBase? = null,
-    @SerializedName("ubicacion") val liveLocation: List<Location>
+    @SerializedName("ubicacion") val liveLocation: List<Location>,
+    @SerializedName("codigoAsistencia") val code: Int? = null
 )
 
 data class DefaultActivity(
@@ -51,7 +52,7 @@ data class Activity(
     @SerializedName("nivel") val nivel: String? = null,
     @SerializedName("distancia") val distancia: String? = null,
     @SerializedName("id") val idRouteBase: String? = null,
-    @SerializedName("codigo") val codigoAsistencia: String? = null
+    @SerializedName("code") val code: Int? = null
 )
 
 data class LocationR(

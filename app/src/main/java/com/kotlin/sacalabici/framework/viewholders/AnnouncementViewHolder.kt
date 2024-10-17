@@ -26,11 +26,12 @@ class AnnouncementViewHolder(
         binding.root.setOnLongClickListener {
             longClickListener(item)
         }
+        // Verificar si hay una URL de imagen asociada al anuncio
         if(item.url != null){
-            binding.ivAnnouncement.visibility = View.VISIBLE
-            getAnnouncementImg(item.url,binding.ivAnnouncement,context)
+            binding.ivAnnouncement.visibility = View.VISIBLE // Mostrar la imagen
+            getAnnouncementImg(item.url,binding.ivAnnouncement,context) // Cargar la imagen
         } else {
-            binding.ivAnnouncement.visibility = View.GONE
+            binding.ivAnnouncement.visibility = View.GONE // Ocultar la imagen si no hay URL
         }
     }
 

@@ -55,6 +55,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
                 // Mostrar progreso
                 showLoading(true)
 
+                // Publica el anuncio utilizando el ViewModel
                 viewModel.postAnnouncement(announcement, this) { result ->
                     runOnUiThread {
                         showLoading(false)
@@ -73,12 +74,14 @@ class AddAnnouncementActivity: AppCompatActivity() {
             }
         }
 
+        // Listener para el botón de agregar imagen
         binding.ibAddImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             pickImageLauncher.launch(intent)
         }
     }
 
+    // Método para validar campos de entrada
     private fun validateFields(): Boolean {
         if (binding.etAddAnnouncementTitle.text.isNullOrBlank()) {
             binding.etAddAnnouncementTitle.error = "El título no puede estar vacío"
@@ -100,6 +103,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    // Método para registrar el lanzador de actividad para seleccionar imágenes
     private fun registerImagePicker() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -113,11 +117,13 @@ class AddAnnouncementActivity: AppCompatActivity() {
         }
     }
 
+    // Limpia los archivos temporales al destruir la actividad
     override fun onDestroy() {
         super.onDestroy()
         cleanTemporaryFiles()
     }
 
+    // Método para limpiar archivos temporales
     private fun cleanTemporaryFiles() {
         val tempFile = File(cacheDir, "tempFile")
         if (tempFile.exists()) {
@@ -125,11 +131,13 @@ class AddAnnouncementActivity: AppCompatActivity() {
         }
     }
 
+    // Método para mostrar u ocultar el indicador de carga
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.ibCheck.isEnabled = !isLoading
     }
 
+    // Método para borrar la imagen seleccionada
     private fun eraseImage() {
         selectedImageUri = null
         isImageErased = true
@@ -140,6 +148,7 @@ class AddAnnouncementActivity: AppCompatActivity() {
         }
     }
 
+    // Configura los TextWatchers para los campos de texto
     private fun setupTextWatchers() {
         binding.etAddAnnouncementDescription.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

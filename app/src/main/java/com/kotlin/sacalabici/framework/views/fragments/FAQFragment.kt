@@ -56,6 +56,11 @@ class FAQFragment : Fragment() {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        faqViewModel.getFAQList()
+    }
+
     private fun initializeObservers() {
         faqViewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
@@ -70,6 +75,7 @@ class FAQFragment : Fragment() {
         faqViewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
             lifecycleScope.launch {
                 setUpRecyclerView(ArrayList(faqListData))
+                adapter.notifyDataSetChanged()
             }
         }
 
@@ -132,19 +138,30 @@ class FAQFragment : Fragment() {
     }
 
     // Function to filter FAQs based on the search query
-    private fun filterFAQs(query: String): ArrayList<FAQBase> =
-        if (query.isEmpty()) {
-            faqList // If query is empty, return the full list
-        } else {
-            // Filter the FAQ list based on the query
-            val filteredList = ArrayList<FAQBase>()
-            for (faq in faqList) {
-                if (faq.Pregunta.contains(query, ignoreCase = true)) {
-                    filteredList.add(faq)
+    private fun filterFAQs(query: String): ArrayList<FAQBase> {
+        val filteredList: ArrayList<FAQBase> =
+            if (query.isEmpty()) {
+                faqList // If query is empty, return the full list
+            } else {
+                // Filter the FAQ list based on the query
+                val tempFilteredList = ArrayList<FAQBase>()
+                for (faq in faqList) {
+                    if (faq.Pregunta.contains(query, ignoreCase = true)) {
+                        tempFilteredList.add(faq)
+                    }
                 }
+                tempFilteredList
             }
-            filteredList
+
+        // Show no results message
+        if (filteredList.isEmpty()) {
+            binding.errorMessageFAQ.visibility = View.VISIBLE
+            binding.errorMessageFAQ.text = "No se encontraron preguntas frecuentes."
+        } else {
+            binding.errorMessageFAQ.visibility = View.GONE
         }
+        return filteredList
+    }
 
     // Función para que el botón de Agregar FAQ de lleve a RegisterFAQFragment
     private fun setupRegisterFAQsButton() {

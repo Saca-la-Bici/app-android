@@ -32,6 +32,10 @@
             android:exported="false" />
 
         <meta-data
+            android:name="com.google.ar.core"
+            android:value="optional" />
+
+        <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
         <meta-data

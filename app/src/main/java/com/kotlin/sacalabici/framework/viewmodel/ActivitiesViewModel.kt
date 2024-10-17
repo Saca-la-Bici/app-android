@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
+import com.kotlin.sacalabici.domain.activities.DeleteActivityRequirement
 import com.kotlin.sacalabici.domain.activities.PostActivityRequirement
 import com.kotlin.sacalabici.domain.activities.PostValidateAttendance
 import com.kotlin.sacalabici.domain.activities.DeleteLocationRequirement
@@ -57,6 +58,7 @@ class ActivitiesViewModel(): ViewModel() {
     private val getTalleresRequirement = GetTalleresRequirement()
     private val requirement = PostActivityRequirement()
     private val patchRequirement = PatchActivityRequirement()
+    private val deleteRequirement = DeleteActivityRequirement()
     private val getActivityByIdRequirement = GetActivityByIdRequirement()
     private val permissionsRequirement = PermissionsRequirement()
     private val getRodadaInfoRequirement = RodadaInfoRequirement()
@@ -314,4 +316,14 @@ class ActivitiesViewModel(): ViewModel() {
         }
     }
 
+    fun deleteActivity(id: String, typeAct: String, callback: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                deleteRequirement(id, typeAct)
+                callback(Result.success(Unit))
+            } catch (e: Exception) {
+                callback(Result.failure(e))
+            }
+        }
+    }
 }

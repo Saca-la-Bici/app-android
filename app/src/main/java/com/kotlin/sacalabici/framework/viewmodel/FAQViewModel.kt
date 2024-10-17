@@ -87,7 +87,14 @@ class FAQViewModel : ViewModel() {
                 // Llamada para registrar la FAQ
                 postFAQRequirement(nuevaFAQ)
 
-                // Notificar que la operación fue exitosa o manejar el resultado si es necesario
+                // Volver a obtener la lista de FAQs actualizada después de agregar la nueva
+                val updatedFaqList = faqListRequirement()
+                if (updatedFaqList != null) {
+                    // Actualizar la lista observada para reflejar el cambio en la UI
+                    faqObjectLiveData.postValue(updatedFaqList.faqs)
+                }
+
+                // Limpiar cualquier mensaje de error
                 errorMessage.postValue(null)
             } catch (e: Exception) {
                 e.printStackTrace()

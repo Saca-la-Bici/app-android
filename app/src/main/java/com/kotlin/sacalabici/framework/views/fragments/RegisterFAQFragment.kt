@@ -81,11 +81,13 @@ class RegisterFAQFragment : Fragment() {
                         // Mostrar mensaje de éxito
                         Toast.makeText(requireContext(), "Pregunta registrada con éxito", Toast.LENGTH_SHORT).show()
 
-                        // Navegar de vuelta a FAQFragment tras registrar la pregunta
-                        parentFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.nav_host_fragment_content_main, FAQFragment())
-                            .commit()
+                        faqViewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
+                            // Navegar de vuelta a FAQFragment una vez que se haya actualizado la lista
+                            parentFragmentManager
+                                .beginTransaction()
+                                .replace(R.id.nav_host_fragment_content_main, FAQFragment())
+                                .commitAllowingStateLoss()
+                        }
 
                         dialog.dismiss()
                     }.setNegativeButton("No") { dialog, _ ->

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +25,14 @@ class ActivitiesFragment: Fragment() {
     private val activitiesViewModel: ActivitiesViewModel by activityViewModels()
 
     private lateinit var addActivityLauncher: ActivityResultLauncher<Intent>
+    private lateinit var preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener
 
     private val sharedPreferences by lazy {
         requireContext().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+    }
+
+    private val sharedPreferencesUpdate by lazy {
+        requireContext().getSharedPreferences("activity_prefs", Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -56,6 +62,10 @@ class ActivitiesFragment: Fragment() {
         initializeComponents()
         setupObservers()
         loadInitialData()
+
+        // Setup listener para cambios en SharedPreferences
+        setupPreferenceListener()
+        checkForUpdates()
     }
 
     // Limpiar binding para optimizar uso de recursos
@@ -146,5 +156,31 @@ class ActivitiesFragment: Fragment() {
         val editor = sharedPreferences.edit()
         editor.putStringSet("permissions", permissions.toSet())
         editor.apply()
+    }
+
+    private fun setupPreferenceListener() {
+        preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == "activity_updated") {
+                val isUpdated = sharedPreferences.getBoolean("activity_updated", false)
+                if (isUpdated) {
+                    activitiesViewModel.getTalleres()
+                    activitiesViewModel.getRodadas()
+                    activitiesViewModel.getEventos()
+                    // Restablecer el valor para futuras modificaciones
+                    sharedPreferences.edit().putBoolean("activity_updated", false).apply()
+                }
+            }
+        }
+
+        // Registrar el listener
+        sharedPreferencesUpdate.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
+    }
+
+    private fun checkForUpdates() {
+        val isUpdated = sharedPreferencesUpdate.getBoolean("activity_updated", false)
+        if (isUpdated) {
+            activitiesViewModel.getTalleres()
+            sharedPreferencesUpdate.edit().putBoolean("activity_updated", false).apply()
+        }
     }
 }

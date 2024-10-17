@@ -3,7 +3,6 @@ package com.kotlin.sacalabici.data.network.activities
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.LocationR
@@ -18,6 +17,12 @@ import com.kotlin.sacalabici.data.network.FirebaseTokenManager
 import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import com.kotlin.sacalabici.data.network.MultipartManager
+import com.kotlin.sacalabici.data.network.announcements.AnnouncementNetworkModuleDI
+import com.kotlin.sacalabici.data.network.model.ActivityData
+import com.kotlin.sacalabici.data.network.model.DeleteActivityRequest
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager) {
@@ -106,16 +111,8 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
         return if (token != null) {
             api = ActivitiesNetworkModuleDI(token)
             try {
-                api.postActivityTaller(
-                    titulo,
-                    fecha,
-                    hora,
-                    duracion,
-                    ubicacion,
-                    descripcion,
-                    tipo,
-                    img
-                )
+                api.postActivityTaller(titulo, fecha, hora, duracion,
+                    ubicacion, descripcion, tipo, img)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
                 null
@@ -236,6 +233,139 @@ class ActivitiesApiClient(private val firebaseTokenManager: FirebaseTokenManager
             }
         } else {
             Pair(false, "Error de autenticación. Por favor, inicia sesión.")
+        }
+    }
+
+
+    suspend fun patchActivityTaller(taller: ActivityData, context: Context): ActivityData? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        val id = taller.id
+        val titulo = taller.title
+        val fecha = taller.date
+        val hora = taller.time
+        val duracion = taller.duration
+        val ubicacion = taller.location
+        val descripcion = taller.description
+        val tipo = taller.type
+        val peopleEnrolled = taller.peopleEnrolled.toString()
+        val state = taller.state.toString()
+        val foro = taller.foro
+
+        val file = taller.imageURL?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
+        val usuariosInscritos = taller.register?.mapIndexed { index, user ->
+            MultipartBody.Part.createFormData("usuariosInscritos[$index]", user)
+        }
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.patchActivityTaller(id,
+                    titulo, fecha, hora, duracion, ubicacion, descripcion,
+                    tipo, img, peopleEnrolled, state, foro, usuariosInscritos)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    suspend fun patchActivityEvento(evento: ActivityData, context: Context): ActivityData? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        val id = evento.id
+        val titulo = evento.title
+        val fecha = evento.date
+        val hora = evento.time
+        val duracion = evento.duration
+        val ubicacion = evento.location
+        val descripcion = evento.description
+        val tipo = evento.type
+        val peopleEnrolled = evento.peopleEnrolled.toString()
+        val state = evento.state.toString()
+        val foro = evento.foro
+
+        val file = evento.imageURL?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
+        // Procesar la lista register como MultipartBody.Part
+        val usuariosInscritos = evento.register?.mapIndexed { index, user ->
+            MultipartBody.Part.createFormData("usuariosInscritos[$index]", user.toString())
+        }
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.patchActivityEvento(id, titulo, fecha, hora, duracion, ubicacion,
+                    descripcion, tipo, img, peopleEnrolled, state, foro, usuariosInscritos)
+            } catch (e: java.lang.Exception){
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    suspend fun patchActivityRodada(rodada: ActivityData, context: Context): ActivityData? {
+        val token = firebaseTokenManager.getTokenSynchronously()
+
+        val id = rodada.id
+        val titulo = rodada.title
+        val fecha = rodada.date
+        val hora = rodada.time
+        val duracion = rodada.duration
+        val ubicacion = rodada.location
+        val descripcion = rodada.description
+        val tipo = rodada.type
+        val peopleEnrolled = rodada.peopleEnrolled.toString()
+        val state = rodada.state.toString()
+        val foro = rodada.foro
+        val ruta = rodada.idRouteBase
+
+        val file = rodada.imageURL?.let { multipartManager.uriToFile(context, it) }
+        val img = file?.let { multipartManager.prepareFilePart("file", Uri.fromFile(it)) }
+
+        val usuariosInscritos = rodada.register?.mapIndexed { index, user ->
+            MultipartBody.Part.createFormData("usuariosInscritos[$index]",
+                user.toRequestBody("text/plain".toMediaTypeOrNull()).toString()
+            )
+        }
+
+        return if (token != null) {
+            api = ActivitiesNetworkModuleDI(token)
+            try {
+                api.patchActivityRodada(id, titulo, fecha, hora, duracion, ubicacion,
+                    descripcion, tipo, img, peopleEnrolled, state, foro, usuariosInscritos, ruta)
+            } catch (e: java.lang.Exception){
+                e.printStackTrace()
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+
+    suspend fun deleteActivity(id: String, tipo: String): Boolean {
+        val token: String?
+        val act = DeleteActivityRequest(id, tipo)
+        try{
+            token = firebaseTokenManager.getTokenSynchronously()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+        api = ActivitiesNetworkModuleDI(token)
+        return try {
+            api.deleteActivity(act).isSuccessful
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
         }
     }
 

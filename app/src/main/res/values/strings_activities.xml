@@ -30,18 +30,24 @@
     <string name="activity_description">Lorem ipsum dolor sit amet.</string>
     <string name="copy_location" >Copiar ubicación al portapales</string>
     <string name="activity_value">valor</string>
+    <string name="activity_question">¿Quieres eliminar esta actividad?</string>
+    <string name="activity_deleteMsg">Esta acción no se podrá deshacer</string>
+    <string name="activity_cancel">Cancelar</string>
+    <string name="activity_confirm">Confirmar</string>
+    <string name="activity_delete">Eliminar imagen</string>
 
     <string-array name="hours">
-        <item>00</item>
-        <item>01</item>
-        <item>02</item>
-        <item>03</item>
-        <item>04</item>
-        <item>05</item>
-        <item>06</item>
-        <item>07</item>
-        <item>08</item>
-        <item>09</item>
+        <item>Horas</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
         <item>10</item>
         <item>11</item>
         <item>12</item>
@@ -59,6 +65,7 @@
     </string-array>
 
     <string-array name="minutes">
+        <item>Minutos</item>
         <item>00</item>
         <item>05</item>
         <item>10</item>

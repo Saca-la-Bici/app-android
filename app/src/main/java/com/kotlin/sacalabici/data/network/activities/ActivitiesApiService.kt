@@ -1,6 +1,5 @@
 package com.kotlin.sacalabici.data.network.activities
 
-import android.util.Log
 import com.kotlin.sacalabici.data.models.activities.CancelActivityRequest
 import com.kotlin.sacalabici.data.models.activities.EventosBase
 import com.kotlin.sacalabici.data.models.activities.JoinActivityRequest
@@ -11,20 +10,21 @@ import com.kotlin.sacalabici.data.network.model.ActivityModel
 import com.kotlin.sacalabici.data.network.model.Rodada
 import retrofit2.http.Body
 import com.kotlin.sacalabici.data.models.profile.PermissionsObject
+import com.kotlin.sacalabici.data.network.model.ActivityData
 import okhttp3.MultipartBody
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import com.kotlin.sacalabici.data.models.activities.RodadaInfoBase
 import retrofit2.http.Query
-import com.kotlin.sacalabici.data.models.activities.Activity
 import com.kotlin.sacalabici.data.models.activities.AttendanceRequest
 import com.kotlin.sacalabici.data.models.activities.LocationR
+import com.kotlin.sacalabici.data.network.model.DeleteActivityRequest
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import retrofit2.Response
 import retrofit2.http.DELETE
-import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -89,6 +89,67 @@ interface ActivitiesApiService {
 
     @POST("actividades/cancelarAsistencia/cancelar")
     suspend fun PostCancelActivity(@Body request: CancelActivityRequest)
+
+    @Multipart
+    @PATCH("actividades/modificar/taller")
+    suspend fun patchActivityTaller(
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
+        @Part imagen: MultipartBody.Part?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
+        @Part usuariosInscritos: List<MultipartBody.Part>?
+    ): ActivityData
+
+    @Multipart
+    @PATCH("actividades/modificar/evento")
+    suspend fun patchActivityEvento(
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
+        @Part imagen: MultipartBody.Part?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
+        @Part usuariosInscritos: List<MultipartBody.Part>?
+    ): ActivityData
+
+    @Multipart
+    @PATCH("actividades/modificar/rodada")
+    suspend fun patchActivityRodada(
+        @Query("id") id: String,
+        @Part("informacion[titulo]") titulo: String,
+        @Part("informacion[fecha]") fecha: String,
+        @Part("informacion[hora]") hora: String,
+        @Part("informacion[duracion]") duracion: String,
+        @Part("informacion[ubicacion]") ubicacion: String,
+        @Part("informacion[descripcion]") descripcion: String,
+        @Part("informacion[tipo]") tipo: String,
+        @Part imagen: MultipartBody.Part?,
+        @Part("informacion[personasInscritas]") peopleEnrolled: String,
+        @Part("informacion[estado]") state: String,
+        @Part("informacion[foro]") foro: String?,
+        @Part usuariosInscritos: List<MultipartBody.Part>?,
+        @Part("ruta") ruta: String?
+    ): ActivityData
+
+    @PATCH("actividades/eliminar")
+    suspend fun deleteActivity(
+        @Body act: DeleteActivityRequest
+    ): Response<Void>
+
 
     @PATCH("rodadas/verificarAsistencia")
     suspend fun PostValidateAttendance(@Body request: AttendanceRequest)

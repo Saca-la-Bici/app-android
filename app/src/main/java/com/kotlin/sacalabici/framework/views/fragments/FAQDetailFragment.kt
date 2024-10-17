@@ -1,8 +1,6 @@
-// FAQDetailFragment.kt
 package com.kotlin.sacalabici.framework.views.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,73 +15,66 @@ class FAQDetailFragment : Fragment() {
     private var _binding: FragmentFaqDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FAQViewModel by activityViewModels()
-    lateinit var selectedFAQ: FAQBase
+    private lateinit var selectedFAQ: FAQBase
     private var permissions: List<String> = emptyList()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqDetailBinding.inflate(inflater, container, false)
-        setupBackButton()
-        setupMoreVertButton()
-        viewModel.getFAQList()
+
+        // Obtener la FAQ seleccionada
+        selectedFAQ = arguments?.getSerializable("selectedFAQ") as FAQBase
+        binding.preguntaTextView.text = selectedFAQ.Pregunta
+        binding.respuestaTextView.text = selectedFAQ.Respuesta
+
+        // Inicializar observadores
+        initializeObservers()
+
+        // Configurar botón de regresar
+        binding.BRegresar.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
+        // Configurar botón de modificar
+        binding.BAlter.setOnClickListener {
+            val bundle =
+                Bundle().apply {
+                    putSerializable("faqToEdit", selectedFAQ)
+                    putString("temaToEdit", selectedFAQ.Tema)
+                }
+            parentFragmentManager
+                .beginTransaction()
+                .replace(
+                    R.id.nav_host_fragment_content_main,
+                    FAQModifyFragment().apply { arguments = bundle },
+                ).addToBackStack(null)
+                .commit()
+        }
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
-            faq?.let {
-                binding.preguntaTextView.text = it.Pregunta
-                binding.respuestaTextView.text = it.Respuesta
-                selectedFAQ = it
-
-            }
-        }
+    private fun initializeObservers() {
         viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
-            Log.d("FAQDetailFragment", "Permissions: $permissions")
             if (permissions.contains("Modificar pregunta frecuente")) {
                 binding.BAlter.visibility = View.VISIBLE
             }
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Actualizar los datos de la pregunta frecuente
+        binding.preguntaTextView.text = selectedFAQ.Pregunta
+        binding.respuestaTextView.text = selectedFAQ.Respuesta
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        viewModel.selectedFAQ.removeObservers(viewLifecycleOwner)
-    }
-
-    private fun setupBackButton() {
-        binding.BRegresar.setOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
-    }
-
-    private fun setupMoreVertButton() {
-        binding.BAlter.setOnClickListener {
-            val selectedFAQ = selectedFAQ
-            val id = selectedFAQ.IdPregunta
-            val pregunta = selectedFAQ.Pregunta
-            val respuesta = selectedFAQ.Respuesta
-
-
-            Log.d("FAQDetailFragment", "MoreVert button clicked")
-            Log.d("FAQDetailFragment", "IdPregunta: $selectedFAQ")
-            val bundle = Bundle()
-            bundle.putInt("IdPregunta", id)
-            bundle.putString("Pregunta", pregunta)
-            bundle.putString("Respuesta", respuesta)
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment_content_main, FAQModifyFragment().apply {
-                    arguments = bundle
-                })
-                .addToBackStack(null)
-                .commit()
-        }
     }
 }

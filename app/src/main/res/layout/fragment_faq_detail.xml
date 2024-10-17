@@ -31,19 +31,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.035" />
 
-    <ImageButton
-        android:id="@+id/BAlter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:src="@drawable/more_vert"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingEnd="15sp"
-        app:layout_constraintVertical_bias="0.035" />
-
     <TextView
         android:id="@+id/preguntaTextView"
         android:layout_width="wrap_content"
@@ -70,4 +57,19 @@
         android:background="@drawable/bg_rounded_gray_button"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
+    <Button
+        android:id="@+id/BAlter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:text="@string/Editar"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20sp"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/respuestaTextView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

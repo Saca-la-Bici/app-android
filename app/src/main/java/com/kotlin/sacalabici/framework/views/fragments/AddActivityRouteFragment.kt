@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.sacalabici.data.models.routes.RouteBase
 import com.kotlin.sacalabici.databinding.FragmentActivityRouteBinding
+import com.kotlin.sacalabici.framework.viewmodel.ActivitiesViewModel
 import com.kotlin.sacalabici.framework.RouteAdapter
 import com.kotlin.sacalabici.framework.viewmodel.MapViewModel
 
@@ -53,9 +54,9 @@ class AddActivityRouteFragment: Fragment() {
         recyclerView = binding.RVRutas
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        rutasAdapter = RouteAdapter(emptyList()) { ruta ->
+        rutasAdapter = RouteAdapter(emptyList(), { ruta ->
             onRutaSelected(ruta)
-        }
+        }, permit = false)
         recyclerView.adapter = rutasAdapter
 
         initializeListeners()

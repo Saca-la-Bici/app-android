@@ -28,9 +28,9 @@ class RouteFragment : Fragment() {
         recyclerView = view.findViewById(R.id.RVRutas)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        rutasAdapter = RouteAdapter(emptyList()) { ruta ->
+        rutasAdapter = RouteAdapter(emptyList(), { ruta ->
             onRutaSelected(ruta)
-        }
+        }, permit = true)
         recyclerView.adapter = rutasAdapter
 
         val rutasList = arguments?.getParcelableArrayList<RouteBase>("rutasList")

@@ -32,6 +32,10 @@
             android:exported="false" />
 
         <meta-data
+            android:name="com.google.ar.core"
+            android:value="optional" />
+
+        <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
         <meta-data
@@ -102,8 +106,14 @@
         <activity
             android:name=".framework.views.activities.activities.AddActivityActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Sacalabici.Light" /> <!-- Otras actividades relevantes -->
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".framework.views.activities.activities.ModifyActivityActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <!-- Otras actividades relevantes -->
         <activity
             android:name=".framework.views.activities.AddRouteActivity"
             android:configChanges="orientation|screenSize"

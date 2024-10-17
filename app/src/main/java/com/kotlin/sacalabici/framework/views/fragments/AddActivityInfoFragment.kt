@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -48,6 +49,7 @@ class AddActivityInfoFragment: Fragment() {
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private var selectedImageUri: Uri? = null
+    private var isImageErased: Boolean = false
 
     /*
     * Permite que el fragmento se comunique con la actividad
@@ -103,13 +105,16 @@ class AddActivityInfoFragment: Fragment() {
         // En caso de que se haya retrocedido, recuperar información
         viewModel.activityInfo.value?.let { info ->
             binding.etAddActivityTitle.setText(info.title)
+            binding.tvTitleWordCount.text = "${info.title.length}/${maxTitle}"
             binding.BDate.text = info.date
             binding.hourSpinner.setSelection(info.hour.toInt())
             binding.minutesSpinner.setSelection(info.minutes.toInt())
             binding.hourSpinnerDur.setSelection(info.hourDur.toInt())
             binding.minutesSpinnerDur.setSelection(info.minutesDur.toInt())
             binding.etAddActivityUbi.setText(info.ubi)
+            binding.tvUbiWordCount.text = "${info.ubi.length}/${maxUbi}"
             binding.etAddActivityDescription.setText(info.description)
+            binding.tvDescWordCount.text = "${info.description.length}/${maxDesc}"
         }
 
         // Variables de edit texts para conteo de caracteres
@@ -152,6 +157,10 @@ class AddActivityInfoFragment: Fragment() {
             listener.onCloseClicked()
         }
 
+        binding.tvEraseImage.setOnClickListener {
+            eraseImage()
+        }
+
         // Evento para subir imagen
         binding.imageButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -185,80 +194,62 @@ class AddActivityInfoFragment: Fragment() {
 
     private fun initializeWordListeners() {
         etTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Contar los caracteres
                 val charCount = s?.length ?: 0
 
                 // Actualizar el contador en el TextView
                 tvTitleWC.text = getString(R.string.char_count, charCount, maxTitle)
-
+            }
+            override fun afterTextChanged(s: Editable?) {
                 // Validar si se excede el límite de caracteres
-                if (charCount > maxTitle) {
+                if (s != null && s.length > maxTitle) {
                     etTitle.error = "Has excedido el límite de $maxTitle caracteres."
                     // Prevenir que se sigan escribiendo caracteres
-                    etTitle.setText(s?.substring(0, maxTitle))
+                    etTitle.setText(s.substring(0, maxTitle))
                     etTitle.setSelection(maxTitle)
                 }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No aplica, pero debe llamarse
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // No aplica, pero debe llamarse
             }
         })
 
         etUbi.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Contar los caracteres
                 val charCount = s?.length ?: 0
 
                 // Actualizar el contador en el TextView
                 tvUbiWC.text = getString(R.string.char_count, charCount, maxUbi)
-
+            }
+            override fun afterTextChanged(s: Editable?) {
                 // Validar si se excede el límite de caracteres
-                if (charCount > maxUbi) {
+                if (s != null && s.length > maxUbi) {
                     etUbi.error = "Has excedido el límite de $maxUbi caracteres."
                     // Prevenir que se sigan escribiendo caracteres
-                    etUbi.setText(s?.substring(0, maxUbi))
+                    etUbi.setText(s.substring(0, maxUbi))
                     etUbi.setSelection(maxUbi)
                 }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No aplica, pero debe llamarse
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // No aplica, pero debe llamarse
             }
         })
 
         etDesc.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Contar los caracteres
                 val charCount = s?.length ?: 0
 
                 // Actualizar el contador en el TextView
                 tvDescWC.text = getString(R.string.char_count, charCount, maxDesc)
-
+            }
+            override fun afterTextChanged(s: Editable?) {
                 // Validar si se excede el límite de caracteres
-                if (charCount > maxDesc) {
+                if (s != null && s.length > maxDesc) {
                     etDesc.error = "Has excedido el límite de $maxDesc caracteres."
                     // Prevenir que se sigan escribiendo caracteres
-                    etDesc.setText(s?.substring(0, maxDesc))
-                    etDesc.setSelection(maxDesc) // Mover el cursor al final del texto permitido
+                    etDesc.setText(s.substring(0, maxDesc))
+                    etDesc.setSelection(maxDesc)
                 }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No aplica, pero debe llamarse
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // No aplica, pero debe llamarse
             }
         })
     }
@@ -273,8 +264,25 @@ class AddActivityInfoFragment: Fragment() {
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 selectedImageUri = result.data?.data
-                binding.imageButton.setImageURI(selectedImageUri)
+                isImageErased = false
+                binding.tvEraseImage.visibility = View.VISIBLE
+                binding.imageButton.apply{
+                    setImageURI(selectedImageUri)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                    adjustViewBounds = true
+                }
             }
+        }
+    }
+
+    private fun eraseImage() {
+        selectedImageUri = null
+        isImageErased = true
+        binding.tvEraseImage.visibility = View.GONE
+        binding.imageButton.apply{
+            setImageResource(R.drawable.ic_add_image)
+            scaleType = ImageView.ScaleType.CENTER
+            adjustViewBounds = false
         }
     }
 
@@ -291,14 +299,14 @@ class AddActivityInfoFragment: Fragment() {
             binding.etAddActivityTitle.error = null
         }
 
-        if (binding.hourSpinner.selectedItemPosition == 0 &&
-            binding.minutesSpinner.selectedItemPosition == 0) {
+        if (binding.hourSpinner.selectedItem == "Horas" ||
+            binding.minutesSpinner.selectedItem == "Minutos") {
             Toast.makeText(requireContext(), "Por favor, selecciona una hora", Toast.LENGTH_SHORT).show()
             isValid = false
         }
 
-        if (binding.hourSpinnerDur.selectedItemPosition == 0 &&
-            binding.minutesSpinnerDur.selectedItemPosition == 0) {
+        if (binding.hourSpinnerDur.selectedItem == "Horas" ||
+            binding.minutesSpinnerDur.selectedItem == "Minutos") {
             Toast.makeText(requireContext(), "Por favor, selecciona una duración", Toast.LENGTH_SHORT).show()
             isValid = false
         }
@@ -324,8 +332,16 @@ class AddActivityInfoFragment: Fragment() {
         return isValid
     }
 
+    private fun cleanTemporaryFiles() {
+        val tempFile = File(requireContext().cacheDir, "tempFile")
+        if (tempFile.exists()) {
+            tempFile.delete()
+        }
+    }
+
     override fun onDetach() {
         super.onDetach()
+        cleanTemporaryFiles()
         _binding = null
     }
 

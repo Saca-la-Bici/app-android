@@ -53,6 +53,13 @@ class AnnouncementsFragment: Fragment() {
         _binding = FragmentAnnouncementsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
         val root: View = binding.root
+        val sharedPreferences = requireContext().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
+
+        if (storedPermissions?.contains("Registrar anuncio") == true) {
+            binding.fabAddAnouncement.visibility = View.VISIBLE
+        }
+        this.permissions = storedPermissions!!
 
         initializeComponents(root)
         setFragmentResultListener("actionButtonDialogResult") { _, bundle ->
@@ -107,12 +114,6 @@ class AnnouncementsFragment: Fragment() {
 
 
     private fun initializeObservers() {
-        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
-            this.permissions = permissions
-            if (permissions.contains("Registrar anuncio")) {
-                binding.fabAddAnouncement.visibility = View.VISIBLE
-            }
-        }
         viewModel.announcementObjectLiveData.observe(viewLifecycleOwner) { announcementList ->
             if (announcementList.isEmpty()) {
                 binding.tvNoAnnouncements.visibility = View.VISIBLE

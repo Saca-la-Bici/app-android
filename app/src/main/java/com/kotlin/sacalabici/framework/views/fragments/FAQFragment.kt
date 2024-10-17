@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +23,7 @@ class FAQFragment : Fragment() {
     private var _binding: FragmentFaqsBinding? = null
     private lateinit var adapter: FAQAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewModel: FAQViewModel
+    private val faqViewModel: FAQViewModel by activityViewModels()
     private var permissions: List<String> = emptyList()
 
     private var faqList: ArrayList<FAQBase> = ArrayList()
@@ -31,16 +31,15 @@ class FAQFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentFaqsBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity())[FAQViewModel::class.java]
         val root: View = binding.root
         setupBackButton()
         initializeComponents(root)
-        viewModel.getFAQList()
-
+        faqViewModel.getFAQList()
         initializeObservers()
         setupRegisterFAQsButton()
 
@@ -49,7 +48,6 @@ class FAQFragment : Fragment() {
             val filteredList = filterFAQs(query.toString())
             adapter.updateList(filteredList)
         }
-
         return root
     }
 
@@ -58,36 +56,49 @@ class FAQFragment : Fragment() {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        faqViewModel.getFAQList()
+    }
+
     private fun initializeObservers() {
-        viewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
+        faqViewModel.permissionsLiveData.observe(viewLifecycleOwner) { permissions ->
             this.permissions = permissions
-            if (permissions.contains("Registrar pregunta frecuente")) {
+            if (permissions.contains("Modificar pregunta frecuente")) {
                 binding.BAgregarPregunta.visibility = View.VISIBLE
-            }
-        }
-        // Observing the FAQ list data from the ViewModel
-        viewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
-            lifecycleScope.launch {
-                setUpRecyclerView(ArrayList(faqListData))
+            } else {
+                binding.BAgregarPregunta.visibility = View.GONE
             }
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+        // Observing the FAQ list data from the ViewModel
+        faqViewModel.faqObjectLiveData.observe(viewLifecycleOwner) { faqListData ->
+            lifecycleScope.launch {
+                setUpRecyclerView(ArrayList(faqListData))
+                adapter.notifyDataSetChanged()
+            }
+        }
+
+        faqViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             binding.errorMessageFAQ.text = errorMessage
         }
 
-        viewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
+        faqViewModel.selectedFAQ.observe(viewLifecycleOwner) { faq ->
             faq?.let {
                 Log.d("FAQFragment", "Selected FAQ: ${faq.IdPregunta}")
-                // Navega solo si no está ya en el BackStack
                 if (parentFragmentManager.findFragmentByTag("FAQDetailFragment") == null) {
                     val transaction = parentFragmentManager.beginTransaction()
-                    transaction.replace(R.id.nav_host_fragment_content_main, FAQDetailFragment(), "FAQDetailFragment")
+                    val fragment =
+                        FAQDetailFragment().apply {
+                            arguments =
+                                Bundle().apply {
+                                    putSerializable("selectedFAQ", faq)
+                                }
+                        }
+                    transaction.replace(R.id.nav_host_fragment_content_main, fragment, "FAQDetailFragment")
                     transaction.addToBackStack(null)
                     transaction.commit()
-
-                    // Limpia el valor de `selectedFAQ` para evitar que se dispare nuevamente al regresar
-                    viewModel.selectedFAQ.postValue(null)
+                    faqViewModel.selectedFAQ.postValue(null)
                 }
             }
         }
@@ -95,7 +106,7 @@ class FAQFragment : Fragment() {
 
     private fun initializeComponents(root: View) {
         recyclerView = root.findViewById(R.id.recyclerFAQ)
-        adapter = FAQAdapter(viewModel) // Initialize the adapter here
+        adapter = FAQAdapter(faqViewModel) // Initialize the adapter here
     }
 
     private fun setUpRecyclerView(dataForList: ArrayList<FAQBase>) {
@@ -117,7 +128,7 @@ class FAQFragment : Fragment() {
     // Function to handle back button, navigating to SettingsFragment
     private fun setupBackButton() {
         binding.BRegresar.setOnClickListener {
-            viewModel.selectedFAQ.postValue(null)  // Limpiar el valor seleccionado
+            faqViewModel.selectedFAQ.postValue(null) // Limpiar el valor seleccionado
             parentFragmentManager
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment_content_main, SettingsFragment())
@@ -127,24 +138,34 @@ class FAQFragment : Fragment() {
     }
 
     // Function to filter FAQs based on the search query
-    private fun filterFAQs(query: String): ArrayList<FAQBase> =
-        if (query.isEmpty()) {
-            faqList // If query is empty, return the full list
-        } else {
-            // Filter the FAQ list based on the query
-            val filteredList = ArrayList<FAQBase>()
-            for (faq in faqList) {
-                if (faq.Pregunta.contains(query, ignoreCase = true)) {
-                    filteredList.add(faq)
+    private fun filterFAQs(query: String): ArrayList<FAQBase> {
+        val filteredList: ArrayList<FAQBase> =
+            if (query.isEmpty()) {
+                faqList // If query is empty, return the full list
+            } else {
+                // Filter the FAQ list based on the query
+                val tempFilteredList = ArrayList<FAQBase>()
+                for (faq in faqList) {
+                    if (faq.Pregunta.contains(query, ignoreCase = true)) {
+                        tempFilteredList.add(faq)
+                    }
                 }
+                tempFilteredList
             }
-            filteredList
+
+        // Show no results message
+        if (filteredList.isEmpty()) {
+            binding.errorMessageFAQ.visibility = View.VISIBLE
+            binding.errorMessageFAQ.text = "No se encontraron preguntas frecuentes."
+        } else {
+            binding.errorMessageFAQ.visibility = View.GONE
         }
+        return filteredList
+    }
 
     // Función para que el botón de Agregar FAQ de lleve a RegisterFAQFragment
     private fun setupRegisterFAQsButton() {
         val btnFAQs = binding.BAgregarPregunta
-        btnFAQs.visibility = View.VISIBLE // Ensure the button is visible
         btnFAQs.setOnClickListener {
             // Navegar a RegisterFAQsFragment y reemplazar el contenido en el contenedor principal de MainActivity
             parentFragmentManager

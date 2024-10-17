@@ -71,7 +71,7 @@ class ProfileViewModel : ViewModel() {
         )
     }
 
-    suspend fun patchProfile(profile: Profile, context: Context): Boolean {
+    suspend fun patchProfile(profile: Profile, context: Context): Boolean { // Manda a llamar la función de patchProfileRequirement con los datos obtenidos en la vista.
         return try {
             withContext(Dispatchers.IO) {
                 patchProfileRequirement(profile, context)

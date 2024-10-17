@@ -53,15 +53,18 @@ class AnnouncementsFragment: Fragment() {
         _binding = FragmentAnnouncementsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[AnnouncementsViewModel::class.java]
         val root: View = binding.root
+        // Recuperar permisos guardados en SharedPreferences
         val sharedPreferences = requireContext().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
         val storedPermissions = sharedPreferences.getStringSet("permissions", null)?.toList()
 
+        // Mostrar botón de añadir anuncio solo si se tiene el permiso correspondiente
         if (storedPermissions?.contains("Registrar anuncio") == true) {
             binding.fabAddAnouncement.visibility = View.VISIBLE
         }
         this.permissions = storedPermissions!!
 
         initializeComponents(root)
+        // Configurar listener para el resultado de acciones del diálogo
         setFragmentResultListener("actionButtonDialogResult") { _, bundle ->
             val resultCode = bundle.getInt("resultCode")
             if (resultCode == Activity.RESULT_OK) {
@@ -72,19 +75,21 @@ class AnnouncementsFragment: Fragment() {
         setupClickListeners()
         fetchAnnouncements()
 
+        // Lanzador para añadir anuncios
         addAnnouncementLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-                viewModel.getAnnouncementList()
+                viewModel.getAnnouncementList() // Actualizar lista si se añadió un anuncio
             }
         }
 
+        // Lanzador para modificar anuncios
         modifyAnnouncementLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                viewModel.getAnnouncementList()
+                viewModel.getAnnouncementList() // Actualizar lista si se añadió un anuncio
             }
         }
 
@@ -93,7 +98,7 @@ class AnnouncementsFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        fetchAnnouncements()
+        fetchAnnouncements() // Obtener la lista de anuncios cada vez que el fragmento se reanuda
     }
 
     override fun onDestroyView() {
@@ -155,13 +160,14 @@ class AnnouncementsFragment: Fragment() {
     }
 
     private fun showDialog(announcement: AnnouncementBase) {
+        // Mostrar diálogo para modificar o eliminar anuncio si se tienen permisos
         if (permissions.contains("Modificar anuncio") || permissions.contains("Eliminar anuncio")) {
             val dialogFragment = ActionButtonDialogFragment.newInstance(
                 announcement.id,
                 announcement.title,
                 announcement.content,
                 announcement.url,
-                permissions
+                permissions // Pasar permisos al diálogo
             )
             dialogFragment.show(parentFragmentManager, ActionButtonDialogFragment.TAG)
         }

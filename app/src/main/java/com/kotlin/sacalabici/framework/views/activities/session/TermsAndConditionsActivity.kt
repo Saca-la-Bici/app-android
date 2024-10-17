@@ -12,6 +12,10 @@ import android.net.Uri
 import android.text.method.LinkMovementMethod
 import com.kotlin.sacalabici.R
 
+/**
+ * TermsAndConditionsActivity es la actividad que muestra un texto con los enlaces clicables a los términos y la
+ * política de privacidad de "Saca la Bici". Al hacer clic en estas palabras, se abre el navegador con la URL correspondiente.
+ */
 class TermsAndConditionsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +58,10 @@ class TermsAndConditionsActivity : AppCompatActivity() {
         textView.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    // Función para abrir una URL en el navegador
+    /**
+     * Abre la URL dada en el navegador cuando se hace clic en un enlace.
+     * @param url La URL que se desea abrir.
+     */
     private fun openUrl(url: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)

@@ -33,6 +33,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel para gestionar la autenticación de usuarios en la aplicación "Saca la Bici".
+ * Este ViewModel soporta inicio de sesión a través de Google, Facebook y correo electrónico.
+ */
 class AuthViewModel : ViewModel() {
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> get() = _authState
@@ -40,10 +44,15 @@ class AuthViewModel : ViewModel() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
-
-
     private lateinit var authStateListener: FirebaseAuth.AuthStateListener
 
+    /**
+     * Inicializa el ViewModel con instancias de FirebaseAuth y GoogleSignInOptions.
+     *
+     * @param firebaseAuthInstance La instancia de FirebaseAuth a utilizar.
+     * @param googleOptions Las opciones de inicio de sesión de Google.
+     * @param activity La actividad desde la cual se inicializa el ViewModel.
+     */
     fun initialize(firebaseAuthInstance: FirebaseAuth, googleOptions: GoogleSignInOptions, activity: AppCompatActivity) {
         firebaseAuth = firebaseAuthInstance
         googleSignInClient = GoogleSignIn.getClient(activity, googleOptions)
@@ -52,6 +61,9 @@ class AuthViewModel : ViewModel() {
         initializeAuthStateListener()
     }
 
+    /**
+     * Inicializa el listener de estado de autenticación de Firebase.
+     */
     private fun initializeAuthStateListener() {
         authStateListener = FirebaseAuth.AuthStateListener { auth ->
             val user = auth.currentUser
@@ -61,16 +73,25 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    // Getter para CallbackManager
+    /**
+     * Devuelve el CallbackManager utilizado para manejar los resultados de Facebook.
+     *
+     * @return El CallbackManager.
+     */
     fun getCallbackManager(): CallbackManager {
         return callbackManager
     }
 
-    // Agregar el listener de estado de autenticación
+    /**
+     * Inicia el listener de estado de autenticación.
+     */
     fun startAuthStateListener() {
         firebaseAuth.addAuthStateListener(authStateListener)
     }
 
+    /**
+     * Verifica el perfil del usuario actual y actualiza el estado de autenticación.
+     */
     private fun checkUserProfile() {
         viewModelScope.launch {
             val currentUser = withContext(Dispatchers.IO) {
@@ -86,13 +107,21 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    // Inicio de sesión con Google
+    /**
+     * Inicia sesión con Google.
+     *
+     * @param activity La actividad desde la cual se inicia el inicio de sesión.
+     */
     fun signInWithGoogle(activity: AppCompatActivity) {
         val signInIntent = googleSignInClient.signInIntent
         activity.startActivityForResult(signInIntent, Constants.RC_SIGN_IN)
     }
 
-    // Inicio de sesión con Facebook
+    /**
+     * Inicia sesión con Facebook.
+     *
+     * @param activity La actividad desde la cual se inicia el inicio de sesión.
+     */
     fun signInWithFacebook(activity: AppCompatActivity) {
         LoginManager.getInstance().logInWithReadPermissions(activity, listOf("email", "public_profile"))
         LoginManager.getInstance().registerCallback(callbackManager, object :
@@ -111,6 +140,11 @@ class AuthViewModel : ViewModel() {
         })
     }
 
+    /**
+     * Maneja el token de acceso de Facebook y autentica al usuario en Firebase.
+     *
+     * @param token El token de acceso de Facebook.
+     */
     private fun handleFacebookAccessToken(token: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(token.token)
         firebaseAuth.signInWithCredential(credential)
@@ -128,6 +162,11 @@ class AuthViewModel : ViewModel() {
             }
     }
 
+    /**
+     * Maneja el resultado del inicio de sesión con Google.
+     *
+     * @param task La tarea que contiene el resultado del inicio de sesión.
+     */
     fun handleGoogleSignInResult(task: Task<GoogleSignInAccount>) {
         try {
             val account = task.getResult(ApiException::class.java)!!
@@ -137,6 +176,11 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Autentica al usuario en Firebase con las credenciales de Google.
+     *
+     * @param account La cuenta de Google del usuario.
+     */
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
@@ -153,7 +197,12 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    // Autenticación por correoy contraseña
+    /**
+     * Inicia sesión con correo electrónico y contraseña.
+     *
+     * @param email El correo electrónico del usuario.
+     * @param password La contraseña del usuario.
+     */
     fun signInWithEmailAndPassword(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -179,7 +228,11 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-
+    /**
+     * Registra al usuario en el sistema después de la autenticación.
+     *
+     * @param currentUser El usuario actual de Firebase.
+     */
     private fun registerUser(currentUser: FirebaseUser) {
         viewModelScope.launch {
             userClient.registerUser(currentUser, firebaseAuth, _authState)

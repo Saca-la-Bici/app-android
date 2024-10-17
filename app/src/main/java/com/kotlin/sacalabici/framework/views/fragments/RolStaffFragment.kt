@@ -1,3 +1,13 @@
+/**
+ * File: RolStaffFragment.kt
+ * Description: Este fragmento gestiona la interfaz de la aplicación donde se visualizan y administran
+ *              los usuarios con los roles de Staff. Permite realizar búsquedas y
+ *              manejar la paginación de usuarios. También facilita la modificación de roles y otros
+ *              cambios de estado a través del ViewModel.
+ * Date: 16/10/2024
+ * Changes: Ninguno.
+ */
+
 package com.kotlin.sacalabici.framework.adapters.views.fragments
 
 import ConsultarUsuariosAdapter
@@ -25,6 +35,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * Fragmento que muestra la lista de usuarios con roles específicos (Staff, Administradores) y permite
+ * búsquedas de usuarios. Utiliza un RecyclerView para paginar los usuarios y se integra con ViewModels para
+ * gestionar los datos y los estados de carga.
+ */
 class RolStaffFragment : Fragment() {
     private var _binding: FragmentRolStaffBinding? = null
     private val binding get() = _binding!!
@@ -152,6 +167,10 @@ class RolStaffFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Configura el RecyclerView con los datos recibidos y establece su layout manager.
+     * @param dataForList Lista de usuarios para mostrar en el RecyclerView.
+     */
     private fun setUpRecyclerView(dataForList: ArrayList<ConsultarUsuariosBase>) {
         binding.RVViewUsers.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -160,6 +179,11 @@ class RolStaffFragment : Fragment() {
         adapter.updateData(dataForList)
     }
 
+    /**
+     * Resalta el fragmento actual y cambia de vista dependiendo del fragmento seleccionado
+     * (Administradores o Staff).
+     * @param currentFragment Nombre del fragmento actual.
+     */
     private fun highlightCurrentFragment(currentFragment: String) {
         resetButtonStyles()
 
@@ -183,6 +207,9 @@ class RolStaffFragment : Fragment() {
         }
     }
 
+    /**
+     * Restablece los estilos de los botones al color por defecto.
+     */
     private fun resetButtonStyles() {
         binding.btnAdministradores.setTextColor(Color.DKGRAY)
         binding.btnStaff.setTextColor(Color.DKGRAY)

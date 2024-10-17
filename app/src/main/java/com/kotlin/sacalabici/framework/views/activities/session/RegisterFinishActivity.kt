@@ -1,3 +1,11 @@
+/**
+ * File: RegisterFinishActivity.kt
+ * Description: Actividad final para el registro de usuario, donde se completan datos como fecha de nacimiento,
+ *              tipo de sangre y número de teléfono antes de finalizar el proceso de registro.
+ * Date: 16/10/2024
+ * Changes:
+ */
+
 package com.kotlin.sacalabici.framework.views.activities.session
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -24,6 +32,11 @@ import com.kotlin.sacalabici.framework.views.activities.MainActivity
 import com.kotlin.sacalabici.framework.views.activities.session.SessionActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
+
+/**
+ * Actividad donde el usuario completa su perfil después de registrarse,
+ * incluyendo información personal como fecha de nacimiento, tipo de sangre y teléfono.
+ */
 @Suppress("NAME_SHADOWING")
 class RegisterFinishActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterUserFinishBinding
@@ -47,6 +60,10 @@ class RegisterFinishActivity : AppCompatActivity() {
         setupButtonListeners()
     }
 
+    /**
+     * Observa los cambios en el estado de autenticación y maneja las diferentes transiciones
+     * según el estado actual del registro.
+     */
     private fun observeAuthState() {
         registerFinishViewModel.authState.observe(this) { authState ->
             when (authState) {
@@ -72,6 +89,10 @@ class RegisterFinishActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Navega a la actividad proporcionada y finaliza la actividad actual.
+     * @param activity Clase de la actividad a la que se desea navegar.
+     */
     private fun navigateTo(activity: Class<*>) {
         val intent = Intent(this, activity).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -84,12 +105,19 @@ class RegisterFinishActivity : AppCompatActivity() {
         registerFinishViewModel.initialize(FirebaseAuth.getInstance())
     }
 
+    /**
+     * Configura los listeners para los botones de la interfaz, incluyendo el selector de fecha,
+     * el botón de retroceso y el botón para finalizar el registro.
+     */
     private fun setupButtonListeners() {
         binding.BDate.setOnClickListener { showDatePickerDialog() }
         binding.BBack.setOnClickListener { setupBackButton() }
         binding.BFinish.setOnClickListener { setupFinishButton() }
     }
 
+    /**
+     * Configura el selector de código de país para el número de teléfono, utilizando una librería externa.
+     */
     private fun setupCountryCodePicker() {
         phoneNumberUtil = PhoneNumberUtil.getInstance()
         countryCodePicker = findViewById(R.id.ccp)
@@ -97,6 +125,9 @@ class RegisterFinishActivity : AppCompatActivity() {
         phoneNumberEditText = binding.TILPhoneNumber.editText as TextInputEditText
     }
 
+    /**
+     * Configura el menú desplegable para seleccionar el tipo de sangre.
+     */
     private fun setupBloodTypeDropdown() {
         val bloodTypes = resources.getStringArray(R.array.bloodTypes).toList()
         val adapter = ArrayAdapter(this, com.hbb20.R.layout.support_simple_spinner_dropdown_item, bloodTypes)
@@ -109,6 +140,9 @@ class RegisterFinishActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    /**
+     * Muestra un diálogo para seleccionar la fecha de nacimiento y actualiza el botón con la fecha seleccionada.
+     */
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -130,6 +164,10 @@ class RegisterFinishActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
+    /**
+     * Inicializa las variables `email`, `username`, `name` y `password` utilizando los valores
+     * pasados a través de `intent` desde la actividad anterior.
+     */
     private fun initializeExtras() {
         email = intent.getStringExtra("email")
         username = intent.getStringExtra("username")
@@ -137,6 +175,10 @@ class RegisterFinishActivity : AppCompatActivity() {
         password = intent.getStringExtra("password")
     }
 
+    /**
+     * Configura el comportamiento del botón de retroceso para eliminar al usuario registrado
+     * en caso de que se quiera cancelar el registro antes de completarlo.
+     */
     private fun setupBackButton() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
@@ -157,6 +199,10 @@ class RegisterFinishActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Maneja la lógica para finalizar el registro, validando los datos del usuario
+     * y enviando la información al ViewModel para completar el registro.
+     */
     private fun setupFinishButton() {
         binding.BFinish.isEnabled = false
         val birthdate = binding.BDate.text.toString()
@@ -190,6 +236,10 @@ class RegisterFinishActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Sobrescribe el comportamiento del botón de retroceso del sistema para asegurarse de que
+     * el usuario se elimine de Firebase si se cancela el registro a mitad de proceso.
+     */
     override fun onBackPressed() {
         super.onBackPressed()
         val currentUser = FirebaseAuth.getInstance().currentUser

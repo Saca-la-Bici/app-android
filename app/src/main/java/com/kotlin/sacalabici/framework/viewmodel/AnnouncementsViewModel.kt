@@ -16,7 +16,6 @@ import com.kotlin.sacalabici.domain.announcement.PatchAnnouncementRequirement
 
 class AnnouncementsViewModel: ViewModel() {
     val announcementObjectLiveData = MutableLiveData<List<AnnouncementBase>>()
-    val permissionsLiveData = MutableLiveData<List<String>>()
     private val announcementListRequirement = AnnouncementListRequirement()
     private val postAnnouncementRequirement = PostAnnouncementRequirement()
     private val deleteAnnouncementRequirement = DeleteAnnouncementRequirement()
@@ -28,7 +27,6 @@ class AnnouncementsViewModel: ViewModel() {
                 val result: AnnouncementObjectBase? = announcementListRequirement()
                 val reversedResult = result!!.announcements.reversed()
                 announcementObjectLiveData.postValue(reversedResult)
-                permissionsLiveData.postValue(result.permissions)
             } catch (e: Exception) {
                 announcementObjectLiveData.postValue(emptyList())
             }

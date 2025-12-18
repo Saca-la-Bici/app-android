@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.kotlin.sacalabici"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -124,10 +124,9 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.10.0")
 
     // Facebook SDK
-    implementation("com.facebook.android:facebook-login:latest.release")
-    implementation("com.facebook.android:facebook-android-sdk:latest.release")
+    implementation("com.facebook.android:facebook-login:16.3.0")
     // Google Play Services Auth
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.3.0")) // Latest BOM
     implementation("com.google.firebase:firebase-analytics-ktx")

@@ -56,14 +56,18 @@ class SessionActivity : AppCompatActivity() {
         val closeWebView: ShapeableImageView = findViewById(R.id.closeWebView)
 
         // Configura el WebView para abrir enlaces dentro de la aplicación.
-        webView.webViewClient = WebViewClient()
+        webView.webViewClient = object : WebViewClient() {
+            override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
+                Toast.makeText(this@SessionActivity, "Error al cargar la página: $description", Toast.LENGTH_SHORT).show()
+            }
+        }
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.allowFileAccess = true
 
         // Listener para abrir la política de privacidad.
         binding.TVPrivacyPolicy.setOnClickListener {
-            val url = "http://18.220.205.53:8080/politicasAplicacion/politicaPrivacidad"
+            val url = "https://18.220.205.53:8080/politicasAplicacion/politicaPrivacidad"
             webView.loadUrl(url)
             webView.visibility = View.VISIBLE
             closeWebView.visibility = View.VISIBLE
@@ -71,7 +75,7 @@ class SessionActivity : AppCompatActivity() {
 
         // Listener para abrir los términos y condiciones.
         binding.TVTermsAndConditions.setOnClickListener {
-            val url = "http://18.220.205.53:8080/politicasAplicacion/terminosCondiciones"
+            val url = "https://18.220.205.53:8080/politicasAplicacion/terminosCondiciones"
             webView.loadUrl(url)
             webView.visibility = View.VISIBLE
             closeWebView.visibility = View.VISIBLE
@@ -142,28 +146,19 @@ class SessionActivity : AppCompatActivity() {
      * Configura los listeners de los botones para permitir que el usuario inicie sesión con Google,
      * Facebook o navegue a las pantallas de login y registro.
      */
+    private val googleSignInLauncher = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) { result ->
+        val data: android.content.Intent? = result.data
+        val task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(data)
+        authViewModel.handleGoogleSignInResult(task)
+    }
+
     private fun setupButtonListeners() {
-        binding.BGoogle.setOnClickListener { authViewModel.signInWithGoogle(this) }
+        binding.BGoogle.setOnClickListener { authViewModel.signInWithGoogle(googleSignInLauncher) }
         binding.BFacebook.setOnClickListener { authViewModel.signInWithFacebook(this) }
         binding.BLogin.setOnClickListener { navigateTo(LoginActivity::class.java) }
         binding.BRegister.setOnClickListener { navigateTo(RegisterUserActivity::class.java) }
     }
 
-    /**
-     * Maneja los resultados de las actividades de inicio de sesión para los proveedores externos como Google y Facebook.
-     * @param requestCode Código de solicitud enviado a la actividad.
-     * @param resultCode Código de resultado devuelto por la actividad.
-     * @param data Intent que contiene los datos devueltos por la actividad.
-     */
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        authViewModel.getCallbackManager().onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            authViewModel.handleGoogleSignInResult(task)
-        }
-    }
 
     /**
      * Inicializa el binding con el layout de la actividad para poder acceder a los elementos de la interfaz.
@@ -171,6 +166,12 @@ class SessionActivity : AppCompatActivity() {
     private fun initializeBinding() {
         binding = ActivitySessionBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        authViewModel.getCallbackManager().onActivityResult(requestCode, resultCode, data)
     }
 
     /**

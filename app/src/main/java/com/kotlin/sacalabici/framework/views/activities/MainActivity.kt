@@ -119,14 +119,8 @@ class MainActivity: AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
 
         if (user != null && !user.isEmailVerified) {
-            user.delete().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("Auth", "Usuario eliminado por falta de verificación.")
-                    navigateTo(SessionActivity::class.java)
-                } else {
-                    Log.e("Auth", "Error al eliminar usuario: ${task.exception?.message}")
-                }
-            }
+            navigateTo(SessionActivity::class.java)
+            return
         }
 
         if (user == null) {

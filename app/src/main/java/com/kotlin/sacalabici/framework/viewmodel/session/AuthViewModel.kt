@@ -110,11 +110,10 @@ class AuthViewModel : ViewModel() {
     /**
      * Inicia sesión con Google.
      *
-     * @param activity La actividad desde la cual se inicia el inicio de sesión.
      */
-    fun signInWithGoogle(activity: AppCompatActivity) {
+    fun signInWithGoogle(launcher: androidx.activity.result.ActivityResultLauncher<android.content.Intent>) {
         val signInIntent = googleSignInClient.signInIntent
-        activity.startActivityForResult(signInIntent, Constants.RC_SIGN_IN)
+        launcher.launch(signInIntent)
     }
 
     /**
@@ -135,7 +134,7 @@ class AuthViewModel : ViewModel() {
             }
 
             override fun onError(error: FacebookException) {
-                _authState.postValue(AuthState.Error("Error al iniciar sesión con Facebook"))
+                _authState.postValue(AuthState.Error("Error al iniciar sesión con Facebook: ${error.message}"))
             }
         })
     }
@@ -152,6 +151,7 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val currentUser = firebaseAuth.currentUser
                     if (currentUser != null) {
+                        _authState.postValue(AuthState.Success)
                         checkUserProfile()
                     } else {
                         _authState.postValue(AuthState.Error("Usuario actual no disponible"))

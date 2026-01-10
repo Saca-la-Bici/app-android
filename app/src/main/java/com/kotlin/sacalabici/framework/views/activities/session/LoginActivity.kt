@@ -15,6 +15,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -32,6 +33,11 @@ import com.kotlin.sacalabici.utils.Constants
  */
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+    // Esto debe ir arriba, junto a las otras variables (como binding)
+    private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        authViewModel.handleGoogleSignInResult(task)
+    }
     private val authViewModel: AuthViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
      * y contraseña, así como el botón de recuperación de contraseña.
      */
     private fun setupButtonListeners() {
-        binding.BGoogle.setOnClickListener { authViewModel.signInWithGoogle(this) }
+        binding.BGoogle.setOnClickListener { authViewModel.signInWithGoogle(googleSignInLauncher) }
         binding.BFacebook.setOnClickListener { authViewModel.signInWithFacebook(this) }
         binding.BBack.setOnClickListener { navigateTo(SessionActivity::class.java) }
         binding.TVForgotPassword.setOnClickListener {

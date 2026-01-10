@@ -151,7 +151,7 @@ class AuthViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val currentUser = firebaseAuth.currentUser
                     if (currentUser != null) {
-                        _authState.postValue(AuthState.Success)
+                        _authState.postValue(AuthState.Success(currentUser))
                         checkUserProfile()
                     } else {
                         _authState.postValue(AuthState.Error("Usuario actual no disponible"))

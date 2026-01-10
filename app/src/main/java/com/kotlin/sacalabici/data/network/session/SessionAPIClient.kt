@@ -14,7 +14,7 @@ class SessionAPIClient(private val idToken: String?) {
         return try {
             api.registerUser(user)
         } catch (e: Exception) {
-            Log.e("SessionAPIClient", "Error al registrar usuario", e)
+            Log.e("DEBUG_URGENTE", "MOTIVO FALLO: ${e.message} | CAUSA: ${e.cause}")
             e.printStackTrace()
             null
         }
